@@ -1,0 +1,1554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		137F78A0E2304DD78D95AA7A /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 41AF55295BC245EAAD973AC1 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				D4EDE886AC0F4A548CAEECCE /* CMake Rules */,
+			);
+			dependencies = (
+				21CD4D0623164737A2315BED /* PBXTargetDependency */,
+				06B1A3D148324AB4A015E94D /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+		ECE1B6ABA0594BFC8499BCBE /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 0EC5DE26266548F4BB2E98FA /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				56F405F100E144ABB74C86B1 /* CMake Rules */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		006B22EFA1AC4E7D96A5A66A /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.cpp */ = {isa = PBXBuildFile; fileRef = 2610BD334BE1422E81BEF4CA /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.cpp */; };
+		007829A0007F42EABC48AE28 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_types.h */ = {isa = PBXBuildFile; fileRef = E19C4267C8614D0286028B32 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_types.h */; };
+		015F2FD6B43049C6889DC53E /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/FontsStoreSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = 33457D5845A7445C8526D2D7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/FontsStoreSingletonComponent.h */; };
+		01BAD8EFB81D4781BD8E6A86 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.cpp */ = {isa = PBXBuildFile; fileRef = B73D9D17523E4B2B9419F95E /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.cpp */; };
+		01DA50736934455A99C32431 /* /Users/alex/Code/AncientGreece/source/engine/debug/components/ConsoleStateSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = 1B64061F07BB4FA5A2500D44 /* /Users/alex/Code/AncientGreece/source/engine/debug/components/ConsoleStateSingletonComponent.h */; };
+		022F198F43AC4F4B94FA8250 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_endian.h */ = {isa = PBXBuildFile; fileRef = 2CFEF27212AA43CEBB58684C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_endian.h */; };
+		0258F20CF62444A09B54047B /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_pandora.h */ = {isa = PBXBuildFile; fileRef = 15D42406729D48C18C3E9E50 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_pandora.h */; };
+		029946179F554E4FBA554C0F /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.cpp */ = {isa = PBXBuildFile; fileRef = 1B6E9DC5336649D9ABB5B3EA /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.cpp */; };
+		0462623D63124BD08907A8B9 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.h */ = {isa = PBXBuildFile; fileRef = 648B05F30ADD41FD96A4E7D8 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.h */; };
+		060CEDFE26BD4362896A4C04 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2ext.h */ = {isa = PBXBuildFile; fileRef = 7D34F0917B854AF7844900A6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2ext.h */; };
+		079A56811F974E1BAC02D410 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_harness.h */ = {isa = PBXBuildFile; fileRef = AA2932C3033948109B3525FD /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_harness.h */; };
+		09F297D50E1042649CD8DF4D /* /Users/alex/Code/AncientGreece/source/engine/input/components/InputStateSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = 9D3BD1F92B584C86AAA8A2AD /* /Users/alex/Code/AncientGreece/source/engine/input/components/InputStateSingletonComponent.h */; };
+		0D0934C09EAF47089912365F /* /Users/alex/Code/AncientGreece/source/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = A058CE7EC91049A590A27372 /* /Users/alex/Code/AncientGreece/source/CMakeLists.txt */; };
+		0DFC5F2BB89D4218939FF25B /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.cpp */ = {isa = PBXBuildFile; fileRef = 9D449F35A49E4769814E19E2 /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.cpp */; };
+		105C2DF45AF74A6D85643FBA /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.h */ = {isa = PBXBuildFile; fileRef = CEF72AF773614FD1B1E20E72 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.h */; };
+		11AA04DD1A744611A551778E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_wiz.h */ = {isa = PBXBuildFile; fileRef = 07704E82870948AB8F1F309F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_wiz.h */; };
+		12C60FD7E15149A18A3E5FEB /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_system.h */ = {isa = PBXBuildFile; fileRef = 33EF92785ADC46D9BB056E0A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_system.h */; };
+		12FBA127921E47838C4A0274 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/vector_relational.h */ = {isa = PBXBuildFile; fileRef = 9E0CBD130132496593999CA3 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/vector_relational.h */; };
+		140D3CCAEAD74718B40CD25B /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.cpp */ = {isa = PBXBuildFile; fileRef = 898F42FA4D5540769DD2EB9A /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.cpp */; };
+		1567A4D9AD2849B8A375F306 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.h */ = {isa = PBXBuildFile; fileRef = 216B253DC5F0492C99981C64 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.h */; };
+		16CC87D8A3444F1ABC68C144 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mixer.h */ = {isa = PBXBuildFile; fileRef = 712F7B4560044CBF82F5828B /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mixer.h */; };
+		1847DD953BD24CBEA71D99B9 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/LightStoreSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = 323FC644B5E741EDA0F4D7A7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/LightStoreSingletonComponent.h */; };
+		19684F11ADF94DDBB6636708 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_md5.h */ = {isa = PBXBuildFile; fileRef = E748A3E3A0E6429B827CE5DB /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_md5.h */; };
+		1A14DA61465040B59C7F25A0 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_stdinc.h */ = {isa = PBXBuildFile; fileRef = 01F6DAA6BEA24B2D9AEFAD14 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_stdinc.h */; };
+		1AEC22C84C444877AEC3A800 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_render.h */ = {isa = PBXBuildFile; fileRef = B29959EC71864691BFB1F8F7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_render.h */; };
+		1CF3C956B97C44A39075E963 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_khrplatform.h */ = {isa = PBXBuildFile; fileRef = 96F7BC776B0E4F3DB118A7D7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_khrplatform.h */; };
+		1F43FFEE6A4243F3A030F854 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2.h */ = {isa = PBXBuildFile; fileRef = 5ABE561E357B4F28903B2746 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2.h */; };
+		2038D35177F647EA86A25D8B /* /Users/alex/Code/AncientGreece/source/engine/common/components/TransformComponent.h */ = {isa = PBXBuildFile; fileRef = FD112FC3B11F4A578E8CE10E /* /Users/alex/Code/AncientGreece/source/engine/common/components/TransformComponent.h */; };
+		20F8701924A4408FAC8CBE78 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_windows.h */ = {isa = PBXBuildFile; fileRef = E22C5A33EF644D7D92918B27 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_windows.h */; };
+		22C9A9E3710B4CF7AFC1FBF6 /* /Users/alex/Code/AncientGreece/source/game/Game.h */ = {isa = PBXBuildFile; fileRef = 1D90F1D22DB045F0A744C71C /* /Users/alex/Code/AncientGreece/source/game/Game.h */; };
+		23D0E07550214A5CA7B2C4B1 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_growth_policy.h */ = {isa = PBXBuildFile; fileRef = A4664B4B93164436B27F7E22 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_growth_policy.h */; };
+		2589B24C794243C5B23DB2CD /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_egl.h */ = {isa = PBXBuildFile; fileRef = 9200876A1FF340F8AFC4ED8C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_egl.h */; };
+		263DB0D08E4C4A6F98DD674E /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2ext.h */ = {isa = PBXBuildFile; fileRef = 954C30A715FD446EAB568389 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2ext.h */; };
+		26FC0F9B5EAB4939BE762EC0 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Funcs.h */ = {isa = PBXBuildFile; fileRef = D1A4301708A64A88AE8A1D06 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Funcs.h */; };
+		27B672AC7F72447A9396218A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_thread.h */ = {isa = PBXBuildFile; fileRef = E36F477F32D54FD58F444724 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_thread.h */; };
+		27FA3FF46DEC4F1C869EDC56 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.cpp */ = {isa = PBXBuildFile; fileRef = 767C9B24C2484907B68ACAE9 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.cpp */; };
+		2807E1859FC54CB8ACCDF6E7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.h */ = {isa = PBXBuildFile; fileRef = 4AFD6D07225D478CBED73F60 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.h */; };
+		2839FE1BCA1E4F4C92E17A7D /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.h */ = {isa = PBXBuildFile; fileRef = ED9AD0814E2642898D152EA8 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.h */; };
+		2B79D9A3FF264D9A876B1C2C /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/exponential.h */ = {isa = PBXBuildFile; fileRef = 30838E0E217D489180477346 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/exponential.h */; };
+		2F917BDB6A8441EC9094ED8D /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.cpp */ = {isa = PBXBuildFile; fileRef = DA1377BCCDB3455A916F051D /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.cpp */; };
+		31EFF5E37D7C4672A936EE93 /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.cpp */ = {isa = PBXBuildFile; fileRef = 144A34DEB4BA4C5FA602F3A6 /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.cpp */; };
+		328A2F2468484EB4A247A09C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_messagebox.h */ = {isa = PBXBuildFile; fileRef = 39822E8AC1C94AB584FE758E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_messagebox.h */; };
+		33B38C296D5F435D886B955D /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/khrplatform.h */ = {isa = PBXBuildFile; fileRef = 26A649F6F95E41BE8EC6C88A /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/khrplatform.h */; };
+		33FCEC5DC2B445119031EEC8 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.h */ = {isa = PBXBuildFile; fileRef = A3EE7AFCA0654F93B4100051 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.h */; };
+		362592376D03484FB80D586F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_copying.h */ = {isa = PBXBuildFile; fileRef = 314361EDC21C4244AA0E93E4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_copying.h */; };
+		365C5FFC433345119C04F23F /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.h */ = {isa = PBXBuildFile; fileRef = 3ACF6740BBFA45779E68BE3A /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.h */; };
+		36806A9CB7F4402D9EED1ADA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengl.h */ = {isa = PBXBuildFile; fileRef = D28BB48F041D4F8BAAE833D4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengl.h */; };
+		3711BD87A75649DC9D807439 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.cpp */ = {isa = PBXBuildFile; fileRef = E4C6A80B77884C62B6B54362 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.cpp */; };
+		378BC282FAFF4BD7AC491A25 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/RenderingContextSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = FD3D72600E2748DA8B76DD25 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/RenderingContextSingletonComponent.h */; };
+		379AC0F00F834A34A82EED5F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_syswm.h */ = {isa = PBXBuildFile; fileRef = FF69EC89A5D34C3B884003F2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_syswm.h */; };
+		37F940B12EEB4B38A4FF1603 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_compare.h */ = {isa = PBXBuildFile; fileRef = 4AA1C55C35424FB29A8AA981 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_compare.h */; };
+		3A0BF139291549F48527F8A2 /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.h */ = {isa = PBXBuildFile; fileRef = 9428B777E1DC46E1AF14D589 /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.h */; };
+		3A1629F05FC64FE79C5554ED /* /Users/alex/Code/AncientGreece/source/engine/common/utils/FileUtils.h */ = {isa = PBXBuildFile; fileRef = 7C77372F6632485582BBD2D7 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/FileUtils.h */; };
+		3D3499339C634663B852287A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_android.h */ = {isa = PBXBuildFile; fileRef = A560E81003D44AC7994C6D45 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_android.h */; };
+		3E443FB005CD4D8F85B06DEF /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_filesystem.h */ = {isa = PBXBuildFile; fileRef = 02A467E77F4743DFB0115D95 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_filesystem.h */; };
+		417CFBBAFFC3448291FD1DF7 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.cpp */ = {isa = PBXBuildFile; fileRef = F3F54B2D04AF44988D054464 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.cpp */; };
+		41FBACD9516249EF91E545F0 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.h */ = {isa = PBXBuildFile; fileRef = 015F95E758D0405F962610F9 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.h */; };
+		4369F85E01AE489A92EB6B7D /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_macosx.h */ = {isa = PBXBuildFile; fileRef = 84252AF431554764B9F088F6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_macosx.h */; };
+		457382433FB343CC971A5D2E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_atomic.h */ = {isa = PBXBuildFile; fileRef = 618E16ACC833453BBC34C3A2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_atomic.h */; };
+		45BB8771CB53425E84851A9C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/begin_code.h */ = {isa = PBXBuildFile; fileRef = E9D71436A1D34BA68AE66122 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/begin_code.h */; };
+		45FF8022D2274C269BC301C1 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.h */ = {isa = PBXBuildFile; fileRef = 0C727257EB3744A28CB847DE /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.h */; };
+		4739DD4EFBDB4B37AB991DC7 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lualib.h */ = {isa = PBXBuildFile; fileRef = 379CB62FF6704D8C990B4AB4 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lualib.h */; };
+		494C84F53378417FAB6DCA90 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_iphoneos.h */ = {isa = PBXBuildFile; fileRef = C24A999F5D6D481F9A7C9CC3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_iphoneos.h */; };
+		499850CD2D6F4497B2C0D73F /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.h */ = {isa = PBXBuildFile; fileRef = 8D3D43872B5847ED85A21FA7 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.h */; };
+		4FF420E18DA742B0B8FA2DB4 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.h */ = {isa = PBXBuildFile; fileRef = 43DF2CEBB27F47A5AE10AD27 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.h */; };
+		52CD3F26A8B640088F416A61 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/Logging.h */ = {isa = PBXBuildFile; fileRef = B3DCE944EAA44218B953A875 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/Logging.h */; };
+		5406B322368442B8AF2B283E /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.cpp */ = {isa = PBXBuildFile; fileRef = AB7DE0E5AB9245789AA28F9A /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.cpp */; };
+		54797BCA0F5840CB9D1CDF55 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_log.h */ = {isa = PBXBuildFile; fileRef = 0B66F5787A8A4E0086653D49 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_log.h */; };
+		547D3106922B49E29214EDEE /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.h */ = {isa = PBXBuildFile; fileRef = F54D0AC4491A45578EB0805D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.h */; };
+		55F7ED0417484B178DA409C5 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.cpp */ = {isa = PBXBuildFile; fileRef = 16AD33913B814DCB91423A09 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.cpp */; };
+		56092F0054D24A569B6922D5 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_power.h */ = {isa = PBXBuildFile; fileRef = B710CCB8EE2248AA90CA0116 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_power.h */; };
+		560B8FA0E92B4385A2B6C2C8 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.h */ = {isa = PBXBuildFile; fileRef = 75425AE1B8464612B059BCBC /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.h */; };
+		5830EA338B9C4B28B1E51480 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_font.h */ = {isa = PBXBuildFile; fileRef = 29A46285B11047E88AB46365 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_font.h */; };
+		59B583B344A6497294F4426F /* /Users/alex/Code/AncientGreece/source/engine/input/utils/InputUtils.h */ = {isa = PBXBuildFile; fileRef = C4320F5379AC40F1B437CD3C /* /Users/alex/Code/AncientGreece/source/engine/input/utils/InputUtils.h */; };
+		5C0DB33B25D149EA875236C1 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.h */ = {isa = PBXBuildFile; fileRef = 7F888F054EC64B64A6F022E1 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.h */; };
+		5D11D35EF43F413192CFBA2F /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.h */ = {isa = PBXBuildFile; fileRef = A1083D4EC3EB41FBA759DE7D /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.h */; };
+		608A5637DF8F4807A317ACD7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_error.h */ = {isa = PBXBuildFile; fileRef = D5146A001A9E463EA5D01367 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_error.h */; };
+		621589C6040E452D89D3C694 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_hash.h */ = {isa = PBXBuildFile; fileRef = 5BA64F64517744ACBC5C5DCF /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_hash.h */; };
+		6293F311A7F84A4CA4643AE7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_sensor.h */ = {isa = PBXBuildFile; fileRef = E34FF769E75F4B3183999EF4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_sensor.h */; };
+		66448B830DF749128F9122C2 /* /Users/alex/Code/AncientGreece/source/engine/common/components/NameComponent.h */ = {isa = PBXBuildFile; fileRef = 7CEC4BEE93A043E899413BCF /* /Users/alex/Code/AncientGreece/source/engine/common/components/NameComponent.h */; };
+		6A0A57EE8FFE48C6B06C638E /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/WindowSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = E529B85A232B427FA613BCCD /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/WindowSingletonComponent.h */; };
+		6BAC99ABFC004ABABB02D0FC /* /Users/alex/Code/AncientGreece/source/engine/resources/IResource.h */ = {isa = PBXBuildFile; fileRef = 9AFD64BCC062471E8CA57B6C /* /Users/alex/Code/AncientGreece/source/engine/resources/IResource.h */; };
+		6CDFB408DAF74A35AFCE8956 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.cpp */ = {isa = PBXBuildFile; fileRef = E85DA1BAD3D14A04A65FEFA8 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.cpp */; };
+		6EFBE05A01C147A5972A7310 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_pixels.h */ = {isa = PBXBuildFile; fileRef = 95E7A91D90C74A329569C15C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_pixels.h */; };
+		7001C83AA9764AA194F1B148 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mutex.h */ = {isa = PBXBuildFile; fileRef = 18DFCC2815FB426FA160DD1F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mutex.h */; };
+		701C125D391D4D78A97571FA /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/packing.h */ = {isa = PBXBuildFile; fileRef = 58B80CF4ED6E43AAB21C1C75 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/packing.h */; };
+		722A51DBD96F4ABFAE6BEA2C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_timer.h */ = {isa = PBXBuildFile; fileRef = 834E5A6D8C6349F795640190 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_timer.h */; };
+		75152FDDBC7B43B7A4F0108E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_blendmode.h */ = {isa = PBXBuildFile; fileRef = EBA3EE4AE3BB4F08ACB2984C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_blendmode.h */; };
+		753C4235C6894825A7BD3890 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_vulkan.h */ = {isa = PBXBuildFile; fileRef = 596737AB46374802A4F9283A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_vulkan.h */; };
+		75F162FEE4364AB082C628D1 /* /Users/alex/Code/AncientGreece/source/engine/resources/IResourceLoader.h */ = {isa = PBXBuildFile; fileRef = FC0EF515FD1C40ED8DCDD4BB /* /Users/alex/Code/AncientGreece/source/engine/resources/IResourceLoader.h */; };
+		767362CFE2C3426E8DB56BA4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_keycode.h */ = {isa = PBXBuildFile; fileRef = 95C232F774394573A52AD7E2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_keycode.h */; };
+		7736ACB4463A4D55A041CE6D /* /Users/alex/Code/AncientGreece/source/engine/IGame.h */ = {isa = PBXBuildFile; fileRef = 4022309D1BDC4E16B0DB4886 /* /Users/alex/Code/AncientGreece/source/engine/IGame.h */; };
+		788EA3A11DAE482994C86AD1 /* /Users/alex/Code/AncientGreece/source/engine/debug/components/DebugViewStateSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = 723875F6FFD4444F883558DD /* /Users/alex/Code/AncientGreece/source/engine/debug/components/DebugViewStateSingletonComponent.h */; };
+		7B25ACD49327480081F37E8A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles.h */ = {isa = PBXBuildFile; fileRef = 1213233A1BD24BB8AC0BEA5E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles.h */; };
+		7B54330C2FCC47C2A05F7378 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_fuzzer.h */ = {isa = PBXBuildFile; fileRef = 381599011566437B96132FF8 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_fuzzer.h */; };
+		7BE9C6833E8D48FC852269F0 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.h */ = {isa = PBXBuildFile; fileRef = 894DC448A16443DC8C95E6D3 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.h */; };
+		7D375B335A994907A4487ECE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2.h */ = {isa = PBXBuildFile; fileRef = 42B089B5B3FA43BAB0BE27B3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2.h */; };
+		7EE34274FB6B4681B06EF954 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.cpp */ = {isa = PBXBuildFile; fileRef = D95A094E0B6D4798890A5520 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.cpp */; };
+		8037BC84D9E741BF8C3FF255 /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.h */ = {isa = PBXBuildFile; fileRef = 02D96AA9D12A4915ADDB5BE5 /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.h */; };
+		8463A403A79F48DF8A340A25 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_shape.h */ = {isa = PBXBuildFile; fileRef = 2FE25FC8DF3A4AB3AB9A1BBC /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_shape.h */; };
+		85992B1C2A6E4A0DA76FA851 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_minimal.h */ = {isa = PBXBuildFile; fileRef = 711BF5BD9B37487DB32779DE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_minimal.h */; };
+		87B1015F2A2945DA87465CF4 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.cpp */ = {isa = PBXBuildFile; fileRef = D2FC28633C2D4D06A9AECA3D /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.cpp */; };
+		87DD6C5FCD0844AD809EC578 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.h */ = {isa = PBXBuildFile; fileRef = F0D774F1967C4F92B874D2C9 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.h */; };
+		8940CC0812614D028FEC8CEE /* /Users/alex/Code/AncientGreece/source/engine/common/utils/Timer.h */ = {isa = PBXBuildFile; fileRef = 43CD50588A7643D291A1C5D0 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/Timer.h */; };
+		8B8E1AC697C2431085C3DBE6 /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.h */ = {isa = PBXBuildFile; fileRef = 9489541D1FE344D899B44341 /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.h */; };
+		8DD0BE0F0B334E3FA79AF710 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_version.h */ = {isa = PBXBuildFile; fileRef = C4A2ADF04F8C4AA389B78DFD /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_version.h */; };
+		8DD86DE3D5A742CCB7503E68 /* /Users/alex/Code/AncientGreece/source/game/Game.cpp */ = {isa = PBXBuildFile; fileRef = 87610C0DF7774E698EF0DD35 /* /Users/alex/Code/AncientGreece/source/game/Game.cpp */; };
+		8E46675BD09742F9AB00B922 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_revision.h */ = {isa = PBXBuildFile; fileRef = E9BF84C6A31443A3A9F7B411 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_revision.h */; };
+		8E782A08E1FF4B4C961B3C8C /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/detail/glm.cpp */ = {isa = PBXBuildFile; fileRef = 09DA5A4B418641F38814F298 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/detail/glm.cpp */; };
+		93342F242ACA46E19C9BE684 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_cpuinfo.h */ = {isa = PBXBuildFile; fileRef = 44118415F2244981A90485EA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_cpuinfo.h */; };
+		95044A0F143E4771966EBA19 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.cpp */ = {isa = PBXBuildFile; fileRef = E6B0EEF2C5644B5D9B2B4DFA /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.cpp */; };
+		9591A2C06EB740EAAB5611FA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_image.h */ = {isa = PBXBuildFile; fileRef = 0547638C8891434D89F50D01 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_image.h */; };
+		95B83BB0FEAD476AAD938EEB /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_log.h */ = {isa = PBXBuildFile; fileRef = C0872F3D95334C1BA578CA20 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_log.h */; };
+		96ACB72256E04F32BEE67E1B /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lauxlib.h */ = {isa = PBXBuildFile; fileRef = BAF7DF8277FC45168B65F004 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lauxlib.h */; };
+		979360013BE5463694E4C924 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.cpp */ = {isa = PBXBuildFile; fileRef = 6E8D5827F96845FBB6B64D4E /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.cpp */; };
+		9A7A4977C7084345B80089EE /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/TextStringComponent.h */ = {isa = PBXBuildFile; fileRef = 2007A5B36881451FA9DF622E /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/TextStringComponent.h */; };
+		9B43C816410D4485A68669F8 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_common.h */ = {isa = PBXBuildFile; fileRef = 1F21C3657964488C96C941BA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_common.h */; };
+		9C71C0A00ED54DF2973F628E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_scancode.h */ = {isa = PBXBuildFile; fileRef = 1386BD8A568E45AE9B510CC6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_scancode.h */; };
+		9D17DFBE38C94905ADF06C62 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.cpp */ = {isa = PBXBuildFile; fileRef = FD61AD753329416DBF304E7E /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.cpp */; };
+		A230B387E4CE4B38AABD7953 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_haptic.h */ = {isa = PBXBuildFile; fileRef = 4D1F7128ECB4409DA35E5A5C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_haptic.h */; };
+		A2781C0F696341CD81238F8A /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2platform.h */ = {isa = PBXBuildFile; fileRef = 4794FF66662642D885B738C8 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2platform.h */; };
+		A38DC5E11C64454BB7B4E3D1 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/close_code.h */ = {isa = PBXBuildFile; fileRef = 0BD730410FAD421C8DDE2F43 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/close_code.h */; };
+		A554A8EC7EE64B38B12FD06D /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengl_glext.h */ = {isa = PBXBuildFile; fileRef = 1598474705D94C23A0924FB5 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengl_glext.h */; };
+		A8ABE2121C3147D29B190065 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.h */ = {isa = PBXBuildFile; fileRef = E0B390423DD44D8EB2E95FFE /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.h */; };
+		A91526B96BFC4F4F8A1F02E0 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL.h */ = {isa = PBXBuildFile; fileRef = CFE9F5A23025411EADA9B55F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL.h */; };
+		A91BC1735B4148CFAFE12C3E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_quit.h */ = {isa = PBXBuildFile; fileRef = 2A88253239EE4901A9BD2711 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_quit.h */; };
+		A9805E6C90A9460687B093FF /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.cpp */ = {isa = PBXBuildFile; fileRef = 5E1C11027BCD46689F1A89E2 /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.cpp */; };
+		A9D19E84DA1A4CFEBA4C7D25 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_memory.h */ = {isa = PBXBuildFile; fileRef = 28265B5717E14A90A0AF687F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_memory.h */; };
+		ABAE90DA9B4342F39EFDE3E9 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/luaconf.h */ = {isa = PBXBuildFile; fileRef = 5EFCDBFE262D4AE4BE3E919B /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/luaconf.h */; };
+		ABE12209A56D46FFA55877DF /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.cpp */ = {isa = PBXBuildFile; fileRef = F73E6872AE984F5F9C0DB342 /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.cpp */; };
+		AC1794802D244B50B90200BB /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/matrix.h */ = {isa = PBXBuildFile; fileRef = F245A6C5D4514F4F97D09413 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/matrix.h */; };
+		AD6EB0C2404742D9ABEA17E2 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.h */ = {isa = PBXBuildFile; fileRef = D0155CA6DF844CAAB08DFA3A /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.h */; };
+		AE41C75776F84AAC828D41D9 /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.h */ = {isa = PBXBuildFile; fileRef = 2AB19AC1CDF3431BBEE58298 /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.h */; };
+		AE607770F9B245F58BAEBBCA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_rect.h */ = {isa = PBXBuildFile; fileRef = D704D4A846EB4FEF873E324B /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_rect.h */; };
+		AE839BBC83064A6FA7E86EEF /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_assert.h */ = {isa = PBXBuildFile; fileRef = 74A921A9E1C84CBAA380D541 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_assert.h */; };
+		AE893DA80F944C43B8FF8857 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_bits.h */ = {isa = PBXBuildFile; fileRef = 743CCCF8EC4341A89E32EC77 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_bits.h */; };
+		AFA7C1982B46409FB966116B /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_set.h */ = {isa = PBXBuildFile; fileRef = EB713E6AF4CA4FABBBAA5340 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_set.h */; };
+		B081EEE7D3954C889A08472F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_loadso.h */ = {isa = PBXBuildFile; fileRef = 28DC7080B33644FE85E21992 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_loadso.h */; };
+		B2305BB58291456FA0C94E68 /* /Users/alex/Code/AncientGreece/source/engine/ECS.h */ = {isa = PBXBuildFile; fileRef = F88A55BAF6ED4E99BBA35E4D /* /Users/alex/Code/AncientGreece/source/engine/ECS.h */; };
+		B2D78D6B410443298897444C /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.cpp */ = {isa = PBXBuildFile; fileRef = 6B4919C79F8A4A9F8E4223CE /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.cpp */; };
+		B5DB2AE04B064D13B5871397 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_joystick.h */ = {isa = PBXBuildFile; fileRef = A6E3F4FDE35E40C5A6084D89 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_joystick.h */; };
+		B67DD1CA5C00420AB388AE1C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_touch.h */ = {isa = PBXBuildFile; fileRef = 42A76328C82A462BA3D89C72 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_touch.h */; };
+		B7A32CE1B6CA4D23BFFA6F6C /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.cpp */ = {isa = PBXBuildFile; fileRef = 921C84E8EB0744DEAA09AA6D /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.cpp */; };
+		B89C06BD7A0E41B18D6F9F04 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/common.h */ = {isa = PBXBuildFile; fileRef = BB8B62099A7041E289495576 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/common.h */; };
+		B9DE98F08D864C4E931A18C0 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_platform.h */ = {isa = PBXBuildFile; fileRef = DC4ED8D26BAB4B48A85F14A3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_platform.h */; };
+		BA49DBBA66AB487CA359C6F7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2platform.h */ = {isa = PBXBuildFile; fileRef = 9D2012D3F6904FDEA6846B60 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2platform.h */; };
+		BAE6A40814B14FF8A3126F56 /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.cpp */ = {isa = PBXBuildFile; fileRef = 57756A69B1F14E18994DE85C /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.cpp */; };
+		BB622F997EBF43FFB4B55C3D /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_main.h */ = {isa = PBXBuildFile; fileRef = B871815F6F934F6ABF1E3BC0 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_main.h */; };
+		BCB78ABDCC2E47698455EE8A /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.h */ = {isa = PBXBuildFile; fileRef = CC2851B40B874C679EB80418 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.h */; };
+		BCC1514BFCD34680A2E8281E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_psp.h */ = {isa = PBXBuildFile; fileRef = B3E87279D0384F0E8F1CAAFE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_psp.h */; };
+		C0BA2547463A43C0B0FF096C /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2.h */ = {isa = PBXBuildFile; fileRef = 100CDFA8182F4CF1AB5C0FE6 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2.h */; };
+		C20AEA2BAB0A4A98A43346D3 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/ShaderStoreSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = 015075868D954528B560EAF7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/ShaderStoreSingletonComponent.h */; };
+		C2D2B173B1CD44259260D0BD /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.cpp */ = {isa = PBXBuildFile; fileRef = 792427334EB94F51BABDB133 /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.cpp */; };
+		C42B89B46F5B422FBD4D58E8 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_gamecontroller.h */ = {isa = PBXBuildFile; fileRef = 9C0525CBF42D4D2B85F0DFC3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_gamecontroller.h */; };
+		C63EEA836EEB48CF81712774 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.cpp */ = {isa = PBXBuildFile; fileRef = 12974B25BD784B6797914D9D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.cpp */; };
+		C76314941F454B65BA5544E3 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.cpp */ = {isa = PBXBuildFile; fileRef = 65BED00AADF74F46B315D776 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.cpp */; };
+		C81A1A9DE30F4B63A3C93CF7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.cpp */ = {isa = PBXBuildFile; fileRef = C11AA01417D2434C848A5ABE /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.cpp */; };
+		C83CD3B14E944531967C9C52 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.cpp */ = {isa = PBXBuildFile; fileRef = 0D91AEA5680041BD8CD7124B /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.cpp */; };
+		C84F0092CA6F4C718DB9D04E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config.h */ = {isa = PBXBuildFile; fileRef = 1C5DFE2E086E49A3AC757397 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config.h */; };
+		C8FD9198BD114CA5A6D05460 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_events.h */ = {isa = PBXBuildFile; fileRef = A9FE2474F1D94DA9AA6404E9 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_events.h */; };
+		C9A771D4A06D49529E2CDF1A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_surface.h */ = {isa = PBXBuildFile; fileRef = 9A04C535BA9344F4AADF3BAA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_surface.h */; };
+		CBC3D6D88AB249C3906CA56A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test.h */ = {isa = PBXBuildFile; fileRef = 695C43E4C7D347D7A2CB39FF /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test.h */; };
+		CBF4B8E9F9D64BC49C158813 /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.h */ = {isa = PBXBuildFile; fileRef = FD1FE58C3FB045ABB14F13AA /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.h */; };
+		CC025E1EA87D4991BEA8E783 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_winrt.h */ = {isa = PBXBuildFile; fileRef = 33666C5EF6D2449C8A49E607 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_winrt.h */; };
+		D0DE74F7AFC94703AD719A06 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/integer.h */ = {isa = PBXBuildFile; fileRef = 57DB1A2A76154B3683ED4F70 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/integer.h */; };
+		D3069AA8CB1D412297ADFD73 /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.h */ = {isa = PBXBuildFile; fileRef = 31FB232DC68944DA910124BE /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.h */; };
+		D3D23921E72A447C99B6C131 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_gesture.h */ = {isa = PBXBuildFile; fileRef = 16D23CBA483141EFA47EC753 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_gesture.h */; };
+		D4080FA7C9144B50A9869018 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_images.h */ = {isa = PBXBuildFile; fileRef = 22D203C05FFE4DE2B8907B81 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_images.h */; };
+		D44C27FF63D3478A901BA000 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/OSMessageBox.h */ = {isa = PBXBuildFile; fileRef = 88B312AD1C4F4979A7A43266 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/OSMessageBox.h */; };
+		D5B3C8844A4E44CD99E40F38 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_keyboard.h */ = {isa = PBXBuildFile; fileRef = 9EBBE768582E462CB48E548C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_keyboard.h */; };
+		D64FABA5B3994B978FF18F23 /* /Users/alex/Code/AncientGreece/source/engine/scripting/components/ScriptComponent.h */ = {isa = PBXBuildFile; fileRef = 5957F2A4009747DFB199267E /* /Users/alex/Code/AncientGreece/source/engine/scripting/components/ScriptComponent.h */; };
+		D884A32B08E84AF1B0C56903 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lua.h */ = {isa = PBXBuildFile; fileRef = 8DA06BA0387B4842A1332C7C /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lua.h */; };
+		D8A8B9EE4ACD40E1B9134A80 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/Colors.h */ = {isa = PBXBuildFile; fileRef = BE09FADF8FEF48E2806F4112 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/Colors.h */; };
+		D9ADD44DDFE44F52906184C3 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/CameraSingletonComponent.h */ = {isa = PBXBuildFile; fileRef = 2AE48BEBB1AA4EAFAF1B7CBB /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/CameraSingletonComponent.h */; };
+		D9F8E6F3D7974B49B0ABF81D /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.h */ = {isa = PBXBuildFile; fileRef = A89A4CF3A9F8417EA7804840 /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.h */; };
+		DB496155EA3840BF9EC646F9 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/StringUtils.h */ = {isa = PBXBuildFile; fileRef = DB2D4F310A2442EEA0FA57E2 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/StringUtils.h */; };
+		DB9754F9EEC34F81BE3003BA /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/trigonometric.h */ = {isa = PBXBuildFile; fileRef = E19436AB5FF144C89E8E2F86 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/trigonometric.h */; };
+		DCE249A09A99420DABBD2831 /* /Users/alex/Code/AncientGreece/source/game/Main.cpp */ = {isa = PBXBuildFile; fileRef = FE1A712E270B4DEFAA2DD75D /* /Users/alex/Code/AncientGreece/source/game/Main.cpp */; };
+		DD6E35A3979D4ABBB5A212E7 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/geometric.h */ = {isa = PBXBuildFile; fileRef = E2D99B14127645BAA05B03EE /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/geometric.h */; };
+		DDDC170E14814A888847C89F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_crc32.h */ = {isa = PBXBuildFile; fileRef = D2F97227DC214FA6BF712416 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_crc32.h */; };
+		DF10BF58668646588229496D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.cpp */ = {isa = PBXBuildFile; fileRef = DDDD6199518F4103AA82C72D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.cpp */; };
+		DF620884AA5D4D4D8AED7247 /* /Users/alex/Code/AncientGreece/source/engine/ECS.cpp */ = {isa = PBXBuildFile; fileRef = AF3435886167410C8203B47F /* /Users/alex/Code/AncientGreece/source/engine/ECS.cpp */; };
+		E3860E7A7CD34A208A213061 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_random.h */ = {isa = PBXBuildFile; fileRef = B491D93F327D42BB9A6BB350 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_random.h */; };
+		E3C517D3DA654F439F45E51B /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_name.h */ = {isa = PBXBuildFile; fileRef = 05C08A4F033E41FABE8FAABE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_name.h */; };
+		E64E474EEB4943659B2BB9EC /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mouse.h */ = {isa = PBXBuildFile; fileRef = D3E26C40368D4175887BE445 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mouse.h */; };
+		E83B06AEF9A84E3483260762 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_assert.h */ = {isa = PBXBuildFile; fileRef = 4538F6B751574BB4B89D7035 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_assert.h */; };
+		E98AA8084FF844D5A3A1719E /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/RenderableComponent.h */ = {isa = PBXBuildFile; fileRef = A4C4255C05F04897817C9D9C /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/RenderableComponent.h */; };
+		EAE9C64392174865A4F11BE7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_clipboard.h */ = {isa = PBXBuildFile; fileRef = A7CF9BC7F3B747E3A265C5AC /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_clipboard.h */; };
+		EB95BB34E63042AD97CD3AD9 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_audio.h */ = {isa = PBXBuildFile; fileRef = 0323833E78AF40D2B77DCB57 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_audio.h */; };
+		ED50E39D3DD0480489CFBA55 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.cpp */ = {isa = PBXBuildFile; fileRef = 1C2716155797433888D668E6 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.cpp */; };
+		EEF7AD5864B4414BB7513671 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.cpp */ = {isa = PBXBuildFile; fileRef = 3263FB6844924C86B213301E /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.cpp */; };
+		EF32F8DE7210416E9B8C0745 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_hints.h */ = {isa = PBXBuildFile; fileRef = FAAB821C4BE3424780114A45 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_hints.h */; };
+		F2B6532F1D044C9EB8599A0E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_rwops.h */ = {isa = PBXBuildFile; fileRef = C09FF3FD5FB3457F83BDA056 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_rwops.h */; };
+		F2EDF9B34D6440489601738E /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.h */ = {isa = PBXBuildFile; fileRef = 70B6BD536EE44011BFF79325 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.h */; };
+		F3358A21E38A4FBCB6CDE2A6 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_map.h */ = {isa = PBXBuildFile; fileRef = 6ACEA25AD4024E1D8DCC3EAB /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_map.h */; };
+		F5FC4C5D59F3479AB8F574CE /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/platform.h */ = {isa = PBXBuildFile; fileRef = 84C6FC4E0F384424A304AF08 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/platform.h */; };
+		F93BCF82D42D4F6EA98E2469 /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.h */ = {isa = PBXBuildFile; fileRef = CD8401A39CB64A2894052C2B /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.h */; };
+		F95B39BCAD7B402D962B48CF /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.h */ = {isa = PBXBuildFile; fileRef = ECE9AFD77879435FA320251C /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.h */; };
+		FA0C77FAF0C145B1A9015EDB /* /Users/alex/Code/AncientGreece/source/engine/GameStartupParameters.h */ = {isa = PBXBuildFile; fileRef = D261FFC6964847C897EF679B /* /Users/alex/Code/AncientGreece/source/engine/GameStartupParameters.h */; };
+		FDA2C0586FD04123A13DCE42 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_video.h */ = {isa = PBXBuildFile; fileRef = A2979B8345A3403AB09BF9D1 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_video.h */; };
+		FDCB254553FC47849BAD8EE6 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.h */ = {isa = PBXBuildFile; fileRef = B9C61E72FC3B4866A5EDDA1E /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		3FC98E3AC4E54A0989A73F19 /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
+		50C8B033C9DF41808A99FA86 /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		6FDA144523934E57B8169482 /* MinSizeRel */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = MinSizeRel;
+		};
+		74130F4AFBF045029289AE88 /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Release;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+		8CE60E3152DF4825AC5063CE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76B2957AFA5A405C9766BED3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 76446327A873484CABC26ED6;
+			remoteInfo = AncientGreece;
+		};
+		BF30DE1F052F4FE59DFC62AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76B2957AFA5A405C9766BED3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ECE1B6ABA0594BFC8499BCBE;
+			remoteInfo = ZERO_CHECK;
+		};
+		C3BF86DE8FB44BF9A2D3673C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76B2957AFA5A405C9766BED3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ECE1B6ABA0594BFC8499BCBE;
+			remoteInfo = ZERO_CHECK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		015075868D954528B560EAF7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/ShaderStoreSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ShaderStoreSingletonComponent.h; path = engine/rendering/components/ShaderStoreSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		015F95E758D0405F962610F9 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = TypeTraits.h; path = engine/common/utils/TypeTraits.h; sourceTree = SOURCE_ROOT; };
+		01F6DAA6BEA24B2D9AEFAD14 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_stdinc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_stdinc.h; path = "extern/SDL2-2.0.9/include/SDL_stdinc.h"; sourceTree = SOURCE_ROOT; };
+		02A467E77F4743DFB0115D95 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_filesystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_filesystem.h; path = "extern/SDL2-2.0.9/include/SDL_filesystem.h"; sourceTree = SOURCE_ROOT; };
+		02D96AA9D12A4915ADDB5BE5 /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ResourceLoadingService.h; path = engine/resources/ResourceLoadingService.h; sourceTree = SOURCE_ROOT; };
+		0323833E78AF40D2B77DCB57 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_audio.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_audio.h; path = "extern/SDL2-2.0.9/include/SDL_audio.h"; sourceTree = SOURCE_ROOT; };
+		0547638C8891434D89F50D01 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_image.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_image.h; path = "extern/SDL2-2.0.9/include/SDL_image.h"; sourceTree = SOURCE_ROOT; };
+		05C08A4F033E41FABE8FAABE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_name.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_name.h; path = "extern/SDL2-2.0.9/include/SDL_name.h"; sourceTree = SOURCE_ROOT; };
+		07704E82870948AB8F1F309F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_wiz.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_wiz.h; path = "extern/SDL2-2.0.9/include/SDL_config_wiz.h"; sourceTree = SOURCE_ROOT; };
+		09DA5A4B418641F38814F298 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/detail/glm.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = glm.cpp; path = "extern/glm-0.9.9.3/glm/detail/glm.cpp"; sourceTree = SOURCE_ROOT; };
+		0B66F5787A8A4E0086653D49 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_log.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_log.h; path = "extern/SDL2-2.0.9/include/SDL_log.h"; sourceTree = SOURCE_ROOT; };
+		0BD730410FAD421C8DDE2F43 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/close_code.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = close_code.h; path = "extern/SDL2-2.0.9/include/close_code.h"; sourceTree = SOURCE_ROOT; };
+		0C727257EB3744A28CB847DE /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MusicLoader.h; path = engine/resources/MusicLoader.h; sourceTree = SOURCE_ROOT; };
+		0D91AEA5680041BD8CD7124B /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = TextureResource.cpp; path = engine/resources/TextureResource.cpp; sourceTree = SOURCE_ROOT; };
+		100CDFA8182F4CF1AB5C0FE6 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gl2.h; path = engine/rendering/opengl/gl2.h; sourceTree = SOURCE_ROOT; };
+		1213233A1BD24BB8AC0BEA5E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_opengles.h; path = "extern/SDL2-2.0.9/include/SDL_opengles.h"; sourceTree = SOURCE_ROOT; };
+		12974B25BD784B6797914D9D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MathUtils.cpp; path = engine/common/utils/MathUtils.cpp; sourceTree = SOURCE_ROOT; };
+		1386BD8A568E45AE9B510CC6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_scancode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_scancode.h; path = "extern/SDL2-2.0.9/include/SDL_scancode.h"; sourceTree = SOURCE_ROOT; };
+		144A34DEB4BA4C5FA602F3A6 /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DefaultEngineExportableFunctions.cpp; path = engine/scripting/DefaultEngineExportableFunctions.cpp; sourceTree = SOURCE_ROOT; };
+		1598474705D94C23A0924FB5 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengl_glext.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_opengl_glext.h; path = "extern/SDL2-2.0.9/include/SDL_opengl_glext.h"; sourceTree = SOURCE_ROOT; };
+		15D42406729D48C18C3E9E50 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_pandora.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_pandora.h; path = "extern/SDL2-2.0.9/include/SDL_config_pandora.h"; sourceTree = SOURCE_ROOT; };
+		16AD33913B814DCB91423A09 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = FontUtils.cpp; path = engine/rendering/utils/FontUtils.cpp; sourceTree = SOURCE_ROOT; };
+		16D23CBA483141EFA47EC753 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_gesture.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_gesture.h; path = "extern/SDL2-2.0.9/include/SDL_gesture.h"; sourceTree = SOURCE_ROOT; };
+		18DFCC2815FB426FA160DD1F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mutex.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_mutex.h; path = "extern/SDL2-2.0.9/include/SDL_mutex.h"; sourceTree = SOURCE_ROOT; };
+		1B64061F07BB4FA5A2500D44 /* /Users/alex/Code/AncientGreece/source/engine/debug/components/ConsoleStateSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ConsoleStateSingletonComponent.h; path = engine/debug/components/ConsoleStateSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		1B6E9DC5336649D9ABB5B3EA /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ShaderLoader.cpp; path = engine/resources/ShaderLoader.cpp; sourceTree = SOURCE_ROOT; };
+		1C2716155797433888D668E6 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = RawInputHandlingSystem.cpp; path = engine/input/systems/RawInputHandlingSystem.cpp; sourceTree = SOURCE_ROOT; };
+		1C5DFE2E086E49A3AC757397 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config.h; path = "extern/SDL2-2.0.9/include/SDL_config.h"; sourceTree = SOURCE_ROOT; };
+		1D90F1D22DB045F0A744C71C /* /Users/alex/Code/AncientGreece/source/game/Game.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Game.h; path = game/Game.h; sourceTree = SOURCE_ROOT; };
+		1F21C3657964488C96C941BA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_common.h; path = "extern/SDL2-2.0.9/include/SDL_test_common.h"; sourceTree = SOURCE_ROOT; };
+		2007A5B36881451FA9DF622E /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/TextStringComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = TextStringComponent.h; path = engine/rendering/components/TextStringComponent.h; sourceTree = SOURCE_ROOT; };
+		216B253DC5F0492C99981C64 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RawInputHandlingSystem.h; path = engine/input/systems/RawInputHandlingSystem.h; sourceTree = SOURCE_ROOT; };
+		22D203C05FFE4DE2B8907B81 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_images.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_images.h; path = "extern/SDL2-2.0.9/include/SDL_test_images.h"; sourceTree = SOURCE_ROOT; };
+		2610BD334BE1422E81BEF4CA /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DebugViewManagementSystem.cpp; path = engine/debug/systems/DebugViewManagementSystem.cpp; sourceTree = SOURCE_ROOT; };
+		26A649F6F95E41BE8EC6C88A /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/khrplatform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = khrplatform.h; path = engine/rendering/opengl/khrplatform.h; sourceTree = SOURCE_ROOT; };
+		28265B5717E14A90A0AF687F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_memory.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_memory.h; path = "extern/SDL2-2.0.9/include/SDL_test_memory.h"; sourceTree = SOURCE_ROOT; };
+		28DC7080B33644FE85E21992 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_loadso.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_loadso.h; path = "extern/SDL2-2.0.9/include/SDL_loadso.h"; sourceTree = SOURCE_ROOT; };
+		29A46285B11047E88AB46365 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_font.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_font.h; path = "extern/SDL2-2.0.9/include/SDL_test_font.h"; sourceTree = SOURCE_ROOT; };
+		2A88253239EE4901A9BD2711 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_quit.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_quit.h; path = "extern/SDL2-2.0.9/include/SDL_quit.h"; sourceTree = SOURCE_ROOT; };
+		2AB19AC1CDF3431BBEE58298 /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ScriptingSystem.h; path = engine/scripting/systems/ScriptingSystem.h; sourceTree = SOURCE_ROOT; };
+		2AE48BEBB1AA4EAFAF1B7CBB /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/CameraSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = CameraSingletonComponent.h; path = engine/rendering/components/CameraSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		2CFEF27212AA43CEBB58684C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_endian.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_endian.h; path = "extern/SDL2-2.0.9/include/SDL_endian.h"; sourceTree = SOURCE_ROOT; };
+		2FE25FC8DF3A4AB3AB9A1BBC /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_shape.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_shape.h; path = "extern/SDL2-2.0.9/include/SDL_shape.h"; sourceTree = SOURCE_ROOT; };
+		30838E0E217D489180477346 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = "extern/glm-0.9.9.3/glm/simd/exponential.h"; sourceTree = SOURCE_ROOT; };
+		314361EDC21C4244AA0E93E4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_copying.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_copying.h; path = "extern/SDL2-2.0.9/include/SDL_copying.h"; sourceTree = SOURCE_ROOT; };
+		319569B7D92E435FA70EB561 /* /Users/alex/Code/AncientGreece/source/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		31FB232DC68944DA910124BE /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DefaultEngineExportableFunctions.h; path = engine/scripting/DefaultEngineExportableFunctions.h; sourceTree = SOURCE_ROOT; };
+		323FC644B5E741EDA0F4D7A7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/LightStoreSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LightStoreSingletonComponent.h; path = engine/rendering/components/LightStoreSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		3263FB6844924C86B213301E /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MeshLoader.cpp; path = engine/resources/MeshLoader.cpp; sourceTree = SOURCE_ROOT; };
+		33457D5845A7445C8526D2D7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/FontsStoreSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = FontsStoreSingletonComponent.h; path = engine/rendering/components/FontsStoreSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		33666C5EF6D2449C8A49E607 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_winrt.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_winrt.h; path = "extern/SDL2-2.0.9/include/SDL_config_winrt.h"; sourceTree = SOURCE_ROOT; };
+		33EF92785ADC46D9BB056E0A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_system.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_system.h; path = "extern/SDL2-2.0.9/include/SDL_system.h"; sourceTree = SOURCE_ROOT; };
+		379CB62FF6704D8C990B4AB4 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lualib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lualib.h; path = "extern/lua-5.3.5/include/lualib.h"; sourceTree = SOURCE_ROOT; };
+		381599011566437B96132FF8 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_fuzzer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_fuzzer.h; path = "extern/SDL2-2.0.9/include/SDL_test_fuzzer.h"; sourceTree = SOURCE_ROOT; };
+		39822E8AC1C94AB584FE758E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_messagebox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_messagebox.h; path = "extern/SDL2-2.0.9/include/SDL_messagebox.h"; sourceTree = SOURCE_ROOT; };
+		3ACF6740BBFA45779E68BE3A /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SoundService.h; path = engine/sound/SoundService.h; sourceTree = SOURCE_ROOT; };
+		4022309D1BDC4E16B0DB4886 /* /Users/alex/Code/AncientGreece/source/engine/IGame.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IGame.h; path = engine/IGame.h; sourceTree = SOURCE_ROOT; };
+		42A76328C82A462BA3D89C72 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_touch.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_touch.h; path = "extern/SDL2-2.0.9/include/SDL_touch.h"; sourceTree = SOURCE_ROOT; };
+		42B089B5B3FA43BAB0BE27B3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_opengles2_gl2.h; path = "extern/SDL2-2.0.9/include/SDL_opengles2_gl2.h"; sourceTree = SOURCE_ROOT; };
+		43CD50588A7643D291A1C5D0 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/Timer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Timer.h; path = engine/common/utils/Timer.h; sourceTree = SOURCE_ROOT; };
+		43DF2CEBB27F47A5AE10AD27 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ShaderResource.h; path = engine/resources/ShaderResource.h; sourceTree = SOURCE_ROOT; };
+		44118415F2244981A90485EA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_cpuinfo.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_cpuinfo.h; path = "extern/SDL2-2.0.9/include/SDL_cpuinfo.h"; sourceTree = SOURCE_ROOT; };
+		4538F6B751574BB4B89D7035 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_assert.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_assert.h; path = "extern/SDL2-2.0.9/include/SDL_assert.h"; sourceTree = SOURCE_ROOT; };
+		4794FF66662642D885B738C8 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gl2platform.h; path = engine/rendering/opengl/gl2platform.h; sourceTree = SOURCE_ROOT; };
+		4AA1C55C35424FB29A8AA981 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_compare.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_compare.h; path = "extern/SDL2-2.0.9/include/SDL_test_compare.h"; sourceTree = SOURCE_ROOT; };
+		4AFD6D07225D478CBED73F60 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MeshUtils.h; path = engine/rendering/utils/MeshUtils.h; sourceTree = SOURCE_ROOT; };
+		4B5F7D3BF7E9430F9EBC195D /* AncientGreece */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = AncientGreece; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1F7128ECB4409DA35E5A5C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_haptic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_haptic.h; path = "extern/SDL2-2.0.9/include/SDL_haptic.h"; sourceTree = SOURCE_ROOT; };
+		57756A69B1F14E18994DE85C /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ResourceLoadingService.cpp; path = engine/resources/ResourceLoadingService.cpp; sourceTree = SOURCE_ROOT; };
+		57DB1A2A76154B3683ED4F70 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = "extern/glm-0.9.9.3/glm/simd/integer.h"; sourceTree = SOURCE_ROOT; };
+		58B80CF4ED6E43AAB21C1C75 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = "extern/glm-0.9.9.3/glm/simd/packing.h"; sourceTree = SOURCE_ROOT; };
+		5957F2A4009747DFB199267E /* /Users/alex/Code/AncientGreece/source/engine/scripting/components/ScriptComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ScriptComponent.h; path = engine/scripting/components/ScriptComponent.h; sourceTree = SOURCE_ROOT; };
+		596737AB46374802A4F9283A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_vulkan.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_vulkan.h; path = "extern/SDL2-2.0.9/include/SDL_vulkan.h"; sourceTree = SOURCE_ROOT; };
+		5ABE561E357B4F28903B2746 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_opengles2.h; path = "extern/SDL2-2.0.9/include/SDL_opengles2.h"; sourceTree = SOURCE_ROOT; };
+		5BA64F64517744ACBC5C5DCF /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_hash.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = robin_hash.h; path = "extern/robin-map/include/tsl/robin_hash.h"; sourceTree = SOURCE_ROOT; };
+		5E1C11027BCD46689F1A89E2 /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ConsoleManagementSystem.cpp; path = engine/debug/systems/ConsoleManagementSystem.cpp; sourceTree = SOURCE_ROOT; };
+		5EFCDBFE262D4AE4BE3E919B /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/luaconf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = luaconf.h; path = "extern/lua-5.3.5/include/luaconf.h"; sourceTree = SOURCE_ROOT; };
+		618E16ACC833453BBC34C3A2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_atomic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_atomic.h; path = "extern/SDL2-2.0.9/include/SDL_atomic.h"; sourceTree = SOURCE_ROOT; };
+		648B05F30ADD41FD96A4E7D8 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MusicResource.h; path = engine/resources/MusicResource.h; sourceTree = SOURCE_ROOT; };
+		65BED00AADF74F46B315D776 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MeshResource.cpp; path = engine/resources/MeshResource.cpp; sourceTree = SOURCE_ROOT; };
+		695C43E4C7D347D7A2CB39FF /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test.h; path = "extern/SDL2-2.0.9/include/SDL_test.h"; sourceTree = SOURCE_ROOT; };
+		6ACEA25AD4024E1D8DCC3EAB /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_map.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = robin_map.h; path = "extern/robin-map/include/tsl/robin_map.h"; sourceTree = SOURCE_ROOT; };
+		6B4919C79F8A4A9F8E4223CE /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = RenderingSystem.cpp; path = engine/rendering/systems/RenderingSystem.cpp; sourceTree = SOURCE_ROOT; };
+		6E8D5827F96845FBB6B64D4E /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DataFileResource.cpp; path = engine/resources/DataFileResource.cpp; sourceTree = SOURCE_ROOT; };
+		70B6BD536EE44011BFF79325 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = FontUtils.h; path = engine/rendering/utils/FontUtils.h; sourceTree = SOURCE_ROOT; };
+		711BF5BD9B37487DB32779DE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_minimal.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_minimal.h; path = "extern/SDL2-2.0.9/include/SDL_config_minimal.h"; sourceTree = SOURCE_ROOT; };
+		712F7B4560044CBF82F5828B /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mixer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_mixer.h; path = "extern/SDL2-2.0.9/include/SDL_mixer.h"; sourceTree = SOURCE_ROOT; };
+		723875F6FFD4444F883558DD /* /Users/alex/Code/AncientGreece/source/engine/debug/components/DebugViewStateSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DebugViewStateSingletonComponent.h; path = engine/debug/components/DebugViewStateSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		743CCCF8EC4341A89E32EC77 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_bits.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_bits.h; path = "extern/SDL2-2.0.9/include/SDL_bits.h"; sourceTree = SOURCE_ROOT; };
+		74A921A9E1C84CBAA380D541 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_assert.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_assert.h; path = "extern/SDL2-2.0.9/include/SDL_test_assert.h"; sourceTree = SOURCE_ROOT; };
+		75425AE1B8464612B059BCBC /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = TextureLoader.h; path = engine/resources/TextureLoader.h; sourceTree = SOURCE_ROOT; };
+		767C9B24C2484907B68ACAE9 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = LightUtils.cpp; path = engine/rendering/utils/LightUtils.cpp; sourceTree = SOURCE_ROOT; };
+		792427334EB94F51BABDB133 /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SoundService.cpp; path = engine/sound/SoundService.cpp; sourceTree = SOURCE_ROOT; };
+		7C77372F6632485582BBD2D7 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/FileUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = FileUtils.h; path = engine/common/utils/FileUtils.h; sourceTree = SOURCE_ROOT; };
+		7CEC4BEE93A043E899413BCF /* /Users/alex/Code/AncientGreece/source/engine/common/components/NameComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = NameComponent.h; path = engine/common/components/NameComponent.h; sourceTree = SOURCE_ROOT; };
+		7D34F0917B854AF7844900A6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2ext.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_opengles2_gl2ext.h; path = "extern/SDL2-2.0.9/include/SDL_opengles2_gl2ext.h"; sourceTree = SOURCE_ROOT; };
+		7F888F054EC64B64A6F022E1 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Context.h; path = engine/rendering/opengl/Context.h; sourceTree = SOURCE_ROOT; };
+		834E5A6D8C6349F795640190 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_timer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_timer.h; path = "extern/SDL2-2.0.9/include/SDL_timer.h"; sourceTree = SOURCE_ROOT; };
+		84252AF431554764B9F088F6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_macosx.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_macosx.h; path = "extern/SDL2-2.0.9/include/SDL_config_macosx.h"; sourceTree = SOURCE_ROOT; };
+		84C6FC4E0F384424A304AF08 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = "extern/glm-0.9.9.3/glm/simd/platform.h"; sourceTree = SOURCE_ROOT; };
+		87610C0DF7774E698EF0DD35 /* /Users/alex/Code/AncientGreece/source/game/Game.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Game.cpp; path = game/Game.cpp; sourceTree = SOURCE_ROOT; };
+		88B312AD1C4F4979A7A43266 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/OSMessageBox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = OSMessageBox.h; path = engine/common/utils/OSMessageBox.h; sourceTree = SOURCE_ROOT; };
+		894DC448A16443DC8C95E6D3 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DefaultEngineConsoleCommands.h; path = engine/debug/DefaultEngineConsoleCommands.h; sourceTree = SOURCE_ROOT; };
+		898F42FA4D5540769DD2EB9A /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = GenesisEngine.cpp; path = engine/GenesisEngine.cpp; sourceTree = SOURCE_ROOT; };
+		8D3D43872B5847ED85A21FA7 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MeshLoader.h; path = engine/resources/MeshLoader.h; sourceTree = SOURCE_ROOT; };
+		8DA06BA0387B4842A1332C7C /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lua.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lua.h; path = "extern/lua-5.3.5/include/lua.h"; sourceTree = SOURCE_ROOT; };
+		9200876A1FF340F8AFC4ED8C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_egl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_egl.h; path = "extern/SDL2-2.0.9/include/SDL_egl.h"; sourceTree = SOURCE_ROOT; };
+		921C84E8EB0744DEAA09AA6D /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Context.cpp; path = engine/rendering/opengl/Context.cpp; sourceTree = SOURCE_ROOT; };
+		9428B777E1DC46E1AF14D589 /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DebugViewManagementSystem.h; path = engine/debug/systems/DebugViewManagementSystem.h; sourceTree = SOURCE_ROOT; };
+		9489541D1FE344D899B44341 /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = GenesisEngine.h; path = engine/GenesisEngine.h; sourceTree = SOURCE_ROOT; };
+		954C30A715FD446EAB568389 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2ext.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gl2ext.h; path = engine/rendering/opengl/gl2ext.h; sourceTree = SOURCE_ROOT; };
+		95C232F774394573A52AD7E2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_keycode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_keycode.h; path = "extern/SDL2-2.0.9/include/SDL_keycode.h"; sourceTree = SOURCE_ROOT; };
+		95E7A91D90C74A329569C15C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_pixels.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_pixels.h; path = "extern/SDL2-2.0.9/include/SDL_pixels.h"; sourceTree = SOURCE_ROOT; };
+		96F7BC776B0E4F3DB118A7D7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_khrplatform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_opengles2_khrplatform.h; path = "extern/SDL2-2.0.9/include/SDL_opengles2_khrplatform.h"; sourceTree = SOURCE_ROOT; };
+		9A04C535BA9344F4AADF3BAA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_surface.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_surface.h; path = "extern/SDL2-2.0.9/include/SDL_surface.h"; sourceTree = SOURCE_ROOT; };
+		9AFD64BCC062471E8CA57B6C /* /Users/alex/Code/AncientGreece/source/engine/resources/IResource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IResource.h; path = engine/resources/IResource.h; sourceTree = SOURCE_ROOT; };
+		9C0525CBF42D4D2B85F0DFC3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_gamecontroller.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_gamecontroller.h; path = "extern/SDL2-2.0.9/include/SDL_gamecontroller.h"; sourceTree = SOURCE_ROOT; };
+		9D2012D3F6904FDEA6846B60 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_opengles2_gl2platform.h; path = "extern/SDL2-2.0.9/include/SDL_opengles2_gl2platform.h"; sourceTree = SOURCE_ROOT; };
+		9D3BD1F92B584C86AAA8A2AD /* /Users/alex/Code/AncientGreece/source/engine/input/components/InputStateSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = InputStateSingletonComponent.h; path = engine/input/components/InputStateSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		9D449F35A49E4769814E19E2 /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ConsoleCommandUtils.cpp; path = engine/debug/utils/ConsoleCommandUtils.cpp; sourceTree = SOURCE_ROOT; };
+		9E0CBD130132496593999CA3 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = "extern/glm-0.9.9.3/glm/simd/vector_relational.h"; sourceTree = SOURCE_ROOT; };
+		9EBBE768582E462CB48E548C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_keyboard.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_keyboard.h; path = "extern/SDL2-2.0.9/include/SDL_keyboard.h"; sourceTree = SOURCE_ROOT; };
+		A058CE7EC91049A590A27372 /* /Users/alex/Code/AncientGreece/source/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		A1083D4EC3EB41FBA759DE7D /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ConsoleCommandUtils.h; path = engine/debug/utils/ConsoleCommandUtils.h; sourceTree = SOURCE_ROOT; };
+		A2979B8345A3403AB09BF9D1 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_video.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_video.h; path = "extern/SDL2-2.0.9/include/SDL_video.h"; sourceTree = SOURCE_ROOT; };
+		A3EE7AFCA0654F93B4100051 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SfxResource.h; path = engine/resources/SfxResource.h; sourceTree = SOURCE_ROOT; };
+		A4664B4B93164436B27F7E22 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_growth_policy.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = robin_growth_policy.h; path = "extern/robin-map/include/tsl/robin_growth_policy.h"; sourceTree = SOURCE_ROOT; };
+		A4C4255C05F04897817C9D9C /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/RenderableComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RenderableComponent.h; path = engine/rendering/components/RenderableComponent.h; sourceTree = SOURCE_ROOT; };
+		A560E81003D44AC7994C6D45 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_android.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_android.h; path = "extern/SDL2-2.0.9/include/SDL_config_android.h"; sourceTree = SOURCE_ROOT; };
+		A6E3F4FDE35E40C5A6084D89 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_joystick.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_joystick.h; path = "extern/SDL2-2.0.9/include/SDL_joystick.h"; sourceTree = SOURCE_ROOT; };
+		A7CF9BC7F3B747E3A265C5AC /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_clipboard.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_clipboard.h; path = "extern/SDL2-2.0.9/include/SDL_clipboard.h"; sourceTree = SOURCE_ROOT; };
+		A89A4CF3A9F8417EA7804840 /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RenderingSystem.h; path = engine/rendering/systems/RenderingSystem.h; sourceTree = SOURCE_ROOT; };
+		A9FE2474F1D94DA9AA6404E9 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_events.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_events.h; path = "extern/SDL2-2.0.9/include/SDL_events.h"; sourceTree = SOURCE_ROOT; };
+		AA2932C3033948109B3525FD /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_harness.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_harness.h; path = "extern/SDL2-2.0.9/include/SDL_test_harness.h"; sourceTree = SOURCE_ROOT; };
+		AB7DE0E5AB9245789AA28F9A /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SfxLoader.cpp; path = engine/resources/SfxLoader.cpp; sourceTree = SOURCE_ROOT; };
+		AF3435886167410C8203B47F /* /Users/alex/Code/AncientGreece/source/engine/ECS.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ECS.cpp; path = engine/ECS.cpp; sourceTree = SOURCE_ROOT; };
+		B29959EC71864691BFB1F8F7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_render.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_render.h; path = "extern/SDL2-2.0.9/include/SDL_render.h"; sourceTree = SOURCE_ROOT; };
+		B3DCE944EAA44218B953A875 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/Logging.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Logging.h; path = engine/common/utils/Logging.h; sourceTree = SOURCE_ROOT; };
+		B3E87279D0384F0E8F1CAAFE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_psp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_psp.h; path = "extern/SDL2-2.0.9/include/SDL_config_psp.h"; sourceTree = SOURCE_ROOT; };
+		B491D93F327D42BB9A6BB350 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_random.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_random.h; path = "extern/SDL2-2.0.9/include/SDL_test_random.h"; sourceTree = SOURCE_ROOT; };
+		B710CCB8EE2248AA90CA0116 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_power.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_power.h; path = "extern/SDL2-2.0.9/include/SDL_power.h"; sourceTree = SOURCE_ROOT; };
+		B73D9D17523E4B2B9419F95E /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = TextureLoader.cpp; path = engine/resources/TextureLoader.cpp; sourceTree = SOURCE_ROOT; };
+		B871815F6F934F6ABF1E3BC0 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_main.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_main.h; path = "extern/SDL2-2.0.9/include/SDL_main.h"; sourceTree = SOURCE_ROOT; };
+		B9C61E72FC3B4866A5EDDA1E /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SfxLoader.h; path = engine/resources/SfxLoader.h; sourceTree = SOURCE_ROOT; };
+		BAF7DF8277FC45168B65F004 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lauxlib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lauxlib.h; path = "extern/lua-5.3.5/include/lauxlib.h"; sourceTree = SOURCE_ROOT; };
+		BB8B62099A7041E289495576 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = "extern/glm-0.9.9.3/glm/simd/common.h"; sourceTree = SOURCE_ROOT; };
+		BE09FADF8FEF48E2806F4112 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/Colors.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Colors.h; path = engine/rendering/utils/Colors.h; sourceTree = SOURCE_ROOT; };
+		C0872F3D95334C1BA578CA20 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_log.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_log.h; path = "extern/SDL2-2.0.9/include/SDL_test_log.h"; sourceTree = SOURCE_ROOT; };
+		C09FF3FD5FB3457F83BDA056 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_rwops.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_rwops.h; path = "extern/SDL2-2.0.9/include/SDL_rwops.h"; sourceTree = SOURCE_ROOT; };
+		C11AA01417D2434C848A5ABE /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = CameraUtils.cpp; path = engine/rendering/utils/CameraUtils.cpp; sourceTree = SOURCE_ROOT; };
+		C24A999F5D6D481F9A7C9CC3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_iphoneos.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_iphoneos.h; path = "extern/SDL2-2.0.9/include/SDL_config_iphoneos.h"; sourceTree = SOURCE_ROOT; };
+		C4320F5379AC40F1B437CD3C /* /Users/alex/Code/AncientGreece/source/engine/input/utils/InputUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = InputUtils.h; path = engine/input/utils/InputUtils.h; sourceTree = SOURCE_ROOT; };
+		C4A2ADF04F8C4AA389B78DFD /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_version.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_version.h; path = "extern/SDL2-2.0.9/include/SDL_version.h"; sourceTree = SOURCE_ROOT; };
+		CC2851B40B874C679EB80418 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DataFileLoader.h; path = engine/resources/DataFileLoader.h; sourceTree = SOURCE_ROOT; };
+		CD8401A39CB64A2894052C2B /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LuaScriptingService.h; path = engine/scripting/service/LuaScriptingService.h; sourceTree = SOURCE_ROOT; };
+		CEF72AF773614FD1B1E20E72 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ShaderLoader.h; path = engine/resources/ShaderLoader.h; sourceTree = SOURCE_ROOT; };
+		CFE9F5A23025411EADA9B55F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL.h; path = "extern/SDL2-2.0.9/include/SDL.h"; sourceTree = SOURCE_ROOT; };
+		D0155CA6DF844CAAB08DFA3A /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = CameraUtils.h; path = engine/rendering/utils/CameraUtils.h; sourceTree = SOURCE_ROOT; };
+		D1A4301708A64A88AE8A1D06 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Funcs.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Funcs.h; path = engine/rendering/opengl/Funcs.h; sourceTree = SOURCE_ROOT; };
+		D261FFC6964847C897EF679B /* /Users/alex/Code/AncientGreece/source/engine/GameStartupParameters.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = GameStartupParameters.h; path = engine/GameStartupParameters.h; sourceTree = SOURCE_ROOT; };
+		D28BB48F041D4F8BAAE833D4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_opengl.h; path = "extern/SDL2-2.0.9/include/SDL_opengl.h"; sourceTree = SOURCE_ROOT; };
+		D2F97227DC214FA6BF712416 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_crc32.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_crc32.h; path = "extern/SDL2-2.0.9/include/SDL_test_crc32.h"; sourceTree = SOURCE_ROOT; };
+		D2FC28633C2D4D06A9AECA3D /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MusicLoader.cpp; path = engine/resources/MusicLoader.cpp; sourceTree = SOURCE_ROOT; };
+		D3E26C40368D4175887BE445 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mouse.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_mouse.h; path = "extern/SDL2-2.0.9/include/SDL_mouse.h"; sourceTree = SOURCE_ROOT; };
+		D5146A001A9E463EA5D01367 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_error.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_error.h; path = "extern/SDL2-2.0.9/include/SDL_error.h"; sourceTree = SOURCE_ROOT; };
+		D704D4A846EB4FEF873E324B /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_rect.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_rect.h; path = "extern/SDL2-2.0.9/include/SDL_rect.h"; sourceTree = SOURCE_ROOT; };
+		D95A094E0B6D4798890A5520 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DefaultEngineConsoleCommands.cpp; path = engine/debug/DefaultEngineConsoleCommands.cpp; sourceTree = SOURCE_ROOT; };
+		DA1377BCCDB3455A916F051D /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = LuaScriptingService.cpp; path = engine/scripting/service/LuaScriptingService.cpp; sourceTree = SOURCE_ROOT; };
+		DB2D4F310A2442EEA0FA57E2 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/StringUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = StringUtils.h; path = engine/common/utils/StringUtils.h; sourceTree = SOURCE_ROOT; };
+		DC4ED8D26BAB4B48A85F14A3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_platform.h; path = "extern/SDL2-2.0.9/include/SDL_platform.h"; sourceTree = SOURCE_ROOT; };
+		DDDD6199518F4103AA82C72D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = TypeTraits.cpp; path = engine/common/utils/TypeTraits.cpp; sourceTree = SOURCE_ROOT; };
+		E0B390423DD44D8EB2E95FFE /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MeshResource.h; path = engine/resources/MeshResource.h; sourceTree = SOURCE_ROOT; };
+		E19436AB5FF144C89E8E2F86 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = "extern/glm-0.9.9.3/glm/simd/trigonometric.h"; sourceTree = SOURCE_ROOT; };
+		E19C4267C8614D0286028B32 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_types.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_types.h; path = "extern/SDL2-2.0.9/include/SDL_types.h"; sourceTree = SOURCE_ROOT; };
+		E22C5A33EF644D7D92918B27 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_windows.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_config_windows.h; path = "extern/SDL2-2.0.9/include/SDL_config_windows.h"; sourceTree = SOURCE_ROOT; };
+		E2D99B14127645BAA05B03EE /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = "extern/glm-0.9.9.3/glm/simd/geometric.h"; sourceTree = SOURCE_ROOT; };
+		E34FF769E75F4B3183999EF4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_sensor.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_sensor.h; path = "extern/SDL2-2.0.9/include/SDL_sensor.h"; sourceTree = SOURCE_ROOT; };
+		E36F477F32D54FD58F444724 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_thread.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_thread.h; path = "extern/SDL2-2.0.9/include/SDL_thread.h"; sourceTree = SOURCE_ROOT; };
+		E4C6A80B77884C62B6B54362 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MusicResource.cpp; path = engine/resources/MusicResource.cpp; sourceTree = SOURCE_ROOT; };
+		E529B85A232B427FA613BCCD /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/WindowSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = WindowSingletonComponent.h; path = engine/rendering/components/WindowSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		E6B0EEF2C5644B5D9B2B4DFA /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ShaderResource.cpp; path = engine/resources/ShaderResource.cpp; sourceTree = SOURCE_ROOT; };
+		E748A3E3A0E6429B827CE5DB /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_md5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_test_md5.h; path = "extern/SDL2-2.0.9/include/SDL_test_md5.h"; sourceTree = SOURCE_ROOT; };
+		E85DA1BAD3D14A04A65FEFA8 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MeshUtils.cpp; path = engine/rendering/utils/MeshUtils.cpp; sourceTree = SOURCE_ROOT; };
+		E9BF84C6A31443A3A9F7B411 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_revision.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_revision.h; path = "extern/SDL2-2.0.9/include/SDL_revision.h"; sourceTree = SOURCE_ROOT; };
+		E9D71436A1D34BA68AE66122 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/begin_code.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = begin_code.h; path = "extern/SDL2-2.0.9/include/begin_code.h"; sourceTree = SOURCE_ROOT; };
+		EB713E6AF4CA4FABBBAA5340 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_set.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = robin_set.h; path = "extern/robin-map/include/tsl/robin_set.h"; sourceTree = SOURCE_ROOT; };
+		EBA3EE4AE3BB4F08ACB2984C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_blendmode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_blendmode.h; path = "extern/SDL2-2.0.9/include/SDL_blendmode.h"; sourceTree = SOURCE_ROOT; };
+		ECE9AFD77879435FA320251C /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LightUtils.h; path = engine/rendering/utils/LightUtils.h; sourceTree = SOURCE_ROOT; };
+		ED9AD0814E2642898D152EA8 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DataFileResource.h; path = engine/resources/DataFileResource.h; sourceTree = SOURCE_ROOT; };
+		F0D774F1967C4F92B874D2C9 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = TextureResource.h; path = engine/resources/TextureResource.h; sourceTree = SOURCE_ROOT; };
+		F245A6C5D4514F4F97D09413 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = "extern/glm-0.9.9.3/glm/simd/matrix.h"; sourceTree = SOURCE_ROOT; };
+		F3F54B2D04AF44988D054464 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SfxResource.cpp; path = engine/resources/SfxResource.cpp; sourceTree = SOURCE_ROOT; };
+		F54D0AC4491A45578EB0805D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MathUtils.h; path = engine/common/utils/MathUtils.h; sourceTree = SOURCE_ROOT; };
+		F73E6872AE984F5F9C0DB342 /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ScriptingSystem.cpp; path = engine/scripting/systems/ScriptingSystem.cpp; sourceTree = SOURCE_ROOT; };
+		F88A55BAF6ED4E99BBA35E4D /* /Users/alex/Code/AncientGreece/source/engine/ECS.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ECS.h; path = engine/ECS.h; sourceTree = SOURCE_ROOT; };
+		FAAB821C4BE3424780114A45 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_hints.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_hints.h; path = "extern/SDL2-2.0.9/include/SDL_hints.h"; sourceTree = SOURCE_ROOT; };
+		FC0EF515FD1C40ED8DCDD4BB /* /Users/alex/Code/AncientGreece/source/engine/resources/IResourceLoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IResourceLoader.h; path = engine/resources/IResourceLoader.h; sourceTree = SOURCE_ROOT; };
+		FD112FC3B11F4A578E8CE10E /* /Users/alex/Code/AncientGreece/source/engine/common/components/TransformComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = TransformComponent.h; path = engine/common/components/TransformComponent.h; sourceTree = SOURCE_ROOT; };
+		FD1FE58C3FB045ABB14F13AA /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ConsoleManagementSystem.h; path = engine/debug/systems/ConsoleManagementSystem.h; sourceTree = SOURCE_ROOT; };
+		FD3D72600E2748DA8B76DD25 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/RenderingContextSingletonComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RenderingContextSingletonComponent.h; path = engine/rendering/components/RenderingContextSingletonComponent.h; sourceTree = SOURCE_ROOT; };
+		FD61AD753329416DBF304E7E /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DataFileLoader.cpp; path = engine/resources/DataFileLoader.cpp; sourceTree = SOURCE_ROOT; };
+		FE1A712E270B4DEFAA2DD75D /* /Users/alex/Code/AncientGreece/source/game/Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Main.cpp; path = game/Main.cpp; sourceTree = SOURCE_ROOT; };
+		FF69EC89A5D34C3B884003F2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_syswm.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SDL_syswm.h; path = "extern/SDL2-2.0.9/include/SDL_syswm.h"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		04791136E1C74E81A17CE144 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				9D3BD1F92B584C86AAA8A2AD /* /Users/alex/Code/AncientGreece/source/engine/input/components/InputStateSingletonComponent.h */,
+			);
+			name = components;
+			sourceTree = "<group>";
+		};
+		09FD3B3781C8481DBC282ACA /* tsl */ = {
+			isa = PBXGroup;
+			children = (
+				A4664B4B93164436B27F7E22 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_growth_policy.h */,
+				5BA64F64517744ACBC5C5DCF /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_hash.h */,
+				6ACEA25AD4024E1D8DCC3EAB /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_map.h */,
+				EB713E6AF4CA4FABBBAA5340 /* /Users/alex/Code/AncientGreece/source/extern/robin-map/include/tsl/robin_set.h */,
+			);
+			name = tsl;
+			sourceTree = "<group>";
+		};
+		0CA5B10682D04782BEB9090F /* systems */ = {
+			isa = PBXGroup;
+			children = (
+				5E1C11027BCD46689F1A89E2 /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.cpp */,
+				FD1FE58C3FB045ABB14F13AA /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.h */,
+				2610BD334BE1422E81BEF4CA /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.cpp */,
+				9428B777E1DC46E1AF14D589 /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.h */,
+			);
+			name = systems;
+			sourceTree = "<group>";
+		};
+		0E0496AD5088418F926CB157 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				9D449F35A49E4769814E19E2 /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.cpp */,
+				A1083D4EC3EB41FBA759DE7D /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.h */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
+		168A3CAFAAE845D8BDDFD746 /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				792427334EB94F51BABDB133 /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.cpp */,
+				3ACF6740BBFA45779E68BE3A /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.h */,
+			);
+			name = sound;
+			sourceTree = "<group>";
+		};
+		1EAE671562624318ACE77F7F /* game */ = {
+			isa = PBXGroup;
+			children = (
+				87610C0DF7774E698EF0DD35 /* /Users/alex/Code/AncientGreece/source/game/Game.cpp */,
+				1D90F1D22DB045F0A744C71C /* /Users/alex/Code/AncientGreece/source/game/Game.h */,
+				FE1A712E270B4DEFAA2DD75D /* /Users/alex/Code/AncientGreece/source/game/Main.cpp */,
+			);
+			name = game;
+			sourceTree = "<group>";
+		};
+		28EA0226BF8E4EFEA506F233 /* AncientGreece */ = {
+			isa = PBXGroup;
+			children = (
+				4AE590DD7EFE49C9B50A6D70 /* engine */,
+				C911EBAF1B7F4BAB972B335F /* extern */,
+				1EAE671562624318ACE77F7F /* game */,
+				A058CE7EC91049A590A27372 /* /Users/alex/Code/AncientGreece/source/CMakeLists.txt */,
+			);
+			name = AncientGreece;
+			sourceTree = "<group>";
+		};
+		449F5606552E40AE9C3E4FD5 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				2AE48BEBB1AA4EAFAF1B7CBB /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/CameraSingletonComponent.h */,
+				33457D5845A7445C8526D2D7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/FontsStoreSingletonComponent.h */,
+				323FC644B5E741EDA0F4D7A7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/LightStoreSingletonComponent.h */,
+				A4C4255C05F04897817C9D9C /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/RenderableComponent.h */,
+				FD3D72600E2748DA8B76DD25 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/RenderingContextSingletonComponent.h */,
+				015075868D954528B560EAF7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/ShaderStoreSingletonComponent.h */,
+				2007A5B36881451FA9DF622E /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/TextStringComponent.h */,
+				E529B85A232B427FA613BCCD /* /Users/alex/Code/AncientGreece/source/engine/rendering/components/WindowSingletonComponent.h */,
+			);
+			name = components;
+			sourceTree = "<group>";
+		};
+		45D14357C2B54527BD206C20 /* glm-0.9.9.3 */ = {
+			isa = PBXGroup;
+			children = (
+				69972EACF140409A813AF475 /* glm */,
+			);
+			name = "glm-0.9.9.3";
+			sourceTree = "<group>";
+		};
+		46AFE01FC56847D59443961A /* opengl */ = {
+			isa = PBXGroup;
+			children = (
+				921C84E8EB0744DEAA09AA6D /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.cpp */,
+				7F888F054EC64B64A6F022E1 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.h */,
+				D1A4301708A64A88AE8A1D06 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Funcs.h */,
+				100CDFA8182F4CF1AB5C0FE6 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2.h */,
+				954C30A715FD446EAB568389 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2ext.h */,
+				4794FF66662642D885B738C8 /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/gl2platform.h */,
+				26A649F6F95E41BE8EC6C88A /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/khrplatform.h */,
+			);
+			name = opengl;
+			sourceTree = "<group>";
+		};
+		4AE590DD7EFE49C9B50A6D70 /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				9AF7A506ABED402AA8F5B943 /* common */,
+				D836733ED557425AB470E873 /* debug */,
+				53053F4F6424401C8E778B0A /* input */,
+				7E40B827C4D44D3A8530B322 /* rendering */,
+				BAE55A11D1114EC08C5FB0A2 /* resources */,
+				597E61768EF14883A158D2C0 /* scripting */,
+				168A3CAFAAE845D8BDDFD746 /* sound */,
+				AF3435886167410C8203B47F /* /Users/alex/Code/AncientGreece/source/engine/ECS.cpp */,
+				F88A55BAF6ED4E99BBA35E4D /* /Users/alex/Code/AncientGreece/source/engine/ECS.h */,
+				D261FFC6964847C897EF679B /* /Users/alex/Code/AncientGreece/source/engine/GameStartupParameters.h */,
+				898F42FA4D5540769DD2EB9A /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.cpp */,
+				9489541D1FE344D899B44341 /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.h */,
+				4022309D1BDC4E16B0DB4886 /* /Users/alex/Code/AncientGreece/source/engine/IGame.h */,
+			);
+			name = engine;
+			sourceTree = "<group>";
+		};
+		4E84E404BB614377A1C0FFB0 /* SDL2-2.0.9 */ = {
+			isa = PBXGroup;
+			children = (
+				84AE4CE211FD4264ACC37859 /* include */,
+			);
+			name = "SDL2-2.0.9";
+			sourceTree = "<group>";
+		};
+		5029942731EC45F58026E504 /* robin-map */ = {
+			isa = PBXGroup;
+			children = (
+				7232CF2E90BD4FBBB877855A /* include */,
+			);
+			name = "robin-map";
+			sourceTree = "<group>";
+		};
+		516252A2A46644878052346A = {
+			isa = PBXGroup;
+			children = (
+				28EA0226BF8E4EFEA506F233 /* AncientGreece */,
+				E8A8DE8BE7E04FB686025190 /* ALL_BUILD */,
+				C57E093AED3C42BF801D14AD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		53053F4F6424401C8E778B0A /* input */ = {
+			isa = PBXGroup;
+			children = (
+				04791136E1C74E81A17CE144 /* components */,
+				8828F5995DDE4767ABD7B70F /* systems */,
+				AAEDD6BDC06D4872B381700B /* utils */,
+			);
+			name = input;
+			sourceTree = "<group>";
+		};
+		597E61768EF14883A158D2C0 /* scripting */ = {
+			isa = PBXGroup;
+			children = (
+				E22C19AE5EF044FC9A3E30B7 /* components */,
+				6AAB1B18AFB6453AAEEC138F /* service */,
+				5F5A8B5AD95146768F39F9A0 /* systems */,
+				144A34DEB4BA4C5FA602F3A6 /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.cpp */,
+				31FB232DC68944DA910124BE /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.h */,
+			);
+			name = scripting;
+			sourceTree = "<group>";
+		};
+		5F5A8B5AD95146768F39F9A0 /* systems */ = {
+			isa = PBXGroup;
+			children = (
+				F73E6872AE984F5F9C0DB342 /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.cpp */,
+				2AB19AC1CDF3431BBEE58298 /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.h */,
+			);
+			name = systems;
+			sourceTree = "<group>";
+		};
+		69972EACF140409A813AF475 /* glm */ = {
+			isa = PBXGroup;
+			children = (
+				EFD131F6DBF24EF18E7AE209 /* detail */,
+				B17873C776C64F5AB5B5FF64 /* simd */,
+			);
+			name = glm;
+			sourceTree = "<group>";
+		};
+		6AAB1B18AFB6453AAEEC138F /* service */ = {
+			isa = PBXGroup;
+			children = (
+				DA1377BCCDB3455A916F051D /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.cpp */,
+				CD8401A39CB64A2894052C2B /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.h */,
+			);
+			name = service;
+			sourceTree = "<group>";
+		};
+		7232CF2E90BD4FBBB877855A /* include */ = {
+			isa = PBXGroup;
+			children = (
+				09FD3B3781C8481DBC282ACA /* tsl */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		7E40B827C4D44D3A8530B322 /* rendering */ = {
+			isa = PBXGroup;
+			children = (
+				449F5606552E40AE9C3E4FD5 /* components */,
+				46AFE01FC56847D59443961A /* opengl */,
+				BD1C3180D3BD459081C69FD0 /* systems */,
+				EAE97A6C1A914E26ACE03DFA /* utils */,
+			);
+			name = rendering;
+			sourceTree = "<group>";
+		};
+		84AE4CE211FD4264ACC37859 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				CFE9F5A23025411EADA9B55F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL.h */,
+				4538F6B751574BB4B89D7035 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_assert.h */,
+				618E16ACC833453BBC34C3A2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_atomic.h */,
+				0323833E78AF40D2B77DCB57 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_audio.h */,
+				743CCCF8EC4341A89E32EC77 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_bits.h */,
+				EBA3EE4AE3BB4F08ACB2984C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_blendmode.h */,
+				A7CF9BC7F3B747E3A265C5AC /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_clipboard.h */,
+				1C5DFE2E086E49A3AC757397 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config.h */,
+				A560E81003D44AC7994C6D45 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_android.h */,
+				C24A999F5D6D481F9A7C9CC3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_iphoneos.h */,
+				84252AF431554764B9F088F6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_macosx.h */,
+				711BF5BD9B37487DB32779DE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_minimal.h */,
+				15D42406729D48C18C3E9E50 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_pandora.h */,
+				B3E87279D0384F0E8F1CAAFE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_psp.h */,
+				E22C5A33EF644D7D92918B27 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_windows.h */,
+				33666C5EF6D2449C8A49E607 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_winrt.h */,
+				07704E82870948AB8F1F309F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_config_wiz.h */,
+				314361EDC21C4244AA0E93E4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_copying.h */,
+				44118415F2244981A90485EA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_cpuinfo.h */,
+				9200876A1FF340F8AFC4ED8C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_egl.h */,
+				2CFEF27212AA43CEBB58684C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_endian.h */,
+				D5146A001A9E463EA5D01367 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_error.h */,
+				A9FE2474F1D94DA9AA6404E9 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_events.h */,
+				02A467E77F4743DFB0115D95 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_filesystem.h */,
+				9C0525CBF42D4D2B85F0DFC3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_gamecontroller.h */,
+				16D23CBA483141EFA47EC753 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_gesture.h */,
+				4D1F7128ECB4409DA35E5A5C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_haptic.h */,
+				FAAB821C4BE3424780114A45 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_hints.h */,
+				0547638C8891434D89F50D01 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_image.h */,
+				A6E3F4FDE35E40C5A6084D89 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_joystick.h */,
+				9EBBE768582E462CB48E548C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_keyboard.h */,
+				95C232F774394573A52AD7E2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_keycode.h */,
+				28DC7080B33644FE85E21992 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_loadso.h */,
+				0B66F5787A8A4E0086653D49 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_log.h */,
+				B871815F6F934F6ABF1E3BC0 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_main.h */,
+				39822E8AC1C94AB584FE758E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_messagebox.h */,
+				712F7B4560044CBF82F5828B /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mixer.h */,
+				D3E26C40368D4175887BE445 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mouse.h */,
+				18DFCC2815FB426FA160DD1F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_mutex.h */,
+				05C08A4F033E41FABE8FAABE /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_name.h */,
+				D28BB48F041D4F8BAAE833D4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengl.h */,
+				1598474705D94C23A0924FB5 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengl_glext.h */,
+				1213233A1BD24BB8AC0BEA5E /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles.h */,
+				5ABE561E357B4F28903B2746 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2.h */,
+				42B089B5B3FA43BAB0BE27B3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2.h */,
+				7D34F0917B854AF7844900A6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2ext.h */,
+				9D2012D3F6904FDEA6846B60 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_gl2platform.h */,
+				96F7BC776B0E4F3DB118A7D7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_opengles2_khrplatform.h */,
+				95E7A91D90C74A329569C15C /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_pixels.h */,
+				DC4ED8D26BAB4B48A85F14A3 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_platform.h */,
+				B710CCB8EE2248AA90CA0116 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_power.h */,
+				2A88253239EE4901A9BD2711 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_quit.h */,
+				D704D4A846EB4FEF873E324B /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_rect.h */,
+				B29959EC71864691BFB1F8F7 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_render.h */,
+				E9BF84C6A31443A3A9F7B411 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_revision.h */,
+				C09FF3FD5FB3457F83BDA056 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_rwops.h */,
+				1386BD8A568E45AE9B510CC6 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_scancode.h */,
+				E34FF769E75F4B3183999EF4 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_sensor.h */,
+				2FE25FC8DF3A4AB3AB9A1BBC /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_shape.h */,
+				01F6DAA6BEA24B2D9AEFAD14 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_stdinc.h */,
+				9A04C535BA9344F4AADF3BAA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_surface.h */,
+				33EF92785ADC46D9BB056E0A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_system.h */,
+				FF69EC89A5D34C3B884003F2 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_syswm.h */,
+				695C43E4C7D347D7A2CB39FF /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test.h */,
+				74A921A9E1C84CBAA380D541 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_assert.h */,
+				1F21C3657964488C96C941BA /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_common.h */,
+				4AA1C55C35424FB29A8AA981 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_compare.h */,
+				D2F97227DC214FA6BF712416 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_crc32.h */,
+				29A46285B11047E88AB46365 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_font.h */,
+				381599011566437B96132FF8 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_fuzzer.h */,
+				AA2932C3033948109B3525FD /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_harness.h */,
+				22D203C05FFE4DE2B8907B81 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_images.h */,
+				C0872F3D95334C1BA578CA20 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_log.h */,
+				E748A3E3A0E6429B827CE5DB /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_md5.h */,
+				28265B5717E14A90A0AF687F /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_memory.h */,
+				B491D93F327D42BB9A6BB350 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_test_random.h */,
+				E36F477F32D54FD58F444724 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_thread.h */,
+				834E5A6D8C6349F795640190 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_timer.h */,
+				42A76328C82A462BA3D89C72 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_touch.h */,
+				E19C4267C8614D0286028B32 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_types.h */,
+				C4A2ADF04F8C4AA389B78DFD /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_version.h */,
+				A2979B8345A3403AB09BF9D1 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_video.h */,
+				596737AB46374802A4F9283A /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/SDL_vulkan.h */,
+				E9D71436A1D34BA68AE66122 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/begin_code.h */,
+				0BD730410FAD421C8DDE2F43 /* /Users/alex/Code/AncientGreece/source/extern/SDL2-2.0.9/include/close_code.h */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		8828F5995DDE4767ABD7B70F /* systems */ = {
+			isa = PBXGroup;
+			children = (
+				1C2716155797433888D668E6 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.cpp */,
+				216B253DC5F0492C99981C64 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.h */,
+			);
+			name = systems;
+			sourceTree = "<group>";
+		};
+		8E31CBDC8BAF4C8E97F7C53F /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				7C77372F6632485582BBD2D7 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/FileUtils.h */,
+				B3DCE944EAA44218B953A875 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/Logging.h */,
+				12974B25BD784B6797914D9D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.cpp */,
+				F54D0AC4491A45578EB0805D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.h */,
+				88B312AD1C4F4979A7A43266 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/OSMessageBox.h */,
+				DB2D4F310A2442EEA0FA57E2 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/StringUtils.h */,
+				43CD50588A7643D291A1C5D0 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/Timer.h */,
+				DDDD6199518F4103AA82C72D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.cpp */,
+				015F95E758D0405F962610F9 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.h */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
+		91C705C70B1B4CECB19BC339 /* lua-5.3.5 */ = {
+			isa = PBXGroup;
+			children = (
+				B157BBF99DD3428EBC7F960C /* include */,
+			);
+			name = "lua-5.3.5";
+			sourceTree = "<group>";
+		};
+		9AF7A506ABED402AA8F5B943 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				ED704C1258FA4354A35A3D1A /* components */,
+				8E31CBDC8BAF4C8E97F7C53F /* utils */,
+			);
+			name = common;
+			sourceTree = "<group>";
+		};
+		9D2AA9CEEF9B46A5B20F3EBF /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		AAEDD6BDC06D4872B381700B /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				C4320F5379AC40F1B437CD3C /* /Users/alex/Code/AncientGreece/source/engine/input/utils/InputUtils.h */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
+		B157BBF99DD3428EBC7F960C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				BAF7DF8277FC45168B65F004 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lauxlib.h */,
+				8DA06BA0387B4842A1332C7C /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lua.h */,
+				5EFCDBFE262D4AE4BE3E919B /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/luaconf.h */,
+				379CB62FF6704D8C990B4AB4 /* /Users/alex/Code/AncientGreece/source/extern/lua-5.3.5/include/lualib.h */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		B17873C776C64F5AB5B5FF64 /* simd */ = {
+			isa = PBXGroup;
+			children = (
+				BB8B62099A7041E289495576 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/common.h */,
+				30838E0E217D489180477346 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/exponential.h */,
+				E2D99B14127645BAA05B03EE /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/geometric.h */,
+				57DB1A2A76154B3683ED4F70 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/integer.h */,
+				F245A6C5D4514F4F97D09413 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/matrix.h */,
+				58B80CF4ED6E43AAB21C1C75 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/packing.h */,
+				84C6FC4E0F384424A304AF08 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/platform.h */,
+				E19436AB5FF144C89E8E2F86 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/trigonometric.h */,
+				9E0CBD130132496593999CA3 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/simd/vector_relational.h */,
+			);
+			name = simd;
+			sourceTree = "<group>";
+		};
+		BA33F49E7BC94CA3B4D74AD6 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				1B64061F07BB4FA5A2500D44 /* /Users/alex/Code/AncientGreece/source/engine/debug/components/ConsoleStateSingletonComponent.h */,
+				723875F6FFD4444F883558DD /* /Users/alex/Code/AncientGreece/source/engine/debug/components/DebugViewStateSingletonComponent.h */,
+			);
+			name = components;
+			sourceTree = "<group>";
+		};
+		BAE55A11D1114EC08C5FB0A2 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				FD61AD753329416DBF304E7E /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.cpp */,
+				CC2851B40B874C679EB80418 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.h */,
+				6E8D5827F96845FBB6B64D4E /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.cpp */,
+				ED9AD0814E2642898D152EA8 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.h */,
+				9AFD64BCC062471E8CA57B6C /* /Users/alex/Code/AncientGreece/source/engine/resources/IResource.h */,
+				FC0EF515FD1C40ED8DCDD4BB /* /Users/alex/Code/AncientGreece/source/engine/resources/IResourceLoader.h */,
+				3263FB6844924C86B213301E /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.cpp */,
+				8D3D43872B5847ED85A21FA7 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.h */,
+				65BED00AADF74F46B315D776 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.cpp */,
+				E0B390423DD44D8EB2E95FFE /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.h */,
+				D2FC28633C2D4D06A9AECA3D /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.cpp */,
+				0C727257EB3744A28CB847DE /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.h */,
+				E4C6A80B77884C62B6B54362 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.cpp */,
+				648B05F30ADD41FD96A4E7D8 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.h */,
+				57756A69B1F14E18994DE85C /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.cpp */,
+				02D96AA9D12A4915ADDB5BE5 /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.h */,
+				AB7DE0E5AB9245789AA28F9A /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.cpp */,
+				B9C61E72FC3B4866A5EDDA1E /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.h */,
+				F3F54B2D04AF44988D054464 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.cpp */,
+				A3EE7AFCA0654F93B4100051 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.h */,
+				1B6E9DC5336649D9ABB5B3EA /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.cpp */,
+				CEF72AF773614FD1B1E20E72 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.h */,
+				E6B0EEF2C5644B5D9B2B4DFA /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.cpp */,
+				43DF2CEBB27F47A5AE10AD27 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.h */,
+				B73D9D17523E4B2B9419F95E /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.cpp */,
+				75425AE1B8464612B059BCBC /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.h */,
+				0D91AEA5680041BD8CD7124B /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.cpp */,
+				F0D774F1967C4F92B874D2C9 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.h */,
+			);
+			name = resources;
+			sourceTree = "<group>";
+		};
+		BD1C3180D3BD459081C69FD0 /* systems */ = {
+			isa = PBXGroup;
+			children = (
+				6B4919C79F8A4A9F8E4223CE /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.cpp */,
+				A89A4CF3A9F8417EA7804840 /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.h */,
+			);
+			name = systems;
+			sourceTree = "<group>";
+		};
+		C57E093AED3C42BF801D14AD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B5F7D3BF7E9430F9EBC195D /* AncientGreece */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C911EBAF1B7F4BAB972B335F /* extern */ = {
+			isa = PBXGroup;
+			children = (
+				4E84E404BB614377A1C0FFB0 /* SDL2-2.0.9 */,
+				45D14357C2B54527BD206C20 /* glm-0.9.9.3 */,
+				91C705C70B1B4CECB19BC339 /* lua-5.3.5 */,
+				5029942731EC45F58026E504 /* robin-map */,
+			);
+			name = extern;
+			sourceTree = "<group>";
+		};
+		D836733ED557425AB470E873 /* debug */ = {
+			isa = PBXGroup;
+			children = (
+				BA33F49E7BC94CA3B4D74AD6 /* components */,
+				0CA5B10682D04782BEB9090F /* systems */,
+				0E0496AD5088418F926CB157 /* utils */,
+				D95A094E0B6D4798890A5520 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.cpp */,
+				894DC448A16443DC8C95E6D3 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.h */,
+			);
+			name = debug;
+			sourceTree = "<group>";
+		};
+		E22C19AE5EF044FC9A3E30B7 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				5957F2A4009747DFB199267E /* /Users/alex/Code/AncientGreece/source/engine/scripting/components/ScriptComponent.h */,
+			);
+			name = components;
+			sourceTree = "<group>";
+		};
+		E8A8DE8BE7E04FB686025190 /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				9D2AA9CEEF9B46A5B20F3EBF /* CMake Rules */,
+				319569B7D92E435FA70EB561 /* /Users/alex/Code/AncientGreece/source/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		EAE97A6C1A914E26ACE03DFA /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				C11AA01417D2434C848A5ABE /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.cpp */,
+				D0155CA6DF844CAAB08DFA3A /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.h */,
+				BE09FADF8FEF48E2806F4112 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/Colors.h */,
+				16AD33913B814DCB91423A09 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.cpp */,
+				70B6BD536EE44011BFF79325 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.h */,
+				767C9B24C2484907B68ACAE9 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.cpp */,
+				ECE9AFD77879435FA320251C /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.h */,
+				E85DA1BAD3D14A04A65FEFA8 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.cpp */,
+				4AFD6D07225D478CBED73F60 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.h */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
+		ED704C1258FA4354A35A3D1A /* components */ = {
+			isa = PBXGroup;
+			children = (
+				7CEC4BEE93A043E899413BCF /* /Users/alex/Code/AncientGreece/source/engine/common/components/NameComponent.h */,
+				FD112FC3B11F4A578E8CE10E /* /Users/alex/Code/AncientGreece/source/engine/common/components/TransformComponent.h */,
+			);
+			name = components;
+			sourceTree = "<group>";
+		};
+		EFD131F6DBF24EF18E7AE209 /* detail */ = {
+			isa = PBXGroup;
+			children = (
+				09DA5A4B418641F38814F298 /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/detail/glm.cpp */,
+			);
+			name = detail;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		76446327A873484CABC26ED6 /* AncientGreece */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1D59A61DE064E919CB52037 /* Build configuration list for PBXNativeTarget "AncientGreece" */;
+			buildPhases = (
+				FFF6F77FCED14E9BBD04D2E4 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				839CA21365674C9AA715C198 /* PBXTargetDependency */,
+			);
+			name = AncientGreece;
+			productName = AncientGreece;
+			productReference = 4B5F7D3BF7E9430F9EBC195D /* AncientGreece */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		76B2957AFA5A405C9766BED3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1160;
+			};
+			buildConfigurationList = 1E9576AE37114466969878FB /* Build configuration list for PBXProject "AncientGreece" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				50C8B033C9DF41808A99FA86 /* Debug */,
+				74130F4AFBF045029289AE88 /* Release */,
+				6FDA144523934E57B8169482 /* MinSizeRel */,
+				3FC98E3AC4E54A0989A73F19 /* RelWithDebInfo */,
+			);
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			mainGroup = 516252A2A46644878052346A;
+			projectDirPath = /Users/alex/Code/AncientGreece/source;
+			projectRoot = "";
+			targets = (
+				137F78A0E2304DD78D95AA7A /* ALL_BUILD */,
+				76446327A873484CABC26ED6 /* AncientGreece */,
+				ECE1B6ABA0594BFC8499BCBE /* ZERO_CHECK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		56F405F100E144ABB74C86B1 /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/alex/Code/AncientGreece/project_files -f /Users/alex/Code/AncientGreece/project_files/CMakeScripts/ZERO_CHECK_cmakeRulesBuildPhase.make$CONFIGURATION OBJDIR=$(basename \"$OBJECT_FILE_DIR_normal\") all";
+			showEnvVarsInLog = 0;
+		};
+		5DB5CAF05E314367BF0CA294 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		BA3DC8BB802D4ED28F7311AE = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		D4EDE886AC0F4A548CAEECCE /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/alex/Code/AncientGreece/project_files -f /Users/alex/Code/AncientGreece/project_files/CMakeScripts/ALL_BUILD_cmakeRulesBuildPhase.make$CONFIGURATION OBJDIR=$(basename \"$OBJECT_FILE_DIR_normal\") all";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FFF6F77FCED14E9BBD04D2E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF620884AA5D4D4D8AED7247 /* /Users/alex/Code/AncientGreece/source/engine/ECS.cpp */,
+				140D3CCAEAD74718B40CD25B /* /Users/alex/Code/AncientGreece/source/engine/GenesisEngine.cpp */,
+				C63EEA836EEB48CF81712774 /* /Users/alex/Code/AncientGreece/source/engine/common/utils/MathUtils.cpp */,
+				DF10BF58668646588229496D /* /Users/alex/Code/AncientGreece/source/engine/common/utils/TypeTraits.cpp */,
+				7EE34274FB6B4681B06EF954 /* /Users/alex/Code/AncientGreece/source/engine/debug/DefaultEngineConsoleCommands.cpp */,
+				A9805E6C90A9460687B093FF /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/ConsoleManagementSystem.cpp */,
+				006B22EFA1AC4E7D96A5A66A /* /Users/alex/Code/AncientGreece/source/engine/debug/systems/DebugViewManagementSystem.cpp */,
+				0DFC5F2BB89D4218939FF25B /* /Users/alex/Code/AncientGreece/source/engine/debug/utils/ConsoleCommandUtils.cpp */,
+				ED50E39D3DD0480489CFBA55 /* /Users/alex/Code/AncientGreece/source/engine/input/systems/RawInputHandlingSystem.cpp */,
+				B7A32CE1B6CA4D23BFFA6F6C /* /Users/alex/Code/AncientGreece/source/engine/rendering/opengl/Context.cpp */,
+				B2D78D6B410443298897444C /* /Users/alex/Code/AncientGreece/source/engine/rendering/systems/RenderingSystem.cpp */,
+				C81A1A9DE30F4B63A3C93CF7 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/CameraUtils.cpp */,
+				55F7ED0417484B178DA409C5 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/FontUtils.cpp */,
+				27FA3FF46DEC4F1C869EDC56 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/LightUtils.cpp */,
+				6CDFB408DAF74A35AFCE8956 /* /Users/alex/Code/AncientGreece/source/engine/rendering/utils/MeshUtils.cpp */,
+				9D17DFBE38C94905ADF06C62 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileLoader.cpp */,
+				979360013BE5463694E4C924 /* /Users/alex/Code/AncientGreece/source/engine/resources/DataFileResource.cpp */,
+				EEF7AD5864B4414BB7513671 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshLoader.cpp */,
+				C76314941F454B65BA5544E3 /* /Users/alex/Code/AncientGreece/source/engine/resources/MeshResource.cpp */,
+				87B1015F2A2945DA87465CF4 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicLoader.cpp */,
+				3711BD87A75649DC9D807439 /* /Users/alex/Code/AncientGreece/source/engine/resources/MusicResource.cpp */,
+				BAE6A40814B14FF8A3126F56 /* /Users/alex/Code/AncientGreece/source/engine/resources/ResourceLoadingService.cpp */,
+				5406B322368442B8AF2B283E /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxLoader.cpp */,
+				417CFBBAFFC3448291FD1DF7 /* /Users/alex/Code/AncientGreece/source/engine/resources/SfxResource.cpp */,
+				029946179F554E4FBA554C0F /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderLoader.cpp */,
+				95044A0F143E4771966EBA19 /* /Users/alex/Code/AncientGreece/source/engine/resources/ShaderResource.cpp */,
+				01BAD8EFB81D4781BD8E6A86 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureLoader.cpp */,
+				C83CD3B14E944531967C9C52 /* /Users/alex/Code/AncientGreece/source/engine/resources/TextureResource.cpp */,
+				31EFF5E37D7C4672A936EE93 /* /Users/alex/Code/AncientGreece/source/engine/scripting/DefaultEngineExportableFunctions.cpp */,
+				2F917BDB6A8441EC9094ED8D /* /Users/alex/Code/AncientGreece/source/engine/scripting/service/LuaScriptingService.cpp */,
+				ABE12209A56D46FFA55877DF /* /Users/alex/Code/AncientGreece/source/engine/scripting/systems/ScriptingSystem.cpp */,
+				C2D2B173B1CD44259260D0BD /* /Users/alex/Code/AncientGreece/source/engine/sound/SoundService.cpp */,
+				8E782A08E1FF4B4C961B3C8C /* /Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3/glm/detail/glm.cpp */,
+				8DD86DE3D5A742CCB7503E68 /* /Users/alex/Code/AncientGreece/source/game/Game.cpp */,
+				DCE249A09A99420DABBD2831 /* /Users/alex/Code/AncientGreece/source/game/Main.cpp */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		06B1A3D148324AB4A015E94D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ECE1B6ABA0594BFC8499BCBE /* ZERO_CHECK */;
+			targetProxy = BF30DE1F052F4FE59DFC62AD /* PBXContainerItemProxy */;
+		};
+		21CD4D0623164737A2315BED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 76446327A873484CABC26ED6 /* AncientGreece */;
+			targetProxy = 8CE60E3152DF4825AC5063CE /* PBXContainerItemProxy */;
+		};
+		839CA21365674C9AA715C198 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ECE1B6ABA0594BFC8499BCBE /* ZERO_CHECK */;
+			targetProxy = C3BF86DE8FB44BF9A2D3673C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0434A92D81644D9FBC84689D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk;
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files/build;
+			};
+			name = Debug;
+		};
+		0EF8B49CCF0E40B19E1B0722 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		190225B3A114464CB6D3C461 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks,/Users/alex/Library/Frameworks);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/alex/Library/Frameworks/SDL2.framework/Headers,/Users/alex/Library/Frameworks/SDL2_image.framework/Headers,/Users/alex/Library/Frameworks/SDL2_mixer.framework/Headers,/Users/alex/Code/AncientGreece/project_files,"/Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3","/Users/alex/Code/AncientGreece/source/extern/json-3.5.0",/usr/local/include/lua,"/Users/alex/Code/AncientGreece/source/extern/robin-map/include");
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = /Users/alex/Library/Frameworks;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CPLUSPLUSFLAGS = "   -Wall -Wextra -pedantic -Werror '-std=gnu++17'  ";
+				OTHER_LDFLAGS = " -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -framework SDL2 -framework SDL2_image -framework SDL2_mixer -framework OpenGL -framework OpenGL /usr/local/lib/liblua.dylib";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AncientGreece;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		431BD6C1BB354086BBC41FB0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk;
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files/build;
+			};
+			name = Release;
+		};
+		45AA03A3B70148309B5D0FF5 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks,/Users/alex/Library/Frameworks);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/alex/Library/Frameworks/SDL2.framework/Headers,/Users/alex/Library/Frameworks/SDL2_image.framework/Headers,/Users/alex/Library/Frameworks/SDL2_mixer.framework/Headers,/Users/alex/Code/AncientGreece/project_files,"/Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3","/Users/alex/Code/AncientGreece/source/extern/json-3.5.0",/usr/local/include/lua,"/Users/alex/Code/AncientGreece/source/extern/robin-map/include");
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = /Users/alex/Library/Frameworks;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CPLUSPLUSFLAGS = "       -DNDEBUG -Wall -Wextra -pedantic -Werror '-std=gnu++17'  ";
+				OTHER_LDFLAGS = " -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -framework SDL2 -framework SDL2_image -framework SDL2_mixer -framework OpenGL -framework OpenGL /usr/local/lib/liblua.dylib";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AncientGreece;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		485BD9F624444D6EB538B0F1 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks,/Users/alex/Library/Frameworks);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/alex/Library/Frameworks/SDL2.framework/Headers,/Users/alex/Library/Frameworks/SDL2_image.framework/Headers,/Users/alex/Library/Frameworks/SDL2_mixer.framework/Headers,/Users/alex/Code/AncientGreece/project_files,"/Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3","/Users/alex/Code/AncientGreece/source/extern/json-3.5.0",/usr/local/include/lua,"/Users/alex/Code/AncientGreece/source/extern/robin-map/include");
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = /Users/alex/Library/Frameworks;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG -Wall -Wextra -pedantic -Werror '-std=gnu++17'  ";
+				OTHER_LDFLAGS = " -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -framework SDL2 -framework SDL2_image -framework SDL2_mixer -framework OpenGL -framework OpenGL /usr/local/lib/liblua.dylib";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AncientGreece;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		5043DA49D33542BE8FF95E1D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		7211380C0AB544EDA2C41EE2 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk;
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files/build;
+			};
+			name = RelWithDebInfo;
+		};
+		7702D6C7EB3B424FAF2592E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		AC56E6FEFA0148E789FE5412 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk;
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files/build;
+			};
+			name = MinSizeRel;
+		};
+		B711DCF41F4C4826B86DD7C6 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		C1669821E220475E86B52122 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		D9BA99CFD98641778E9494F3 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		E017BF6E6F33442FA852E6D4 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		E28935D79AFA46B8857E486E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks,/Users/alex/Library/Frameworks);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/alex/Library/Frameworks/SDL2.framework/Headers,/Users/alex/Library/Frameworks/SDL2_image.framework/Headers,/Users/alex/Library/Frameworks/SDL2_mixer.framework/Headers,/Users/alex/Code/AncientGreece/project_files,"/Users/alex/Code/AncientGreece/source/extern/glm-0.9.9.3","/Users/alex/Code/AncientGreece/source/extern/json-3.5.0",/usr/local/include/lua,"/Users/alex/Code/AncientGreece/source/extern/robin-map/include");
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = /Users/alex/Library/Frameworks;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG -Wall -Wextra -pedantic -Werror '-std=gnu++17'  ";
+				OTHER_LDFLAGS = " -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -framework SDL2 -framework SDL2_image -framework SDL2_mixer -framework OpenGL -framework OpenGL /usr/local/lib/liblua.dylib";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AncientGreece;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		F2F90B805C2A44229857F2C7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/alex/Code/AncientGreece/project_files;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0EC5DE26266548F4BB2E98FA /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0EF8B49CCF0E40B19E1B0722 /* Debug */,
+				5043DA49D33542BE8FF95E1D /* Release */,
+				B711DCF41F4C4826B86DD7C6 /* MinSizeRel */,
+				D9BA99CFD98641778E9494F3 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1E9576AE37114466969878FB /* Build configuration list for PBXProject "AncientGreece" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0434A92D81644D9FBC84689D /* Debug */,
+				431BD6C1BB354086BBC41FB0 /* Release */,
+				AC56E6FEFA0148E789FE5412 /* MinSizeRel */,
+				7211380C0AB544EDA2C41EE2 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		41AF55295BC245EAAD973AC1 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7702D6C7EB3B424FAF2592E0 /* Debug */,
+				F2F90B805C2A44229857F2C7 /* Release */,
+				E017BF6E6F33442FA852E6D4 /* MinSizeRel */,
+				C1669821E220475E86B52122 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B1D59A61DE064E919CB52037 /* Build configuration list for PBXNativeTarget "AncientGreece" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				190225B3A114464CB6D3C461 /* Debug */,
+				E28935D79AFA46B8857E486E /* Release */,
+				485BD9F624444D6EB538B0F1 /* MinSizeRel */,
+				45AA03A3B70148309B5D0FF5 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 76B2957AFA5A405C9766BED3 /* Project object */;
+}
