@@ -1,3 +1,0 @@
-/Users/alex/Code/AncientGreece/project_files/CMakeFiles/AncientGreece.dir
-/Users/alex/Code/AncientGreece/project_files/CMakeFiles/ALL_BUILD.dir
-/Users/alex/Code/AncientGreece/project_files/CMakeFiles/ZERO_CHECK.dir

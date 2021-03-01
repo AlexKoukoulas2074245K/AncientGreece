@@ -31,7 +31,7 @@ namespace
 {
     constexpr unsigned int CAMERA_FRUSTUM_SIDES = 6;
 
-    const glm::vec3 DEFAULT_CAMERA_POSITION     = glm::vec3(0.0f, 0.0f, -5.0f);
+    const glm::vec3 DEFAULT_CAMERA_POSITION     = glm::vec3(0.0f, 0.0f, -0.3f);
     const glm::vec3 DEFAULT_CAMERA_FRONT_VECTOR = glm::vec3(0.0f, 0.0f, -1.0f);
     const glm::vec3 DEFAULT_CAMERA_UP_VECTOR    = math::Y_AXIS;
 

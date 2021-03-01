@@ -20,6 +20,8 @@
 #include "../engine/rendering/components/CameraSingletonComponent.h"
 #include "../engine/rendering/components/LightStoreSingletonComponent.h"
 #include "../engine/rendering/components/RenderableComponent.h"
+#include "../engine/rendering/components/WindowSingletonComponent.h"
+#include "../engine/rendering/utils/CameraUtils.h"
 #include "../engine/rendering/utils/FontUtils.h"
 #include "../engine/rendering/utils/LightUtils.h"
 #include "../engine/rendering/utils/MeshUtils.h"
@@ -52,6 +54,30 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 
+static bool IsMeshInsideCameraFrustum
+(
+    const glm::vec3& meshPosition,
+    const glm::vec3& meshScale,
+    const glm::vec3& meshDimensions,
+    const genesis::rendering::CameraFrustum& cameraFrustum
+)
+{
+    const auto scaledMeshDimensions = meshDimensions * meshScale;
+    const auto frustumCheckSphereRadius = genesis::math::Max(scaledMeshDimensions.x, genesis::math::Max(scaledMeshDimensions.y, scaledMeshDimensions.z)) * 0.5f;
+
+    for (auto i = 0U; i < 6U; ++i)
+    {
+        float dist =
+            cameraFrustum[i].x * meshPosition.x +
+            cameraFrustum[i].y * meshPosition.y +
+            cameraFrustum[i].z * meshPosition.z +
+            cameraFrustum[i].w - frustumCheckSphereRadius;
+
+        if (dist > 0) return false;
+    }
+
+    return true;
+}
 ///------------------------------------------------------------------------------------------------
 /*
 static void CreateSphereAtRandomPosition(const int i)
@@ -92,6 +118,10 @@ static void CreateSphereAtRandomPosition(const int i)
 void Game::VOnGameInit()
 {
     genesis::rendering::LoadAndCreateModelByName("map", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map"));
+    genesis::rendering::LoadAndCreateModelByName("map_edge", glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_1"));
+    genesis::rendering::LoadAndCreateModelByName("map_edge", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_2"));
+    genesis::rendering::LoadAndCreateModelByName("map_edge", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_3"));
+    genesis::rendering::LoadAndCreateModelByName("map_edge", glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_4"));
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     //genesis::rendering::AddLightSource(glm::vec3(0.0f, 4.0f, 0.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
@@ -104,7 +134,8 @@ static float dtAccum = 0.0f;
 void Game::VOnUpdate(const float dt)
 {
     auto& world = genesis::ecs::World::GetInstance();
-
+    
+    const auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
     auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
     
@@ -112,10 +143,11 @@ void Game::VOnUpdate(const float dt)
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
     
-    float moveSpeed = 2.0f;
-    float lookSpeed = 1.0f;
-    //float zoomSpeed = 0.2f;
-
+    float moveSpeed = 0.2f;
+    auto cameraPosition = cameraComponent.mPosition;
+    auto maxZ = -0.20f;
+    auto minZ = -0.60f;
+    
     if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::CAMERA_MOVE_UP))
     {
         cameraComponent.mPosition.y += moveSpeed * dt;
@@ -140,39 +172,41 @@ void Game::VOnUpdate(const float dt)
     {
         cameraComponent.mPosition -= dt * moveSpeed * cameraComponent.mFrontVector;
     }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::UP_ARROW_KEY))
-    {
-        cameraComponent.mPitch += lookSpeed * dt;
-        if (cameraComponent.mPitch >= 2 * genesis::math::PI)
-        {
-            cameraComponent.mPitch = cameraComponent.mPitch - 2 * genesis::math::PI;
+ 
+    auto isEdgeVisible = false;
+    for (int i = 1; i < 5; ++i) {
+        auto entityId = world.FindEntityWithName(StringId("map_edge_" + std::to_string(i)));
+        // Calculate render-constant camera view matrix
+        auto viewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
+        
+        // Calculate render-constant camera projection matrix
+        auto projectionMatrix = glm::perspectiveFovLH
+        (
+            cameraComponent.mFieldOfView,
+            windowComponent.mRenderableWidth,
+            windowComponent.mRenderableHeight,
+            cameraComponent.mZNear,
+            cameraComponent.mZFar
+        );
+        
+        // Calculate the camera frustum for this frame
+        auto frustum = genesis::rendering::CalculateCameraFrustum(viewMatrix, projectionMatrix);
+        
+        const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
+        const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
+        const auto& currentMesh        = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceId);
+        
+        if (IsMeshInsideCameraFrustum(transformComponent.mPosition, transformComponent.mScale, currentMesh.GetDimensions(), frustum)) {
+            isEdgeVisible = true;
+            break;
         }
     }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::DOWN_ARROW_KEY))
-    {
-        cameraComponent.mPitch -= lookSpeed * dt;
-        if (cameraComponent.mPitch <= 0.0f)
-        {
-            cameraComponent.mPitch = 2 * genesis::math::PI + cameraComponent.mPitch;
-        }
+    
+    auto exceededZLimits = cameraComponent.mPosition.z < minZ || cameraComponent.mPosition.z > maxZ;
+    if (isEdgeVisible || exceededZLimits) {
+        cameraComponent.mPosition = cameraPosition;
     }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::LEFT_ARROW_KEY))
-    {
-        cameraComponent.mYaw += lookSpeed * dt;
-        if (cameraComponent.mYaw >= 2 * genesis::math::PI)
-        {
-            cameraComponent.mYaw = cameraComponent.mYaw - 2 * genesis::math::PI;
-        }        
-    }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::RIGHT_ARROW_KEY))
-    {
-        cameraComponent.mYaw -= lookSpeed * dt;
-        if (cameraComponent.mYaw <= 0.0f)
-        {
-            cameraComponent.mYaw = 2 * genesis::math::PI + cameraComponent.mYaw;
-        }
-    }
-
+    
     cameraComponent.mFrontVector.x = genesis::math::Cosf(cameraComponent.mYaw) * genesis::math::Cosf(cameraComponent.mPitch);
     cameraComponent.mFrontVector.y = genesis::math::Sinf(cameraComponent.mPitch);
     cameraComponent.mFrontVector.z = genesis::math::Sinf(cameraComponent.mYaw) * genesis::math::Cosf(cameraComponent.mPitch);

@@ -463,7 +463,7 @@ bool IsMeshInsideCameraFrustum
 )
 {
     const auto scaledMeshDimensions = meshDimensions * meshScale;
-    const auto frustumCheckSphereRadius = math::Max(scaledMeshDimensions.x, math::Max(scaledMeshDimensions.y, scaledMeshDimensions.z));
+    const auto frustumCheckSphereRadius = math::Max(scaledMeshDimensions.x, math::Max(scaledMeshDimensions.y, scaledMeshDimensions.z)) * 0.5f;
 
     for (auto i = 0U; i < 6U; ++i)
     {
