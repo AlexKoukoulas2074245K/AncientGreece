@@ -13,6 +13,7 @@
 #include "../../ECS.h"
 
 #include <SDL_keyboard.h>
+#include <SDL_mouse.h>
 #include <tsl/robin_map.h>
 #include <vector>
 
@@ -32,29 +33,25 @@ static constexpr int DEFAULT_KEY_COUNT = 512;
 
 ///-----------------------------------------------------------------------------------------------
 
-enum class InputActionType
-{    
-    CAMERA_MOVE_UP,
-    CAMERA_MOVE_DOWN,
-    CAMERA_MOVE_LEFT,
-    CAMERA_MOVE_RIGHT,
-    CAMERA_MOVE_FORWARD,
-    CAMERA_MOVE_BACKWARD,       
-    CAMERA_ZOOM_IN,
-    CAMERA_ZOOM_OUT,
-    CONSOLE_TOGGLE,
-    SHIFT_KEY,
-    BACKSPACE_KEY,
-    ENTER_KEY,
-    UP_ARROW_KEY,
-    DOWN_ARROW_KEY,
-    LEFT_ARROW_KEY,
-    RIGHT_ARROW_KEY
+enum class Key
+{
+    A_KEY, B_KEY, C_KEY, D_KEY, E_KEY, F_KEY, G_KEY, H_KEY, I_KEY, J_KEY,
+    K_KEY, L_KEY, M_KEY, N_KEY, O_KEY, P_KEY, Q_KEY, R_KEY, S_KEY, T_KEY,
+    U_KEY, V_KEY, W_KEY, X_KEY, Y_KEY, Z_KEY, SHIFT_KEY, BACKSPACE_KEY, ENTER_KEY,
+    UP_ARROW_KEY, DOWN_ARROW_KEY, LEFT_ARROW_KEY, RIGHT_ARROW_KEY,
+    TILDE_KEY
 };
 
 ///-----------------------------------------------------------------------------------------------
 
-enum class InputActionState
+enum class Button
+{
+    LEFT_BUTTON, MIDDLE_BUTTON, RIGHT_BUTTON
+};
+
+///-----------------------------------------------------------------------------------------------
+
+enum class InputState
 {
     RELEASED, PRESSED, TAPPED
 };
@@ -64,48 +61,44 @@ enum class InputActionState
 class InputStateSingletonComponent final: public ecs::IComponent
 {
 public:
-    tsl::robin_map<InputActionType, InputActionState> mCurrentInputState =
-    {        
-        { InputActionType::CAMERA_MOVE_UP,       InputActionState::RELEASED },
-        { InputActionType::CAMERA_MOVE_DOWN,     InputActionState::RELEASED },
-        { InputActionType::CAMERA_MOVE_LEFT,     InputActionState::RELEASED },
-        { InputActionType::CAMERA_MOVE_RIGHT,    InputActionState::RELEASED },
-        { InputActionType::CAMERA_MOVE_FORWARD,  InputActionState::RELEASED },
-        { InputActionType::CAMERA_MOVE_BACKWARD, InputActionState::RELEASED },        
-        { InputActionType::CAMERA_ZOOM_IN,       InputActionState::RELEASED },
-        { InputActionType::CAMERA_ZOOM_OUT,      InputActionState::RELEASED },
-        { InputActionType::CONSOLE_TOGGLE,       InputActionState::RELEASED },
-        { InputActionType::SHIFT_KEY,            InputActionState::RELEASED },
-        { InputActionType::BACKSPACE_KEY,        InputActionState::RELEASED },
-        { InputActionType::ENTER_KEY,            InputActionState::RELEASED },
-        { InputActionType::UP_ARROW_KEY,         InputActionState::RELEASED },
-        { InputActionType::DOWN_ARROW_KEY,       InputActionState::RELEASED },
-        { InputActionType::LEFT_ARROW_KEY,       InputActionState::RELEASED },
-        { InputActionType::RIGHT_ARROW_KEY,      InputActionState::RELEASED }        
+    tsl::robin_map<SDL_Scancode, Key> mKeybindings =
+    {
+        {SDL_SCANCODE_A, Key::A_KEY}, {SDL_SCANCODE_B, Key::B_KEY},
+        {SDL_SCANCODE_C, Key::C_KEY}, {SDL_SCANCODE_D, Key::D_KEY},
+        {SDL_SCANCODE_E, Key::E_KEY}, {SDL_SCANCODE_F, Key::F_KEY},
+        {SDL_SCANCODE_G, Key::G_KEY}, {SDL_SCANCODE_H, Key::H_KEY},
+        {SDL_SCANCODE_I, Key::I_KEY}, {SDL_SCANCODE_J, Key::J_KEY},
+        {SDL_SCANCODE_K, Key::K_KEY}, {SDL_SCANCODE_L, Key::L_KEY},
+        {SDL_SCANCODE_M, Key::M_KEY}, {SDL_SCANCODE_N, Key::N_KEY},
+        {SDL_SCANCODE_O, Key::O_KEY}, {SDL_SCANCODE_P, Key::P_KEY},
+        {SDL_SCANCODE_Q, Key::Q_KEY}, {SDL_SCANCODE_R, Key::R_KEY},
+        {SDL_SCANCODE_S, Key::S_KEY}, {SDL_SCANCODE_T, Key::T_KEY},
+        {SDL_SCANCODE_U, Key::U_KEY}, {SDL_SCANCODE_V, Key::V_KEY},
+        {SDL_SCANCODE_W, Key::W_KEY}, {SDL_SCANCODE_X, Key::X_KEY},
+        {SDL_SCANCODE_Y, Key::Y_KEY}, {SDL_SCANCODE_Z, Key::Z_KEY},
+        {SDL_SCANCODE_LSHIFT, Key::SHIFT_KEY},
+        {SDL_SCANCODE_BACKSPACE, Key::BACKSPACE_KEY},
+        {SDL_SCANCODE_RETURN, Key::ENTER_KEY},
+        {SDL_SCANCODE_GRAVE, Key::TILDE_KEY},
+        {SDL_SCANCODE_LEFT, Key::LEFT_ARROW_KEY},
+        {SDL_SCANCODE_RIGHT, Key::RIGHT_ARROW_KEY},
+        {SDL_SCANCODE_UP, Key::UP_ARROW_KEY},
+        {SDL_SCANCODE_DOWN, Key::DOWN_ARROW_KEY},
     };
-
-    tsl::robin_map<SDL_Scancode, InputActionType> mKeybindings =
-    {        
-        { SDL_SCANCODE_Q,         InputActionType::CAMERA_MOVE_UP },
-        { SDL_SCANCODE_E,         InputActionType::CAMERA_MOVE_DOWN },
-        { SDL_SCANCODE_W,         InputActionType::CAMERA_MOVE_FORWARD },
-        { SDL_SCANCODE_S,         InputActionType::CAMERA_MOVE_BACKWARD },
-        { SDL_SCANCODE_A,         InputActionType::CAMERA_MOVE_LEFT },
-        { SDL_SCANCODE_D,         InputActionType::CAMERA_MOVE_RIGHT },        
-        { SDL_SCANCODE_Z,         InputActionType::CAMERA_ZOOM_IN },
-        { SDL_SCANCODE_X,         InputActionType::CAMERA_ZOOM_OUT },
-        { SDL_SCANCODE_GRAVE,     InputActionType::CONSOLE_TOGGLE },
-        { SDL_SCANCODE_LSHIFT,    InputActionType::SHIFT_KEY },
-        { SDL_SCANCODE_BACKSPACE, InputActionType::BACKSPACE_KEY },
-        { SDL_SCANCODE_RETURN,    InputActionType::ENTER_KEY },
-        { SDL_SCANCODE_UP,        InputActionType::UP_ARROW_KEY },
-        { SDL_SCANCODE_DOWN,      InputActionType::DOWN_ARROW_KEY },
-        { SDL_SCANCODE_LEFT,      InputActionType::LEFT_ARROW_KEY },
-        { SDL_SCANCODE_RIGHT,     InputActionType::RIGHT_ARROW_KEY }
+    
+    tsl::robin_map<int, Button> mButtonBindings =
+    {
+        {SDL_BUTTON_LEFT, Button::LEFT_BUTTON},
+        {SDL_BUTTON_MIDDLE, Button::MIDDLE_BUTTON},
+        {SDL_BUTTON_RIGHT, Button::RIGHT_BUTTON}
     };
-
-    // Needed for tapped input checks 
-    std::vector<unsigned char> mPreviousRawKeyboardState;        
+    
+    tsl::robin_map<Key, InputState> mCurrentKeyboardState;
+    std::vector<unsigned char> mPreviousRawKeyboardState;
+    
+    tsl::robin_map<Button, InputState> mCurrentButtonsState;
+    tsl::robin_map<Button, InputState> mPreviousButtonsState;
+    int mMouseX, mMouseY, mMouseWheelDelta;
 };
 
 ///-----------------------------------------------------------------------------------------------

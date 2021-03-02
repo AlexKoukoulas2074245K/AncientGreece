@@ -77,7 +77,7 @@ void ConsoleManagementSystem::HandleConsoleSpecialInput() const
     auto& consoleStateComponent = ecs::World::GetInstance().GetSingletonComponent<debug::ConsoleStateSingletonComponent>();
 
     // Handling console open/close
-    if (input::IsActionTypeKeyTapped(input::InputActionType::CONSOLE_TOGGLE))
+    if (input::GetKeyState(input::Key::TILDE_KEY) == input::InputState::TAPPED)
     {
         consoleStateComponent.mEnabled = !consoleStateComponent.mEnabled;
 
@@ -100,7 +100,7 @@ void ConsoleManagementSystem::HandleConsoleSpecialInput() const
         }
     }
     // Handle console backspace
-    else if (input::IsActionTypeKeyTapped(input::InputActionType::BACKSPACE_KEY))
+    else if (input::GetKeyState(input::Key::BACKSPACE_KEY) == input::InputState::TAPPED)
     {
         if (consoleStateComponent.mEnabled && consoleStateComponent.mCurrentCommandTextBuffer.size() > 1)
         {
@@ -109,7 +109,7 @@ void ConsoleManagementSystem::HandleConsoleSpecialInput() const
         }
     }
     // Handle previous command cycling
-    else if (input::IsActionTypeKeyTapped(input::InputActionType::UP_ARROW_KEY))
+    else if (input::GetKeyState(input::Key::UP_ARROW_KEY) == input::InputState::TAPPED)
     {
         if (consoleStateComponent.mEnabled && consoleStateComponent.mCommandHistory.size() > 0)
         {
@@ -119,7 +119,7 @@ void ConsoleManagementSystem::HandleConsoleSpecialInput() const
         }
     }
     // Handle next command cycling
-    else if (input::IsActionTypeKeyTapped(input::InputActionType::DOWN_ARROW_KEY))
+    else if (input::GetKeyState(input::Key::DOWN_ARROW_KEY) == input::InputState::TAPPED)
     {
         if (consoleStateComponent.mEnabled && consoleStateComponent.mCommandHistory.size() > 0)
         {
@@ -129,7 +129,7 @@ void ConsoleManagementSystem::HandleConsoleSpecialInput() const
         }
     }
     // Handle command execution
-    else if (input::IsActionTypeKeyTapped(input::InputActionType::ENTER_KEY))
+    else if (input::GetKeyState(input::Key::ENTER_KEY) == input::InputState::TAPPED)
     {
         if (consoleStateComponent.mEnabled)
         {

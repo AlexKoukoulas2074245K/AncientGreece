@@ -148,27 +148,27 @@ void Game::VOnUpdate(const float dt)
     auto maxZ = -0.20f;
     auto minZ = -0.60f;
     
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::CAMERA_MOVE_UP))
+    if (genesis::input::GetKeyState(genesis::input::Key::Q_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition.y += moveSpeed * dt;
     }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::CAMERA_MOVE_DOWN))
+    if (genesis::input::GetKeyState(genesis::input::Key::E_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition.y -= moveSpeed * dt;
     }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::CAMERA_MOVE_LEFT))
+    if (genesis::input::GetKeyState(genesis::input::Key::A_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition += dt * moveSpeed * glm::normalize(glm::cross(cameraComponent.mFrontVector, cameraComponent.mUpVector));
     }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::CAMERA_MOVE_RIGHT))
+    if (genesis::input::GetKeyState(genesis::input::Key::D_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition -= dt * moveSpeed * glm::normalize(glm::cross(cameraComponent.mFrontVector, cameraComponent.mUpVector));
     }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::CAMERA_MOVE_FORWARD))
+    if (genesis::input::GetKeyState(genesis::input::Key::W_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition += dt * moveSpeed * cameraComponent.mFrontVector;
     }
-    if (genesis::input::IsActionTypeKeyPressed(genesis::input::InputActionType::CAMERA_MOVE_BACKWARD))
+    if (genesis::input::GetKeyState(genesis::input::Key::S_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition -= dt * moveSpeed * cameraComponent.mFrontVector;
     }
@@ -211,7 +211,12 @@ void Game::VOnUpdate(const float dt)
     cameraComponent.mFrontVector.y = genesis::math::Sinf(cameraComponent.mPitch);
     cameraComponent.mFrontVector.z = genesis::math::Sinf(cameraComponent.mYaw) * genesis::math::Cosf(cameraComponent.mPitch);
     
-    Log(LogType::INFO, "Camera pos: %.2f, %.2f, %.2f", cameraComponent.mPosition.x, cameraComponent.mPosition.y, cameraComponent.mPosition.z);
+    if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) == genesis::input::InputState::PRESSED) {
+        Log(LogType::INFO, "Mouse lbutton pressed");
+    }
+    if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) == genesis::input::InputState::RELEASED) {
+        Log(LogType::INFO, "Mouse lbutton released");
+    }
 }
 
 ///------------------------------------------------------------------------------------------------

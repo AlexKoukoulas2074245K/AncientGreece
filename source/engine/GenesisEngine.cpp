@@ -14,6 +14,7 @@
 #include "debug/utils/ConsoleCommandUtils.h"
 #include "debug/components/DebugViewStateSingletonComponent.h"
 #include "input/components/InputStateSingletonComponent.h"
+#include "input/components/InputStateSingletonComponent.h"
 #include "input/systems/RawInputHandlingSystem.h"
 #include "input/utils/InputUtils.h"
 #include "rendering/components/WindowSingletonComponent.h"
@@ -210,6 +211,9 @@ void GenesisEngine::UpdateFrameStatistics(float& dt, float& elapsedTicks, float&
 
 bool AppShouldQuit()
 {
+    auto& inputStateComponent = ecs::World::GetInstance().GetSingletonComponent<input::InputStateSingletonComponent>();
+    inputStateComponent.mMouseWheelDelta = 0;
+    
     // Poll events
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -217,7 +221,12 @@ bool AppShouldQuit()
         switch (event.type)
         {
             case SDL_QUIT: return true;
-
+            
+            case SDL_MOUSEWHEEL:
+            {
+                inputStateComponent.mMouseWheelDelta = event.wheel.y;
+            } break;
+                
 #if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)
             case SDL_TEXTINPUT:
             {

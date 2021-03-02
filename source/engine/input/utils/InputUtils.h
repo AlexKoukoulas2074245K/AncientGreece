@@ -23,41 +23,48 @@ namespace input
 {
 
 ///-----------------------------------------------------------------------------------------------
-/// Tests whether the state of the given input action is TAPPED.
-/// @param[in] actionType the action type to check for its state.
-/// @param[in] world the singular world of the ECS state.
-/// @returns whether the state of the input action type is TAPPED.
-inline bool IsActionTypeKeyTapped(const InputActionType actionType)
+/// Returns the state of the given key.
+/// @param[in] key the key to check for its state.
+/// @returns the state of the specified key.
+inline InputState GetKeyState(const Key key)
 {
     auto& world = ecs::World::GetInstance();
     const auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
-    return inputStateComponent.mCurrentInputState.at(actionType) == InputActionState::TAPPED;
+    return inputStateComponent.mCurrentKeyboardState.at(key);
 }
 
 ///-----------------------------------------------------------------------------------------------
-/// Tests whether the state of the given input action is PRESSED.
-/// @param[in] actionType the action type to check for its state.
-/// @param[in] world the singular world of the ECS state.
-/// @returns whether the state of the input action type is PRESSED.
-inline bool IsActionTypeKeyPressed(const InputActionType actionType)
+/// Returns the state of the given button.
+/// @param[in] button the button to check for its state.
+/// @returns the state of the specified button.
+inline InputState GetButtonState(const Button button)
 {
     auto& world = ecs::World::GetInstance();
     const auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
-    return inputStateComponent.mCurrentInputState.at(actionType) == InputActionState::PRESSED;
-}
-
-/// Tests whether the state of the given input action is RELEASED.
-/// @param[in] actionType the action type to check for its state.
-/// @param[in] world the singular world of the ECS state.
-/// @returns whether the state of the input action type is RELEASED.
-inline bool IsActionTypeKeyReleased(const InputActionType actionType)
-{
-    auto& world = ecs::World::GetInstance();
-    const auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
-    return inputStateComponent.mCurrentInputState.at(actionType) == InputActionState::RELEASED;
+    return inputStateComponent.mCurrentButtonsState.at(button);
 }
 
 ///-----------------------------------------------------------------------------------------------
+/// Returns current delta of the mouse wheel (> 0 scroll up, < 0 scroll down).
+/// @returns the delta of the mouse wheel.
+inline int GetMouseWheelDelta()
+{
+    auto& world = ecs::World::GetInstance();
+    const auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
+    return inputStateComponent.mMouseWheelDelta;
+}
+
+///-----------------------------------------------------------------------------------------------
+/// Returns current mouse position relative to the focused window.
+/// @param[out] mouseX the x coordinate of the mouse relative to the window
+/// @param[out] mouseY the y coordinate of the mouse relative to the window
+inline void GetMousePosition(int& mouseX, int& mouseY)
+{
+    auto& world = ecs::World::GetInstance();
+    const auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
+    mouseX = inputStateComponent.mMouseX;
+    mouseY = inputStateComponent.mMouseY;
+}
 
 }
 
