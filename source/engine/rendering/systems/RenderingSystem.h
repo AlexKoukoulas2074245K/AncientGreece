@@ -35,11 +35,13 @@ namespace rendering
 ///-----------------------------------------------------------------------------------------------
 
 class CameraSingletonComponent;
+class LightStoreSingletonComponent;
 class RenderableComponent;
 class RenderingContextSingletonComponent;
+class TextStringComponent;
 class ShaderStoreSingletonComponent;
 class WindowSingletonComponent;
-class LightStoreSingletonComponent;
+
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -51,6 +53,18 @@ public:
     void VUpdate(const float dt, const std::vector<ecs::EntityId>&) const override;
 
 private:
+    void RenderStringInternal
+    (
+        const TransformComponent& entityTransformComponent,
+        const RenderableComponent& entityRenderableComponent,
+        const CameraSingletonComponent& globalCameraComponent,
+        const LightStoreSingletonComponent& lightStoreComponent,
+        const ShaderStoreSingletonComponent& globalShaderStoreComponent,
+        const TextStringComponent& textStringComponent,
+        const WindowSingletonComponent& globalWindowComponent,
+        RenderingContextSingletonComponent& renderingContextComponent
+    ) const;
+    
     void RenderEntityInternal
     (        
         const TransformComponent& entityTransformComponent,
@@ -61,7 +75,7 @@ private:
         const WindowSingletonComponent& globalWindowComponent,        
         RenderingContextSingletonComponent& renderingContextComponent        
     ) const;
-        
+    
     void InitializeRenderingWindowAndContext() const;
     void InitializeCamera() const;
     void InitializeLights() const;

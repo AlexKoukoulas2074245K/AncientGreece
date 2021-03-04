@@ -115,13 +115,13 @@ void DebugViewManagementSystem::HandleLightsDebug() const
 
 void DebugViewManagementSystem::ClearFrameStatsStrings() const
 {
-    const auto& world = ecs::World::GetInstance();
+    auto& world = ecs::World::GetInstance();
     auto& debugViewStateComponent = world.GetSingletonComponent<debug::DebugViewStateSingletonComponent>();
 
     if (debugViewStateComponent.mFpsStrings.first != ecs::NULL_ENTITY_ID)
     {
-        rendering::DestroyRenderedText(debugViewStateComponent.mFpsStrings.first);
-        rendering::DestroyRenderedText(debugViewStateComponent.mFpsStrings.second);
+        world.DestroyEntity(debugViewStateComponent.mFpsStrings.first);
+        world.DestroyEntity(debugViewStateComponent.mFpsStrings.second);
 
         debugViewStateComponent.mFpsStrings.first  = ecs::NULL_ENTITY_ID;
         debugViewStateComponent.mFpsStrings.second = ecs::NULL_ENTITY_ID;
@@ -129,8 +129,8 @@ void DebugViewManagementSystem::ClearFrameStatsStrings() const
 
     if (debugViewStateComponent.mEntityCountStrings.first != ecs::NULL_ENTITY_ID)
     {
-        rendering::DestroyRenderedText(debugViewStateComponent.mEntityCountStrings.first);
-        rendering::DestroyRenderedText(debugViewStateComponent.mEntityCountStrings.second);
+        world.DestroyEntity(debugViewStateComponent.mEntityCountStrings.first);
+        world.DestroyEntity(debugViewStateComponent.mEntityCountStrings.second);
 
         debugViewStateComponent.mEntityCountStrings.first = ecs::NULL_ENTITY_ID;
         debugViewStateComponent.mEntityCountStrings.second = ecs::NULL_ENTITY_ID;
@@ -140,8 +140,8 @@ void DebugViewManagementSystem::ClearFrameStatsStrings() const
     {
         for (const auto& systemNameAndUpdateTimeStrings : debugViewStateComponent.mSystemNamesAndUpdateTimeStrings)
         {
-            rendering::DestroyRenderedText(systemNameAndUpdateTimeStrings.first);
-            rendering::DestroyRenderedText(systemNameAndUpdateTimeStrings.second);
+            world.DestroyEntity(systemNameAndUpdateTimeStrings.first);
+            world.DestroyEntity(systemNameAndUpdateTimeStrings.second);
         }
 
         debugViewStateComponent.mSystemNamesAndUpdateTimeStrings.clear();

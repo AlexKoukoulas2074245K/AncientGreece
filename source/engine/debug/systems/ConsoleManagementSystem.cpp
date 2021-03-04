@@ -7,6 +7,7 @@
 
 #include "ConsoleManagementSystem.h"
 #include "../components/ConsoleStateSingletonComponent.h"
+#include "../../common/components/TransformComponent.h"
 #include "../../input/utils/InputUtils.h"
 #include "../../rendering/components/RenderableComponent.h"
 #include "../../rendering/components/TextStringComponent.h"
@@ -74,7 +75,8 @@ void ConsoleManagementSystem::CreateConsoleBackgroundEntityIfNotAlive() const
 
 void ConsoleManagementSystem::HandleConsoleSpecialInput() const
 {
-    auto& consoleStateComponent = ecs::World::GetInstance().GetSingletonComponent<debug::ConsoleStateSingletonComponent>();
+    auto& world = ecs::World::GetInstance();
+    auto& consoleStateComponent = world.GetSingletonComponent<debug::ConsoleStateSingletonComponent>();
 
     // Handling console open/close
     if (input::GetKeyState(input::Key::TILDE_KEY) == input::InputState::TAPPED)
@@ -93,7 +95,7 @@ void ConsoleManagementSystem::HandleConsoleSpecialInput() const
 
             for (const auto& pastConsoleTextStringEntityIds : consoleStateComponent.mPastConsoleTextStringEntityIds)
             {
-                rendering::DestroyRenderedText(pastConsoleTextStringEntityIds);
+                world.DestroyEntity(pastConsoleTextStringEntityIds);
             }
 
             consoleStateComponent.mPastConsoleTextStringEntityIds.clear();
@@ -175,13 +177,14 @@ void ConsoleManagementSystem::HandleConsoleBackgroundAnimation() const
 
 void ConsoleManagementSystem::HandleConsoleTextRendering() const
 {
-    auto& consoleStateComponent = ecs::World::GetInstance().GetSingletonComponent<ConsoleStateSingletonComponent>();
+    auto& world = ecs::World::GetInstance();
+    auto& consoleStateComponent = world.GetSingletonComponent<ConsoleStateSingletonComponent>();
 
     if (consoleStateComponent.mCurrentCommandRenderedTextEntityId == ecs::NULL_ENTITY_ID || IsCurrentCommandRenderedTextOutOfDate())
     {
         if (consoleStateComponent.mCurrentCommandRenderedTextEntityId != ecs::NULL_ENTITY_ID)
         {
-            rendering::DestroyRenderedText(consoleStateComponent.mCurrentCommandRenderedTextEntityId);            
+            world.DestroyEntity(consoleStateComponent.mCurrentCommandRenderedTextEntityId);
         }
 
         consoleStateComponent.mCurrentCommandRenderedTextEntityId = rendering::RenderText
@@ -269,7 +272,7 @@ void ConsoleManagementSystem::ExecuteCommand() const
 
 void ConsoleManagementSystem::AddTextStringToConsolePastText(const ecs::EntityId commandStringTextEntityId) const
 {
-    const auto& world = ecs::World::GetInstance();
+    auto& world = ecs::World::GetInstance();
     auto& consoleStateComponent = world.GetSingletonComponent<ConsoleStateSingletonComponent>();
 
     // Add text string to past console text
@@ -278,7 +281,7 @@ void ConsoleManagementSystem::AddTextStringToConsolePastText(const ecs::EntityId
     // Remove overflowing past text strings (circular buffer style)
     if (consoleStateComponent.mPastConsoleTextStringEntityIds.size() > CONSOLE_MAX_LINES_VISIBLE)
     {
-        rendering::DestroyRenderedText(consoleStateComponent.mPastConsoleTextStringEntityIds.front());
+        world.DestroyEntity(consoleStateComponent.mPastConsoleTextStringEntityIds.front());
         consoleStateComponent.mPastConsoleTextStringEntityIds.erase(consoleStateComponent.mPastConsoleTextStringEntityIds.begin());
     }
 }
@@ -315,7 +318,8 @@ void ConsoleManagementSystem::RepositionPastConsoleTextStrings() const
             CONSOLE_CURRENT_COMMAND_TEXT_POSITION.z
         );
 
-        rendering::SetTextPosition(pastConsoleTextStringEntityId, targetPosition);
+        auto& transformComponent = world.GetComponent<TransformComponent>(pastConsoleTextStringEntityId);
+        transformComponent.mPosition = targetPosition;
     }
 }
 
@@ -326,14 +330,8 @@ bool ConsoleManagementSystem::IsCurrentCommandRenderedTextOutOfDate() const
     const auto& world = ecs::World::GetInstance();
     const auto& consoleStateComponent = world.GetSingletonComponent<ConsoleStateSingletonComponent>();
     const auto& renderedTextStringComponent = world.GetComponent<rendering::TextStringComponent>(consoleStateComponent.mCurrentCommandRenderedTextEntityId);
-
-    std::string renderedCommandText = "";
-    for (const auto& characterEntry : renderedTextStringComponent.mTextCharacterEntities)
-    {
-        renderedCommandText += characterEntry.mCharacter;
-    }
-
-    return renderedCommandText != consoleStateComponent.mCurrentCommandTextBuffer;
+    
+    return renderedTextStringComponent.mText != consoleStateComponent.mCurrentCommandTextBuffer;
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -34,7 +34,7 @@ namespace
     static const std::string FONT_MAP_FILE_EXTENSION           = ".dat";
     static const std::string FONT_ATLAS_TEXTURE_FILE_EXTENSION = ".png";
 
-    static const float FONT_PADDING_PROPORTION_TO_SIZE = 0.333333f;
+    static const float DEFAULT_FONT_PADDING_PROPORTION_TO_SIZE = 0.333333f;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -98,38 +98,6 @@ void LoadFont
 
 ///-----------------------------------------------------------------------------------------------
 
-ecs::EntityId RenderCharacter
-(
-    const char character,
-    const StringId& fontName,
-    const float size,
-    const glm::vec3& position,
-    const glm::vec4& color /* glm::vec4(0.0f, 0.0f, 0.0f, 0.0f) */
-)
-{    
-    auto& world = ecs::World::GetInstance();
-    auto& fontStoreComponent = world.GetSingletonComponent<FontsStoreSingletonComponent>();
-
-    auto renderableComponent = std::make_unique<RenderableComponent>();
-    renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource(resources::ResourceLoadingService::RES_ATLASES_ROOT + fontName.GetString() + FONT_ATLAS_TEXTURE_FILE_EXTENSION);    
-    renderableComponent->mShaderNameId = FONT_SHADER_NAME;
-    renderableComponent->mIsGuiComponent = true;
-    renderableComponent->mMeshResourceId = fontStoreComponent.mLoadedFonts.at(fontName).at(character);
-    renderableComponent->mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = color;
-
-    auto transformComponent = std::make_unique<TransformComponent>();    
-    transformComponent->mPosition = position;
-    transformComponent->mScale = glm::vec3(size);
-
-    const auto characterEntity = world.CreateEntity();
-    world.AddComponent<RenderableComponent>(characterEntity, std::move(renderableComponent));
-    world.AddComponent<TransformComponent>(characterEntity, std::move(transformComponent));
-
-    return characterEntity;
-}
-
-///-----------------------------------------------------------------------------------------------
-
 ecs::EntityId RenderText
 (
     const std::string& text,
@@ -141,9 +109,17 @@ ecs::EntityId RenderText
 {
     auto& world = ecs::World::GetInstance();
     auto& fontStoreComponent = world.GetSingletonComponent<FontsStoreSingletonComponent>();
-    auto textStringComponent = std::make_unique<TextStringComponent>();
-
-    auto positionCounter = position;
+    
+    auto transformComponent  = std::make_unique<TransformComponent>();
+    transformComponent->mPosition = position;
+    transformComponent->mScale = glm::vec3(size);
+    
+    auto renderableComponent = std::make_unique<RenderableComponent>();
+    renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource(resources::ResourceLoadingService::RES_ATLASES_ROOT + fontName.GetString() + FONT_ATLAS_TEXTURE_FILE_EXTENSION);
+    renderableComponent->mShaderNameId = FONT_SHADER_NAME;
+    renderableComponent->mIsGuiComponent = true;
+    renderableComponent->mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = color;
+    
     for (const auto& character : text)
     {
         if (fontStoreComponent.mLoadedFonts.at(fontName).count(character) == 0)
@@ -151,16 +127,18 @@ ecs::EntityId RenderText
             continue;
         }
         
-        const auto characterEntityId = RenderCharacter(character, fontName, size, positionCounter, color);
-        textStringComponent->mTextCharacterEntities.push_back(CharacterEntry(characterEntityId, character));
-        
-        positionCounter.x += size * FONT_PADDING_PROPORTION_TO_SIZE;
-    }    
-
+        renderableComponent->mMeshResourceIds.push_back( fontStoreComponent.mLoadedFonts.at(fontName).at(character));
+    }
+    
+    auto textStringComponent = std::make_unique<TextStringComponent>();
+    textStringComponent->mText = text;
     textStringComponent->mCharacterSize = size;
-
+    textStringComponent->mPaddingProportionalToSize = DEFAULT_FONT_PADDING_PROPORTION_TO_SIZE;
+    
     auto entity = world.CreateEntity();
+    world.AddComponent<TransformComponent>(entity, std::move(transformComponent));
     world.AddComponent<TextStringComponent>(entity, std::move(textStringComponent));
+    world.AddComponent<RenderableComponent>(entity, std::move(renderableComponent));
 
     return entity;
 }
@@ -177,6 +155,8 @@ ecs::EntityId RenderTextIfDifferentToPreviousString
     const glm::vec4& color /* glm::vec4(0.0f, 0.0f, 0.0f, 0.0f) */
 )
 {
+    auto& world = ecs::World::GetInstance();
+    
     if (previousString != ecs::NULL_ENTITY_ID && IsTextStringTheSameAsText(previousString, text))
     {
         return previousString;
@@ -184,68 +164,10 @@ ecs::EntityId RenderTextIfDifferentToPreviousString
     
     if (previousString != ecs::NULL_ENTITY_ID)
     {
-        DestroyRenderedText(previousString);
+        world.DestroyEntity(previousString);
     }
 
     return RenderText(text, fontName, size, position, color);
-}
-
-///-----------------------------------------------------------------------------------------------
-
-void DestroyRenderedText
-(
-    const ecs::EntityId textStringEntityId
-)
-{
-    auto& world = ecs::World::GetInstance();
-    auto& textStringComponent = world.GetComponent<TextStringComponent>(textStringEntityId);
-
-    for (const auto& characterEntity : textStringComponent.mTextCharacterEntities)
-    {
-        world.DestroyEntity(characterEntity.mEntityId);
-    }
-
-    textStringComponent.mTextCharacterEntities.clear();
-    world.DestroyEntity(textStringEntityId);
-}
-
-///-----------------------------------------------------------------------------------------------
-
-void MoveText
-(
-    const ecs::EntityId textStringEntityId,
-    const float dx /* 0.0f */,
-    const float dy /* 0.0f */
-)
-{
-    auto& world = ecs::World::GetInstance();
-    auto& textStringComponent = world.GetComponent<TextStringComponent>(textStringEntityId);
-    
-    for (const auto& characterEntity : textStringComponent.mTextCharacterEntities)
-    {
-        world.GetComponent<TransformComponent>(characterEntity.mEntityId).mPosition += glm::vec3(dx, dy, 0.0f);
-    }
-}
-    
-///-----------------------------------------------------------------------------------------------
-
-void SetTextPosition
-(
-    const ecs::EntityId textStringEntityId,
-    const glm::vec3& position
-)
-{
-    auto& world = ecs::World::GetInstance();
-    auto& textStringComponent = world.GetComponent<TextStringComponent>(textStringEntityId);
-
-    auto positionCounter = position;
-    for (auto i = 0U; i < textStringComponent.mTextCharacterEntities.size(); ++i)
-    {
-        const auto& characterEntry = textStringComponent.mTextCharacterEntities.at(i);
-        world.GetComponent<TransformComponent>(characterEntry.mEntityId).mPosition = positionCounter;
-
-        positionCounter.x += textStringComponent.mCharacterSize * FONT_PADDING_PROPORTION_TO_SIZE;
-    }
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -258,21 +180,8 @@ bool IsTextStringTheSameAsText
 {
     auto& world = ecs::World::GetInstance();
     auto& textStringComponent = world.GetComponent<TextStringComponent>(textStringEntityId);
-
-    if (textStringComponent.mTextCharacterEntities.size() != textToTest.size())
-    {
-        return false;
-    }
-
-    for (auto i = 0U; i < textToTest.size(); ++i)
-    {
-        if (textStringComponent.mTextCharacterEntities[i].mCharacter != textToTest[i])
-        {
-            return false;
-        }
-    }
-
-    return true;
+    
+    return textStringComponent.mText == textToTest;
 }
 
 ///-----------------------------------------------------------------------------------------------

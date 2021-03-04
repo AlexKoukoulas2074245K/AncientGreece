@@ -129,7 +129,7 @@ bool OverworldCameraControllerSystem::IsCameraOutOfBounds() const
 
         const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
         const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
-        const auto& currentMesh = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceId);
+        const auto& currentMesh = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
 
         // Check whether any map edge is visible at this time
         if (genesis::math::IsMeshInsideFrustum(transformComponent.mPosition, transformComponent.mScale, currentMesh.GetDimensions(), frustum))

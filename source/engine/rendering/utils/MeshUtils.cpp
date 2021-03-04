@@ -69,9 +69,9 @@ ecs::EntityId LoadAndCreateModelByName
     auto renderableComponent = std::make_unique<RenderableComponent>();        
     renderableComponent->mShaderNameId = DEFAULT_MODEL_SHADER;
 
-    renderableComponent->mMeshResourceId =     
+    renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
-        LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj");
+        LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));
         
     renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource
     (
@@ -109,9 +109,9 @@ ecs::EntityId LoadAndCreateGuiSprite
     auto renderableComponent = std::make_unique<RenderableComponent>();    
     renderableComponent->mShaderNameId = shaderName;
     renderableComponent->mIsGuiComponent = true;
-    renderableComponent->mMeshResourceId =     
+    renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
-        LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj");
+        LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));
 
     renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource
     (

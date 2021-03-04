@@ -39,24 +39,6 @@ void LoadFont
 );
 
 ///------------------------------------------------------------------------------------------------
-/// Renders a single character with the given font. 
-///
-/// @param[in] character the character to render.
-/// @param[in] fontName the name of the font to use in rendering.
-/// @param[in] size the size of character.
-/// @param[in] position the position to render the character at.
-/// @param[in] color (optional) specifies the custom color of the rendered character.
-/// @returns the id of an entity holding the renderable and transform components of the character.
-ecs::EntityId RenderCharacter
-(
-    const char character,
-    const StringId& fontName,
-    const float size,
-    const glm::vec3& position,
-    const glm::vec4& color = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)
-);
-
-///------------------------------------------------------------------------------------------------
 /// Renders a text string with the given font. 
 ///
 /// @param[in] text the text to render.
@@ -96,38 +78,6 @@ ecs::EntityId RenderTextIfDifferentToPreviousString
     const glm::vec4& color = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)
 );
 
-///------------------------------------------------------------------------------------------------
-/// Moves a text string by a certain displacement.
-///
-/// @param[in] textStringEntityId the id of the entity holding the root TextStringComponent of the text to be moved.
-/// @param[in] dx the horizontal displacement
-/// @param[in] dy the vertical displacement
-void MoveText
-(
-    const ecs::EntityId textStringEntityId,
-    const float dx = 0.0f,
-    const float dy = 0.0f
-);
-
-///------------------------------------------------------------------------------------------------
-/// Sets the position of a text string.
-///
-/// @param[in] textStringEntityId the id of the entity holding the root TextStringComponent of the text to be moved.
-/// @param[in] position the target position of the text
-void SetTextPosition
-(
-    const ecs::EntityId textStringEntityId,
-    const glm::vec3& position
-);
-
-///------------------------------------------------------------------------------------------------
-/// Clears a text string. 
-///
-/// @param[in] textStringEntityId the id of the entity holding the root TextStringComponent of the text to be cleared.
-void DestroyRenderedText
-(
-    const ecs::EntityId textStringEntityId
-);
 
 ///------------------------------------------------------------------------------------------------
 /// Checks whether the TextStringComponent of the entity passed in represents the same string as the second argument. 

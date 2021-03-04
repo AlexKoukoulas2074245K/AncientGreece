@@ -58,12 +58,13 @@ struct MaterialProperties final
 
 class RenderableComponent final: public ecs::IComponent
 {
-public:    
+public:
+    std::vector<ResourceId> mMeshResourceIds;
     ShaderUniforms mShaderUniforms;
     MaterialProperties mMaterial;
-    ResourceId mMeshResourceId    = 0;
     ResourceId mTextureResourceId = 0;            
     StringId mShaderNameId        = StringId();
+    int mCurrentMeshResourceIndex = 0;
     bool mIsVisible               = true;
     bool mIsGuiComponent          = false;
     bool mIsAffectedByLight       = false;
