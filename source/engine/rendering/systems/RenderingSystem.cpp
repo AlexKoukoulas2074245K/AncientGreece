@@ -60,16 +60,6 @@ namespace
 
 ///-----------------------------------------------------------------------------------------------
 
-bool IsMeshInsideCameraFrustum
-(
-    const glm::vec3& meshPosition,
-    const glm::vec3& meshScale,
-    const glm::vec3& meshDimensions,
-    const CameraFrustum& cameraFrustum
-);
-
-///-----------------------------------------------------------------------------------------------
-
 RenderingSystem::RenderingSystem()
     : BaseSystem()
 {
@@ -150,7 +140,7 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
             const auto& currentMesh        = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceId);
 
             // Frustum culling
-            if (!IsMeshInsideCameraFrustum
+            if (!math::IsMeshInsideFrustum
             (
                 transformComponent.mPosition,
                 transformComponent.mScale,
@@ -453,31 +443,6 @@ std::set<std::string> RenderingSystem::GetAndFilterShaderNames() const
 }
 
 ///-----------------------------------------------------------------------------------------------
-
-bool IsMeshInsideCameraFrustum
-(
-    const glm::vec3& meshPosition,
-    const glm::vec3& meshScale,
-    const glm::vec3& meshDimensions,
-    const CameraFrustum& cameraFrustum
-)
-{
-    const auto scaledMeshDimensions = meshDimensions * meshScale;
-    const auto frustumCheckSphereRadius = math::Max(scaledMeshDimensions.x, math::Max(scaledMeshDimensions.y, scaledMeshDimensions.z)) * 0.5f;
-
-    for (auto i = 0U; i < 6U; ++i)
-    {
-        float dist =
-            cameraFrustum[i].x * meshPosition.x +
-            cameraFrustum[i].y * meshPosition.y +
-            cameraFrustum[i].z * meshPosition.z +
-            cameraFrustum[i].w - frustumCheckSphereRadius;
-
-        if (dist > 0) return false;
-    }
-
-    return true;
-}
 
 }
 

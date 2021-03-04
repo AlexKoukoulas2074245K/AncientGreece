@@ -1,29 +1,32 @@
 ///------------------------------------------------------------------------------------------------
-///  CollidedEntitiesComponent.h
+///  OverworldCameraControllerSystem.h
 ///  Genesis
 ///
-///  Created by Alex Koukoulas on 24/07/2020.
+///  Created by Alex Koukoulas on 04/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef CollidedEntitiesComponent_h
-#define CollidedEntitiesComponent_h
-
-///-----------------------------------------------------------------------------------------------
-
-#include "../../../engine/ECS.h"
-
-#include <utility>
+#ifndef OverworldCameraControllerSystem_h
+#define OverworldCameraControllerSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
-namespace physics
+#include "../../engine/ECS.h"
+
+///-----------------------------------------------------------------------------------------------
+
+namespace overworld
 {
 
 ///-----------------------------------------------------------------------------------------------
-
-struct CollidedEntitiesComponent final : public genesis::ecs::IComponent
+class OverworldCameraControllerSystem final : public genesis::ecs::BaseSystem<genesis::ecs::NullComponent>
 {
-    std::pair<genesis::ecs::EntityId, genesis::ecs::EntityId> mCollidedEntities;
+public:
+    OverworldCameraControllerSystem();
+
+    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+    
+private:
+    bool IsCameraOutOfBounds() const;
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -32,4 +35,4 @@ struct CollidedEntitiesComponent final : public genesis::ecs::IComponent
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* CollidedEntitiesComponent_h */
+#endif /* OverworldCameraControllerSystem_h */

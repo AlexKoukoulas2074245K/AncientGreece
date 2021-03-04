@@ -21,6 +21,7 @@
 #include <glm/gtc/matrix_transform.hpp> // mat helpers
 #include <glm/gtc/matrix_access.hpp>    // mat helpers
 #include <random>
+#include <array>
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -34,6 +35,8 @@ namespace math
 
 ///-----------------------------------------------------------------------------------------------
 
+static constexpr unsigned int FRUSTUM_SIDES = 6;
+
 static constexpr float PI              = 3.141592f;
 static constexpr float EQ_THRESHOLD    = 1e-4f;
 static constexpr float DEGREES_PER_RAD = 57.2958f;
@@ -42,6 +45,10 @@ static constexpr float RADS_PER_DEGREE = 0.0174532925f;
 static const glm::vec3 X_AXIS = glm::vec3(1.0f, 0.0f, 0.0f);
 static const glm::vec3 Y_AXIS = glm::vec3(0.0f, 1.0f, 0.0f);
 static const glm::vec3 Z_AXIS = glm::vec3(0.0f, 0.0f, 1.0f);
+
+///-----------------------------------------------------------------------------------------------
+
+using Frustum = std::array<glm::vec4, FRUSTUM_SIDES>;
 
 ///-----------------------------------------------------------------------------------------------
 /// Returns the minimum of the 2 given values.
@@ -356,6 +363,15 @@ bool RayToSphereIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDir
 /// @param[out] t the ray's t at the intersection point, if one actually happened
 /// @returns whether an intersection is taking place.
 bool RayToPlaneIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const glm::vec3& planeCenter, const glm::vec3& planeNormal, float& t);
+
+///-----------------------------------------------------------------------------------------------
+/// Computes and returns whether the given mesh is inside a frustum.
+/// @param[in] meshPosition the mesh's position.
+/// @param[in] meshScale the scale of the mesh.
+/// @param[in] meshDimensions the dimensions of the mesh in a glm::vec3 form.
+/// @param[in] Frustum the frustum to test containment in.
+/// @returns whether the mesh is inside the frustum.
+bool IsMeshInsideFrustum(const glm::vec3& meshPosition, const glm::vec3& meshScale, const glm::vec3& meshDimensions, const Frustum& frustum);
 
 }
 

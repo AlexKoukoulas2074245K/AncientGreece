@@ -19,9 +19,9 @@ namespace rendering
 
 ///-----------------------------------------------------------------------------------------------
 
-CameraFrustum CalculateCameraFrustum(const glm::mat4& viewMatrix, const glm::mat4& projMatrix)
+math::Frustum CalculateCameraFrustum(const glm::mat4& viewMatrix, const glm::mat4& projMatrix)
 {
-    CameraFrustum cameraFrustum;
+    math::Frustum cameraFrustum;
 
     auto viewProjectionMatrix = projMatrix * viewMatrix;
 
@@ -40,7 +40,7 @@ CameraFrustum CalculateCameraFrustum(const glm::mat4& viewMatrix, const glm::mat
     cameraFrustum[5] = glm::normalize(rowW - rowZ);
 
     // Normalize planes
-    for (auto i = 0U; i < 6U; ++i)
+    for (auto i = 0U; i < math::FRUSTUM_SIDES; ++i)
     {
         glm::vec3 planeNormal(cameraFrustum[i].x, cameraFrustum[i].y, cameraFrustum[i].z);
         const auto length = glm::length(planeNormal);

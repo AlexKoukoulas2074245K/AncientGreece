@@ -11,6 +11,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "../components/InputStateSingletonComponent.h"
+#include "../../common/utils/MathUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -56,14 +57,12 @@ inline int GetMouseWheelDelta()
 
 ///-----------------------------------------------------------------------------------------------
 /// Returns current mouse position relative to the focused window.
-/// @param[out] mouseX the x coordinate of the mouse relative to the window
-/// @param[out] mouseY the y coordinate of the mouse relative to the window
-inline void GetMousePosition(int& mouseX, int& mouseY)
+/// @returns the mouse position in window space wrapped in an ivec2
+inline glm::ivec2 GetMousePosition()
 {
     auto& world = ecs::World::GetInstance();
     const auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
-    mouseX = inputStateComponent.mMouseX;
-    mouseY = inputStateComponent.mMouseY;
+    return glm::ivec2(inputStateComponent.mMouseX, inputStateComponent.mMouseY);
 }
 
 }
