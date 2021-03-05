@@ -11,8 +11,10 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "IResource.h"
+#include "../common/utils/MathUtils.h"
 
 #include <SDL_stdinc.h>
+#include <SDL_surface.h>
 
 ///------------------------------------------------------------------------------------------------
 
@@ -39,20 +41,23 @@ public:
     
     GLuint GetGLTextureId() const;
     int GetWidth() const;
-    int GetHeight() const;    
+    int GetHeight() const;
+    glm::ivec3 GetRGBAtPixel(const int x, const int y) const;
 
 private:
     TextureResource
     (
+        SDL_Surface* const surface,
         const int width, 
         const int height,
-        GLuint glTextureId        
+        GLuint glTextureId
     );
     
 private:
+    SDL_Surface* const mSurface;
     const int mWidth;
     const int mHeight;
-    const GLuint mGLTextureId;    
+    const GLuint mGLTextureId;
 };
 
 ///------------------------------------------------------------------------------------------------

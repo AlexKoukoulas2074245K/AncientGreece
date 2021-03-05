@@ -9,6 +9,7 @@
 #include "../rendering/opengl/Context.h"
 
 #include <cassert>
+#include <SDL_pixels.h>
 
 ///------------------------------------------------------------------------------------------------
 
@@ -25,6 +26,7 @@ namespace resources
 TextureResource::~TextureResource()
 {
     GL_CHECK(glDeleteTextures(1, &mGLTextureId));
+    SDL_FreeSurface(mSurface);
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -50,17 +52,28 @@ int TextureResource::GetHeight() const
 
 ///------------------------------------------------------------------------------------------------
 
+glm::ivec3 TextureResource::GetRGBAtPixel(const int x, const int y) const
+{
+    Uint8 r,g,b;
+    auto pixel = *(Uint32*)((Uint8*)mSurface->pixels + y * mSurface->pitch + x * mSurface->format->BytesPerPixel);
+    SDL_GetRGB(pixel, mSurface->format, &r, &g, &b);
+    return glm::ivec3(r, g, b);
+}
+
+///------------------------------------------------------------------------------------------------
+
 TextureResource::TextureResource
 (
+    SDL_Surface* const surface,
     const int width,
     const int height,
     GLuint glTextureId
 )
-    : mWidth(width)
+    : mSurface(surface)
+    , mWidth(width)
     , mHeight(height)
-    , mGLTextureId(glTextureId)    
+    , mGLTextureId(glTextureId)
 {
-
 }
 
 ///------------------------------------------------------------------------------------------------

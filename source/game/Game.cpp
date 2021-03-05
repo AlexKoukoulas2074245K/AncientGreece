@@ -7,6 +7,7 @@
 
 #include "Game.h"
 #include "overworld/systems/OverworldCameraControllerSystem.h"
+#include "overworld/systems/OverworldTargetSelectionSystem.h"
 #include "../engine/ECS.h"
 #include "../engine/common/utils/MathUtils.h"
 #include "../engine/debug/components/DebugViewStateSingletonComponent.h"
@@ -33,6 +34,7 @@ void Game::VOnSystemsInit()
 #endif
     
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
+    world.AddSystem(std::make_unique<overworld::OverworldTargetSelectionSystem>());
     
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
