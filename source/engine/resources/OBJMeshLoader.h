@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  MeshLoader.h
+///  OBJMeshLoader.h
 ///  Genesis
 ///
 ///  Created by Alex Koukoulas on 20/11/2019.
 ///------------------------------------------------------------------------------------------------
 
-#ifndef MeshLoader_h
-#define MeshLoader_h
+#ifndef OBJMeshLoader_h
+#define OBJMeshLoader_h
 
 ///------------------------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ namespace resources
 
 ///------------------------------------------------------------------------------------------------
 
-class MeshLoader final: public IResourceLoader
+class OBJMeshLoader final: public IResourceLoader
 {
     friend class ResourceLoadingService;
     
@@ -33,7 +33,7 @@ public:
     std::unique_ptr<IResource> VCreateAndLoadResource(const std::string& path) const override;
     
 private:
-    MeshLoader() = default;
+    OBJMeshLoader() = default;
     
     std::string ExtractAndRemoveInjectedTexCoordsIfAny(std::string& path) const;
 };
@@ -46,4 +46,4 @@ private:
 
 ///------------------------------------------------------------------------------------------------
 
-#endif /* MeshLoader_h */
+#endif /* OBJMeshLoader_h */

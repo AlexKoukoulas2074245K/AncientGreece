@@ -24,6 +24,8 @@ configure_file(demo-config.h.in "${CMAKE_BINARY_DIR}/demo-config.h")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/build_utilities")
 
+# Find assimp
+find_package(assimp REQUIRED)
 # Find Lua 
 find_package(Lua REQUIRED)
 
@@ -50,14 +52,14 @@ set(XML_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/extern/rapidxml-1.13")
 set(ROBIN_MAP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/extern/robin-map/include")
 
 # Define executable target
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL_MIXER_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${CMAKE_BINARY_DIR} ${GLM_INCLUDE_DIRS} ${JSON_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${ROBIN_MAP_INCLUDE_DIR} ${XML_INCLUDE_DIRS})
+include_directories(${assimp_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL_MIXER_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${CMAKE_BINARY_DIR} ${GLM_INCLUDE_DIRS} ${JSON_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${ROBIN_MAP_INCLUDE_DIR} ${XML_INCLUDE_DIRS})
 
 file(GLOB_RECURSE SOURCE_DIR
         "*.h"
         "*.cpp"
 )    
 add_executable(${PROJECT_NAME} ${SOURCE_DIR})
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBS} ${SDL2_IMAGE_LIBRARIES} ${SDL_MIXER_LIBRARIES} ${OPENGL_LIBRARIES} ${LUA_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${SDL2_LIBS} ${SDL2_IMAGE_LIBRARIES} ${SDL_MIXER_LIBRARIES} ${OPENGL_LIBRARIES} ${LUA_LIBRARIES})
 
 assign_source_group(${SOURCE_DIR})
 

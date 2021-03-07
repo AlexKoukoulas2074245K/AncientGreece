@@ -51,7 +51,8 @@ static std::string CreateTexCoordInjectedModelPath
 
 ecs::EntityId LoadAndCreateModelByName
 (
-    const std::string& modelName,    
+    const std::string& modelName,
+    const ModelType modelType,
     const glm::vec3& initialPosition /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialRotation /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialScale /* glm::vec3(1.0f, 1.0f, 1.0f) */,
@@ -71,7 +72,7 @@ ecs::EntityId LoadAndCreateModelByName
 
     renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
-        LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));
+        LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + (modelType == ModelType::OBJ ? ".obj" : ".dae")));
         
     renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource
     (

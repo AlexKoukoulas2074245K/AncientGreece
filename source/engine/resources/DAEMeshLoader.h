@@ -1,17 +1,16 @@
 ///------------------------------------------------------------------------------------------------
-///  MeshResource.h
+///  DAEMeshLoader.h
 ///  Genesis
 ///
 ///  Created by Alex Koukoulas on 20/11/2019.
 ///------------------------------------------------------------------------------------------------
 
-#ifndef MeshResource_h
-#define MeshResource_h
+#ifndef DAEMeshLoader_h
+#define DAEMeshLoader_h
 
 ///------------------------------------------------------------------------------------------------
 
-#include "IResource.h"
-#include "../common/utils/MathUtils.h"
+#include "IResourceLoader.h"
 
 ///------------------------------------------------------------------------------------------------
 
@@ -25,27 +24,18 @@ namespace resources
 
 ///------------------------------------------------------------------------------------------------
 
-using GLuint = unsigned int;
-
-///------------------------------------------------------------------------------------------------
-
-class MeshResource final: public IResource
+class DAEMeshLoader final: public IResourceLoader
 {
-    friend class OBJMeshLoader;
-    friend class DAEMeshLoader;
+    friend class ResourceLoadingService;
     
 public:
-    GLuint GetVertexArrayObject() const;
-    GLuint GetElementCount() const;
-    const glm::vec3& GetDimensions() const;
-
-private:
-    MeshResource(const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
+    void VInitialize() override;
+    std::unique_ptr<IResource> VCreateAndLoadResource(const std::string& path) const override;
     
 private:
-    const GLuint mVertexArrayObject;
-    const GLuint mElementCount;
-    const glm::vec3 mDimensions;
+    DAEMeshLoader() = default;
+    
+    std::string ExtractAndRemoveInjectedTexCoordsIfAny(std::string& path) const;
 };
 
 ///------------------------------------------------------------------------------------------------
@@ -56,4 +46,4 @@ private:
 
 ///------------------------------------------------------------------------------------------------
 
-#endif /* MeshResource_h */
+#endif /* DAEMeshLoader_h */

@@ -299,6 +299,7 @@ void DebugViewManagementSystem::CreateDebugLights() const
         auto cubeEntity = rendering::LoadAndCreateModelByName
         (
             DEBUG_LIGHT_ASSET_NAME.GetString(),
+            rendering::ModelType::OBJ,
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(0.0f, 0.0f, 0.0f),
             DEBUG_LIGHT_SCALE,

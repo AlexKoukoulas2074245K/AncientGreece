@@ -1,5 +1,5 @@
 ///------------------------------------------------------------------------------------------------
-///  MeshLoader.cpp
+///  OBJMeshLoader.cpp
 ///  Genesis
 ///
 ///  Created by Alex Koukoulas on 20/11/2019.
@@ -10,7 +10,7 @@
 #pragma warning(disable: 4996)
 #endif
 
-#include "MeshLoader.h"
+#include "OBJMeshLoader.h"
 #include "MeshResource.h"
 #include "../common/utils/StringUtils.h"
 #include "../common/utils/MathUtils.h"
@@ -32,13 +32,13 @@ namespace resources
 
 ///------------------------------------------------------------------------------------------------
 
-void MeshLoader::VInitialize()
+void OBJMeshLoader::VInitialize()
 {
 }
 
 ///------------------------------------------------------------------------------------------------
 
-std::unique_ptr<IResource> MeshLoader::VCreateAndLoadResource(const std::string& path) const
+std::unique_ptr<IResource> OBJMeshLoader::VCreateAndLoadResource(const std::string& path) const
 {
     auto trimmedPath = path;
     const auto injectedTexCoordsString = ExtractAndRemoveInjectedTexCoordsIfAny(trimmedPath);
@@ -210,7 +210,7 @@ std::unique_ptr<IResource> MeshLoader::VCreateAndLoadResource(const std::string&
 
 ///------------------------------------------------------------------------------------------------
 
-std::string MeshLoader::ExtractAndRemoveInjectedTexCoordsIfAny(std::string& path) const
+std::string OBJMeshLoader::ExtractAndRemoveInjectedTexCoordsIfAny(std::string& path) const
 {
     std::string injectedTexCoordString;
     std::string cleanPath;
