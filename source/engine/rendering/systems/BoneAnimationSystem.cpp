@@ -142,7 +142,8 @@ void BoneAnimationSystem::CalculateTransformsInHierarchy(const float animationTi
         }
         
         glm::mat4 rotMatrix = glm::mat4_cast(rotation);
-        nodeTransform = glm::translate(nodeTransform, glm::vec3(0.0f, 0.0f, 0.0f));
+        nodeTransform = glm::mat4(1.0f);
+        nodeTransform = glm::translate(nodeTransform, position);
         nodeTransform *= rotMatrix;
         nodeTransform = glm::scale(nodeTransform, scaling);
     }
