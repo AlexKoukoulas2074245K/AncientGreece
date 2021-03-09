@@ -35,6 +35,7 @@ using ResourceId = unsigned int;
 
 struct ShaderUniforms final
 {
+    tsl::robin_map<StringId, std::vector<glm::mat4>, StringIdHasher> mShaderMatrixArrayUniforms;
     tsl::robin_map<StringId, std::vector<glm::vec4>, StringIdHasher> mShaderFloatVec4ArrayUniforms;
     tsl::robin_map<StringId, std::vector<glm::vec3>, StringIdHasher> mShaderFloatVec3ArrayUniforms;
     tsl::robin_map<StringId, glm::mat4, StringIdHasher> mShaderMatrixUniforms;

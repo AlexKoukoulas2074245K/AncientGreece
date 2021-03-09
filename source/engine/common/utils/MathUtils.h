@@ -10,6 +10,8 @@
 
 ///-----------------------------------------------------------------------------------------------
 
+#include <assimp/matrix4x4.h>
+#include <assimp/quaternion.h>
 #include <cmath>                        // powf, sinf, cosf, atan2
 #include <ctime>                        // time
 #include <functional>                   // function
@@ -17,6 +19,7 @@
 #include <glm/vec3.hpp>                 // vec3
 #include <glm/mat4x4.hpp>               // mat4
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/quaternion_float.hpp> // for quat
 #include <glm/gtc/matrix_transform.hpp> // mat helpers
 #include <glm/gtc/matrix_access.hpp>    // mat helpers
@@ -136,6 +139,33 @@ inline glm::vec3 ClampToMax(const glm::vec3& vec, const glm::vec3& maxVec)
 inline glm::vec3 ClampToMin(const glm::vec3& vec, const glm::vec3& minVec)
 {
     return glm::vec3(Max(vec.x, minVec.x), Max(vec.y, minVec.y), Max(vec.z, minVec.z));
+}
+
+///-----------------------------------------------------------------------------------------------
+/// Converts an assimp mat4 into a glm mat4. No transposing just copy over
+/// @param[in] assimpMat the assimp mat4 to transform to glm.
+/// @returns a glm::mat4 with the copied elements.
+inline glm::mat4 AssimpMat4ToGlmMat4(const aiMatrix4x4& assimpMat)
+{
+    return glm::transpose(glm::make_mat4(&assimpMat.a1));
+}
+
+///-----------------------------------------------------------------------------------------------
+/// Converts an assimp vec3 into a glm vec3. No transposing just copy over
+/// @param[in] vec the assimp vec3 to transform to glm.
+/// @returns a glm::vec3 with the copied elements.
+inline glm::vec3 AssimpVec3ToGlmVec3(const aiVector3D& vec)
+{
+    return glm::vec3(vec.x, vec.y, vec.z);
+}
+
+///-----------------------------------------------------------------------------------------------
+/// Converts an assimp quaternion into a glm quaternion. No transposing just copy over
+/// @param[in] quat the assimp quat to transform to glm.
+/// @returns a glm::vec3 with the copied elements.
+inline glm::quat AssimpQuatToGlmQuat(const aiQuaternion& quat)
+{
+    return glm::quat(quat.w, quat.x, quat.y, quat.z);
 }
 
 ///-----------------------------------------------------------------------------------------------

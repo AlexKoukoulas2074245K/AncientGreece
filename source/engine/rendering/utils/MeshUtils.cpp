@@ -27,8 +27,9 @@ namespace rendering
 
 namespace
 {
-    const StringId DEFAULT_MODEL_SHADER = StringId("default_3d");    
-    const StringId ATLAS_MODEL_NAME     = StringId("gui_atlas_quad");
+    const StringId DEFAULT_SKELETAL_MODEL_SHADER = StringId("default_skeletal_3d");
+    const StringId DEFAULT_MODEL_SHADER          = StringId("default_3d");
+    const StringId ATLAS_MODEL_NAME              = StringId("gui_atlas_quad");
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -68,7 +69,7 @@ ecs::EntityId LoadAndCreateModelByName
     transformComponent->mScale = initialScale;
 
     auto renderableComponent = std::make_unique<RenderableComponent>();        
-    renderableComponent->mShaderNameId = DEFAULT_MODEL_SHADER;
+    renderableComponent->mShaderNameId = modelType == ModelType::OBJ ? DEFAULT_MODEL_SHADER : DEFAULT_SKELETAL_MODEL_SHADER;
 
     renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().

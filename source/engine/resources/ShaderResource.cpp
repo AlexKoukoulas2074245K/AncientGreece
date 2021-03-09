@@ -66,6 +66,22 @@ bool ShaderResource::SetMatrix4fv
 
 ///------------------------------------------------------------------------------------------------
 
+bool ShaderResource::SetMatrix4Array(const StringId& uniformName, const std::vector<glm::mat4>& values) const
+{
+    for (auto i = 0U; i < values.size(); ++i)
+    {
+        auto setUniformResult = SetMatrix4fv(StringId(uniformName.GetString() + "[" + std::to_string(i) + "]"), values[i]);
+        if (!setUniformResult)
+        {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+///------------------------------------------------------------------------------------------------
+
 bool ShaderResource::SetFloatVec4Array(const StringId& uniformName, const std::vector<glm::vec4>& values) const
 {
     for (auto i = 0U; i < values.size(); ++i)

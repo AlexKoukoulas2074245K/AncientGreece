@@ -34,8 +34,6 @@ public:
     
 private:
     DAEMeshLoader() = default;
-    
-    std::string ExtractAndRemoveInjectedTexCoordsIfAny(std::string& path) const;
 };
 
 ///------------------------------------------------------------------------------------------------

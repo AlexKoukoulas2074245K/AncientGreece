@@ -221,7 +221,13 @@ bool AppShouldQuit()
         switch (event.type)
         {
             case SDL_QUIT: return true;
-            
+            case SDL_KEYDOWN:
+            {
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    return true;
+                }
+            }
             case SDL_MOUSEWHEEL:
             {
                 inputStateComponent.mMouseWheelDelta = event.wheel.y;

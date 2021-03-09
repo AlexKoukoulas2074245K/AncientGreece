@@ -203,7 +203,7 @@ std::unique_ptr<IResource> OBJMeshLoader::VCreateAndLoadResource(const std::stri
     
     GL_CHECK(glBindVertexArray(0));
     
-    // Calculate dimensinos
+    // Calculate dimensions
     glm::vec3 meshDimensions(math::Abs(minX - maxX), math::Abs(minY - maxY), math::Abs(minZ - maxZ));
     return std::unique_ptr<MeshResource>(new MeshResource(vertexArrayObject, final_indices.size(), meshDimensions));
 }
