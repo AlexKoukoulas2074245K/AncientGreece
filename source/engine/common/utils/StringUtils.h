@@ -148,7 +148,7 @@ public:
     {
     }
     
-    StringId(const std::string& str)
+    explicit StringId(const std::string& str)
         : mString(str)
         , mStringId(GetStringHash(str))
     {

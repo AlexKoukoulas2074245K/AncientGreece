@@ -12,7 +12,7 @@
 
 #include "IResource.h"
 #include "../common/utils/MathUtils.h"
-
+#include "../common/utils/StringUtils.h"
 #include <assimp/scene.h>
 #include <tsl/robin_map.h>
 #include <list>
@@ -46,7 +46,7 @@ struct SkeletonNode
 {
     SkeletonNode** mChildren;
     glm::mat4 mTransform;
-    std::string mNodeName;
+    StringId mNodeName;
     int mNumChildren;
 };
 
@@ -89,7 +89,7 @@ struct AnimationInfo
 {
     float mTicksPerSecond;
     float mDuration;
-    tsl::robin_map<std::string, BoneAnimationInfo> mBoneNameToAnimInfo;
+    tsl::robin_map<StringId, BoneAnimationInfo, StringIdHasher> mBoneNameToAnimInfo;
 };
 
 ///------------------------------------------------------------------------------------------------
@@ -108,12 +108,12 @@ public:
     bool HasSkeleton() const;
     const SkeletonNode* GetRootSkeletonNode() const;
     const AnimationInfo& GetAnimationInfo() const;
-    const tsl::robin_map<std::string, unsigned int>& GetBoneNameToIdMap() const;
+    const tsl::robin_map<StringId, unsigned int, StringIdHasher>& GetBoneNameToIdMap() const;
     const glm::mat4& GetSceneTransform() const;
     std::vector<BoneInfo>& GetBoneInfo();
     
 private:
-    MeshResource(const std::vector<BoneInfo>& boneInfo, const AnimationInfo& animationInfo, const tsl::robin_map<std::string, unsigned int>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
+    MeshResource(const std::vector<BoneInfo>& boneInfo, const AnimationInfo& animationInfo, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
     MeshResource(const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
     
 private:
@@ -122,7 +122,7 @@ private:
     
 private:
     const AnimationInfo mAnimationInfo;
-    const tsl::robin_map<std::string, unsigned int> mBoneNameToIdMap;
+    const tsl::robin_map<StringId, unsigned int, StringIdHasher> mBoneNameToIdMap;
     const glm::mat4 mSceneTransform;
     const GLuint mVertexArrayObject;
     const GLuint mElementCount;

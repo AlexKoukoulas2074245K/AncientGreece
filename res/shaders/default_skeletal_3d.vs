@@ -26,7 +26,7 @@ void main()
 
     uv_frag = uv;
     frag_unprojected_pos = (world * boneTransform * vec4(position, 1.0f)).rgb;
-    normal_interp = (boneTransform * norm * vec4(normal, 0.0f)).rgb;
+    normal_interp = (norm * boneTransform * vec4(normal, 0.0f)).rgb;
     gl_Position = proj * view * vec4(frag_unprojected_pos, 1.0f);
     frag_pos = gl_Position.rgb;
 

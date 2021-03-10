@@ -102,7 +102,7 @@ void BoneAnimationSystem::CalculateTransformsInHierarchy(const float animationTi
             uint nextPositionIndex = (keyFrameIndex + 1);
             assert(nextPositionIndex < nodeAnim.mPositionKeys.size());
             float dt = static_cast<float>(nodeAnim.mPositionKeys[nextPositionIndex].mTime - nodeAnim.mPositionKeys[keyFrameIndex].mTime);
-            float factor = (animationTime - (float)nodeAnim.mPositionKeys[keyFrameIndex].mTime) / dt;
+            float factor = math::Max(0.0f, (animationTime - (float)nodeAnim.mPositionKeys[keyFrameIndex].mTime) / dt);
             assert(factor >= 0.0f && factor <= 1.0f);
             const auto& start = nodeAnim.mPositionKeys[keyFrameIndex].mPosition;
             const auto& end   = nodeAnim.mPositionKeys[nextPositionIndex].mPosition;
@@ -118,7 +118,7 @@ void BoneAnimationSystem::CalculateTransformsInHierarchy(const float animationTi
             uint nextRotationIndex = (keyFrameIndex + 1);
             assert(nextRotationIndex < nodeAnim.mRotationKeys.size());
             float dt = static_cast<float>(nodeAnim.mRotationKeys[nextRotationIndex].mTime - nodeAnim.mRotationKeys[keyFrameIndex].mTime);
-            float factor = (animationTime - (float)nodeAnim.mRotationKeys[keyFrameIndex].mTime) / dt;
+            float factor = math::Max(0.0f, (animationTime - (float)nodeAnim.mRotationKeys[keyFrameIndex].mTime) / dt);
             assert(factor >= 0.0f && factor <= 1.0f);
             const auto& start = nodeAnim.mRotationKeys[keyFrameIndex].mRotation;
             const auto& end   = nodeAnim.mRotationKeys[nextRotationIndex].mRotation;
@@ -138,7 +138,7 @@ void BoneAnimationSystem::CalculateTransformsInHierarchy(const float animationTi
             uint nextScalingIndex = (keyFrameIndex + 1);
             assert(nextScalingIndex < nodeAnim.mScalingKeys.size());
             float dt = static_cast<float>(nodeAnim.mScalingKeys[nextScalingIndex].mTime - nodeAnim.mScalingKeys[keyFrameIndex].mTime);
-            float factor = (animationTime - (float)nodeAnim.mScalingKeys[keyFrameIndex].mTime) / dt;
+            float factor = math::Max(0.0f, (animationTime - (float)nodeAnim.mScalingKeys[keyFrameIndex].mTime) / dt);
             assert(factor >= 0.0f && factor <= 1.0f);
             const auto& start = nodeAnim.mScalingKeys[keyFrameIndex].mScale;
             const auto& end   = nodeAnim.mScalingKeys[nextScalingIndex].mScale;

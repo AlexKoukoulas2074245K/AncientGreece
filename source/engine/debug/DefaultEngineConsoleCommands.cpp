@@ -110,7 +110,7 @@ void RegisterDefaultEngineConsoleCommands()
         }
 
         // extract entity name from quotes and position deltas
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
         const auto dx = std::stof(commandTextComponents[2]);
         const auto dy = std::stof(commandTextComponents[3]);
         const auto dz = std::stof(commandTextComponents[4]);
@@ -150,7 +150,7 @@ void RegisterDefaultEngineConsoleCommands()
         }
 
         // extract entity name from quotes and position deltas
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
         const auto posX = std::stof(commandTextComponents[2]);
         const auto posY = std::stof(commandTextComponents[3]);
         const auto posZ = std::stof(commandTextComponents[4]);
@@ -190,7 +190,7 @@ void RegisterDefaultEngineConsoleCommands()
         }
 
         // extract entity name from quotes and position deltas
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
 
         const auto& world = ecs::World::GetInstance();
 
@@ -241,7 +241,7 @@ void RegisterDefaultEngineConsoleCommands()
             inRadians = commandTextComponents[5] == "rad";
         }
 
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
         const auto drx = std::stof(commandTextComponents[2]) * (inRadians ? 1.0f : math::RADS_PER_DEGREE);
         const auto dry = std::stof(commandTextComponents[3]) * (inRadians ? 1.0f : math::RADS_PER_DEGREE);
         const auto drz = std::stof(commandTextComponents[4]) * (inRadians ? 1.0f : math::RADS_PER_DEGREE);
@@ -292,7 +292,7 @@ void RegisterDefaultEngineConsoleCommands()
         }
 
         // extract entity name from quotes and position deltas
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
         const auto rx = std::stof(commandTextComponents[2]) * (inRadians ? 1.0f : math::RADS_PER_DEGREE);
         const auto ry = std::stof(commandTextComponents[3]) * (inRadians ? 1.0f : math::RADS_PER_DEGREE);
         const auto rz = std::stof(commandTextComponents[4]) * (inRadians ? 1.0f : math::RADS_PER_DEGREE);
@@ -343,7 +343,7 @@ void RegisterDefaultEngineConsoleCommands()
         }
 
         // extract entity name from quotes and position deltas
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
 
         const auto& world = ecs::World::GetInstance();
 
@@ -384,7 +384,7 @@ void RegisterDefaultEngineConsoleCommands()
         }
 
         // extract entity name from quotes and position deltas
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
         const auto dsx = std::stof(commandTextComponents[2]);
         const auto dsy = std::stof(commandTextComponents[3]);
         const auto dsz = std::stof(commandTextComponents[4]);
@@ -424,7 +424,7 @@ void RegisterDefaultEngineConsoleCommands()
         }
 
         // extract entity name from quotes and position deltas
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
         const auto sx = std::stof(commandTextComponents[2]);
         const auto sy = std::stof(commandTextComponents[3]);
         const auto sz = std::stof(commandTextComponents[4]);
@@ -464,7 +464,7 @@ void RegisterDefaultEngineConsoleCommands()
         }
 
         // extract entity name from quotes and position deltas
-        const auto entityName = StringSplit(commandTextComponents[1], '\"')[1];
+        const auto entityName = StringId(StringSplit(commandTextComponents[1], '\"')[1]);
 
         const auto& world = ecs::World::GetInstance();
 

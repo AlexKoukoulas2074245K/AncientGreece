@@ -61,7 +61,7 @@ const AnimationInfo& MeshResource::GetAnimationInfo() const
 
 ///------------------------------------------------------------------------------------------------
 
-const tsl::robin_map<std::string, unsigned int>& MeshResource::GetBoneNameToIdMap() const
+const tsl::robin_map<StringId, unsigned int, StringIdHasher>& MeshResource::GetBoneNameToIdMap() const
 {
     return mBoneNameToIdMap;
 }
@@ -82,7 +82,7 @@ std::vector<BoneInfo>& MeshResource::GetBoneInfo()
 
 ///------------------------------------------------------------------------------------------------
 
-MeshResource::MeshResource(const std::vector<BoneInfo>& boneInfo, const AnimationInfo& animationInfo, const tsl::robin_map<std::string, unsigned int>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions)
+MeshResource::MeshResource(const std::vector<BoneInfo>& boneInfo, const AnimationInfo& animationInfo, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions)
     : mAnimationInfo(animationInfo)
     , mBoneNameToIdMap(boneMapping)
     , mSceneTransform(sceneTransform)
@@ -117,7 +117,7 @@ void MeshResource::CreateSkeleton(const aiNode* node, SkeletonNode* skeletonNode
 {
     if (node == nullptr) return;
     
-    skeletonNode->mNodeName = std::string(node->mName.C_Str());
+    skeletonNode->mNodeName = StringId(std::string(node->mName.C_Str()));
     skeletonNode->mTransform = math::AssimpMat4ToGlmMat4(node->mTransformation);
     skeletonNode->mNumChildren = node->mNumChildren;
     

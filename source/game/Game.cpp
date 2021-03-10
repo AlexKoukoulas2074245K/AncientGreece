@@ -76,7 +76,7 @@ void Game::VOnUpdate(const float dt)
     dtAccum += dt;
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
-    auto moveSpeed = 10.0f;
+    auto moveSpeed = 0.5f;
     auto lookSpeed = 1.0f;
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
     auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
@@ -177,6 +177,12 @@ void Game::VOnUpdate(const float dt)
     auto vecFromPlayerToMouse = pointOfContact - world.GetComponent<genesis::TransformComponent>(entity).mPosition;
     auto arctan = genesis::math::Arctan2(vecFromPlayerToMouse.x, vecFromPlayerToMouse.y);
     world.GetComponent<genesis::TransformComponent>(entity).mRotation.z = -arctan;
+    
+    if (glm::length(vecFromPlayerToMouse) > 0.001f )
+    {
+        world.GetComponent<genesis::TransformComponent>(entity).mPosition += glm::normalize(vecFromPlayerToMouse) * 0.002f * dt;
+    }
+    
     
     //Log(LogType::INFO, "Z: %.4f, Scale: %.4f", world.GetComponent<genesis::TransformComponent>(entity).mPosition.z, world.GetComponent<genesis::TransformComponent>(entity).mScale.z);
 }

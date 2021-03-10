@@ -216,7 +216,7 @@ void ConsoleManagementSystem::ExecuteCommand() const
         const auto& commandSplitBySpace = StringSplit(consoleStateComponent.mCurrentCommandTextBuffer.substr(1), ' ');
 
         // If command not found let user know
-        if (consoleStateComponent.mRegisterdConsoleCommands.count(commandSplitBySpace[0]) == 0)
+        if (consoleStateComponent.mRegisterdConsoleCommands.count(StringId(commandSplitBySpace[0])) == 0)
         {
             // Render command not found text
             AddTextStringToConsolePastText(rendering::RenderText

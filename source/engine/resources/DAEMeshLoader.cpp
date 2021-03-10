@@ -89,7 +89,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     std::vector<VertexBoneData> bones; bones.reserve(vertexCount);
     std::vector<unsigned short> indices;
     std::vector<BoneInfo> boneInfo;
-    tsl::robin_map<std::string, unsigned int> boneNameToIdMap;
+    tsl::robin_map<StringId, unsigned int, StringIdHasher> boneNameToIdMap;
     AnimationInfo animationInfo;
     
     float minX = 100.0f, maxX = -100.0f, minY = 100.0f, maxY = -100.0f, minZ = 100.0f, maxZ = -100.0f;
@@ -109,7 +109,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     // Load Bone Data
     for (unsigned int i = 0 ; i < mesh->mNumBones ; i++) {
         unsigned int boneIndex = 0;
-        auto boneName = std::string(mesh->mBones[i]->mName.data);
+        auto boneName = StringId(std::string(mesh->mBones[i]->mName.data));
 
         if (boneNameToIdMap.find(boneName) == boneNameToIdMap.end())
         {
@@ -163,7 +163,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     for (unsigned int i = 0; i < currentAnimation->mNumChannels; ++i)
     {
         auto* nodeAnim = currentAnimation->mChannels[i];
-        auto nodeName = std::string(nodeAnim->mNodeName.C_Str());
+        auto nodeName = StringId(std::string(nodeAnim->mNodeName.C_Str()));
         
         std::vector<PositionKey> positionKeys;
         std::vector<RotationKey> rotationKeys;
