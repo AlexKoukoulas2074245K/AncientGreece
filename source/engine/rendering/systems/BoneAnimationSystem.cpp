@@ -122,7 +122,11 @@ void BoneAnimationSystem::CalculateTransformsInHierarchy(const float animationTi
             assert(factor >= 0.0f && factor <= 1.0f);
             const auto& start = nodeAnim.mRotationKeys[keyFrameIndex].mRotation;
             const auto& end   = nodeAnim.mRotationKeys[nextRotationIndex].mRotation;
-            rotation = glm::normalize(glm::mix(start, end, factor));
+            aiQuaternion aiQuatStart(start.w, start.x, start.y, start.z);
+            aiQuaternion aiQuatEnd(end.w, end.x, end.y, end.z);
+            aiQuaternion lerp;
+            aiQuaternion::Interpolate(lerp, aiQuatStart, aiQuatEnd, factor);
+            rotation = math::AssimpQuatToGlmQuat(lerp);
         }
         
         // Calculate interpolated scaling

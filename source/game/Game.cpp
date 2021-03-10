@@ -60,7 +60,7 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    genesis::rendering::LoadAndCreateModelByName("spartan1", genesis::rendering::ModelType::DAE, glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("spartan"));
+    genesis::rendering::LoadAndCreateModelByName("walking", genesis::rendering::ModelType::DAE, glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("spartan"));
 }
 
 ///------------------------------------------------------------------------------------------------

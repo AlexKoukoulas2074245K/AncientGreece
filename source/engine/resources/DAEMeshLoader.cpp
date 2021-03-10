@@ -14,6 +14,7 @@
 #include "MeshResource.h"
 #include "../common/utils/StringUtils.h"
 #include "../common/utils/MathUtils.h"
+#include "../common/utils/Logging.h"
 #include "../rendering/opengl/Context.h"
 
 #include <assimp/Importer.hpp>
