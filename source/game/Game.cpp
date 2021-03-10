@@ -60,7 +60,7 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    genesis::rendering::LoadAndCreateModelByName("walking", genesis::rendering::ModelType::DAE, glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("spartan"));
+    genesis::rendering::LoadAndCreateModelByName("walking", genesis::rendering::ModelType::DAE, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.005f, 0.005f, 0.005f), StringId("spartan"));
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ void Game::VOnUpdate(const float dt)
     auto moveSpeed = 10.0f;
     auto lookSpeed = 1.0f;
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
-    //auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
+    auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
     
     auto entity = world.FindEntityWithName(StringId("spartan"));
     if (genesis::input::GetKeyState(genesis::input::Key::R_KEY) == genesis::input::InputState::PRESSED)
@@ -155,28 +155,28 @@ void Game::VOnUpdate(const float dt)
         }
     }
     
-//    // Calculate render-constant camera view matrix
-//    auto mViewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
-//
-//    // Calculate render-constant camera projection matrix
-//    auto mProjectionMatrix = glm::perspectiveFovLH
-//    (
-//        cameraComponent.mFieldOfView,
-//        windowComponent.mRenderableWidth,
-//        windowComponent.mRenderableHeight,
-//        cameraComponent.mZNear,
-//        cameraComponent.mZFar
-//    );
-//
-//    auto rayDirection = genesis::math::ComputeMouseRayDirection(mViewMatrix, mProjectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
-//
-//    auto t = 0.0f;
-//    genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, rayDirection, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), t);
-//
-//    auto pointOfContact = cameraComponent.mPosition + t * rayDirection;
-//    auto vecFromPlayerToMouse = pointOfContact - world.GetComponent<genesis::TransformComponent>(entity).mPosition;
-//    auto arctan = genesis::math::Arctan2(vecFromPlayerToMouse.x, vecFromPlayerToMouse.y);
-//    world.GetComponent<genesis::TransformComponent>(entity).mRotation.z = -arctan;
+    // Calculate render-constant camera view matrix
+    auto mViewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
+
+    // Calculate render-constant camera projection matrix
+    auto mProjectionMatrix = glm::perspectiveFovLH
+    (
+        cameraComponent.mFieldOfView,
+        windowComponent.mRenderableWidth,
+        windowComponent.mRenderableHeight,
+        cameraComponent.mZNear,
+        cameraComponent.mZFar
+    );
+
+    auto rayDirection = genesis::math::ComputeMouseRayDirection(mViewMatrix, mProjectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
+
+    auto t = 0.0f;
+    genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, rayDirection, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), t);
+
+    auto pointOfContact = cameraComponent.mPosition + t * rayDirection;
+    auto vecFromPlayerToMouse = pointOfContact - world.GetComponent<genesis::TransformComponent>(entity).mPosition;
+    auto arctan = genesis::math::Arctan2(vecFromPlayerToMouse.x, vecFromPlayerToMouse.y);
+    world.GetComponent<genesis::TransformComponent>(entity).mRotation.z = -arctan;
     
     //Log(LogType::INFO, "Z: %.4f, Scale: %.4f", world.GetComponent<genesis::TransformComponent>(entity).mPosition.z, world.GetComponent<genesis::TransformComponent>(entity).mScale.z);
 }
