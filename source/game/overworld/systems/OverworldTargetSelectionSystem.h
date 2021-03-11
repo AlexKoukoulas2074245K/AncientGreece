@@ -11,6 +11,8 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+#include "../../engine/common/utils/MathUtils.h"
+#include "../../engine/common/utils/ColorUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -25,6 +27,8 @@ public:
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
     
+private:
+    void CreateWaypointAtPosition(const glm::vec3& position) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

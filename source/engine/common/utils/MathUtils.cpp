@@ -64,14 +64,15 @@ bool RayToSphereIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDir
 
 ///------------------------------------------------------------------------------------------------
 
-bool RayToPlaneIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const glm::vec3& planeCenter, const glm::vec3& planeNormal, float& t)
+bool RayToPlaneIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const glm::vec3& planeCenter, const glm::vec3& planeNormal, glm::vec3& intersectionPoint)
 {
     float denom = glm::dot(planeNormal, rayDirection);
     if (abs(denom) > 0.0001f) // your favorite epsilon
     {
-        t = glm::dot(planeNormal, (planeCenter - rayOrigin)) / denom;
+        float t = glm::dot(planeNormal, (planeCenter - rayOrigin)) / denom;
         if (t >= 0)
         {
+            intersectionPoint = rayOrigin + t * rayDirection;
             return true;
         }
     }

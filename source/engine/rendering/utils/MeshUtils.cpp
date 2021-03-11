@@ -9,7 +9,9 @@
 #include "../components/RenderableComponent.h"
 #include "../../common/components/NameComponent.h"
 #include "../../common/components/TransformComponent.h"
+#include "../../common/utils/FileUtils.h"
 #include "../../common/utils/MathUtils.h"
+#include "../../common/utils/StringUtils.h"
 
 #include <vector>
 
@@ -50,10 +52,9 @@ static std::string CreateTexCoordInjectedModelPath
 
 ///------------------------------------------------------------------------------------------------
 
-ecs::EntityId LoadAndCreateModelByName
+ecs::EntityId LoadStaticModelByName
 (
     const std::string& modelName,
-    const ModelType modelType,
     const glm::vec3& initialPosition /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialRotation /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialScale /* glm::vec3(1.0f, 1.0f, 1.0f) */,
@@ -69,12 +70,55 @@ ecs::EntityId LoadAndCreateModelByName
     transformComponent->mScale = initialScale;
 
     auto renderableComponent = std::make_unique<RenderableComponent>();        
-    renderableComponent->mShaderNameId = modelType == ModelType::OBJ ? DEFAULT_MODEL_SHADER : DEFAULT_SKELETAL_MODEL_SHADER;
-
+    renderableComponent->mShaderNameId = DEFAULT_MODEL_SHADER;
     renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
-        LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + (modelType == ModelType::OBJ ? ".obj" : ".dae")));
-        
+        LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));
+    renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource
+    (
+        resources::ResourceLoadingService::RES_TEXTURES_ROOT + modelName + ".png"
+    );
+    
+    world.AddComponent<RenderableComponent>(modelEntity, std::move(renderableComponent));
+    world.AddComponent<TransformComponent>(modelEntity, std::move(transformComponent));
+
+    if (entityName != StringId())
+    {
+        world.AddComponent<NameComponent>(modelEntity, std::make_unique<NameComponent>(entityName));
+    }
+
+    return modelEntity;
+}
+
+///------------------------------------------------------------------------------------------------
+
+ecs::EntityId LoadAnimatedModelByName
+(
+    const std::string& modelName,
+    const glm::vec3& initialPosition /* glm::vec3(0.0f, 0.0f, 0.0f) */,
+    const glm::vec3& initialRotation /* glm::vec3(0.0f, 0.0f, 0.0f) */,
+    const glm::vec3& initialScale /* glm::vec3(1.0f, 1.0f, 1.0f) */,
+    const StringId entityName /* StringId() */
+)
+{
+    auto& world = ecs::World::GetInstance();
+    const auto modelEntity = world.CreateEntity();
+
+    auto transformComponent = std::make_unique<TransformComponent>();
+    transformComponent->mPosition = initialPosition;
+    transformComponent->mRotation = initialRotation;
+    transformComponent->mScale = initialScale;
+
+    auto renderableComponent = std::make_unique<RenderableComponent>();
+    renderableComponent->mShaderNameId = DEFAULT_SKELETAL_MODEL_SHADER;
+    
+    auto animFiles = GetAllFilenamesInDirectory(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/");
+    for (const auto& fileName: animFiles)
+    {
+        renderableComponent->mMeshResourceIds.push_back(resources::ResourceLoadingService::GetInstance() .LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/" +   fileName));
+        renderableComponent->mAnimNameToMeshIndex[StringId(GetFileNameWithoutExtension(fileName))] = renderableComponent->mAnimNameToMeshIndex.size();
+    }
+    
     renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource
     (
         resources::ResourceLoadingService::RES_TEXTURES_ROOT + modelName + ".png"

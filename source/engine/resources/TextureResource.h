@@ -12,6 +12,7 @@
 
 #include "IResource.h"
 #include "../common/utils/MathUtils.h"
+#include "../common/utils/ColorUtils.h"
 
 #include <SDL_stdinc.h>
 #include <SDL_surface.h>
@@ -42,7 +43,7 @@ public:
     GLuint GetGLTextureId() const;
     int GetWidth() const;
     int GetHeight() const;
-    glm::ivec3 GetRGBAtPixel(const int x, const int y) const;
+    colors::RGBTriplet GetRGBatPixel(const int x, const int y) const;
 
 private:
     TextureResource

@@ -26,14 +26,7 @@ namespace rendering
 {
 
 ///------------------------------------------------------------------------------------------------
-
-enum class ModelType
-{
-    OBJ, DAE
-};
-
-///------------------------------------------------------------------------------------------------
-/// Loads and creates and entity holding the loaded model based on the model name supplied.
+/// Returns an entity holding the loaded (OBJ) static model based on the model name supplied.
 ///
 /// Note: this helper function assumes that the model name and texture name are the 
 /// same in their respective resource folders.
@@ -43,10 +36,28 @@ enum class ModelType
 /// @param[in] initialPosition (optional) an initial position for the loaded model.
 /// @param[in] entityName (optional) a string to name the entity with.
 /// @returns the entity id of the loaded entity.
-ecs::EntityId LoadAndCreateModelByName
+ecs::EntityId LoadStaticModelByName
 (
     const std::string& modelName,
-    const ModelType modelType,
+    const glm::vec3& initialPosition = glm::vec3(0.0f, 0.0f, 0.0f),
+    const glm::vec3& initialRotation = glm::vec3(0.0f, 0.0f, 0.0f),
+    const glm::vec3& initialScale = glm::vec3(1.0f, 1.0f, 1.0f),
+    const StringId entityName = StringId()
+);
+
+///------------------------------------------------------------------------------------------------
+/// Returns an entity holding the loaded (DAE) skeletally animated model based on the model name supplied.
+///
+/// Note: this helper function assumes that the model folder name and texture name are the
+/// same in their respective resource folders.
+/// @param[in] modelName the model with the given name to look for in the resource models folder.
+/// @param[in] world the singular world of the ECS state.
+/// @param[in] initialPosition (optional) an initial position for the loaded model.
+/// @param[in] entityName (optional) a string to name the entity with.
+/// @returns the entity id of the loaded entity.
+ecs::EntityId LoadAnimatedModelByName
+(
+    const std::string& modelName,
     const glm::vec3& initialPosition = glm::vec3(0.0f, 0.0f, 0.0f),
     const glm::vec3& initialRotation = glm::vec3(0.0f, 0.0f, 0.0f),
     const glm::vec3& initialScale = glm::vec3(1.0f, 1.0f, 1.0f),

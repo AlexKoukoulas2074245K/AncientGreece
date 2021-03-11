@@ -17,7 +17,9 @@
 #include "input/components/InputStateSingletonComponent.h"
 #include "input/systems/RawInputHandlingSystem.h"
 #include "input/utils/InputUtils.h"
+#include "rendering/components/RenderingContextSingletonComponent.h"
 #include "rendering/components/WindowSingletonComponent.h"
+#include "rendering/opengl/Context.h"
 #include "rendering/systems/RenderingSystem.h"
 #include "rendering/utils/FontUtils.h"
 #include "resources/ResourceLoadingService.h"
@@ -143,7 +145,50 @@ void GenesisEngine::InitializeSdlContextAndWindow(const GameStartupParameters& s
     SDL_SetWindowResizable(windowComponent->mWindowHandle, SDL_FALSE);
     SDL_ShowWindow(windowComponent->mWindowHandle);
 
+    // Create SDL GL context
+    auto renderingContextComponent = std::make_unique<rendering::RenderingContextSingletonComponent>();
+    renderingContextComponent->mGLContext = SDL_GL_CreateContext(windowComponent->mWindowHandle);
+    if (renderingContextComponent->mGLContext == nullptr)
+    {
+        ShowMessageBox(MessageBoxType::ERROR, "Error creating SDL context", "An error has occurred while trying to create an SDL_Context");
+        exit(1);
+    }
+
+    // Commit context
+    SDL_GL_MakeCurrent(windowComponent->mWindowHandle, renderingContextComponent->mGLContext);
+    SDL_GL_SetSwapInterval(0);
+
+#ifdef _WIN32
+    // Initialize GLES2 function table
+    glFuncTable.initialize();
+#endif
+
+    // Get actual render buffer width/height
+    auto renderableWidth  = 0;
+    auto renderableHeight = 0;
+    SDL_GL_GetDrawableSize(windowComponent->mWindowHandle, &renderableWidth, &renderableHeight);
+
+    windowComponent->mRenderableWidth  = static_cast<float>(renderableWidth);
+    windowComponent->mRenderableHeight = static_cast<float>(renderableHeight);
+    windowComponent->mAspectRatio      = windowComponent->mRenderableWidth/windowComponent->mRenderableHeight;
+    
+    // Log GL driver info
+    Log(LogType::INFO, "Vendor     : %s", GL_NO_CHECK(glGetString(GL_VENDOR)));
+    Log(LogType::INFO, "Renderer   : %s", GL_NO_CHECK(glGetString(GL_RENDERER)));
+    Log(LogType::INFO, "Version    : %s", GL_NO_CHECK(glGetString(GL_VERSION)));
+
+    // Configure Blending
+    GL_CHECK(glEnable(GL_BLEND));
+    GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    
+    // Configure Depth
+    GL_CHECK(glEnable(GL_DEPTH_TEST));
+    GL_CHECK(glDepthFunc(GL_LESS));
+    
+    // Transfer ownership of singleton components to world
+    ecs::World::GetInstance().SetSingletonComponent<rendering::RenderingContextSingletonComponent>(std::move(renderingContextComponent));
     ecs::World::GetInstance().SetSingletonComponent<rendering::WindowSingletonComponent>(std::move(windowComponent));
+    
 }
 
 ///-----------------------------------------------------------------------------------------------

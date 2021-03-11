@@ -50,8 +50,8 @@ public:
 
     // Previous render call resource ids
     StringId previousShaderNameId             = StringId();
-    resources::ResourceId previousTextureResourceId = ResourceId();
-    resources::ResourceId previousMeshResourceId    = ResourceId();
+    resources::ResourceId previousTextureResourceId = resources::ResourceId();
+    resources::ResourceId previousMeshResourceId    = resources::ResourceId();
     
 };
 

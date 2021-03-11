@@ -296,10 +296,9 @@ void DebugViewManagementSystem::CreateDebugLights() const
     
     for (auto i = 0U; i < lightStoreComponent.mLightPositions.size(); ++i)
     {
-        auto cubeEntity = rendering::LoadAndCreateModelByName
+        auto cubeEntity = rendering::LoadStaticModelByName
         (
             DEBUG_LIGHT_ASSET_NAME.GetString(),
-            rendering::ModelType::OBJ,
             glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(0.0f, 0.0f, 0.0f),
             DEBUG_LIGHT_SCALE,

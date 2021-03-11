@@ -61,6 +61,7 @@ class RenderableComponent final: public ecs::IComponent
 {
 public:
     std::vector<ResourceId> mMeshResourceIds;
+    tsl::robin_map<StringId, int, StringIdHasher> mAnimNameToMeshIndex;
     ShaderUniforms mShaderUniforms;
     MaterialProperties mMaterial;
     ResourceId mTextureResourceId = 0;            

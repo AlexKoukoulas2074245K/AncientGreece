@@ -29,8 +29,8 @@ namespace
     const float CAMERA_MOVE_SPEED                     = 0.1f;
     const float CAMERA_ZOOM_SPEED                     = 1.0f;
     const float CAMERA_ZOOM_SPEED_DECELERATION        = 0.98f;
-    const float CAMERA_MAX_Z                          = -0.10f;
-    const float CAMERA_MIN_Z                          = -0.60f;
+    const float CAMERA_MAX_Z                          = -0.2f;
+    const float CAMERA_MIN_Z                          = -0.6f;
 }
 
 ///-----------------------------------------------------------------------------------------------

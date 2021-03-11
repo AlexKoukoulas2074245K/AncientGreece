@@ -260,7 +260,12 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     
     // Calculate dimensions
     glm::vec3 meshDimensions(math::Abs(minX - maxX), math::Abs(minY - maxY), math::Abs(minZ - maxZ));
-    return std::unique_ptr<MeshResource>(new MeshResource(boneInfo, animationInfo, boneNameToIdMap, sceneTransform, scene->mRootNode, vertexArrayObject, indices.size(), meshDimensions));
+    
+    std::unique_ptr<MeshResource> meshResource(new MeshResource(boneInfo, animationInfo, boneNameToIdMap, sceneTransform, scene->mRootNode, vertexArrayObject, indices.size(), meshDimensions));
+    
+    importer.FreeScene();
+    
+    return std::move(meshResource);
 }
 
 ///------------------------------------------------------------------------------------------------

@@ -76,7 +76,6 @@ private:
         RenderingContextSingletonComponent& renderingContextComponent        
     ) const;
     
-    void InitializeRenderingWindowAndContext() const;
     void InitializeCamera() const;
     void InitializeLights() const;
     void CompileAndLoadShaders() const;

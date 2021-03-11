@@ -390,9 +390,9 @@ bool RayToSphereIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDir
 /// @param[in] rayDirection the direction of the ray.
 /// @param[in] planeCenter the center of the plane.
 /// @param[in] planeNormal the normal vector of the plane.
-/// @param[out] t the ray's t at the intersection point, if one actually happened
+/// @param[out] intersectionPoint the intersection point found.
 /// @returns whether an intersection is taking place.
-bool RayToPlaneIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const glm::vec3& planeCenter, const glm::vec3& planeNormal, float& t);
+bool RayToPlaneIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const glm::vec3& planeCenter, const glm::vec3& planeNormal, glm::vec3& intersectionPoint);
 
 ///-----------------------------------------------------------------------------------------------
 /// Computes and returns whether the given mesh is inside a frustum.

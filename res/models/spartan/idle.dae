@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.79.0 commit date:2018-03-22, commit time:14:10, hash:f4dc9f9</authoring_tool>
     </contributor>
-    <created>2021-03-08T09:37:51</created>
-    <modified>2021-03-08T09:37:51</modified>
+    <created>2021-03-11T12:50:53</created>
+    <modified>2021-03-11T12:50:53</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -445,25 +445,25 @@
   <library_animations>
     <animation id="ARM_hoplite_root_pose_matrix">
       <source id="ARM_hoplite_root_pose_matrix-input">
-        <float_array id="ARM_hoplite_root_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_root_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_root_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_root_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_root_pose_matrix-output">
-        <float_array id="ARM_hoplite_root_pose_matrix-output-array" count="48">1 1.94277e-15 3.71087e-8 0 3.71087e-8 -1.70495e-7 -1 -1.01207e-7 4.38411e-15 1 -2.38419e-7 2.154822 0 0 0 1 1 1.94277e-15 3.71087e-8 0 3.71087e-8 -1.70495e-7 -1 -1.01207e-7 4.38411e-15 1 -2.38419e-7 2.154822 0 0 0 1 1 1.94277e-15 3.71087e-8 0 3.71087e-8 -1.70495e-7 -1 -1.01207e-7 4.38411e-15 1 -2.38419e-7 2.154822 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_root_pose_matrix-output-array" count="80">1 1.94277e-15 3.71087e-8 0 3.71087e-8 -1.70495e-7 -1 -1.01207e-7 4.38411e-15 1 -2.38419e-7 2.154822 0 0 0 1 1.01 1.96219e-15 3.74798e-8 0 3.74798e-8 -1.722e-7 -1.01 -1.01207e-7 4.42795e-15 1.01 -2.40803e-7 2.154822 0 0 0 1 0.9999 1.94257e-15 3.7105e-8 0 3.7105e-8 -1.70478e-7 -0.9999 -1.01207e-7 4.38367e-15 0.9999 -2.38395e-7 2.154822 0 0 0 1 1.01 1.96219e-15 3.74798e-8 0 3.74798e-8 -1.722e-7 -1.01 -1.01207e-7 4.42795e-15 1.01 -2.40803e-7 2.154822 0 0 0 1 1 1.94277e-15 3.71087e-8 0 3.71087e-8 -1.70495e-7 -1 -1.01207e-7 4.38411e-15 1 -2.38419e-7 2.154822 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_root_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_root_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_root_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_root_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_root_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_root_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_root_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -477,25 +477,25 @@
     </animation>
     <animation id="ARM_hoplite_pelvis_pose_matrix">
       <source id="ARM_hoplite_pelvis_pose_matrix-input">
-        <float_array id="ARM_hoplite_pelvis_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_pelvis_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_pelvis_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_pelvis_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_pelvis_pose_matrix-output">
-        <float_array id="ARM_hoplite_pelvis_pose_matrix-output-array" count="48">1 1.00248e-8 1.26499e-8 2.88204e-4 -1.30861e-8 0.9623414 0.2718438 -0.1648533 -9.44832e-9 -0.2718438 0.9623414 -0.05965077 0 0 0 1 1 1.00248e-8 1.26499e-8 2.88204e-4 -1.30861e-8 0.9623414 0.2718438 -0.1648533 -9.44832e-9 -0.2718438 0.9623414 -0.05965077 0 0 0 1 1 1.00248e-8 1.26499e-8 2.88204e-4 -1.30861e-8 0.9623414 0.2718438 -0.1648533 -9.44832e-9 -0.2718438 0.9623414 -0.05965077 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_pelvis_pose_matrix-output-array" count="80">1 1.00248e-8 1.26499e-8 2.88204e-4 -1.30861e-8 0.9623414 0.2718438 -0.1648533 -9.44832e-9 -0.2718438 0.9623414 -0.05965077 0 0 0 1 1 1.00248e-8 1.26499e-8 2.88204e-4 -1.30861e-8 0.9623414 0.2718438 -0.1648533 -9.44832e-9 -0.2718438 0.9623414 -0.05965077 0 0 0 1 1 1.00248e-8 1.26499e-8 2.88204e-4 -1.30861e-8 0.9623414 0.2718438 -0.1648533 -9.44832e-9 -0.2718438 0.9623414 -0.05965077 0 0 0 1 1 1.00248e-8 1.26499e-8 2.88204e-4 -1.30861e-8 0.9623414 0.2718438 -0.1648533 -9.44832e-9 -0.2718438 0.9623414 -0.05965077 0 0 0 1 1 1.00248e-8 1.26499e-8 2.88204e-4 -1.30861e-8 0.9623414 0.2718438 -0.1648533 -9.44832e-9 -0.2718438 0.9623414 -0.05965077 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_pelvis_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_pelvis_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_pelvis_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_pelvis_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_pelvis_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_pelvis_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_pelvis_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -509,25 +509,25 @@
     </animation>
     <animation id="ARM_hoplite_lumbar_pose_matrix">
       <source id="ARM_hoplite_lumbar_pose_matrix-input">
-        <float_array id="ARM_hoplite_lumbar_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_lumbar_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_lumbar_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_lumbar_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_lumbar_pose_matrix-output">
-        <float_array id="ARM_hoplite_lumbar_pose_matrix-output-array" count="48">1 -2.03468e-8 2.4781e-7 0 1.22437e-7 0.907742 -0.4195287 0.1974163 -2.16412e-7 0.4195287 0.9077421 -2.98023e-8 0 0 0 1 1 -2.03468e-8 2.4781e-7 0 1.22437e-7 0.907742 -0.4195287 0.1974163 -2.16412e-7 0.4195287 0.9077421 -2.98023e-8 0 0 0 1 1 -2.03468e-8 2.4781e-7 0 1.22437e-7 0.907742 -0.4195287 0.1974163 -2.16412e-7 0.4195287 0.9077421 -2.98023e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_lumbar_pose_matrix-output-array" count="80">1 -2.03468e-8 2.4781e-7 0 1.22437e-7 0.907742 -0.4195287 0.1974163 -2.16412e-7 0.4195287 0.9077421 -2.98023e-8 0 0 0 1 1 -2.03468e-8 2.4781e-7 0 1.22437e-7 0.907742 -0.4195287 0.1974163 -2.16412e-7 0.4195287 0.9077421 -2.98023e-8 0 0 0 1 1 -2.03468e-8 2.4781e-7 0 1.22437e-7 0.907742 -0.4195287 0.1974163 -2.16412e-7 0.4195287 0.9077421 -2.98023e-8 0 0 0 1 1 -2.03468e-8 2.4781e-7 0 1.22437e-7 0.907742 -0.4195287 0.1974163 -2.16412e-7 0.4195287 0.9077421 -2.98023e-8 0 0 0 1 1 -2.03468e-8 2.4781e-7 0 1.22437e-7 0.907742 -0.4195287 0.1974163 -2.16412e-7 0.4195287 0.9077421 -2.98023e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_lumbar_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_lumbar_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_lumbar_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_lumbar_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_lumbar_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_lumbar_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_lumbar_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -541,25 +541,25 @@
     </animation>
     <animation id="ARM_hoplite_rib_pose_matrix">
       <source id="ARM_hoplite_rib_pose_matrix-input">
-        <float_array id="ARM_hoplite_rib_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_rib_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_rib_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_rib_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_rib_pose_matrix-output">
-        <float_array id="ARM_hoplite_rib_pose_matrix-output-array" count="48">1 4.59592e-8 -2.30616e-7 -0.01278647 -9.18949e-9 0.9876041 0.1569658 0.7140629 2.34972e-7 -0.1569658 0.987604 9.80228e-4 0 0 0 1 1 4.59592e-8 -2.30616e-7 -0.01278647 -9.18949e-9 0.9876041 0.1569658 0.7140629 2.34972e-7 -0.1569658 0.987604 9.80228e-4 0 0 0 1 1 4.59592e-8 -2.30616e-7 -0.01278647 -9.18949e-9 0.9876041 0.1569658 0.7140629 2.34972e-7 -0.1569658 0.987604 9.80228e-4 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_rib_pose_matrix-output-array" count="80">1 4.59592e-8 -2.30616e-7 -0.01278647 -9.18949e-9 0.9876041 0.1569658 0.7140629 2.34972e-7 -0.1569658 0.987604 9.80228e-4 0 0 0 1 1 4.59592e-8 -2.30616e-7 -0.01278647 -9.18949e-9 0.9876041 0.1569658 0.7140629 2.34972e-7 -0.1569658 0.987604 9.80228e-4 0 0 0 1 1 4.59592e-8 -2.30616e-7 -0.01278647 -9.18949e-9 0.9876041 0.1569658 0.7140629 2.34972e-7 -0.1569658 0.987604 9.80228e-4 0 0 0 1 1 4.59592e-8 -2.30616e-7 -0.01278647 -9.18949e-9 0.9876041 0.1569658 0.7140629 2.34972e-7 -0.1569658 0.987604 9.80228e-4 0 0 0 1 1 4.59592e-8 -2.30616e-7 -0.01278647 -9.18949e-9 0.9876041 0.1569658 0.7140629 2.34972e-7 -0.1569658 0.987604 9.80228e-4 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_rib_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_rib_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_rib_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_rib_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_rib_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_rib_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_rib_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -573,25 +573,25 @@
     </animation>
     <animation id="ARM_hoplite_neck_pose_matrix">
       <source id="ARM_hoplite_neck_pose_matrix-input">
-        <float_array id="ARM_hoplite_neck_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_neck_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_neck_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_neck_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_neck_pose_matrix-output">
-        <float_array id="ARM_hoplite_neck_pose_matrix-output-array" count="48">1 4.79465e-11 3.80575e-9 -9.31323e-10 1.01759e-14 1 2.95938e-8 0.4660859 -3.80575e-9 -2.95938e-8 1 0 0 0 0 1 1 4.79465e-11 3.80575e-9 -9.31323e-10 1.01759e-14 1 2.95938e-8 0.4660859 -3.80575e-9 -2.95938e-8 1 0 0 0 0 1 1 4.79465e-11 3.80575e-9 -9.31323e-10 1.01759e-14 1 2.95938e-8 0.4660859 -3.80575e-9 -2.95938e-8 1 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_neck_pose_matrix-output-array" count="80">1 4.79465e-11 3.80575e-9 -9.31323e-10 1.01759e-14 1 2.95938e-8 0.4660859 -3.80575e-9 -2.95938e-8 1 0 0 0 0 1 1 4.79465e-11 3.80575e-9 -9.31323e-10 1.01759e-14 1 2.95938e-8 0.4660859 -3.80575e-9 -2.95938e-8 1 0 0 0 0 1 1 4.79465e-11 3.80575e-9 -9.31323e-10 1.01759e-14 1 2.95938e-8 0.4660859 -3.80575e-9 -2.95938e-8 1 0 0 0 0 1 1 4.79465e-11 3.80575e-9 -9.31323e-10 1.01759e-14 1 2.95938e-8 0.4660859 -3.80575e-9 -2.95938e-8 1 0 0 0 0 1 1 4.79465e-11 3.80575e-9 -9.31323e-10 1.01759e-14 1 2.95938e-8 0.4660859 -3.80575e-9 -2.95938e-8 1 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_neck_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_neck_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_neck_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_neck_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_neck_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_neck_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_neck_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -605,25 +605,25 @@
     </animation>
     <animation id="ARM_hoplite_skull_pose_matrix">
       <source id="ARM_hoplite_skull_pose_matrix-input">
-        <float_array id="ARM_hoplite_skull_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_skull_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skull_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_skull_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_skull_pose_matrix-output">
-        <float_array id="ARM_hoplite_skull_pose_matrix-output-array" count="48">1 4.79458e-11 1.57329e-9 -0.02154185 0 1 8.82778e-10 0.4520023 -1.57329e-9 -8.85294e-10 1 7.01693e-8 0 0 0 1 1 4.79458e-11 1.57329e-9 -0.02154185 0 1 8.82778e-10 0.4520023 -1.57329e-9 -8.85294e-10 1 7.01693e-8 0 0 0 1 1 4.79458e-11 1.57329e-9 -0.02154185 0 1 8.82778e-10 0.4520023 -1.57329e-9 -8.85294e-10 1 7.01693e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_skull_pose_matrix-output-array" count="80">1 4.79458e-11 1.57329e-9 -0.02154185 0 1 8.82778e-10 0.4520023 -1.57329e-9 -8.85294e-10 1 7.01693e-8 0 0 0 1 1 4.79458e-11 1.57329e-9 -0.02154185 0 1 8.82778e-10 0.4520023 -1.57329e-9 -8.85294e-10 1 7.01693e-8 0 0 0 1 1 4.79458e-11 1.57329e-9 -0.02154185 0 1 8.82778e-10 0.4520023 -1.57329e-9 -8.85294e-10 1 7.01693e-8 0 0 0 1 1 4.79458e-11 1.57329e-9 -0.02154185 0 1 8.82778e-10 0.4520023 -1.57329e-9 -8.85294e-10 1 7.01693e-8 0 0 0 1 1 4.79458e-11 1.57329e-9 -0.02154185 0 1 8.82778e-10 0.4520023 -1.57329e-9 -8.85294e-10 1 7.01693e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skull_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_skull_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_skull_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_skull_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_skull_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skull_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_skull_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -637,25 +637,25 @@
     </animation>
     <animation id="ARM_hoplite_nogginbottom_pose_matrix">
       <source id="ARM_hoplite_nogginbottom_pose_matrix-input">
-        <float_array id="ARM_hoplite_nogginbottom_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_nogginbottom_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_nogginbottom_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_nogginbottom_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_nogginbottom_pose_matrix-output">
-        <float_array id="ARM_hoplite_nogginbottom_pose_matrix-output-array" count="48">1 2.81548e-10 2.42479e-7 0.001799189 -1.13036e-8 0.9991255 0.04181351 0.08982587 -2.42255e-7 -0.04181351 0.9991254 0.2822084 0 0 0 1 1 2.81548e-10 2.42479e-7 0.001799189 -1.13036e-8 0.9991255 0.04181351 0.08982587 -2.42255e-7 -0.04181351 0.9991254 0.2822084 0 0 0 1 1 2.81548e-10 2.42479e-7 0.001799189 -1.13036e-8 0.9991255 0.04181351 0.08982587 -2.42255e-7 -0.04181351 0.9991254 0.2822084 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_nogginbottom_pose_matrix-output-array" count="80">1 2.81548e-10 2.42479e-7 0.001799189 -1.13036e-8 0.9991255 0.04181351 0.08982587 -2.42255e-7 -0.04181351 0.9991254 0.2822084 0 0 0 1 1 2.81548e-10 2.42479e-7 0.001799189 -1.13036e-8 0.9991255 0.04181351 0.08982587 -2.42255e-7 -0.04181351 0.9991254 0.2822084 0 0 0 1 1 2.81548e-10 2.42479e-7 0.001799189 -1.13036e-8 0.9991255 0.04181351 0.08982587 -2.42255e-7 -0.04181351 0.9991254 0.2822084 0 0 0 1 1 2.81548e-10 2.42479e-7 0.001799189 -1.13036e-8 0.9991255 0.04181351 0.08982587 -2.42255e-7 -0.04181351 0.9991254 0.2822084 0 0 0 1 1 2.81548e-10 2.42479e-7 0.001799189 -1.13036e-8 0.9991255 0.04181351 0.08982587 -2.42255e-7 -0.04181351 0.9991254 0.2822084 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_nogginbottom_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_nogginbottom_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_nogginbottom_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_nogginbottom_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_nogginbottom_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_nogginbottom_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_nogginbottom_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -669,25 +669,25 @@
     </animation>
     <animation id="ARM_hoplite_nogginbottom_end_pose_matrix">
       <source id="ARM_hoplite_nogginbottom_end_pose_matrix-input">
-        <float_array id="ARM_hoplite_nogginbottom_end_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_nogginbottom_end_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_nogginbottom_end_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_nogginbottom_end_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_nogginbottom_end_pose_matrix-output">
-        <float_array id="ARM_hoplite_nogginbottom_end_pose_matrix-output-array" count="48">1 1.76793e-9 3.21632e-12 0 -1.59232e-9 1 4.88013e-7 0.1000001 9.91429e-14 -4.99189e-7 1 -2.98023e-8 0 0 0 1 1 1.76793e-9 3.21632e-12 0 -1.59232e-9 1 4.88013e-7 0.1000001 9.91429e-14 -4.99189e-7 1 -2.98023e-8 0 0 0 1 1 1.76793e-9 3.21632e-12 0 -1.59232e-9 1 4.88013e-7 0.1000001 9.91429e-14 -4.99189e-7 1 -2.98023e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_nogginbottom_end_pose_matrix-output-array" count="80">1 1.76793e-9 3.21632e-12 0 -1.59232e-9 1 4.88013e-7 0.1000001 9.91429e-14 -4.99189e-7 1 -2.98023e-8 0 0 0 1 1 1.76793e-9 3.21632e-12 0 -1.59232e-9 1 4.88013e-7 0.1000001 9.91429e-14 -4.99189e-7 1 -2.98023e-8 0 0 0 1 1 1.76793e-9 3.21632e-12 0 -1.59232e-9 1 4.88013e-7 0.1000001 9.91429e-14 -4.99189e-7 1 -2.98023e-8 0 0 0 1 1 1.76793e-9 3.21632e-12 0 -1.59232e-9 1 4.88013e-7 0.1000001 9.91429e-14 -4.99189e-7 1 -2.98023e-8 0 0 0 1 1 1.76793e-9 3.21632e-12 0 -1.59232e-9 1 4.88013e-7 0.1000001 9.91429e-14 -4.99189e-7 1 -2.98023e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_nogginbottom_end_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_nogginbottom_end_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_nogginbottom_end_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_nogginbottom_end_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_nogginbottom_end_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_nogginbottom_end_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_nogginbottom_end_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -701,25 +701,25 @@
     </animation>
     <animation id="ARM_hoplite_plumes_pose_matrix">
       <source id="ARM_hoplite_plumes_pose_matrix-input">
-        <float_array id="ARM_hoplite_plumes_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_plumes_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_plumes_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_plumes_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_plumes_pose_matrix-output">
-        <float_array id="ARM_hoplite_plumes_pose_matrix-output-array" count="48">1 -3.21149e-9 4.80662e-7 -0.002369028 -7.81561e-9 0.9997774 0.02110213 0.1819344 -4.80623e-7 -0.02110213 0.9997773 0.1862073 0 0 0 1 1 -3.21149e-9 4.80662e-7 -0.002369028 -7.81561e-9 0.9997774 0.02110213 0.1819344 -4.80623e-7 -0.02110213 0.9997773 0.1862073 0 0 0 1 1 -3.21149e-9 4.80662e-7 -0.002369028 -7.81561e-9 0.9997774 0.02110213 0.1819344 -4.80623e-7 -0.02110213 0.9997773 0.1862073 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_plumes_pose_matrix-output-array" count="80">1 -3.21149e-9 4.80662e-7 -0.002369028 -7.81561e-9 0.9997774 0.02110213 0.1819344 -4.80623e-7 -0.02110213 0.9997773 0.1862073 0 0 0 1 1 -3.21149e-9 4.80662e-7 -0.002369028 -7.81561e-9 0.9997774 0.02110213 0.1819344 -4.80623e-7 -0.02110213 0.9997773 0.1862073 0 0 0 1 1 -3.21149e-9 4.80662e-7 -0.002369028 -7.81561e-9 0.9997774 0.02110213 0.1819344 -4.80623e-7 -0.02110213 0.9997773 0.1862073 0 0 0 1 1 -3.21149e-9 4.80662e-7 -0.002369028 -7.81561e-9 0.9997774 0.02110213 0.1819344 -4.80623e-7 -0.02110213 0.9997773 0.1862073 0 0 0 1 1 -3.21149e-9 4.80662e-7 -0.002369028 -7.81561e-9 0.9997774 0.02110213 0.1819344 -4.80623e-7 -0.02110213 0.9997773 0.1862073 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_plumes_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_plumes_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_plumes_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_plumes_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_plumes_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_plumes_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_plumes_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -733,25 +733,25 @@
     </animation>
     <animation id="ARM_hoplite_plumes_end_pose_matrix">
       <source id="ARM_hoplite_plumes_end_pose_matrix-input">
-        <float_array id="ARM_hoplite_plumes_end_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_plumes_end_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_plumes_end_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_plumes_end_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_plumes_end_pose_matrix-output">
-        <float_array id="ARM_hoplite_plumes_end_pose_matrix-output-array" count="48">1 4.43274e-9 -1.52368e-12 0 -4.01972e-9 0.9999999 -4.73112e-7 0.0999999 -4.00929e-13 4.76837e-7 0.9999999 0 0 0 0 1 1 4.43274e-9 -1.52368e-12 0 -4.01972e-9 0.9999999 -4.73112e-7 0.0999999 -4.00929e-13 4.76837e-7 0.9999999 0 0 0 0 1 1 4.43274e-9 -1.52368e-12 0 -4.01972e-9 0.9999999 -4.73112e-7 0.0999999 -4.00929e-13 4.76837e-7 0.9999999 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_plumes_end_pose_matrix-output-array" count="80">1 4.43274e-9 -1.52368e-12 0 -4.01972e-9 0.9999999 -4.73112e-7 0.0999999 -4.00929e-13 4.76837e-7 0.9999999 0 0 0 0 1 1 4.43274e-9 -1.52368e-12 0 -4.01972e-9 0.9999999 -4.73112e-7 0.0999999 -4.00929e-13 4.76837e-7 0.9999999 0 0 0 0 1 1 4.43274e-9 -1.52368e-12 0 -4.01972e-9 0.9999999 -4.73112e-7 0.0999999 -4.00929e-13 4.76837e-7 0.9999999 0 0 0 0 1 1 4.43274e-9 -1.52368e-12 0 -4.01972e-9 0.9999999 -4.73112e-7 0.0999999 -4.00929e-13 4.76837e-7 0.9999999 0 0 0 0 1 1 4.43274e-9 -1.52368e-12 0 -4.01972e-9 0.9999999 -4.73112e-7 0.0999999 -4.00929e-13 4.76837e-7 0.9999999 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_plumes_end_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_plumes_end_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_plumes_end_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_plumes_end_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_plumes_end_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_plumes_end_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_plumes_end_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -765,25 +765,25 @@
     </animation>
     <animation id="ARM_hoplite_skulltop_pose_matrix">
       <source id="ARM_hoplite_skulltop_pose_matrix-input">
-        <float_array id="ARM_hoplite_skulltop_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_skulltop_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skulltop_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_skulltop_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_skulltop_pose_matrix-output">
-        <float_array id="ARM_hoplite_skulltop_pose_matrix-output-array" count="48">1 -8.83377e-10 4.68211e-9 -0.00416822 0 1 2.16573e-11 0.3702891 -4.68211e-9 -1.92983e-11 1 0 0 0 0 1 1 -8.83377e-10 4.68211e-9 -0.00416822 0 1 2.16573e-11 0.3702891 -4.68211e-9 -1.92983e-11 1 0 0 0 0 1 1 -8.83377e-10 4.68211e-9 -0.00416822 0 1 2.16573e-11 0.3702891 -4.68211e-9 -1.92983e-11 1 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_skulltop_pose_matrix-output-array" count="80">1 -8.83377e-10 4.68211e-9 -0.00416822 0 1 2.16573e-11 0.3702891 -4.68211e-9 -1.92983e-11 1 0 0 0 0 1 1 -8.83377e-10 4.68211e-9 -0.00416822 0 1 2.16573e-11 0.3702891 -4.68211e-9 -1.92983e-11 1 0 0 0 0 1 1 -8.83377e-10 4.68211e-9 -0.00416822 0 1 2.16573e-11 0.3702891 -4.68211e-9 -1.92983e-11 1 0 0 0 0 1 1 -8.83377e-10 4.68211e-9 -0.00416822 0 1 2.16573e-11 0.3702891 -4.68211e-9 -1.92983e-11 1 0 0 0 0 1 1 -8.83377e-10 4.68211e-9 -0.00416822 0 1 2.16573e-11 0.3702891 -4.68211e-9 -1.92983e-11 1 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skulltop_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_skulltop_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_skulltop_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_skulltop_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_skulltop_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skulltop_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_skulltop_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -797,25 +797,25 @@
     </animation>
     <animation id="ARM_hoplite_skulltop_end_pose_matrix">
       <source id="ARM_hoplite_skulltop_end_pose_matrix-input">
-        <float_array id="ARM_hoplite_skulltop_end_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_skulltop_end_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skulltop_end_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_skulltop_end_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_skulltop_end_pose_matrix-output">
-        <float_array id="ARM_hoplite_skulltop_end_pose_matrix-output-array" count="48">1 4.79326e-11 0 0 1.2032e-14 0.9999999 -1.84741e-13 0.0999999 0 2.71427e-12 1 0 0 0 0 1 1 4.79326e-11 0 0 1.2032e-14 0.9999999 -1.84741e-13 0.0999999 0 2.71427e-12 1 0 0 0 0 1 1 4.79326e-11 0 0 1.2032e-14 0.9999999 -1.84741e-13 0.0999999 0 2.71427e-12 1 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_skulltop_end_pose_matrix-output-array" count="80">1 4.79326e-11 0 0 1.2032e-14 0.9999999 -1.84741e-13 0.0999999 0 2.71427e-12 1 0 0 0 0 1 1 4.79326e-11 0 0 1.2032e-14 0.9999999 -1.84741e-13 0.0999999 0 2.71427e-12 1 0 0 0 0 1 1 4.79326e-11 0 0 1.2032e-14 0.9999999 -1.84741e-13 0.0999999 0 2.71427e-12 1 0 0 0 0 1 1 4.79326e-11 0 0 1.2032e-14 0.9999999 -1.84741e-13 0.0999999 0 2.71427e-12 1 0 0 0 0 1 1 4.79326e-11 0 0 1.2032e-14 0.9999999 -1.84741e-13 0.0999999 0 2.71427e-12 1 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skulltop_end_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_skulltop_end_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_skulltop_end_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_skulltop_end_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_skulltop_end_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_skulltop_end_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_skulltop_end_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -829,25 +829,25 @@
     </animation>
     <animation id="ARM_hoplite_cloaktop_pose_matrix">
       <source id="ARM_hoplite_cloaktop_pose_matrix-input">
-        <float_array id="ARM_hoplite_cloaktop_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_cloaktop_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_cloaktop_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_cloaktop_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_cloaktop_pose_matrix-output">
-        <float_array id="ARM_hoplite_cloaktop_pose_matrix-output-array" count="48">1 2.82214e-8 1.16233e-7 0.009935169 -3.22772e-8 -0.8718405 0.4897899 0.3512943 1.15159e-7 -0.4897899 -0.8718405 -0.1981262 0 0 0 1 1 3.14291e-8 1.14291e-7 0.009935169 -3.59685e-8 -0.8380525 0.5455896 0.3512943 1.12929e-7 -0.5455896 -0.8380525 -0.1981262 0 0 0 1 1 2.82214e-8 1.16233e-7 0.009935169 -3.22772e-8 -0.8718405 0.4897899 0.3512943 1.15159e-7 -0.4897899 -0.8718405 -0.1981262 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_cloaktop_pose_matrix-output-array" count="80">1 2.82214e-8 1.16233e-7 0.009935169 -3.22772e-8 -0.8718405 0.4897899 0.3512943 1.15159e-7 -0.4897899 -0.8718405 -0.1981262 0 0 0 1 1 3.45179e-8 1.16123e-7 0.009935169 -3.41267e-8 -0.8392396 0.5437619 0.3512943 1.16225e-7 -0.543762 -0.8392395 -0.1981262 0 0 0 1 1 3.43025e-8 1.12293e-7 0.009935169 -3.92753e-8 -0.8033018 0.5955722 0.3512943 1.10635e-7 -0.5955723 -0.8033017 -0.1981262 0 0 0 1 1 3.45179e-8 1.16123e-7 0.009935169 -3.41267e-8 -0.8392396 0.5437619 0.3512943 1.16225e-7 -0.543762 -0.8392395 -0.1981262 0 0 0 1 1 2.82214e-8 1.16233e-7 0.009935169 -3.22772e-8 -0.8718405 0.4897899 0.3512943 1.15159e-7 -0.4897899 -0.8718405 -0.1981262 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_cloaktop_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_cloaktop_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_cloaktop_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_cloaktop_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_cloaktop_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_cloaktop_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_cloaktop_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -861,25 +861,25 @@
     </animation>
     <animation id="ARM_hoplite_cloak_pose_matrix">
       <source id="ARM_hoplite_cloak_pose_matrix-input">
-        <float_array id="ARM_hoplite_cloak_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_cloak_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_cloak_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_cloak_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_cloak_pose_matrix-output">
-        <float_array id="ARM_hoplite_cloak_pose_matrix-output-array" count="48">0.9953835 -0.01959679 -0.09395519 2.32831e-10 0.0286801 0.9949369 0.09632385 0.8901496 0.09159183 -0.09857383 0.9909058 -1.19209e-7 0 0 0 1 0.9953836 -0.01959681 -0.09395518 2.32831e-10 0.01351411 0.9977974 -0.06494504 0.8901496 0.09502095 0.06337562 0.9934559 -1.19209e-7 0 0 0 1 0.9953835 -0.01959679 -0.09395519 2.32831e-10 0.0286801 0.9949369 0.09632385 0.8901496 0.09159183 -0.09857383 0.9909058 -1.19209e-7 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_cloak_pose_matrix-output-array" count="80">0.9953835 -0.01959679 -0.09395519 2.32831e-10 0.0286801 0.9949369 0.09632385 0.8901496 0.09159183 -0.09857383 0.9909058 -1.19209e-7 0 0 0 1 0.9953835 -0.0195968 -0.09395519 2.32831e-10 0.02134706 0.9996162 0.01765987 0.8901496 0.09357305 -0.01958397 0.9954199 -1.19209e-7 0 0 0 1 0.9953836 -0.0195968 -0.09395517 2.32831e-10 0.01388032 0.9980342 -0.06111473 0.8901496 0.09496815 0.0595285 0.993699 -1.19209e-7 0 0 0 1 0.9953835 -0.0195968 -0.09395519 2.32831e-10 0.02134706 0.9996162 0.01765987 0.8901496 0.09357305 -0.01958397 0.9954199 -1.19209e-7 0 0 0 1 0.9953835 -0.01959679 -0.09395519 2.32831e-10 0.0286801 0.9949369 0.09632385 0.8901496 0.09159183 -0.09857383 0.9909058 -1.19209e-7 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_cloak_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_cloak_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_cloak_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_cloak_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_cloak_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_cloak_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_cloak_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -893,25 +893,25 @@
     </animation>
     <animation id="ARM_hoplite_l-top_end_pose_matrix">
       <source id="ARM_hoplite_l-top_end_pose_matrix-input">
-        <float_array id="ARM_hoplite_l-top_end_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_l-top_end_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_l-top_end_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_l-top_end_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_l-top_end_pose_matrix-output">
-        <float_array id="ARM_hoplite_l-top_end_pose_matrix-output-array" count="48">-0.466779 0.884374 -7.90005e-8 -9.31323e-10 -0.884374 -0.4667791 -3.54603e-9 0.4660859 -4.00118e-8 6.82108e-8 1 0 0 0 0 1 -0.466779 0.884374 -7.90005e-8 -9.31323e-10 -0.884374 -0.4667791 -3.54603e-9 0.4660859 -4.00118e-8 6.82108e-8 1 0 0 0 0 1 -0.466779 0.884374 -7.90005e-8 -9.31323e-10 -0.884374 -0.4667791 -3.54603e-9 0.4660859 -4.00118e-8 6.82108e-8 1 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_l-top_end_pose_matrix-output-array" count="80">-0.466779 0.884374 -7.90005e-8 -9.31323e-10 -0.884374 -0.4667791 -3.54603e-9 0.4660859 -4.00118e-8 6.82108e-8 1 0 0 0 0 1 -0.466779 0.884374 -7.90005e-8 -9.31323e-10 -0.884374 -0.4667791 -3.54603e-9 0.4660859 -4.00118e-8 6.82108e-8 1 0 0 0 0 1 -0.466779 0.884374 -7.90005e-8 -9.31323e-10 -0.884374 -0.4667791 -3.54603e-9 0.4660859 -4.00118e-8 6.82108e-8 1 0 0 0 0 1 -0.466779 0.884374 -7.90005e-8 -9.31323e-10 -0.884374 -0.4667791 -3.54603e-9 0.4660859 -4.00118e-8 6.82108e-8 1 0 0 0 0 1 -0.466779 0.884374 -7.90005e-8 -9.31323e-10 -0.884374 -0.4667791 -3.54603e-9 0.4660859 -4.00118e-8 6.82108e-8 1 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_l-top_end_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_l-top_end_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_l-top_end_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_l-top_end_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_l-top_end_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_l-top_end_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_l-top_end_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -925,25 +925,25 @@
     </animation>
     <animation id="ARM_hoplite_scapula_pose_matrix">
       <source id="ARM_hoplite_scapula_pose_matrix-input">
-        <float_array id="ARM_hoplite_scapula_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_scapula_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_scapula_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_scapula_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_scapula_pose_matrix-output">
-        <float_array id="ARM_hoplite_scapula_pose_matrix-output-array" count="48">2.19306e-4 -0.5081556 0.8612651 0 -0.001129846 0.8612645 0.5081555 0.4721708 -0.9999993 -0.0010845 -3.85304e-4 2.91038e-11 0 0 0 1 2.19306e-4 -0.5081556 0.8612651 0 -0.001129846 0.8612645 0.5081555 0.4721708 -0.9999993 -0.0010845 -3.85304e-4 2.91038e-11 0 0 0 1 2.19306e-4 -0.5081556 0.8612651 0 -0.001129846 0.8612645 0.5081555 0.4721708 -0.9999993 -0.0010845 -3.85304e-4 2.91038e-11 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_scapula_pose_matrix-output-array" count="80">2.19306e-4 -0.5081556 0.8612651 0 -0.001129846 0.8612645 0.5081555 0.4721708 -0.9999993 -0.0010845 -3.85304e-4 2.91038e-11 0 0 0 1 2.19306e-4 -0.5081556 0.8612651 0 -0.001129846 0.8612645 0.5081555 0.4721708 -0.9999993 -0.0010845 -3.85304e-4 2.91038e-11 0 0 0 1 2.19306e-4 -0.5081556 0.8612651 0 -0.001129846 0.8612645 0.5081555 0.4721708 -0.9999993 -0.0010845 -3.85304e-4 2.91038e-11 0 0 0 1 2.19306e-4 -0.5081556 0.8612651 0 -0.001129846 0.8612645 0.5081555 0.4721708 -0.9999993 -0.0010845 -3.85304e-4 2.91038e-11 0 0 0 1 2.19306e-4 -0.5081556 0.8612651 0 -0.001129846 0.8612645 0.5081555 0.4721708 -0.9999993 -0.0010845 -3.85304e-4 2.91038e-11 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_scapula_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_scapula_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_scapula_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_scapula_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_scapula_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_scapula_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_scapula_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -957,25 +957,25 @@
     </animation>
     <animation id="ARM_hoplite_ulna_pose_matrix">
       <source id="ARM_hoplite_ulna_pose_matrix-input">
-        <float_array id="ARM_hoplite_ulna_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_ulna_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ulna_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_ulna_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_ulna_pose_matrix-output">
-        <float_array id="ARM_hoplite_ulna_pose_matrix-output-array" count="48">0.3347105 -0.217859 0.9167916 -5.82077e-11 0.9350907 -0.04350238 -0.351729 0.6333676 0.1165097 0.9750104 0.1891571 0 0 0 0 1 0.3347105 -0.217859 0.9167916 -5.82077e-11 0.9350907 -0.04350238 -0.351729 0.6333676 0.1165097 0.9750104 0.1891571 0 0 0 0 1 0.3347105 -0.217859 0.9167916 -5.82077e-11 0.9350907 -0.04350238 -0.351729 0.6333676 0.1165097 0.9750104 0.1891571 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_ulna_pose_matrix-output-array" count="80">0.3347105 -0.217859 0.9167916 -5.82077e-11 0.9350907 -0.04350238 -0.351729 0.6333676 0.1165097 0.9750104 0.1891571 0 0 0 0 1 0.3347105 -0.217859 0.9167916 -5.82077e-11 0.9350907 -0.04350238 -0.351729 0.6333676 0.1165097 0.9750104 0.1891571 0 0 0 0 1 0.3347105 -0.217859 0.9167916 -5.82077e-11 0.9350907 -0.04350238 -0.351729 0.6333676 0.1165097 0.9750104 0.1891571 0 0 0 0 1 0.3347105 -0.217859 0.9167916 -5.82077e-11 0.9350907 -0.04350238 -0.351729 0.6333676 0.1165097 0.9750104 0.1891571 0 0 0 0 1 0.3347105 -0.217859 0.9167916 -5.82077e-11 0.9350907 -0.04350238 -0.351729 0.6333676 0.1165097 0.9750104 0.1891571 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ulna_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_ulna_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_ulna_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_ulna_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_ulna_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ulna_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_ulna_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -989,25 +989,25 @@
     </animation>
     <animation id="ARM_hoplite_r-top_end_pose_matrix">
       <source id="ARM_hoplite_r-top_end_pose_matrix-input">
-        <float_array id="ARM_hoplite_r-top_end_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_r-top_end_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_r-top_end_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_r-top_end_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_r-top_end_pose_matrix-output">
-        <float_array id="ARM_hoplite_r-top_end_pose_matrix-output-array" count="48">-0.4447948 -0.8956327 9.51738e-7 -9.31323e-10 0.8956327 -0.4447946 -1.65594e-6 0.4660859 1.90644e-6 1.15854e-7 1 0 0 0 0 1 -0.4447948 -0.8956327 9.51738e-7 -9.31323e-10 0.8956327 -0.4447946 -1.65594e-6 0.4660859 1.90644e-6 1.15854e-7 1 0 0 0 0 1 -0.4447948 -0.8956327 9.51738e-7 -9.31323e-10 0.8956327 -0.4447946 -1.65594e-6 0.4660859 1.90644e-6 1.15854e-7 1 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_r-top_end_pose_matrix-output-array" count="80">-0.4447948 -0.8956327 9.51738e-7 -9.31323e-10 0.8956327 -0.4447946 -1.65594e-6 0.4660859 1.90644e-6 1.15854e-7 1 0 0 0 0 1 -0.4447948 -0.8956327 9.51738e-7 -9.31323e-10 0.8956327 -0.4447946 -1.65594e-6 0.4660859 1.90644e-6 1.15854e-7 1 0 0 0 0 1 -0.4447948 -0.8956327 9.51738e-7 -9.31323e-10 0.8956327 -0.4447946 -1.65594e-6 0.4660859 1.90644e-6 1.15854e-7 1 0 0 0 0 1 -0.4447948 -0.8956327 9.51738e-7 -9.31323e-10 0.8956327 -0.4447946 -1.65594e-6 0.4660859 1.90644e-6 1.15854e-7 1 0 0 0 0 1 -0.4447948 -0.8956327 9.51738e-7 -9.31323e-10 0.8956327 -0.4447946 -1.65594e-6 0.4660859 1.90644e-6 1.15854e-7 1 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_r-top_end_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_r-top_end_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_r-top_end_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_r-top_end_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_r-top_end_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_r-top_end_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_r-top_end_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1021,25 +1021,25 @@
     </animation>
     <animation id="ARM_hoplite_scapula01_pose_matrix">
       <source id="ARM_hoplite_scapula01_pose_matrix-input">
-        <float_array id="ARM_hoplite_scapula01_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_scapula01_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_scapula01_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_scapula01_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_scapula01_pose_matrix-output">
-        <float_array id="ARM_hoplite_scapula01_pose_matrix-output-array" count="48">0.153298 0.4024091 0.9025334 0 0.3083581 0.8482435 -0.4305787 0.4942417 -0.9388371 0.3443104 0.005947893 0 0 0 0 1 0.153298 0.4024091 0.9025334 0 0.3083581 0.8482435 -0.4305787 0.4942417 -0.9388371 0.3443104 0.005947893 0 0 0 0 1 0.153298 0.4024091 0.9025334 0 0.3083581 0.8482435 -0.4305787 0.4942417 -0.9388371 0.3443104 0.005947893 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_scapula01_pose_matrix-output-array" count="80">0.153298 0.4024091 0.9025334 0 0.3083581 0.8482435 -0.4305787 0.4942417 -0.9388371 0.3443104 0.005947893 0 0 0 0 1 0.153298 0.4024091 0.9025334 0 0.3083581 0.8482435 -0.4305787 0.4942417 -0.9388371 0.3443104 0.005947893 0 0 0 0 1 0.153298 0.4024091 0.9025334 0 0.3083581 0.8482435 -0.4305787 0.4942417 -0.9388371 0.3443104 0.005947893 0 0 0 0 1 0.153298 0.4024091 0.9025334 0 0.3083581 0.8482435 -0.4305787 0.4942417 -0.9388371 0.3443104 0.005947893 0 0 0 0 1 0.153298 0.4024091 0.9025334 0 0.3083581 0.8482435 -0.4305787 0.4942417 -0.9388371 0.3443104 0.005947893 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_scapula01_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_scapula01_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_scapula01_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_scapula01_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_scapula01_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_scapula01_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_scapula01_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1053,25 +1053,25 @@
     </animation>
     <animation id="ARM_hoplite_ulna01_pose_matrix">
       <source id="ARM_hoplite_ulna01_pose_matrix-input">
-        <float_array id="ARM_hoplite_ulna01_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_ulna01_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ulna01_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_ulna01_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_ulna01_pose_matrix-output">
-        <float_array id="ARM_hoplite_ulna01_pose_matrix-output-array" count="48">0.06345007 -0.5965839 0.8000386 1.49012e-8 -0.08201005 0.7958257 0.5999466 0.6200781 -0.9946097 -0.1036778 0.001569333 -2.38419e-7 0 0 0 1 0.06345007 -0.5965839 0.8000386 1.49012e-8 -0.08201005 0.7958257 0.5999466 0.6200781 -0.9946097 -0.1036778 0.001569333 -2.38419e-7 0 0 0 1 0.06345007 -0.5965839 0.8000386 1.49012e-8 -0.08201005 0.7958257 0.5999466 0.6200781 -0.9946097 -0.1036778 0.001569333 -2.38419e-7 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_ulna01_pose_matrix-output-array" count="80">0.06345007 -0.5965839 0.8000386 1.49012e-8 -0.08201005 0.7958257 0.5999466 0.6200781 -0.9946097 -0.1036778 0.001569333 -2.38419e-7 0 0 0 1 0.06345007 -0.5965839 0.8000386 1.49012e-8 -0.08201005 0.7958257 0.5999466 0.6200781 -0.9946097 -0.1036778 0.001569333 -2.38419e-7 0 0 0 1 0.06345007 -0.5965839 0.8000386 1.49012e-8 -0.08201005 0.7958257 0.5999466 0.6200781 -0.9946097 -0.1036778 0.001569333 -2.38419e-7 0 0 0 1 0.06345007 -0.5965839 0.8000386 1.49012e-8 -0.08201005 0.7958257 0.5999466 0.6200781 -0.9946097 -0.1036778 0.001569333 -2.38419e-7 0 0 0 1 0.06345007 -0.5965839 0.8000386 1.49012e-8 -0.08201005 0.7958257 0.5999466 0.6200781 -0.9946097 -0.1036778 0.001569333 -2.38419e-7 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ulna01_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_ulna01_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_ulna01_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_ulna01_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_ulna01_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ulna01_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_ulna01_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1085,25 +1085,25 @@
     </animation>
     <animation id="ARM_hoplite_smoke_node_1_pose_matrix">
       <source id="ARM_hoplite_smoke_node_1_pose_matrix-input">
-        <float_array id="ARM_hoplite_smoke_node_1_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_smoke_node_1_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_smoke_node_1_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_smoke_node_1_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_smoke_node_1_pose_matrix-output">
-        <float_array id="ARM_hoplite_smoke_node_1_pose_matrix-output-array" count="48">0.01388218 -0.9948464 -0.1004399 2.38419e-7 -0.2025269 -0.1011652 0.9740372 0.7281538 -0.9791782 0.006819613 -0.2028875 -5.96046e-8 0 0 0 1 0.01388218 -0.9948464 -0.1004399 2.38419e-7 -0.2025269 -0.1011652 0.9740372 0.7281538 -0.9791782 0.006819613 -0.2028875 -5.96046e-8 0 0 0 1 0.01388218 -0.9948464 -0.1004399 2.38419e-7 -0.2025269 -0.1011652 0.9740372 0.7281538 -0.9791782 0.006819613 -0.2028875 -5.96046e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_smoke_node_1_pose_matrix-output-array" count="80">0.01388218 -0.9948464 -0.1004399 2.38419e-7 -0.2025269 -0.1011652 0.9740372 0.7281538 -0.9791782 0.006819613 -0.2028875 -5.96046e-8 0 0 0 1 0.01388218 -0.9948464 -0.1004399 2.38419e-7 -0.2025269 -0.1011652 0.9740372 0.7281538 -0.9791782 0.006819613 -0.2028875 -5.96046e-8 0 0 0 1 0.01388218 -0.9948464 -0.1004399 2.38419e-7 -0.2025269 -0.1011652 0.9740372 0.7281538 -0.9791782 0.006819613 -0.2028875 -5.96046e-8 0 0 0 1 0.01388218 -0.9948464 -0.1004399 2.38419e-7 -0.2025269 -0.1011652 0.9740372 0.7281538 -0.9791782 0.006819613 -0.2028875 -5.96046e-8 0 0 0 1 0.01388218 -0.9948464 -0.1004399 2.38419e-7 -0.2025269 -0.1011652 0.9740372 0.7281538 -0.9791782 0.006819613 -0.2028875 -5.96046e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_smoke_node_1_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_smoke_node_1_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_smoke_node_1_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_smoke_node_1_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_smoke_node_1_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_smoke_node_1_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_smoke_node_1_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1117,25 +1117,25 @@
     </animation>
     <animation id="ARM_hoplite_hip_L_pose_matrix">
       <source id="ARM_hoplite_hip_L_pose_matrix-input">
-        <float_array id="ARM_hoplite_hip_L_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_hip_L_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_hip_L_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_hip_L_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_hip_L_pose_matrix-output">
-        <float_array id="ARM_hoplite_hip_L_pose_matrix-output-array" count="48">-0.6579821 0.7065434 -0.2604904 0 -0.7257023 -0.6873038 -0.03113635 0.1974163 -0.2010353 0.1685514 0.9649742 -2.98023e-8 0 0 0 1 -0.6579821 0.7065434 -0.2604904 0 -0.7257023 -0.6873038 -0.03113635 0.1974163 -0.2010353 0.1685514 0.9649742 -2.98023e-8 0 0 0 1 -0.6579821 0.7065434 -0.2604904 0 -0.7257023 -0.6873038 -0.03113635 0.1974163 -0.2010353 0.1685514 0.9649742 -2.98023e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_hip_L_pose_matrix-output-array" count="80">-0.6579821 0.7065434 -0.2604904 0 -0.7257023 -0.6873038 -0.03113635 0.1974163 -0.2010353 0.1685514 0.9649742 -2.98023e-8 0 0 0 1 -0.6579821 0.7065434 -0.2604904 0 -0.7257023 -0.6873038 -0.03113635 0.1974163 -0.2010353 0.1685514 0.9649742 -2.98023e-8 0 0 0 1 -0.6579821 0.7065434 -0.2604904 0 -0.7257023 -0.6873038 -0.03113635 0.1974163 -0.2010353 0.1685514 0.9649742 -2.98023e-8 0 0 0 1 -0.6579821 0.7065434 -0.2604904 0 -0.7257023 -0.6873038 -0.03113635 0.1974163 -0.2010353 0.1685514 0.9649742 -2.98023e-8 0 0 0 1 -0.6579821 0.7065434 -0.2604904 0 -0.7257023 -0.6873038 -0.03113635 0.1974163 -0.2010353 0.1685514 0.9649742 -2.98023e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_hip_L_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_hip_L_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_hip_L_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_hip_L_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_hip_L_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_hip_L_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_hip_L_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1149,25 +1149,25 @@
     </animation>
     <animation id="ARM_hoplite_femurleft_pose_matrix">
       <source id="ARM_hoplite_femurleft_pose_matrix-input">
-        <float_array id="ARM_hoplite_femurleft_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_femurleft_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_femurleft_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_femurleft_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_femurleft_pose_matrix-output">
-        <float_array id="ARM_hoplite_femurleft_pose_matrix-output-array" count="48">-0.04449276 0.722761 0.6896641 1.19209e-7 -0.3847505 0.6246982 -0.6794991 0.3247275 -0.9219477 -0.2955814 0.2502882 -2.98023e-8 0 0 0 1 -0.04449276 0.722761 0.6896641 1.19209e-7 -0.3847505 0.6246982 -0.6794991 0.3247275 -0.9219477 -0.2955814 0.2502882 -2.98023e-8 0 0 0 1 -0.04449276 0.722761 0.6896641 1.19209e-7 -0.3847505 0.6246982 -0.6794991 0.3247275 -0.9219477 -0.2955814 0.2502882 -2.98023e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_femurleft_pose_matrix-output-array" count="80">-0.04449276 0.722761 0.6896641 1.19209e-7 -0.3847505 0.6246982 -0.6794991 0.3247275 -0.9219477 -0.2955814 0.2502882 -2.98023e-8 0 0 0 1 -0.04449276 0.722761 0.6896641 1.19209e-7 -0.3847505 0.6246982 -0.6794991 0.3247275 -0.9219477 -0.2955814 0.2502882 -2.98023e-8 0 0 0 1 -0.04449276 0.722761 0.6896641 1.19209e-7 -0.3847505 0.6246982 -0.6794991 0.3247275 -0.9219477 -0.2955814 0.2502882 -2.98023e-8 0 0 0 1 -0.04449276 0.722761 0.6896641 1.19209e-7 -0.3847505 0.6246982 -0.6794991 0.3247275 -0.9219477 -0.2955814 0.2502882 -2.98023e-8 0 0 0 1 -0.04449276 0.722761 0.6896641 1.19209e-7 -0.3847505 0.6246982 -0.6794991 0.3247275 -0.9219477 -0.2955814 0.2502882 -2.98023e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_femurleft_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_femurleft_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_femurleft_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_femurleft_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_femurleft_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_femurleft_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_femurleft_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1181,25 +1181,25 @@
     </animation>
     <animation id="ARM_hoplite_knee-l-bopttom_pose_matrix">
       <source id="ARM_hoplite_knee-l-bopttom_pose_matrix-input">
-        <float_array id="ARM_hoplite_knee-l-bopttom_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_knee-l-bopttom_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-l-bopttom_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_knee-l-bopttom_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_knee-l-bopttom_pose_matrix-output">
-        <float_array id="ARM_hoplite_knee-l-bopttom_pose_matrix-output-array" count="48">-0.002409004 4.23972e-4 0.9999971 7.45058e-9 0.04280872 0.9990832 -3.20446e-4 0.7394271 -0.9990804 0.0428078 -0.002424945 0 0 0 0 1 -0.002409004 4.23972e-4 0.9999971 7.45058e-9 0.04280872 0.9990832 -3.20446e-4 0.7394271 -0.9990804 0.0428078 -0.002424945 0 0 0 0 1 -0.002409004 4.23972e-4 0.9999971 7.45058e-9 0.04280872 0.9990832 -3.20446e-4 0.7394271 -0.9990804 0.0428078 -0.002424945 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_knee-l-bopttom_pose_matrix-output-array" count="80">-0.002409004 4.23972e-4 0.9999971 7.45058e-9 0.04280872 0.9990832 -3.20446e-4 0.7394271 -0.9990804 0.0428078 -0.002424945 0 0 0 0 1 -0.002409004 4.23972e-4 0.9999971 7.45058e-9 0.04280872 0.9990832 -3.20446e-4 0.7394271 -0.9990804 0.0428078 -0.002424945 0 0 0 0 1 -0.002409004 4.23972e-4 0.9999971 7.45058e-9 0.04280872 0.9990832 -3.20446e-4 0.7394271 -0.9990804 0.0428078 -0.002424945 0 0 0 0 1 -0.002409004 4.23972e-4 0.9999971 7.45058e-9 0.04280872 0.9990832 -3.20446e-4 0.7394271 -0.9990804 0.0428078 -0.002424945 0 0 0 0 1 -0.002409004 4.23972e-4 0.9999971 7.45058e-9 0.04280872 0.9990832 -3.20446e-4 0.7394271 -0.9990804 0.0428078 -0.002424945 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-l-bopttom_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_knee-l-bopttom_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_knee-l-bopttom_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_knee-l-bopttom_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_knee-l-bopttom_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-l-bopttom_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_knee-l-bopttom_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1213,25 +1213,25 @@
     </animation>
     <animation id="ARM_hoplite_ankle_left_pose_matrix">
       <source id="ARM_hoplite_ankle_left_pose_matrix-input">
-        <float_array id="ARM_hoplite_ankle_left_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_ankle_left_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ankle_left_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_ankle_left_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_ankle_left_pose_matrix-output">
-        <float_array id="ARM_hoplite_ankle_left_pose_matrix-output-array" count="48">1 2.89148e-8 2.26055e-6 0 -2.21178e-6 0.2160908 0.9763734 1.122255 -4.60136e-7 -0.9763733 0.2160908 -1.49012e-8 0 0 0 1 1 2.89148e-8 2.26055e-6 0 -2.21178e-6 0.2160908 0.9763734 1.122255 -4.60136e-7 -0.9763733 0.2160908 -1.49012e-8 0 0 0 1 1 2.89148e-8 2.26055e-6 0 -2.21178e-6 0.2160908 0.9763734 1.122255 -4.60136e-7 -0.9763733 0.2160908 -1.49012e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_ankle_left_pose_matrix-output-array" count="80">1 2.89148e-8 2.26055e-6 0 -2.21178e-6 0.2160908 0.9763734 1.122255 -4.60136e-7 -0.9763733 0.2160908 -1.49012e-8 0 0 0 1 1 2.89148e-8 2.26055e-6 0 -2.21178e-6 0.2160908 0.9763734 1.122255 -4.60136e-7 -0.9763733 0.2160908 -1.49012e-8 0 0 0 1 1 2.89148e-8 2.26055e-6 0 -2.21178e-6 0.2160908 0.9763734 1.122255 -4.60136e-7 -0.9763733 0.2160908 -1.49012e-8 0 0 0 1 1 2.89148e-8 2.26055e-6 0 -2.21178e-6 0.2160908 0.9763734 1.122255 -4.60136e-7 -0.9763733 0.2160908 -1.49012e-8 0 0 0 1 1 2.89148e-8 2.26055e-6 0 -2.21178e-6 0.2160908 0.9763734 1.122255 -4.60136e-7 -0.9763733 0.2160908 -1.49012e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ankle_left_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_ankle_left_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_ankle_left_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_ankle_left_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_ankle_left_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ankle_left_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_ankle_left_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1245,25 +1245,25 @@
     </animation>
     <animation id="ARM_hoplite_foot_left01_pose_matrix">
       <source id="ARM_hoplite_foot_left01_pose_matrix-input">
-        <float_array id="ARM_hoplite_foot_left01_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_foot_left01_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_foot_left01_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_foot_left01_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_foot_left01_pose_matrix-output">
-        <float_array id="ARM_hoplite_foot_left01_pose_matrix-output-array" count="48">1 5.74343e-7 3.19857e-5 0 -8.54804e-6 0.9682823 0.2498588 0.3558486 -3.08277e-5 -0.2498588 0.9682823 7.45058e-9 0 0 0 1 1 5.74343e-7 3.19857e-5 0 -8.54804e-6 0.9682823 0.2498588 0.3558486 -3.08277e-5 -0.2498588 0.9682823 7.45058e-9 0 0 0 1 1 5.74343e-7 3.19857e-5 0 -8.54804e-6 0.9682823 0.2498588 0.3558486 -3.08277e-5 -0.2498588 0.9682823 7.45058e-9 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_foot_left01_pose_matrix-output-array" count="80">1 5.74343e-7 3.19857e-5 0 -8.54804e-6 0.9682823 0.2498588 0.3558486 -3.08277e-5 -0.2498588 0.9682823 7.45058e-9 0 0 0 1 1 5.74343e-7 3.19857e-5 0 -8.54804e-6 0.9682823 0.2498588 0.3558486 -3.08277e-5 -0.2498588 0.9682823 7.45058e-9 0 0 0 1 1 5.74343e-7 3.19857e-5 0 -8.54804e-6 0.9682823 0.2498588 0.3558486 -3.08277e-5 -0.2498588 0.9682823 7.45058e-9 0 0 0 1 1 5.74343e-7 3.19857e-5 0 -8.54804e-6 0.9682823 0.2498588 0.3558486 -3.08277e-5 -0.2498588 0.9682823 7.45058e-9 0 0 0 1 1 5.74343e-7 3.19857e-5 0 -8.54804e-6 0.9682823 0.2498588 0.3558486 -3.08277e-5 -0.2498588 0.9682823 7.45058e-9 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_foot_left01_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_foot_left01_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_foot_left01_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_foot_left01_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_foot_left01_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_foot_left01_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_foot_left01_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1277,25 +1277,25 @@
     </animation>
     <animation id="ARM_hoplite_butt-l_pose_matrix">
       <source id="ARM_hoplite_butt-l_pose_matrix-input">
-        <float_array id="ARM_hoplite_butt-l_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_butt-l_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_butt-l_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_butt-l_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_butt-l_pose_matrix-output">
-        <float_array id="ARM_hoplite_butt-l_pose_matrix-output-array" count="48">-0.002496153 0.05613457 -0.9984226 0.2198393 0.04280439 -0.9975021 -0.05619068 0.1134516 -0.9990847 -0.04287645 9.36095e-5 -0.02735218 0 0 0 1 -0.002496153 0.05613457 -0.9984226 0.2198393 0.04280439 -0.9975021 -0.05619068 0.1134516 -0.9990847 -0.04287645 9.36095e-5 -0.02735218 0 0 0 1 -0.002496153 0.05613457 -0.9984226 0.2198393 0.04280439 -0.9975021 -0.05619068 0.1134516 -0.9990847 -0.04287645 9.36095e-5 -0.02735218 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_butt-l_pose_matrix-output-array" count="80">-0.002496153 0.05613457 -0.9984226 0.2198393 0.04280439 -0.9975021 -0.05619068 0.1134516 -0.9990847 -0.04287645 9.36095e-5 -0.02735218 0 0 0 1 -0.002496153 0.05613457 -0.9984226 0.2198393 0.04280439 -0.9975021 -0.05619068 0.1134516 -0.9990847 -0.04287645 9.36095e-5 -0.02735218 0 0 0 1 -0.002496153 0.05613457 -0.9984226 0.2198393 0.04280439 -0.9975021 -0.05619068 0.1134516 -0.9990847 -0.04287645 9.36095e-5 -0.02735218 0 0 0 1 -0.002496153 0.05613457 -0.9984226 0.2198393 0.04280439 -0.9975021 -0.05619068 0.1134516 -0.9990847 -0.04287645 9.36095e-5 -0.02735218 0 0 0 1 -0.002496153 0.05613457 -0.9984226 0.2198393 0.04280439 -0.9975021 -0.05619068 0.1134516 -0.9990847 -0.04287645 9.36095e-5 -0.02735218 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_butt-l_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_butt-l_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_butt-l_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_butt-l_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_butt-l_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_butt-l_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_butt-l_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1309,25 +1309,25 @@
     </animation>
     <animation id="ARM_hoplite_knee-l-top_pose_matrix">
       <source id="ARM_hoplite_knee-l-top_pose_matrix-input">
-        <float_array id="ARM_hoplite_knee-l-top_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_knee-l-top_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-l-top_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_knee-l-top_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_knee-l-top_pose_matrix-output">
-        <float_array id="ARM_hoplite_knee-l-top_pose_matrix-output-array" count="48">-0.002396852 0.05613452 -0.9984222 -0.3803688 0.04280982 -0.9975023 -0.05618617 0.4633348 -0.9990835 -0.04287645 -7.6886e-6 -0.0109129 0 0 0 1 -0.002396852 0.05613452 -0.9984222 -0.3803688 0.04280982 -0.9975023 -0.05618617 0.4633348 -0.9990835 -0.04287645 -7.6886e-6 -0.0109129 0 0 0 1 -0.002396852 0.05613452 -0.9984222 -0.3803688 0.04280982 -0.9975023 -0.05618617 0.4633348 -0.9990835 -0.04287645 -7.6886e-6 -0.0109129 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_knee-l-top_pose_matrix-output-array" count="80">-0.002396852 0.05613452 -0.9984222 -0.3803688 0.04280982 -0.9975023 -0.05618617 0.4633348 -0.9990835 -0.04287645 -7.6886e-6 -0.0109129 0 0 0 1 -0.002396852 0.05613452 -0.9984222 -0.3803688 0.04280982 -0.9975023 -0.05618617 0.4633348 -0.9990835 -0.04287645 -7.6886e-6 -0.0109129 0 0 0 1 -0.002396852 0.05613452 -0.9984222 -0.3803688 0.04280982 -0.9975023 -0.05618617 0.4633348 -0.9990835 -0.04287645 -7.6886e-6 -0.0109129 0 0 0 1 -0.002396852 0.05613452 -0.9984222 -0.3803688 0.04280982 -0.9975023 -0.05618617 0.4633348 -0.9990835 -0.04287645 -7.6886e-6 -0.0109129 0 0 0 1 -0.002396852 0.05613452 -0.9984222 -0.3803688 0.04280982 -0.9975023 -0.05618617 0.4633348 -0.9990835 -0.04287645 -7.6886e-6 -0.0109129 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-l-top_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_knee-l-top_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_knee-l-top_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_knee-l-top_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_knee-l-top_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-l-top_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_knee-l-top_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1341,25 +1341,25 @@
     </animation>
     <animation id="ARM_hoplite_hip_R_pose_matrix">
       <source id="ARM_hoplite_hip_R_pose_matrix-input">
-        <float_array id="ARM_hoplite_hip_R_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_hip_R_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_hip_R_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_hip_R_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_hip_R_pose_matrix-output">
-        <float_array id="ARM_hoplite_hip_R_pose_matrix-output-array" count="48">-0.654405 -0.7093601 0.2618454 0 0.7276688 -0.6849328 -0.03694643 0.1974163 0.2055548 0.1663588 0.9644024 -2.98023e-8 0 0 0 1 -0.654405 -0.7093601 0.2618454 0 0.7276688 -0.6849328 -0.03694643 0.1974163 0.2055548 0.1663588 0.9644024 -2.98023e-8 0 0 0 1 -0.654405 -0.7093601 0.2618454 0 0.7276688 -0.6849328 -0.03694643 0.1974163 0.2055548 0.1663588 0.9644024 -2.98023e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_hip_R_pose_matrix-output-array" count="80">-0.654405 -0.7093601 0.2618454 0 0.7276688 -0.6849328 -0.03694643 0.1974163 0.2055548 0.1663588 0.9644024 -2.98023e-8 0 0 0 1 -0.654405 -0.7093601 0.2618454 0 0.7276688 -0.6849328 -0.03694643 0.1974163 0.2055548 0.1663588 0.9644024 -2.98023e-8 0 0 0 1 -0.654405 -0.7093601 0.2618454 0 0.7276688 -0.6849328 -0.03694643 0.1974163 0.2055548 0.1663588 0.9644024 -2.98023e-8 0 0 0 1 -0.654405 -0.7093601 0.2618454 0 0.7276688 -0.6849328 -0.03694643 0.1974163 0.2055548 0.1663588 0.9644024 -2.98023e-8 0 0 0 1 -0.654405 -0.7093601 0.2618454 0 0.7276688 -0.6849328 -0.03694643 0.1974163 0.2055548 0.1663588 0.9644024 -2.98023e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_hip_R_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_hip_R_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_hip_R_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_hip_R_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_hip_R_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_hip_R_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_hip_R_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1373,25 +1373,25 @@
     </animation>
     <animation id="ARM_hoplite_femurright_pose_matrix">
       <source id="ARM_hoplite_femurright_pose_matrix-input">
-        <float_array id="ARM_hoplite_femurright_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_femurright_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_femurright_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_femurright_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_femurright_pose_matrix-output">
-        <float_array id="ARM_hoplite_femurright_pose_matrix-output-array" count="48">0.04167936 -0.7443508 0.6664871 0 -0.3807039 0.6049121 0.6993896 0.3273107 -0.9237574 -0.2828844 -0.2581649 -2.98023e-8 0 0 0 1 0.04167936 -0.7443508 0.6664871 0 -0.3807039 0.6049121 0.6993896 0.3273107 -0.9237574 -0.2828844 -0.2581649 -2.98023e-8 0 0 0 1 0.04167936 -0.7443508 0.6664871 0 -0.3807039 0.6049121 0.6993896 0.3273107 -0.9237574 -0.2828844 -0.2581649 -2.98023e-8 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_femurright_pose_matrix-output-array" count="80">0.04167936 -0.7443508 0.6664871 0 -0.3807039 0.6049121 0.6993896 0.3273107 -0.9237574 -0.2828844 -0.2581649 -2.98023e-8 0 0 0 1 0.04167936 -0.7443508 0.6664871 0 -0.3807039 0.6049121 0.6993896 0.3273107 -0.9237574 -0.2828844 -0.2581649 -2.98023e-8 0 0 0 1 0.04167936 -0.7443508 0.6664871 0 -0.3807039 0.6049121 0.6993896 0.3273107 -0.9237574 -0.2828844 -0.2581649 -2.98023e-8 0 0 0 1 0.04167936 -0.7443508 0.6664871 0 -0.3807039 0.6049121 0.6993896 0.3273107 -0.9237574 -0.2828844 -0.2581649 -2.98023e-8 0 0 0 1 0.04167936 -0.7443508 0.6664871 0 -0.3807039 0.6049121 0.6993896 0.3273107 -0.9237574 -0.2828844 -0.2581649 -2.98023e-8 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_femurright_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_femurright_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_femurright_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_femurright_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_femurright_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_femurright_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_femurright_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1405,25 +1405,25 @@
     </animation>
     <animation id="ARM_hoplite_knee-r-bopttom_pose_matrix">
       <source id="ARM_hoplite_knee-r-bopttom_pose_matrix-input">
-        <float_array id="ARM_hoplite_knee-r-bopttom_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_knee-r-bopttom_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-r-bopttom_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_knee-r-bopttom_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_knee-r-bopttom_pose_matrix-output">
-        <float_array id="ARM_hoplite_knee-r-bopttom_pose_matrix-output-array" count="48">8.99381e-4 4.90882e-4 0.9999994 -7.45058e-9 -0.01606564 0.9998707 -4.7636e-4 0.7388523 -0.9998705 -0.0160652 9.07151e-4 0 0 0 0 1 8.99381e-4 4.90882e-4 0.9999994 -7.45058e-9 -0.01606564 0.9998707 -4.7636e-4 0.7388523 -0.9998705 -0.0160652 9.07151e-4 0 0 0 0 1 8.99381e-4 4.90882e-4 0.9999994 -7.45058e-9 -0.01606564 0.9998707 -4.7636e-4 0.7388523 -0.9998705 -0.0160652 9.07151e-4 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_knee-r-bopttom_pose_matrix-output-array" count="80">8.99381e-4 4.90882e-4 0.9999994 -7.45058e-9 -0.01606564 0.9998707 -4.7636e-4 0.7388523 -0.9998705 -0.0160652 9.07151e-4 0 0 0 0 1 8.99381e-4 4.90882e-4 0.9999994 -7.45058e-9 -0.01606564 0.9998707 -4.7636e-4 0.7388523 -0.9998705 -0.0160652 9.07151e-4 0 0 0 0 1 8.99381e-4 4.90882e-4 0.9999994 -7.45058e-9 -0.01606564 0.9998707 -4.7636e-4 0.7388523 -0.9998705 -0.0160652 9.07151e-4 0 0 0 0 1 8.99381e-4 4.90882e-4 0.9999994 -7.45058e-9 -0.01606564 0.9998707 -4.7636e-4 0.7388523 -0.9998705 -0.0160652 9.07151e-4 0 0 0 0 1 8.99381e-4 4.90882e-4 0.9999994 -7.45058e-9 -0.01606564 0.9998707 -4.7636e-4 0.7388523 -0.9998705 -0.0160652 9.07151e-4 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-r-bopttom_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_knee-r-bopttom_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_knee-r-bopttom_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_knee-r-bopttom_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_knee-r-bopttom_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-r-bopttom_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_knee-r-bopttom_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1437,25 +1437,25 @@
     </animation>
     <animation id="ARM_hoplite_ankleright_pose_matrix">
       <source id="ARM_hoplite_ankleright_pose_matrix-input">
-        <float_array id="ARM_hoplite_ankleright_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_ankleright_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ankleright_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_ankleright_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_ankleright_pose_matrix-output">
-        <float_array id="ARM_hoplite_ankleright_pose_matrix-output-array" count="48">1 -1.25936e-7 1.06555e-6 0 -1.0153e-6 0.2162534 0.9763373 1.125571 -3.52978e-7 -0.9763373 0.2162534 0 0 0 0 1 1 -1.25936e-7 1.06555e-6 0 -1.0153e-6 0.2162534 0.9763373 1.125571 -3.52978e-7 -0.9763373 0.2162534 0 0 0 0 1 1 -1.25936e-7 1.06555e-6 0 -1.0153e-6 0.2162534 0.9763373 1.125571 -3.52978e-7 -0.9763373 0.2162534 0 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_ankleright_pose_matrix-output-array" count="80">1 -1.25936e-7 1.06555e-6 0 -1.0153e-6 0.2162534 0.9763373 1.125571 -3.52978e-7 -0.9763373 0.2162534 0 0 0 0 1 1 -1.25936e-7 1.06555e-6 0 -1.0153e-6 0.2162534 0.9763373 1.125571 -3.52978e-7 -0.9763373 0.2162534 0 0 0 0 1 1 -1.25936e-7 1.06555e-6 0 -1.0153e-6 0.2162534 0.9763373 1.125571 -3.52978e-7 -0.9763373 0.2162534 0 0 0 0 1 1 -1.25936e-7 1.06555e-6 0 -1.0153e-6 0.2162534 0.9763373 1.125571 -3.52978e-7 -0.9763373 0.2162534 0 0 0 0 1 1 -1.25936e-7 1.06555e-6 0 -1.0153e-6 0.2162534 0.9763373 1.125571 -3.52978e-7 -0.9763373 0.2162534 0 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ankleright_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_ankleright_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_ankleright_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_ankleright_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_ankleright_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_ankleright_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_ankleright_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1469,25 +1469,25 @@
     </animation>
     <animation id="ARM_hoplite_foot_right01_pose_matrix">
       <source id="ARM_hoplite_foot_right01_pose_matrix-input">
-        <float_array id="ARM_hoplite_foot_right01_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_foot_right01_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_foot_right01_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_foot_right01_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_foot_right01_pose_matrix-output">
-        <float_array id="ARM_hoplite_foot_right01_pose_matrix-output-array" count="48">1 2.62155e-7 2.86171e-5 0 -7.40408e-6 0.9682822 0.2498593 0.3558484 -2.76439e-5 -0.2498592 0.9682822 -7.45058e-9 0 0 0 1 1 2.62155e-7 2.86171e-5 0 -7.40408e-6 0.9682822 0.2498593 0.3558484 -2.76439e-5 -0.2498592 0.9682822 -7.45058e-9 0 0 0 1 1 2.62155e-7 2.86171e-5 0 -7.40408e-6 0.9682822 0.2498593 0.3558484 -2.76439e-5 -0.2498592 0.9682822 -7.45058e-9 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_foot_right01_pose_matrix-output-array" count="80">1 2.62155e-7 2.86171e-5 0 -7.40408e-6 0.9682822 0.2498593 0.3558484 -2.76439e-5 -0.2498592 0.9682822 -7.45058e-9 0 0 0 1 1 2.62155e-7 2.86171e-5 0 -7.40408e-6 0.9682822 0.2498593 0.3558484 -2.76439e-5 -0.2498592 0.9682822 -7.45058e-9 0 0 0 1 1 2.62155e-7 2.86171e-5 0 -7.40408e-6 0.9682822 0.2498593 0.3558484 -2.76439e-5 -0.2498592 0.9682822 -7.45058e-9 0 0 0 1 1 2.62155e-7 2.86171e-5 0 -7.40408e-6 0.9682822 0.2498593 0.3558484 -2.76439e-5 -0.2498592 0.9682822 -7.45058e-9 0 0 0 1 1 2.62155e-7 2.86171e-5 0 -7.40408e-6 0.9682822 0.2498593 0.3558484 -2.76439e-5 -0.2498592 0.9682822 -7.45058e-9 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_foot_right01_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_foot_right01_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_foot_right01_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_foot_right01_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_foot_right01_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_foot_right01_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_foot_right01_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1501,25 +1501,25 @@
     </animation>
     <animation id="ARM_hoplite_butt-r_pose_matrix">
       <source id="ARM_hoplite_butt-r_pose_matrix-input">
-        <float_array id="ARM_hoplite_butt-r_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_butt-r_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_butt-r_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_butt-r_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_butt-r_pose_matrix-output">
-        <float_array id="ARM_hoplite_butt-r_pose_matrix-output-array" count="48">9.29475e-4 0.05590098 -0.9984342 0.2196997 -0.0160648 -0.9983066 -0.05590877 0.1122003 -0.9998514 0.01609077 -1.88655e-5 0.01026621 0 0 0 1 9.29475e-4 0.05590098 -0.9984342 0.2196997 -0.0160648 -0.9983066 -0.05590877 0.1122003 -0.9998514 0.01609077 -1.88655e-5 0.01026621 0 0 0 1 9.29475e-4 0.05590098 -0.9984342 0.2196997 -0.0160648 -0.9983066 -0.05590877 0.1122003 -0.9998514 0.01609077 -1.88655e-5 0.01026621 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_butt-r_pose_matrix-output-array" count="80">9.29475e-4 0.05590098 -0.9984342 0.2196997 -0.0160648 -0.9983066 -0.05590877 0.1122003 -0.9998514 0.01609077 -1.88655e-5 0.01026621 0 0 0 1 9.29475e-4 0.05590098 -0.9984342 0.2196997 -0.0160648 -0.9983066 -0.05590877 0.1122003 -0.9998514 0.01609077 -1.88655e-5 0.01026621 0 0 0 1 9.29475e-4 0.05590098 -0.9984342 0.2196997 -0.0160648 -0.9983066 -0.05590877 0.1122003 -0.9998514 0.01609077 -1.88655e-5 0.01026621 0 0 0 1 9.29475e-4 0.05590098 -0.9984342 0.2196997 -0.0160648 -0.9983066 -0.05590877 0.1122003 -0.9998514 0.01609077 -1.88655e-5 0.01026621 0 0 0 1 9.29475e-4 0.05590098 -0.9984342 0.2196997 -0.0160648 -0.9983066 -0.05590877 0.1122003 -0.9998514 0.01609077 -1.88655e-5 0.01026621 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_butt-r_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_butt-r_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_butt-r_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_butt-r_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_butt-r_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_butt-r_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_butt-r_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1533,25 +1533,25 @@
     </animation>
     <animation id="ARM_hoplite_knee-r-top_pose_matrix">
       <source id="ARM_hoplite_knee-r-top_pose_matrix-input">
-        <float_array id="ARM_hoplite_knee-r-top_pose_matrix-input-array" count="3">0 1 2</float_array>
+        <float_array id="ARM_hoplite_knee-r-top_pose_matrix-input-array" count="5">0 0.5 1 1.5 2</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-r-top_pose_matrix-input-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_knee-r-top_pose_matrix-input-array" count="5" stride="1">
             <param name="TIME" type="float"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_knee-r-top_pose_matrix-output">
-        <float_array id="ARM_hoplite_knee-r-top_pose_matrix-output-array" count="48">9.85354e-4 0.05590026 -0.9984306 -0.3804342 -0.01606361 -0.9983065 -0.05590911 0.4626652 -0.9998075 0.01609076 -4.95024e-5 0.004095554 0 0 0 1 9.85354e-4 0.05590026 -0.9984306 -0.3804342 -0.01606361 -0.9983065 -0.05590911 0.4626652 -0.9998075 0.01609076 -4.95024e-5 0.004095554 0 0 0 1 9.85354e-4 0.05590026 -0.9984306 -0.3804342 -0.01606361 -0.9983065 -0.05590911 0.4626652 -0.9998075 0.01609076 -4.95024e-5 0.004095554 0 0 0 1</float_array>
+        <float_array id="ARM_hoplite_knee-r-top_pose_matrix-output-array" count="80">9.85354e-4 0.05590026 -0.9984306 -0.3804342 -0.01606361 -0.9983065 -0.05590911 0.4626652 -0.9998075 0.01609076 -4.95024e-5 0.004095554 0 0 0 1 9.85354e-4 0.05590026 -0.9984306 -0.3804342 -0.01606361 -0.9983065 -0.05590911 0.4626652 -0.9998075 0.01609076 -4.95024e-5 0.004095554 0 0 0 1 9.85354e-4 0.05590026 -0.9984306 -0.3804342 -0.01606361 -0.9983065 -0.05590911 0.4626652 -0.9998075 0.01609076 -4.95024e-5 0.004095554 0 0 0 1 9.85354e-4 0.05590026 -0.9984306 -0.3804342 -0.01606361 -0.9983065 -0.05590911 0.4626652 -0.9998075 0.01609076 -4.95024e-5 0.004095554 0 0 0 1 9.85354e-4 0.05590026 -0.9984306 -0.3804342 -0.01606361 -0.9983065 -0.05590911 0.4626652 -0.9998075 0.01609076 -4.95024e-5 0.004095554 0 0 0 1</float_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-r-top_pose_matrix-output-array" count="3" stride="16">
+          <accessor source="#ARM_hoplite_knee-r-top_pose_matrix-output-array" count="5" stride="16">
             <param name="TRANSFORM" type="float4x4"/>
           </accessor>
         </technique_common>
       </source>
       <source id="ARM_hoplite_knee-r-top_pose_matrix-interpolation">
-        <Name_array id="ARM_hoplite_knee-r-top_pose_matrix-interpolation-array" count="3">LINEAR LINEAR LINEAR</Name_array>
+        <Name_array id="ARM_hoplite_knee-r-top_pose_matrix-interpolation-array" count="5">LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         <technique_common>
-          <accessor source="#ARM_hoplite_knee-r-top_pose_matrix-interpolation-array" count="3" stride="1">
+          <accessor source="#ARM_hoplite_knee-r-top_pose_matrix-interpolation-array" count="5" stride="1">
             <param name="INTERPOLATION" type="name"/>
           </accessor>
         </technique_common>
@@ -1608,11 +1608,7 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="ARM_hoplite" name="ARM_hoplite" type="NODE">
-        <translate sid="location">0 0 0</translate>
-        <rotate sid="rotationZ">0 0 1 0</rotate>
-        <rotate sid="rotationY">0 1 0 0</rotate>
-        <rotate sid="rotationX">1 0 0 -9.33467e-6</rotate>
-        <scale sid="scale">1 1 1</scale>
+        <matrix sid="transform">1 0 0 0 0 1 1.62921e-7 0 0 -1.62921e-7 1 0 0 0 0 1</matrix>
         <node id="ARM_hoplite_root" name="root" sid="root" type="JOINT">
           <matrix sid="transform">1 1.94277e-15 3.71087e-8 0 3.71087e-8 -1.70495e-7 -1 -1.01207e-7 4.38411e-15 1 -2.38419e-7 2.154822 0 0 0 1</matrix>
           <node id="ARM_hoplite_pelvis" name="pelvis" sid="pelvis" type="JOINT">
@@ -2016,51 +2012,27 @@
         </instance_controller>
       </node>
       <node id="Lamp_WEST" name="Lamp_WEST" type="NODE">
-        <translate sid="location">-28.80603 3.436447 33.30629</translate>
-        <rotate sid="rotationZ">0 0 1 -97.2794</rotate>
-        <rotate sid="rotationY">0 1 0 6.478367</rotate>
-        <rotate sid="rotationX">1 0 0 39.47849</rotate>
-        <scale sid="scale">3.598536 3.598536 3.598536</scale>
+        <matrix sid="transform">-0.4530514 2.722482 -2.309176 -28.80603 -3.546739 -0.6080006 -0.02096676 3.436447 -0.4060158 2.273298 2.759841 33.30629 0 0 0 1</matrix>
         <instance_light url="#Lamp_WEST-light"/>
       </node>
       <node id="Camera" name="Camera" type="NODE">
-        <translate sid="location">7.481132 -6.50764 5.343665</translate>
-        <rotate sid="rotationZ">0 0 1 46.69194</rotate>
-        <rotate sid="rotationY">0 1 0 0</rotate>
-        <rotate sid="rotationX">1 0 0 63.5593</rotate>
-        <scale sid="scale">1 1 1</scale>
+        <matrix sid="transform">0.6859207 -0.3240135 0.6515582 7.481132 0.7276763 0.3054208 -0.6141704 -6.50764 0 0.8953956 0.4452714 5.343665 0 0 0 1</matrix>
         <instance_camera url="#Camera-camera"/>
       </node>
       <node id="Lamp" name="Lamp" type="NODE">
-        <translate sid="location">4.076245 1.005454 5.903862</translate>
-        <rotate sid="rotationZ">0 0 1 106.9363</rotate>
-        <rotate sid="rotationY">0 1 0 3.163707</rotate>
-        <rotate sid="rotationX">1 0 0 37.26105</rotate>
-        <scale sid="scale">1 0.9999999 1</scale>
+        <matrix sid="transform">-0.2908646 -0.7711008 0.5663932 4.076245 0.9551712 -0.1998834 0.2183912 1.005454 -0.05518906 0.6045247 0.7946723 5.903862 0 0 0 1</matrix>
         <instance_light url="#Lamp-light"/>
       </node>
       <node id="LAMP_FRONT_PEACH_001" name="LAMP_FRONT_PEACH_001" type="NODE">
-        <translate sid="location">0.07793808 -21.84175 55.79722</translate>
-        <rotate sid="rotationZ">0 0 1 -2.261781</rotate>
-        <rotate sid="rotationY">0 1 0 2.61824</rotate>
-        <rotate sid="rotationX">1 0 0 20.30057</rotate>
-        <scale sid="scale">3.598536 3.598535 3.598536</scale>
+        <matrix sid="transform">3.591979 0.1901838 0.1047818 0.07793808 -0.1418689 3.370134 -1.253606 -21.84175 -0.1643848 1.247191 3.371491 55.79722 0 0 0 1</matrix>
         <instance_light url="#LAMP_FRONT_PEACH_001-light"/>
       </node>
       <node id="Lamp_WEST" name="Lamp_WEST" type="NODE">
-        <translate sid="location">-28.80603 3.436447 33.30629</translate>
-        <rotate sid="rotationZ">0 0 1 -97.27941</rotate>
-        <rotate sid="rotationY">0 1 0 6.478367</rotate>
-        <rotate sid="rotationX">1 0 0 39.4785</rotate>
-        <scale sid="scale">3.598536 3.598536 3.598535</scale>
+        <matrix sid="transform">-0.4530521 2.722482 -2.309176 -28.80603 -3.546739 -0.6080011 -0.02096633 3.436447 -0.4060159 2.273299 2.759841 33.30629 0 0 0 1</matrix>
         <instance_light url="#Lamp_WEST-light"/>
       </node>
       <node id="Lamp_001" name="Lamp_001" type="NODE">
-        <translate sid="location">4.076245 1.005454 5.903862</translate>
-        <rotate sid="rotationZ">0 0 1 106.9363</rotate>
-        <rotate sid="rotationY">0 1 0 3.163706</rotate>
-        <rotate sid="rotationX">1 0 0 37.26105</rotate>
-        <scale sid="scale">1 0.9999999 1</scale>
+        <matrix sid="transform">-0.2908648 -0.7711007 0.5663933 4.076245 0.9551711 -0.1998834 0.2183913 1.005454 -0.05518903 0.6045247 0.7946723 5.903862 0 0 0 1</matrix>
         <instance_light url="#Lamp_001-light"/>
       </node>
     </visual_scene>
