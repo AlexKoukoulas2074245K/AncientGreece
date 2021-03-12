@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "overworld/components/OverworldWaypointTargetComponent.h"
 #include "overworld/systems/OverworldCameraControllerSystem.h"
+#include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldTargetSelectionSystem.h"
 #include "../engine/ECS.h"
 #include "../engine/common/components/TransformComponent.h"
@@ -24,7 +25,7 @@
 #include "../engine/rendering/components/WindowSingletonComponent.h"
 #include "../engine/rendering/utils/LightUtils.h"
 #include "../engine/rendering/utils/MeshUtils.h"
-#include "../engine/rendering/systems/BoneAnimationSystem.h"
+#include "../engine/rendering/systems/ModelAnimationSystem.h"
 #include "../engine/rendering/systems/RenderingSystem.h"
 #include "../engine/resources/ResourceLoadingService.h"
 #include "../engine/scripting/components/ScriptComponent.h"
@@ -43,10 +44,11 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<genesis::debug::DebugViewManagementSystem>());
 #endif
     
-    world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldTargetSelectionSystem>());
+    world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>());
+    world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
     
-    world.AddSystem(std::make_unique<genesis::rendering::BoneAnimationSystem>());
+    world.AddSystem(std::make_unique<genesis::rendering::ModelAnimationSystem>());
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 

@@ -73,6 +73,7 @@ bool RayToPlaneIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDire
         if (t >= 0)
         {
             intersectionPoint = rayOrigin + t * rayDirection;
+            intersectionPoint.z = planeCenter.z;
             return true;
         }
     }

@@ -32,13 +32,10 @@ namespace overworld
 namespace
 {
     static const StringId MAP_ENTITY_NAME     = StringId("map");
-    static const StringId WAYPOINT_ASSET_NAME = StringId("waypoint_arrow");
     
     static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";
 
     static const glm::vec3 MAP_NORMAL        = glm::vec3(0.0f, 0.0f, -1.0f);
-    static const glm::vec3 WAYPOINT_ROTATION = glm::vec3(-genesis::math::PI/3.0f, 0.0f, 0.0f);
-    static const glm::vec3 WAYPOINT_SCALE    = glm::vec3(0.004f, 0.004f, 0.004f);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -97,33 +94,14 @@ void OverworldTargetSelectionSystem::VUpdate(const float, const std::vector<gene
     // Attach waypoint component to player
     auto playerEntity = world.FindEntityWithName(StringId("player"));
     auto wayPointComponent = std::make_unique<OverworldWaypointTargetComponent>();
-    Log(LogType::INFO, "%d,%d,%d", targetPixel.mRed, targetPixel.mBlue, targetPixel.mGreen);
+    wayPointComponent->mTargetPosition = mapIntersectionPoint;
     wayPointComponent->mTargetAreaType = RGB_TO_AREA_TYPE.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE.at(targetPixel) : WayPointTargetAreaType::NEUTRAL;
     
     if (world.HasComponent<OverworldWaypointTargetComponent>(playerEntity))
     {
-        world.DestroyEntity(world.FindEntityWithName(WAYPOINT_ASSET_NAME));
         world.RemoveComponent<OverworldWaypointTargetComponent>(playerEntity);
     }
     world.AddComponent<OverworldWaypointTargetComponent>(playerEntity, std::move(wayPointComponent));
-    
-    // Create waypoint
-    CreateWaypointAtPosition(mapIntersectionPoint);
-}
-
-///-----------------------------------------------------------------------------------------------
-
-void OverworldTargetSelectionSystem::CreateWaypointAtPosition(const glm::vec3& position) const
-{
-    auto& world = genesis::ecs::World::GetInstance();
-
-    auto waypointEntity = genesis::rendering::LoadStaticModelByName(WAYPOINT_ASSET_NAME.GetString(), position, WAYPOINT_ROTATION, WAYPOINT_SCALE, WAYPOINT_ASSET_NAME);
-
-    auto scriptComponent = std::make_unique<genesis::scripting::ScriptComponent>();
-    scriptComponent->mScriptName = StringId(WAYPOINT_ASSET_NAME);
-    scriptComponent->mScriptType = genesis::scripting::ScriptType::CONTINUOUS_EXECUTION;
-
-    world.AddComponent<genesis::scripting::ScriptComponent>(waypointEntity, std::move(scriptComponent));
 }
 
 ///-----------------------------------------------------------------------------------------------

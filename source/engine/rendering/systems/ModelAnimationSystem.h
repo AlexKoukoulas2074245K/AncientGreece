@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  BoneAnimationSystem.h
+///  ModelAnimationSystem.h
 ///  Genesis
 ///
 ///  Created by Alex Koukoulas on 08/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef BoneAnimationSystem_h
-#define BoneAnimationSystem_h
+#ifndef ModelAnimationSystem_h
+#define ModelAnimationSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -34,10 +34,10 @@ class RenderableComponent;
 
 ///-----------------------------------------------------------------------------------------------
 
-class BoneAnimationSystem final: public ecs::BaseSystem<TransformComponent, RenderableComponent>
+class ModelAnimationSystem final: public ecs::BaseSystem<TransformComponent, RenderableComponent>
 {
 public:
-    BoneAnimationSystem();
+    ModelAnimationSystem();
     
     void VUpdate(const float dt, const std::vector<ecs::EntityId>&) const override;
     
@@ -53,4 +53,4 @@ private:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* BoneAnimationSystem_h */
+#endif /* ModelAnimationSystem_h */

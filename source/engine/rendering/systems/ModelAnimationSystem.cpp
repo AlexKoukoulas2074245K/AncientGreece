@@ -1,11 +1,11 @@
 ///------------------------------------------------------------------------------------------------
-///  BoneAnimationSystem.cpp
+///  ModelAnimationSystem.cpp
 ///  Genesis
 ///
 ///  Created by Alex Koukoulas on 08/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#include "BoneAnimationSystem.h"
+#include "ModelAnimationSystem.h"
 #include "../components/RenderableComponent.h"
 #include "../../common/components/TransformComponent.h"
 #include "../../common/utils/Logging.h"
@@ -24,7 +24,7 @@ namespace rendering
 
 ///-----------------------------------------------------------------------------------------------
 
-BoneAnimationSystem::BoneAnimationSystem()
+ModelAnimationSystem::ModelAnimationSystem()
     : BaseSystem()
 {
 }
@@ -32,7 +32,7 @@ BoneAnimationSystem::BoneAnimationSystem()
 ///-----------------------------------------------------------------------------------------------
 
 float timeAccum = 0.0f;
-void BoneAnimationSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& entitiesToProcess) const
+void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = ecs::World::GetInstance();
     for (const auto& entityId : entitiesToProcess)
@@ -68,7 +68,7 @@ void BoneAnimationSystem::VUpdate(const float dt, const std::vector<ecs::EntityI
 
 ///-----------------------------------------------------------------------------------------------
 
-void BoneAnimationSystem::CalculateTransformsInHierarchy(const float animationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, resources::MeshResource& meshResource) const
+void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, resources::MeshResource& meshResource) const
 {
     auto nodeTransform = node->mTransform;
     const auto& animationInfo = meshResource.GetAnimationInfo();
@@ -122,11 +122,7 @@ void BoneAnimationSystem::CalculateTransformsInHierarchy(const float animationTi
             assert(factor >= 0.0f && factor <= 1.0f);
             const auto& start = nodeAnim.mRotationKeys[keyFrameIndex].mRotation;
             const auto& end   = nodeAnim.mRotationKeys[nextRotationIndex].mRotation;
-            aiQuaternion aiQuatStart(start.w, start.x, start.y, start.z);
-            aiQuaternion aiQuatEnd(end.w, end.x, end.y, end.z);
-            aiQuaternion lerp;
-            aiQuaternion::Interpolate(lerp, aiQuatStart, aiQuatEnd, factor);
-            rotation = math::AssimpQuatToGlmQuat(lerp);
+            rotation = glm::slerp(start, end, factor);
         }
         
         // Calculate interpolated scaling
