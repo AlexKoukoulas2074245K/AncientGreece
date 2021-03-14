@@ -32,7 +32,6 @@ namespace rendering
 /// same in their respective resource folders.
 /// @param[in] modelName the model with the given name to look for in the resource models folder.
 /// @param[in] modelType the required model type to know which file postfix to insert
-/// @param[in] world the singular world of the ECS state.
 /// @param[in] initialPosition (optional) an initial position for the loaded model.
 /// @param[in] entityName (optional) a string to name the entity with.
 /// @returns the entity id of the loaded entity.
@@ -51,8 +50,9 @@ ecs::EntityId LoadStaticModelByName
 /// Note: this helper function assumes that the model folder name and texture name are the
 /// same in their respective resource folders.
 /// @param[in] modelName the model with the given name to look for in the resource models folder.
-/// @param[in] world the singular world of the ECS state.
 /// @param[in] initialPosition (optional) an initial position for the loaded model.
+/// @param[in] initialRotation (optional) an initial rotation for the loaded model.
+/// @param[in] initialScale (optional) an initial scale for the loaded model.
 /// @param[in] entityName (optional) a string to name the entity with.
 /// @returns the entity id of the loaded entity.
 ecs::EntityId LoadAnimatedModelByName
@@ -70,7 +70,6 @@ ecs::EntityId LoadAnimatedModelByName
 /// @param[in] modelName the model with the given name to look for in the resource models folder.
 /// @param[in] textureName the texture with the given name to look for in the resource models folder.
 /// @param[in] shaderName the shader with this name will be attached to the model.
-/// @param[in] world the singular world of the ECS state.
 /// @param[in] initialPosition (optional) an initial position for the loaded model.
 /// @param[in] entityName (optional) a string to name the entity with.
 /// @returns the entity id of the loaded entity.

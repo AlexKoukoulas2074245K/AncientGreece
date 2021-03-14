@@ -24,6 +24,13 @@ namespace rendering
 
 ///-----------------------------------------------------------------------------------------------
 
+namespace
+{
+    static const float ANIMATION_TRANSITION_TIME = 0.2f;
+}
+
+///-----------------------------------------------------------------------------------------------
+
 ModelAnimationSystem::ModelAnimationSystem()
     : BaseSystem()
 {
@@ -31,7 +38,6 @@ ModelAnimationSystem::ModelAnimationSystem()
 
 ///-----------------------------------------------------------------------------------------------
 
-float timeAccum = 0.0f;
 void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = ecs::World::GetInstance();
@@ -49,13 +55,39 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
             continue;
         }
         
-        timeAccum += dt;
         glm::mat4 transform(1.0f);
         
-        const auto& animationInfo = currentMesh.GetAnimationInfo();
-        auto animationTime = std::fmod(timeAccum, animationInfo.mDuration);
+        if (renderableComponent.mPreviousMeshResourceIndex != -1)
+        {
+            renderableComponent.mTransitionAnimationTimeAccum += dt;
+            if (renderableComponent.mTransitionAnimationTimeAccum >= ANIMATION_TRANSITION_TIME)
+            {
+                // Transition to next anim finished
+                renderableComponent.mPreviousMeshResourceIndex = -1;
+                renderableComponent.mTransitionAnimationTimeAccum = 0.0f;
+                renderableComponent.mAnimationTimeAccum = 0.0f;
+            }
+            else
+            {
+                // Transition to next anim ongoing
+                auto& previousMesh = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mPreviousMeshResourceIndex]);
+                
+                auto transitionAnimationTime = std::fmod(renderableComponent.mTransitionAnimationTimeAccum, ANIMATION_TRANSITION_TIME);
+                auto previousAnimationTime = std::fmod(renderableComponent.mAnimationTimeAccum, previousMesh.GetAnimationInfo().mDuration);
+                CalculateTransitionalTransformsInHierarchy(previousAnimationTime, transitionAnimationTime, currentMesh.GetRootSkeletonNode(), transform, previousMesh, currentMesh);
+            }
+        }
+        else
+        {
+            // Current anim playing
+            renderableComponent.mAnimationTimeAccum += dt;
+            
+            const auto& animationInfo = currentMesh.GetAnimationInfo();
+            auto animationTime = std::fmod(renderableComponent.mAnimationTimeAccum, animationInfo.mDuration);
+            
+            CalculateTransformsInHierarchy(animationTime, currentMesh.GetRootSkeletonNode(), transform, currentMesh);
+        }
         
-        CalculateTransformsInHierarchy(animationTime, currentMesh.GetRootSkeletonNode(), transform, currentMesh);
         
         const auto nBones = currentMesh.GetBoneInfo().size();
         renderableComponent.mShaderUniforms.mShaderMatrixArrayUniforms[StringId("bones")].resize(nBones);
@@ -63,6 +95,78 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
         {
             renderableComponent.mShaderUniforms.mShaderMatrixArrayUniforms[StringId("bones")][i] = currentMesh.GetBoneInfo()[i].mBoneFinalTransformMatrix;
         }
+    }
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void ModelAnimationSystem::CalculateTransitionalTransformsInHierarchy(const float previousAnimationTime, const float transitionAnimationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& previousMeshResource, resources::MeshResource& currentMeshResource) const
+{
+    auto nodeTransform = node->mTransform;
+    const auto& previousMeshAnimationInfo = previousMeshResource.GetAnimationInfo();
+    
+    if (previousMeshAnimationInfo.mBoneNameToAnimInfo.count(node->mNodeName) > 0)
+    {
+        auto previousNodeAnim = previousMeshAnimationInfo.mBoneNameToAnimInfo.at(node->mNodeName);
+        auto transitionNodeAnim = currentMeshResource.GetAnimationInfo().mBoneNameToAnimInfo.at(node->mNodeName);
+        
+        // Find closest key frame
+        auto keyFrameIndex = -1;
+        for (unsigned int i = 0 ; i < previousNodeAnim.mPositionKeys.size() - 1; i++)
+        {
+            if (previousAnimationTime < static_cast<float>(previousNodeAnim.mPositionKeys[i + 1].mTime))
+            {
+                keyFrameIndex = i;
+                break;
+            }
+        }
+        assert(keyFrameIndex > -1);
+        
+        const auto factor = transitionAnimationTime/ANIMATION_TRANSITION_TIME;
+        assert(factor >= 0.0f && factor <= 1.0f);
+    
+        glm::vec3 position;
+        glm::quat rotation;
+        glm::vec3 scaling;
+       
+        {
+            const auto& start = previousNodeAnim.mPositionKeys[keyFrameIndex].mPosition;
+            const auto& end   = transitionNodeAnim.mPositionKeys[0].mPosition;
+            position = start + factor * (end - start);
+        }
+        
+        {
+            const auto& start = previousNodeAnim.mRotationKeys[keyFrameIndex].mRotation;
+            const auto& end   = transitionNodeAnim.mRotationKeys[0].mRotation;
+            rotation = glm::slerp(start, end, factor);
+        }
+        
+        {
+            const auto& start = previousNodeAnim.mScalingKeys[keyFrameIndex].mScale;
+            const auto& end   = transitionNodeAnim.mScalingKeys[0].mScale;
+            scaling = start + factor * (end - start);
+        }
+        
+        glm::mat4 rotMatrix = glm::mat4_cast(rotation);
+        nodeTransform = glm::mat4(1.0f);
+        nodeTransform = glm::translate(nodeTransform, position);
+        nodeTransform *= rotMatrix;
+        nodeTransform = glm::scale(nodeTransform, scaling);
+    }
+    
+    auto globalTransform = parentTransform * nodeTransform;
+    auto& boneInfo = currentMeshResource.GetBoneInfo();
+    const auto& boneNameToIdMap = previousMeshResource.GetBoneNameToIdMap();
+    
+    if (boneNameToIdMap.find(node->mNodeName) != boneNameToIdMap.end())
+    {
+        auto boneIndex = boneNameToIdMap.at(node->mNodeName);
+        boneInfo[boneIndex].mBoneFinalTransformMatrix = previousMeshResource.GetSceneTransform() * globalTransform * boneInfo[boneIndex].mBoneOffsetMatrix;
+    }
+    
+    for (int i = 0; i < node->mNumChildren; ++i)
+    {
+        CalculateTransitionalTransformsInHierarchy(previousAnimationTime, transitionAnimationTime, node->mChildren[i], globalTransform, previousMeshResource, currentMeshResource);
     }
 }
 
@@ -94,7 +198,8 @@ void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationT
         glm::vec3 scaling;
         
         // Calculate interpolated position
-        if (nodeAnim.mPositionKeys.size() == 1) {
+        if (nodeAnim.mPositionKeys.size() == 1)
+        {
             rotation = nodeAnim.mPositionKeys[0].mPosition;
         }
         else
@@ -110,7 +215,8 @@ void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationT
         }
         
         // Calculate interpolated rotation
-        if (nodeAnim.mRotationKeys.size() == 1) {
+        if (nodeAnim.mRotationKeys.size() == 1)
+        {
             rotation = nodeAnim.mRotationKeys[0].mRotation;
         }
         else
@@ -126,7 +232,8 @@ void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationT
         }
         
         // Calculate interpolated scaling
-        if (nodeAnim.mScalingKeys.size() == 1) {
+        if (nodeAnim.mScalingKeys.size() == 1)
+        {
             scaling = nodeAnim.mScalingKeys[0].mScale;
         }
         else

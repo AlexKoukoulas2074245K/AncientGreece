@@ -64,12 +64,15 @@ public:
     tsl::robin_map<StringId, int, StringIdHasher> mAnimNameToMeshIndex;
     ShaderUniforms mShaderUniforms;
     MaterialProperties mMaterial;
-    ResourceId mTextureResourceId = 0;            
-    StringId mShaderNameId        = StringId();
-    int mCurrentMeshResourceIndex = 0;
-    bool mIsVisible               = true;
-    bool mIsGuiComponent          = false;
-    bool mIsAffectedByLight       = false;
+    ResourceId mTextureResourceId       = 0;
+    StringId mShaderNameId              = StringId();
+    int mCurrentMeshResourceIndex       = 0;
+    int mPreviousMeshResourceIndex      = -1;
+    float mAnimationTimeAccum           = 0.0f;
+    float mTransitionAnimationTimeAccum = 0.0f;
+    bool mIsVisible                     = true;
+    bool mIsGuiComponent                = false;
+    bool mIsAffectedByLight             = false;
 };
 
 ///-----------------------------------------------------------------------------------------------

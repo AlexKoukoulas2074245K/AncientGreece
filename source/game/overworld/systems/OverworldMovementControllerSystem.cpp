@@ -7,6 +7,7 @@
 
 #include "OverworldMovementControllerSystem.h"
 #include "../components/OverworldWaypointTargetComponent.h"
+#include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
@@ -42,7 +43,6 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
     {
         const auto& waypointComponent = world.GetComponent<OverworldWaypointTargetComponent>(entityId);
         auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
-        auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
         
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
@@ -50,7 +50,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD)
         {
             // Start Idle animation
-            renderableComponent.mCurrentMeshResourceIndex = renderableComponent.mAnimNameToMeshIndex.at(StringId("idle"));
+            genesis::animation::ChangeAnimation(entityId, StringId("idle"));
             
             world.RemoveComponent<OverworldWaypointTargetComponent>(entityId);
         }
@@ -60,7 +60,8 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
             UpdatePosition(dt, speed, waypointComponent.mTargetPosition, transformComponent.mPosition);
             UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
             
-            renderableComponent.mCurrentMeshResourceIndex = renderableComponent.mAnimNameToMeshIndex.at(StringId("walking"));
+            // Start walking animation
+            genesis::animation::ChangeAnimation(entityId, StringId("walking"));
         }
     }
 }
