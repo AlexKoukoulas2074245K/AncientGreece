@@ -39,7 +39,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
 {
     auto& world = genesis::ecs::World::GetInstance();
     
-    for (const auto& entityId: entitiesToProcess)
+    for (const auto entityId: entitiesToProcess)
     {
         const auto& waypointComponent = world.GetComponent<OverworldWaypointTargetComponent>(entityId);
         auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
@@ -51,7 +51,6 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         {
             // Start Idle animation
             genesis::animation::ChangeAnimation(entityId, StringId("idle"));
-            
             world.RemoveComponent<OverworldWaypointTargetComponent>(entityId);
         }
         // Else move and rotate towards target
@@ -82,7 +81,7 @@ void OverworldMovementControllerSystem::UpdateRotation(const float dt, const flo
     while (entityRotation.z - targetRotation > genesis::math::PI) targetRotation += genesis::math::PI * 2.0f;
     while (targetRotation - entityRotation.z > genesis::math::PI) entityRotation.z += genesis::math::PI * 2.0f;
     
-    if (genesis::math::Abs(targetRotation - entityRotation.z) > SUFFICIENTLY_CLOSE_THRESHOLD)
+    if (genesis::math::Abs(targetRotation - entityRotation.z) > ROTATION_SPEED * dt)
     {
         entityRotation.z = targetRotation > entityRotation.z ? entityRotation.z + ROTATION_SPEED * dt : entityRotation.z - ROTATION_SPEED * dt;
         

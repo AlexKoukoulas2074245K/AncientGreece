@@ -88,7 +88,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     std::vector<glm::vec3> normals; normals.reserve(vertexCount);
     std::vector<VertexBoneData> bones; bones.reserve(vertexCount);
     std::vector<unsigned short> indices;
-    std::vector<BoneInfo> boneInfo;
+    std::vector<glm::mat4> boneOffsetMatrices;
     tsl::robin_map<StringId, unsigned int, StringIdHasher> boneNameToIdMap;
     AnimationInfo animationInfo;
     
@@ -113,9 +113,8 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
 
         if (boneNameToIdMap.find(boneName) == boneNameToIdMap.end())
         {
-            boneIndex = boneInfo.size();
-            BoneInfo bi;
-            boneInfo.push_back(bi);
+            boneIndex = boneOffsetMatrices.size();
+            boneOffsetMatrices.push_back(glm::mat4(1.0f));
         }
         else
         {
@@ -123,7 +122,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
         }
 
         boneNameToIdMap[boneName] = boneIndex;
-        boneInfo[boneIndex].mBoneOffsetMatrix = math::AssimpMat4ToGlmMat4(mesh->mBones[i]->mOffsetMatrix);
+        boneOffsetMatrices[i] = math::AssimpMat4ToGlmMat4(mesh->mBones[i]->mOffsetMatrix);
 
         for (unsigned int j = 0 ; j < mesh->mBones[i]->mNumWeights ; j++)
         {
@@ -261,7 +260,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     // Calculate dimensions
     glm::vec3 meshDimensions(math::Abs(minX - maxX), math::Abs(minY - maxY), math::Abs(minZ - maxZ));
     
-    std::unique_ptr<MeshResource> meshResource(new MeshResource(boneInfo, animationInfo, boneNameToIdMap, sceneTransform, scene->mRootNode, vertexArrayObject, indices.size(), meshDimensions));
+    std::unique_ptr<MeshResource> meshResource(new MeshResource(animationInfo, boneOffsetMatrices, boneNameToIdMap, sceneTransform, scene->mRootNode, vertexArrayObject, indices.size(), meshDimensions));
     
     importer.FreeScene();
     

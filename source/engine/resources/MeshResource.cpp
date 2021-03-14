@@ -75,21 +75,21 @@ const glm::mat4& MeshResource::GetSceneTransform() const
 
 ///------------------------------------------------------------------------------------------------
 
-std::vector<BoneInfo>& MeshResource::GetBoneInfo()
+const std::vector<glm::mat4>& MeshResource::GetBoneOffsetMatrices() const
 {
-    return mBoneInfo;
+    return mBoneOffsetMatrices;
 }
 
 ///------------------------------------------------------------------------------------------------
 
-MeshResource::MeshResource(const std::vector<BoneInfo>& boneInfo, const AnimationInfo& animationInfo, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions)
+MeshResource::MeshResource(const AnimationInfo& animationInfo, const std::vector<glm::mat4>& boneOffsetMatrices, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions)
     : mAnimationInfo(animationInfo)
+    , mBoneOffsetMatrices(boneOffsetMatrices)
     , mBoneNameToIdMap(boneMapping)
     , mSceneTransform(sceneTransform)
     , mVertexArrayObject(vertexArrayObject)
     , mElementCount(elementCount)
     , mDimensions(meshDimensions)
-    , mBoneInfo(boneInfo)
 {
     mRootSkeletonNode = new SkeletonNode;
     CreateSkeleton(rootAssimpNode, mRootSkeletonNode);

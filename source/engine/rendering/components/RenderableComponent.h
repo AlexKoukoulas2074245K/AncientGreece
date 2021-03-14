@@ -60,6 +60,7 @@ struct MaterialProperties final
 class RenderableComponent final: public ecs::IComponent
 {
 public:
+    std::vector<glm::mat4> mBoneTransformMatrices;
     std::vector<ResourceId> mMeshResourceIds;
     tsl::robin_map<StringId, int, StringIdHasher> mAnimNameToMeshIndex;
     ShaderUniforms mShaderUniforms;

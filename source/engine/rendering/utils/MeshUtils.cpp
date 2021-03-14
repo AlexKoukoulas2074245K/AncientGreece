@@ -12,6 +12,7 @@
 #include "../../common/utils/FileUtils.h"
 #include "../../common/utils/MathUtils.h"
 #include "../../common/utils/StringUtils.h"
+#include "../../resources/MeshResource.h"
 
 #include <vector>
 
@@ -32,6 +33,7 @@ namespace
     const StringId DEFAULT_SKELETAL_MODEL_SHADER = StringId("default_skeletal_3d");
     const StringId DEFAULT_MODEL_SHADER          = StringId("default_3d");
     const StringId ATLAS_MODEL_NAME              = StringId("gui_atlas_quad");
+    const StringId BONES_UNIFORM_NAME            = StringId("bones");
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -115,8 +117,13 @@ ecs::EntityId LoadAnimatedModelByName
     auto animFiles = GetAllFilenamesInDirectory(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/");
     for (const auto& fileName: animFiles)
     {
-        renderableComponent->mMeshResourceIds.push_back(resources::ResourceLoadingService::GetInstance() .LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/" +   fileName));
+        auto meshResourceId = resources::ResourceLoadingService::GetInstance() .LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/" +   fileName);
+        renderableComponent->mMeshResourceIds.push_back(meshResourceId);
         renderableComponent->mAnimNameToMeshIndex[StringId(GetFileNameWithoutExtension(fileName))] = renderableComponent->mAnimNameToMeshIndex.size();
+        
+        const auto& meshResource = resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(meshResourceId);
+        renderableComponent->mBoneTransformMatrices.resize(meshResource.GetBoneOffsetMatrices().size());
+        renderableComponent->mShaderUniforms.mShaderMatrixArrayUniforms[BONES_UNIFORM_NAME].resize(meshResource.GetBoneOffsetMatrices().size());
     }
     
     renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource

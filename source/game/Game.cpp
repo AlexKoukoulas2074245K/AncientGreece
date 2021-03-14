@@ -66,11 +66,16 @@ void Game::VOnGameInit()
     
     genesis::rendering::LoadAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     
+    for (int i = 0; i < 100; ++i)
+    {
+        genesis::rendering::LoadAnimatedModelByName("spartan", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
+    }
 }
 
 ///------------------------------------------------------------------------------------------------
 
 static float dtAccum = 0.0f;
+static float dtAccum2 = 0.0f;
 
 void Game::VOnUpdate(const float dt)
 {
@@ -79,6 +84,23 @@ void Game::VOnUpdate(const float dt)
     auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
     
     dtAccum += dt;
+    dtAccum2 += dt;
+    
+    if (dtAccum2 > 1.0f)
+    {
+        dtAccum2 = 0.0f;
+        for (int i = 0; i < 100; ++i)
+        {
+            auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
+            if (!world.HasComponent<overworld::OverworldWaypointTargetComponent>(entity))
+            {
+                const auto& position = world.GetComponent<genesis::TransformComponent>(entity);
+                auto component = std::make_unique<overworld::OverworldWaypointTargetComponent>();
+                component->mTargetPosition = glm::vec3(genesis::math::RandomFloat(position.mPosition.x - 0.2f, position.mPosition.x + 0.2f),genesis::math::RandomFloat(position.mPosition.y -0.2f, position.mPosition.y + 0.2f),0.0f);
+                world.AddComponent<overworld::OverworldWaypointTargetComponent>(entity, std::move(component));
+            }
+        }
+    }
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
     auto moveSpeed = 0.5f;

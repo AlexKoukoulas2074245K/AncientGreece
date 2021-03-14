@@ -34,14 +34,6 @@ using GLuint = unsigned int;
 
 ///------------------------------------------------------------------------------------------------
 
-struct BoneInfo
-{
-    glm::mat4 mBoneOffsetMatrix;
-    glm::mat4 mBoneFinalTransformMatrix;
-};
-
-///------------------------------------------------------------------------------------------------
-
 struct SkeletonNode
 {
     SkeletonNode** mChildren;
@@ -110,10 +102,13 @@ public:
     const AnimationInfo& GetAnimationInfo() const;
     const tsl::robin_map<StringId, unsigned int, StringIdHasher>& GetBoneNameToIdMap() const;
     const glm::mat4& GetSceneTransform() const;
-    std::vector<BoneInfo>& GetBoneInfo();
+    const std::vector<glm::mat4>& GetBoneOffsetMatrices() const;
     
 private:
-    MeshResource(const std::vector<BoneInfo>& boneInfo, const AnimationInfo& animationInfo, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
+    // Animated model (DAE) constructor
+    MeshResource(const AnimationInfo& animationInfo, const std::vector<glm::mat4>& boneOffsetMatrices, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
+    
+    // Static model (OBJ) constructor
     MeshResource(const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
     
 private:
@@ -122,12 +117,12 @@ private:
     
 private:
     const AnimationInfo mAnimationInfo;
+    const std::vector<glm::mat4> mBoneOffsetMatrices;
     const tsl::robin_map<StringId, unsigned int, StringIdHasher> mBoneNameToIdMap;
     const glm::mat4 mSceneTransform;
     const GLuint mVertexArrayObject;
     const GLuint mElementCount;
     const glm::vec3 mDimensions;
-    std::vector<BoneInfo> mBoneInfo;
     SkeletonNode* mRootSkeletonNode;
     
 };

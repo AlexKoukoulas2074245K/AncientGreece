@@ -27,6 +27,7 @@ namespace rendering
 namespace
 {
     static const float ANIMATION_TRANSITION_TIME = 0.2f;
+    static const StringId BONES_UNIFORM_NAME     = StringId("bones");
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -74,7 +75,7 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
                 
                 auto transitionAnimationTime = std::fmod(renderableComponent.mTransitionAnimationTimeAccum, ANIMATION_TRANSITION_TIME);
                 auto previousAnimationTime = std::fmod(renderableComponent.mAnimationTimeAccum, previousMesh.GetAnimationInfo().mDuration);
-                CalculateTransitionalTransformsInHierarchy(previousAnimationTime, transitionAnimationTime, currentMesh.GetRootSkeletonNode(), transform, previousMesh, currentMesh);
+                CalculateTransitionalTransformsInHierarchy(previousAnimationTime, transitionAnimationTime, currentMesh.GetRootSkeletonNode(), transform, previousMesh, currentMesh, renderableComponent);
             }
         }
         else
@@ -85,22 +86,20 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
             const auto& animationInfo = currentMesh.GetAnimationInfo();
             auto animationTime = std::fmod(renderableComponent.mAnimationTimeAccum, animationInfo.mDuration);
             
-            CalculateTransformsInHierarchy(animationTime, currentMesh.GetRootSkeletonNode(), transform, currentMesh);
+            CalculateTransformsInHierarchy(animationTime, currentMesh.GetRootSkeletonNode(), transform, currentMesh, renderableComponent);
         }
         
-        
-        const auto nBones = currentMesh.GetBoneInfo().size();
-        renderableComponent.mShaderUniforms.mShaderMatrixArrayUniforms[StringId("bones")].resize(nBones);
+        const auto nBones = currentMesh.GetBoneOffsetMatrices().size();
         for (auto i = 0U; i < nBones; ++i)
         {
-            renderableComponent.mShaderUniforms.mShaderMatrixArrayUniforms[StringId("bones")][i] = currentMesh.GetBoneInfo()[i].mBoneFinalTransformMatrix;
+            renderableComponent.mShaderUniforms.mShaderMatrixArrayUniforms[BONES_UNIFORM_NAME][i] = renderableComponent.mBoneTransformMatrices[i];
         }
     }
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-void ModelAnimationSystem::CalculateTransitionalTransformsInHierarchy(const float previousAnimationTime, const float transitionAnimationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& previousMeshResource, resources::MeshResource& currentMeshResource) const
+void ModelAnimationSystem::CalculateTransitionalTransformsInHierarchy(const float previousAnimationTime, const float transitionAnimationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& previousMeshResource, const resources::MeshResource& currentMeshResource, RenderableComponent& renderableComponent) const
 {
     auto nodeTransform = node->mTransform;
     const auto& previousMeshAnimationInfo = previousMeshResource.GetAnimationInfo();
@@ -155,24 +154,24 @@ void ModelAnimationSystem::CalculateTransitionalTransformsInHierarchy(const floa
     }
     
     auto globalTransform = parentTransform * nodeTransform;
-    auto& boneInfo = currentMeshResource.GetBoneInfo();
     const auto& boneNameToIdMap = previousMeshResource.GetBoneNameToIdMap();
     
     if (boneNameToIdMap.find(node->mNodeName) != boneNameToIdMap.end())
     {
         auto boneIndex = boneNameToIdMap.at(node->mNodeName);
-        boneInfo[boneIndex].mBoneFinalTransformMatrix = previousMeshResource.GetSceneTransform() * globalTransform * boneInfo[boneIndex].mBoneOffsetMatrix;
+        
+        renderableComponent.mBoneTransformMatrices[boneIndex] = previousMeshResource.GetSceneTransform() * globalTransform * currentMeshResource.GetBoneOffsetMatrices()[boneIndex];
     }
     
     for (int i = 0; i < node->mNumChildren; ++i)
     {
-        CalculateTransitionalTransformsInHierarchy(previousAnimationTime, transitionAnimationTime, node->mChildren[i], globalTransform, previousMeshResource, currentMeshResource);
+        CalculateTransitionalTransformsInHierarchy(previousAnimationTime, transitionAnimationTime, node->mChildren[i], globalTransform, previousMeshResource, currentMeshResource, renderableComponent);
     }
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, resources::MeshResource& meshResource) const
+void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& meshResource, RenderableComponent& renderableComponent) const
 {
     auto nodeTransform = node->mTransform;
     const auto& animationInfo = meshResource.GetAnimationInfo();
@@ -256,18 +255,17 @@ void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationT
     }
     
     auto globalTransform = parentTransform * nodeTransform;
-    auto& boneInfo = meshResource.GetBoneInfo();
     const auto& boneNameToIdMap = meshResource.GetBoneNameToIdMap();
     
     if (boneNameToIdMap.find(node->mNodeName) != boneNameToIdMap.end())
     {
         auto boneIndex = boneNameToIdMap.at(node->mNodeName);
-        boneInfo[boneIndex].mBoneFinalTransformMatrix = meshResource.GetSceneTransform() * globalTransform * boneInfo[boneIndex].mBoneOffsetMatrix;
+        renderableComponent.mBoneTransformMatrices[boneIndex] = meshResource.GetSceneTransform() * globalTransform * meshResource.GetBoneOffsetMatrices()[boneIndex];
     }
     
     for (int i = 0; i < node->mNumChildren; ++i)
     {
-        CalculateTransformsInHierarchy(animationTime, node->mChildren[i], globalTransform, meshResource);
+        CalculateTransformsInHierarchy(animationTime, node->mChildren[i], globalTransform, meshResource, renderableComponent);
     }
 }
 
