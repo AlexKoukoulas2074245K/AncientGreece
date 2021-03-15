@@ -72,6 +72,10 @@ void Game::VOnGameInit()
     {
         genesis::rendering::LoadAnimatedModelByName("spartan", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
     }
+    
+//    auto entity = genesis::rendering::LoadAndCreateGuiSprite("gui_base", "parchment", StringId("default_gui"));
+//    auto& transformComponent = genesis::ecs::World::GetInstance().GetComponent<genesis::TransformComponent>(entity);
+//    transformComponent.mScale /= 2.0f;
 }
 
 ///------------------------------------------------------------------------------------------------

@@ -7,6 +7,7 @@
 
 #include "MeshUtils.h"
 #include "../components/RenderableComponent.h"
+#include "../utils/Colors.h"
 #include "../../common/components/NameComponent.h"
 #include "../../common/components/TransformComponent.h"
 #include "../../common/utils/FileUtils.h"
@@ -30,10 +31,11 @@ namespace rendering
 
 namespace
 {
-    const StringId DEFAULT_SKELETAL_MODEL_SHADER = StringId("default_skeletal_3d");
-    const StringId DEFAULT_MODEL_SHADER          = StringId("default_3d");
-    const StringId ATLAS_MODEL_NAME              = StringId("gui_atlas_quad");
-    const StringId BONES_UNIFORM_NAME            = StringId("bones");
+    static const StringId DEFAULT_SKELETAL_MODEL_SHADER        = StringId("default_skeletal_3d");
+    static const StringId DEFAULT_MODEL_SHADER                 = StringId("default_3d");
+    static const StringId ATLAS_MODEL_NAME                     = StringId("gui_atlas_quad");
+    static const StringId BONES_UNIFORM_NAME                   = StringId("bones");
+    static const StringId GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME = StringId("custom_color");
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -165,7 +167,7 @@ ecs::EntityId LoadAndCreateGuiSprite
     renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
         LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));
-
+    renderableComponent->mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = genesis::rendering::colors::BLACK;
     renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource
     (
         resources::ResourceLoadingService::RES_TEXTURES_ROOT + textureName + ".png"
