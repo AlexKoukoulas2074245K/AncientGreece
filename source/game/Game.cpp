@@ -23,6 +23,7 @@
 #include "../engine/rendering/components/LightStoreSingletonComponent.h"
 #include "../engine/rendering/components/RenderableComponent.h"
 #include "../engine/rendering/components/WindowSingletonComponent.h"
+#include "../engine/rendering/utils/FontUtils.h"
 #include "../engine/rendering/utils/LightUtils.h"
 #include "../engine/rendering/utils/MeshUtils.h"
 #include "../engine/rendering/systems/ModelAnimationSystem.h"
@@ -56,6 +57,7 @@ void Game::VOnSystemsInit()
 
 void Game::VOnGameInit()
 {
+    genesis::rendering::LoadFont(StringId("ancient_greek_font"), 16, 16);
     genesis::rendering::LoadStaticModelByName("map", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map"));
     genesis::rendering::LoadStaticModelByName("map_edge", glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_1"));
     genesis::rendering::LoadStaticModelByName("map_edge", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_2"));
@@ -66,7 +68,7 @@ void Game::VOnGameInit()
     
     genesis::rendering::LoadAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     
-    for (int i = 0; i < 100; ++i)
+    for (int i = 0; i < 300; ++i)
     {
         genesis::rendering::LoadAnimatedModelByName("spartan", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
     }
@@ -89,7 +91,7 @@ void Game::VOnUpdate(const float dt)
     if (dtAccum2 > 1.0f)
     {
         dtAccum2 = 0.0f;
-        for (int i = 0; i < 100; ++i)
+        for (int i = 0; i < 300; ++i)
         {
             auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
             if (!world.HasComponent<overworld::OverworldWaypointTargetComponent>(entity))
