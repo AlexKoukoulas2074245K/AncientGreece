@@ -272,7 +272,7 @@ bool AppShouldQuit()
                 {
                     return true;
                 }
-            }
+            } break;
             case SDL_MOUSEWHEEL:
             {
                 inputStateComponent.mMouseWheelDelta = event.wheel.y;

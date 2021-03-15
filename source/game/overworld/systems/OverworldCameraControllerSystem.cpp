@@ -24,11 +24,10 @@ namespace overworld
 
 namespace
 {
-    const float ZERO_THRESHOLD                        = 0.01f;
-    const float CAMERA_MOVEMENT_WINDOW_EDGE_THRESHOLD = 0.05f;
+    //const float ZERO_THRESHOLD                        = 0.01f;
     const float CAMERA_MOVE_SPEED                     = 0.1f;
     const float CAMERA_ZOOM_SPEED                     = 1.0f;
-    const float CAMERA_ZOOM_SPEED_DECELERATION        = 0.98f;
+    const float CAMERA_ZOOM_SPEED_DECELERATION        = 9.8f;
     const float CAMERA_MAX_Z                          = -0.2f;
     const float CAMERA_MIN_Z                          = -0.6f;
 }
@@ -46,25 +45,23 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
-    
-    const auto& mouseCoords = genesis::input::GetMousePosition();
-    const auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
     const auto oldCameraPosition = cameraComponent.mPosition;
     
+    cameraComponent.mVelocity.x = cameraComponent.mVelocity.y = 0.0f;
+    
     // Panning Calculations
-    if(mouseCoords.x < windowComponent.mRenderableWidth * CAMERA_MOVEMENT_WINDOW_EDGE_THRESHOLD)
+    if(genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mVelocity.x = -CAMERA_MOVE_SPEED;
     }
-    if(mouseCoords.x > windowComponent.mRenderableWidth - windowComponent.mRenderableWidth * CAMERA_MOVEMENT_WINDOW_EDGE_THRESHOLD)
-    {
+    if(genesis::input::GetKeyState(genesis::input::Key::RIGHT_ARROW_KEY) == genesis::input::InputState::PRESSED){
         cameraComponent.mVelocity.x = CAMERA_MOVE_SPEED;
     }
-    if (mouseCoords.y < windowComponent.mRenderableHeight * CAMERA_MOVEMENT_WINDOW_EDGE_THRESHOLD)
+    if(genesis::input::GetKeyState(genesis::input::Key::UP_ARROW_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mVelocity.y = CAMERA_MOVE_SPEED;
     }
-    if (mouseCoords.y > windowComponent.mRenderableHeight - windowComponent.mRenderableWidth * CAMERA_MOVEMENT_WINDOW_EDGE_THRESHOLD)
+    if(genesis::input::GetKeyState(genesis::input::Key::DOWN_ARROW_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mVelocity.y = -CAMERA_MOVE_SPEED;
     }
@@ -80,9 +77,20 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
     }
     
     cameraComponent.mPosition += cameraComponent.mVelocity * dt;
-    cameraComponent.mVelocity = cameraComponent.mVelocity * CAMERA_ZOOM_SPEED_DECELERATION;
-    if (glm::length(cameraComponent.mVelocity) < ZERO_THRESHOLD) {
-        cameraComponent.mVelocity = glm::vec3();
+    
+    // Decelerate zoom in velocity
+    if (cameraComponent.mVelocity.z > 0)
+    {
+        cameraComponent.mVelocity.z -= CAMERA_ZOOM_SPEED_DECELERATION * dt;
+    }
+    if (cameraComponent.mVelocity.z < 0)
+    {
+        cameraComponent.mVelocity.z += CAMERA_ZOOM_SPEED_DECELERATION * dt;
+    }
+    
+    if (genesis::math::Abs(cameraComponent.mVelocity.z) < CAMERA_ZOOM_SPEED_DECELERATION * dt)
+    {
+        cameraComponent.mVelocity.z = 0.0f;
     }
     
     // Check for exceeding limits

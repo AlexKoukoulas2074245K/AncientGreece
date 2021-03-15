@@ -104,7 +104,6 @@ void Game::VOnUpdate(const float dt)
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
     auto moveSpeed = 0.5f;
-    auto lookSpeed = 1.0f;
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
     
     if (genesis::input::GetKeyState(genesis::input::Key::E_KEY)== genesis::input::InputState::PRESSED)
@@ -130,38 +129,6 @@ void Game::VOnUpdate(const float dt)
     if (genesis::input::GetKeyState(genesis::input::Key::S_KEY)== genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition -= dt * moveSpeed * cameraComponent.mFrontVector;
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::UP_ARROW_KEY)== genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mPitch += lookSpeed * dt;
-        if (cameraComponent.mPitch >= 2 * genesis::math::PI)
-        {
-            cameraComponent.mPitch = cameraComponent.mPitch - 2 * genesis::math::PI;
-        }
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::DOWN_ARROW_KEY)== genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mPitch -= lookSpeed * dt;
-        if (cameraComponent.mPitch <= 0.0f)
-        {
-            cameraComponent.mPitch = 2 * genesis::math::PI + cameraComponent.mPitch;
-        }
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY)== genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mYaw += lookSpeed * dt;
-        if (cameraComponent.mYaw >= 2 * genesis::math::PI)
-        {
-            cameraComponent.mYaw = cameraComponent.mYaw - 2 * genesis::math::PI;
-        }
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::RIGHT_ARROW_KEY) == genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mYaw -= lookSpeed * dt;
-        if (cameraComponent.mYaw <= 0.0f)
-        {
-            cameraComponent.mYaw = 2 * genesis::math::PI + cameraComponent.mYaw;
-        }
     }
 }
 
