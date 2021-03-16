@@ -69,7 +69,7 @@ void ConsoleManagementSystem::CreateConsoleBackgroundEntityIfNotAlive() const
 {
     if (ecs::World::GetInstance().FindEntityWithName(CONSOLE_BACKGROUND_ENTITY_NAME) == ecs::NULL_ENTITY_ID)
     {
-        rendering::LoadAndCreateGuiSprite("gui_base", "debug_square", StringId("console"), glm::vec3(0.0f, 0.0f, 0.0f), CONSOLE_BACKGROUND_ENTITY_NAME);
+        rendering::LoadAndCreateGuiSprite("gui_base", "debug_square", StringId("console"), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.0f, 4.0f, 2.0f), CONSOLE_BACKGROUND_ENTITY_NAME);
     }
 }
 

@@ -12,6 +12,7 @@
 #include "../resources/DAEMeshLoader.h"
 #include "../resources/MusicLoader.h"
 #include "../resources/SfxLoader.h"
+#include "../resources/XMLLoader.h"
 #include "../resources/ShaderLoader.h"
 #include "../resources/TextureLoader.h"
 #include "../common/utils/FileUtils.h"
@@ -46,6 +47,7 @@ const std::string ResourceLoadingService::RES_SCRIPTS_ROOT       = RES_ROOT + "s
 const std::string ResourceLoadingService::RES_MODELS_ROOT        = RES_ROOT + "models/";
 const std::string ResourceLoadingService::RES_MUSIC_ROOT         = RES_ROOT + "music/";
 const std::string ResourceLoadingService::RES_SFX_ROOT           = RES_ROOT + "sfx/";
+const std::string ResourceLoadingService::RES_XML_ROOT           = RES_ROOT + "xml/";
 const std::string ResourceLoadingService::RES_SHADERS_ROOT       = RES_ROOT + "shaders/";
 const std::string ResourceLoadingService::RES_TEXTURES_ROOT      = RES_ROOT + "textures/";
 const std::string ResourceLoadingService::RES_ATLASES_ROOT       = RES_TEXTURES_ROOT + "atlases/";
@@ -78,6 +80,7 @@ void ResourceLoadingService::Initialize()
     mResourceLoaders.push_back(std::unique_ptr<DAEMeshLoader>(new DAEMeshLoader));
     mResourceLoaders.push_back(std::unique_ptr<MusicLoader>(new MusicLoader));
     mResourceLoaders.push_back(std::unique_ptr<SfxLoader>(new SfxLoader));
+    mResourceLoaders.push_back(std::unique_ptr<XMLLoader>(new XMLLoader));
 
     // Map resource extensions to loaders
     mResourceExtensionsToLoadersMap[StringId("png")]  = mResourceLoaders[0].get();
@@ -90,6 +93,7 @@ void ResourceLoadingService::Initialize()
     mResourceExtensionsToLoadersMap[StringId("dae")]  = mResourceLoaders[4].get();
     mResourceExtensionsToLoadersMap[StringId("ogg")]  = mResourceLoaders[5].get();
     mResourceExtensionsToLoadersMap[StringId("wav")]  = mResourceLoaders[6].get();
+    mResourceExtensionsToLoadersMap[StringId("xml")]  = mResourceLoaders[7].get();
     
     for (auto& resourceLoader: mResourceLoaders)
     {

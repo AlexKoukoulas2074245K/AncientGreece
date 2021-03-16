@@ -50,18 +50,18 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
     cameraComponent.mVelocity.x = cameraComponent.mVelocity.y = 0.0f;
     
     // Panning Calculations
-    if(genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY) == genesis::input::InputState::PRESSED)
+    if(genesis::input::GetKeyState(genesis::input::Key::A_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mVelocity.x = -CAMERA_MOVE_SPEED;
     }
-    if(genesis::input::GetKeyState(genesis::input::Key::RIGHT_ARROW_KEY) == genesis::input::InputState::PRESSED){
+    if(genesis::input::GetKeyState(genesis::input::Key::D_KEY) == genesis::input::InputState::PRESSED){
         cameraComponent.mVelocity.x = CAMERA_MOVE_SPEED;
     }
-    if(genesis::input::GetKeyState(genesis::input::Key::UP_ARROW_KEY) == genesis::input::InputState::PRESSED)
+    if(genesis::input::GetKeyState(genesis::input::Key::W_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mVelocity.y = CAMERA_MOVE_SPEED;
     }
-    if(genesis::input::GetKeyState(genesis::input::Key::DOWN_ARROW_KEY) == genesis::input::InputState::PRESSED)
+    if(genesis::input::GetKeyState(genesis::input::Key::S_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mVelocity.y = -CAMERA_MOVE_SPEED;
     }

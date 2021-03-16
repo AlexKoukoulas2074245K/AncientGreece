@@ -10,6 +10,8 @@
 #include "overworld/systems/OverworldCameraControllerSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldTargetSelectionSystem.h"
+#include "view/systems/ViewManagementSystem.h"
+#include "view/utils/ViewUtils.h"
 #include "../engine/ECS.h"
 #include "../engine/common/components/TransformComponent.h"
 #include "../engine/common/utils/Logging.h"
@@ -45,6 +47,8 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<genesis::debug::DebugViewManagementSystem>());
 #endif
     
+    world.AddSystem(std::make_unique<view::ViewManagementSystem>());
+    
     world.AddSystem(std::make_unique<overworld::OverworldTargetSelectionSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
@@ -58,24 +62,28 @@ void Game::VOnSystemsInit()
 void Game::VOnGameInit()
 {
     genesis::rendering::LoadFont(StringId("ancient_greek_font"), 16, 16);
-    genesis::rendering::LoadStaticModelByName("map", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map"));
-    genesis::rendering::LoadStaticModelByName("map_edge", glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_1"));
-    genesis::rendering::LoadStaticModelByName("map_edge", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_2"));
-    genesis::rendering::LoadStaticModelByName("map_edge", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_3"));
-    genesis::rendering::LoadStaticModelByName("map_edge", glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_4"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_1"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_2"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_3"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_4"));
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    genesis::rendering::LoadAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
+    genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     
-    for (int i = 0; i < 300; ++i)
+    for (int i = 0; i < 3; ++i)
     {
-        genesis::rendering::LoadAnimatedModelByName("spartan", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
+        genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
     }
+    
+    view::LoadView("test", StringId("viewname"));
     
 //    auto entity = genesis::rendering::LoadAndCreateGuiSprite("gui_base", "parchment", StringId("default_gui"));
 //    auto& transformComponent = genesis::ecs::World::GetInstance().GetComponent<genesis::TransformComponent>(entity);
 //    transformComponent.mScale /= 2.0f;
+//    
+//    genesis::rendering::RenderText("This is a message to the owner 123", StringId("ancient_greek_font"), 0.08f, glm::vec3(-0.2f, 0.0f, -0.1f));
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -95,7 +103,7 @@ void Game::VOnUpdate(const float dt)
     if (dtAccum2 > 1.0f)
     {
         dtAccum2 = 0.0f;
-        for (int i = 0; i < 300; ++i)
+        for (int i = 0; i < 3; ++i)
         {
             auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
             if (!world.HasComponent<overworld::OverworldWaypointTargetComponent>(entity))
@@ -109,32 +117,10 @@ void Game::VOnUpdate(const float dt)
     }
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
-    auto moveSpeed = 0.5f;
-    auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
     
-    if (genesis::input::GetKeyState(genesis::input::Key::E_KEY)== genesis::input::InputState::PRESSED)
+    if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)
     {
-        cameraComponent.mPosition.y += moveSpeed * dt;
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::Q_KEY)== genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mPosition.y -= moveSpeed * dt;
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::A_KEY)== genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mPosition += dt * moveSpeed * glm::normalize(glm::cross(cameraComponent.mFrontVector, cameraComponent.mUpVector));
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::D_KEY)== genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mPosition -= dt * moveSpeed * glm::normalize(glm::cross(cameraComponent.mFrontVector, cameraComponent.mUpVector));
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::W_KEY)== genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mPosition += dt * moveSpeed * cameraComponent.mFrontVector;
-    }
-    if (genesis::input::GetKeyState(genesis::input::Key::S_KEY)== genesis::input::InputState::PRESSED)
-    {
-        cameraComponent.mPosition -= dt * moveSpeed * cameraComponent.mFrontVector;
+        view::DestroyView(world.FindEntityWithName(StringId("viewname")));
     }
 }
 

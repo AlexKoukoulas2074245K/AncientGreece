@@ -35,7 +35,7 @@ namespace rendering
 /// @param[in] initialPosition (optional) an initial position for the loaded model.
 /// @param[in] entityName (optional) a string to name the entity with.
 /// @returns the entity id of the loaded entity.
-ecs::EntityId LoadStaticModelByName
+ecs::EntityId LoadAndCreateStaticModelByName
 (
     const std::string& modelName,
     const glm::vec3& initialPosition = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -55,7 +55,7 @@ ecs::EntityId LoadStaticModelByName
 /// @param[in] initialScale (optional) an initial scale for the loaded model.
 /// @param[in] entityName (optional) a string to name the entity with.
 /// @returns the entity id of the loaded entity.
-ecs::EntityId LoadAnimatedModelByName
+ecs::EntityId LoadAndCreateAnimatedModelByName
 (
     const std::string& modelName,
     const glm::vec3& initialPosition = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -79,6 +79,8 @@ ecs::EntityId LoadAndCreateGuiSprite
     const std::string& textureName,
     const StringId shaderName,    
     const glm::vec3& initialPosition = glm::vec3(0.0f, 0.0f, 0.0f),
+    const glm::vec3& initialRotation = glm::vec3(0.0f, 0.0f, 0.0f),
+    const glm::vec3& initialScale = glm::vec3(1.0f, 1.0f, 1.0f),
     const StringId entityName = StringId()
 );
 
