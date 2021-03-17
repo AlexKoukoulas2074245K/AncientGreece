@@ -12,7 +12,6 @@
 #include "../resources/DAEMeshLoader.h"
 #include "../resources/MusicLoader.h"
 #include "../resources/SfxLoader.h"
-#include "../resources/XMLLoader.h"
 #include "../resources/ShaderLoader.h"
 #include "../resources/TextureLoader.h"
 #include "../common/utils/FileUtils.h"
@@ -80,20 +79,19 @@ void ResourceLoadingService::Initialize()
     mResourceLoaders.push_back(std::unique_ptr<DAEMeshLoader>(new DAEMeshLoader));
     mResourceLoaders.push_back(std::unique_ptr<MusicLoader>(new MusicLoader));
     mResourceLoaders.push_back(std::unique_ptr<SfxLoader>(new SfxLoader));
-    mResourceLoaders.push_back(std::unique_ptr<XMLLoader>(new XMLLoader));
 
     // Map resource extensions to loaders
     mResourceExtensionsToLoadersMap[StringId("png")]  = mResourceLoaders[0].get();
     mResourceExtensionsToLoadersMap[StringId("json")] = mResourceLoaders[1].get();
     mResourceExtensionsToLoadersMap[StringId("dat")]  = mResourceLoaders[1].get();
     mResourceExtensionsToLoadersMap[StringId("lua")]  = mResourceLoaders[1].get();
+    mResourceExtensionsToLoadersMap[StringId("xml")]  = mResourceLoaders[1].get();
     mResourceExtensionsToLoadersMap[StringId("vs")]   = mResourceLoaders[2].get();
     mResourceExtensionsToLoadersMap[StringId("fs")]   = mResourceLoaders[2].get();
     mResourceExtensionsToLoadersMap[StringId("obj")]  = mResourceLoaders[3].get();
     mResourceExtensionsToLoadersMap[StringId("dae")]  = mResourceLoaders[4].get();
     mResourceExtensionsToLoadersMap[StringId("ogg")]  = mResourceLoaders[5].get();
     mResourceExtensionsToLoadersMap[StringId("wav")]  = mResourceLoaders[6].get();
-    mResourceExtensionsToLoadersMap[StringId("xml")]  = mResourceLoaders[7].get();
     
     for (auto& resourceLoader: mResourceLoaders)
     {
