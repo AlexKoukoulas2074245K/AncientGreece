@@ -1,6 +1,6 @@
 ///------------------------------------------------------------------------------------------------
 ///  Game.h
-///  Genesis
+///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 19/11/2019.
 ///------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ class Game final: public genesis::IGame
 public:    
     void VOnSystemsInit() override;
     void VOnGameInit() override;
-    void VOnUpdate(const float dt) override;
+    void VOnUpdate(float& dt) override;
     
 };       
 

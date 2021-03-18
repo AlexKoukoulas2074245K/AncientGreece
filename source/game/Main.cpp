@@ -1,6 +1,6 @@
 ///------------------------------------------------------------------------------------------------
 ///  Main.cpp
-///  Genesis
+///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 19/11/2019.
 ///------------------------------------------------------------------------------------------------
@@ -17,7 +17,7 @@
 int main(int, char**)
 {
     genesis::GenesisEngine engine;
-    genesis::GameStartupParameters startupParameters("Genesis", 0.7f);
+    genesis::GameStartupParameters startupParameters("AncientGreece", 0.7f);
     
     Game game;
     engine.RunGame(startupParameters, game);

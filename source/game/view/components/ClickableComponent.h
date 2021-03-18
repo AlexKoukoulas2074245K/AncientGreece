@@ -1,38 +1,37 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldCameraControllerSystem.h
+///  ClickableComponent.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 04/03/2021.
+///  Created by Alex Koukoulas on 16/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldCameraControllerSystem_h
-#define OverworldCameraControllerSystem_h
+#ifndef ClickableComponent_h
+#define ClickableComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+#include "../../engine/common/utils/MathUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
 
-namespace overworld
+namespace view
 {
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldCameraControllerSystem final : public genesis::ecs::BaseSystem<genesis::ecs::NullComponent>
+
+class ClickableComponent final: public genesis::ecs::IComponent
 {
 public:
-    OverworldCameraControllerSystem();
-
-    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
-    
-private:
-    bool IsCameraOutOfBounds() const;
+    glm::vec4 mTextColor;
+    glm::vec4 mInteractionColor;
+    StringId mInteractionEvent;
 };
 
 ///-----------------------------------------------------------------------------------------------
-
+    
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* OverworldCameraControllerSystem_h */
+#endif /* ClickableComponent_h */

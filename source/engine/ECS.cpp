@@ -26,7 +26,14 @@ namespace ecs
 #if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)
 static StringId GetSystemNameFromTypeIdString(const std::string& typeIdString)
 {
-    const auto& systemNameSplitByWhiteSpace = StringSplit(typeIdString, ' ');
+    std::string unsymbolifiedName;
+    for (size_t i = typeIdString.size() - 1; i >= 0; i--)
+    {
+        if (std::isdigit(typeIdString[i])) break;
+        unsymbolifiedName = typeIdString[i] + unsymbolifiedName;
+    }
+    
+    const auto& systemNameSplitByWhiteSpace = StringSplit(unsymbolifiedName, ' ');
     const auto& systemNameSplitByColumn = StringSplit(systemNameSplitByWhiteSpace[systemNameSplitByWhiteSpace.size() - 1], ':');
     return StringId(systemNameSplitByColumn[systemNameSplitByColumn.size() - 1]);
 }

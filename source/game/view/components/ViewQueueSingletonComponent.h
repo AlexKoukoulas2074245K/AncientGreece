@@ -1,37 +1,38 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldTargetSelectionSystem.h
-///  Genesis
+///  ViewQueueSingletonComponent.h
+///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 05/03/2021.
+///  Created by Alex Koukoulas on 18/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldTargetSelectionSystem_h
-#define OverworldTargetSelectionSystem_h
+#ifndef ViewQueueSingletonComponent_h
+#define ViewQueueSingletonComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
-#include "../../engine/common/utils/MathUtils.h"
-#include "../../engine/common/utils/ColorUtils.h"
+
+#include <queue>
+#include <utility>
 
 ///-----------------------------------------------------------------------------------------------
 
-namespace overworld
+namespace view
 {
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldTargetSelectionSystem final : public genesis::ecs::BaseSystem<genesis::ecs::NullComponent>
+
+class ViewQueueSingletonComponent final: public genesis::ecs::IComponent
 {
 public:
-    OverworldTargetSelectionSystem();
-
-    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+    std::queue<std::pair<std::string, StringId>> mQueuedViews;
+    bool mActiveViewExists = false;
 };
 
 ///-----------------------------------------------------------------------------------------------
-
+    
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* OverworldTargetSelectionSystem_h */
+#endif /* ViewQueueSingletonComponent_h */

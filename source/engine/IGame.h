@@ -38,8 +38,8 @@ public:
     ///
     /// This will be called once per frame and should be used to 
     /// perform all game-specific logic.
-    /// @param[in] dt the inter-frame delta time.    
-    virtual void VOnUpdate(const float dt) = 0;
+    /// @param[in,out] dt the inter-frame delta time. Can be manipulated by the game before updating the world
+    virtual void VOnUpdate(float& dt) = 0;
 };
 
 ///------------------------------------------------------------------------------------------------

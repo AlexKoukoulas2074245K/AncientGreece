@@ -21,7 +21,7 @@ namespace math
 
 ///-----------------------------------------------------------------------------------------------
 
-glm::vec3 ComputeMouseRayDirection(const glm::mat4& viewMatrix, const glm::mat4& projMatrix, const float windowWidth, const float windowHeight)
+glm::vec2 ComputeMouseCoordsInNDC(const float windowWidth, const float windowHeight)
 {
     auto mouse_x = 0;
     auto mouse_y = 0;
@@ -29,9 +29,18 @@ glm::vec3 ComputeMouseRayDirection(const glm::mat4& viewMatrix, const glm::mat4&
     
     const auto& mouseX = mouse_x / (windowWidth  * 0.5f) - 1.0f;
     const auto& mouseY = mouse_y / (windowHeight * 0.5f) - 1.0f;
+    
+    return glm::vec2(mouseX, -mouseY);
+}
+
+///-----------------------------------------------------------------------------------------------
+
+glm::vec3 ComputeMouseRayDirection(const glm::mat4& viewMatrix, const glm::mat4& projMatrix, const float windowWidth, const float windowHeight)
+{
+    const auto mousePosInNDC = ComputeMouseCoordsInNDC(windowWidth, windowHeight);
 
     const auto& invVP = glm::inverse(projMatrix * viewMatrix);
-    const auto& screenPos = glm::vec4(mouseX, -mouseY, 1.0f, 1.0f);
+    const auto& screenPos = glm::vec4(mousePosInNDC.x, mousePosInNDC.y, 1.0f, 1.0f);
     const auto& worldPos = invVP * screenPos;
     
     return glm::normalize(glm::vec3(worldPos));
@@ -99,6 +108,13 @@ bool IsMeshInsideFrustum(const glm::vec3& meshPosition, const glm::vec3& meshSca
     }
 
     return true;
+}
+
+///------------------------------------------------------------------------------------------------
+
+bool IsPointInsideRectangle(const glm::vec2& rectangleBottomLeft, const glm::vec2& rectangleTopRight, const glm::vec2& point)
+{
+    return point.x > rectangleBottomLeft.x and point.x < rectangleTopRight.x and point.y > rectangleBottomLeft.y and point.y < rectangleTopRight.y;
 }
 
 ///------------------------------------------------------------------------------------------------

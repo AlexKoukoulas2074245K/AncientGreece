@@ -1,11 +1,11 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldTargetSelectionSystem.cpp
-///  Genesis
+///  OverworldPlayerTargetSelectionSystem.cpp
+///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 05/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#include "OverworldTargetSelectionSystem.h"
+#include "OverworldPlayerTargetSelectionSystem.h"
 #include "../components/OverworldWaypointTargetComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
@@ -31,16 +31,16 @@ namespace overworld
 
 namespace
 {
-    static const StringId MAP_ENTITY_NAME     = StringId("map");
+    static const StringId MAP_ENTITY_NAME = StringId("map");
     
     static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";
 
-    static const glm::vec3 MAP_NORMAL        = glm::vec3(0.0f, 0.0f, -1.0f);
+    static const glm::vec3 MAP_NORMAL = glm::vec3(0.0f, 0.0f, -1.0f);
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-OverworldTargetSelectionSystem::OverworldTargetSelectionSystem()
+OverworldPlayerTargetSelectionSystem::OverworldPlayerTargetSelectionSystem()
     : BaseSystem()
 {
     genesis::resources::ResourceLoadingService::GetInstance().LoadResource(NAVMAP_ASSET_PATH);
@@ -48,7 +48,7 @@ OverworldTargetSelectionSystem::OverworldTargetSelectionSystem()
 
 ///-----------------------------------------------------------------------------------------------
 
-void OverworldTargetSelectionSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>&) const
+void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>&) const
 {
     if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) != genesis::input::InputState::TAPPED) return;
     

@@ -54,6 +54,14 @@ static const glm::vec3 Z_AXIS = glm::vec3(0.0f, 0.0f, 1.0f);
 using Frustum = std::array<glm::vec4, FRUSTUM_SIDES>;
 
 ///-----------------------------------------------------------------------------------------------
+
+struct Rectangle
+{
+    glm::vec2 bottomLeft;
+    glm::vec2 topRight;
+};
+
+///-----------------------------------------------------------------------------------------------
 /// Returns the minimum of the 2 given values.
 /// @tparam T type class of the arguments given (can be inferred from the parameters passed in).
 /// @param[in] a the first value.
@@ -369,7 +377,18 @@ inline float Arctan2(const float x, const float y)
 }
 
 ///-----------------------------------------------------------------------------------------------
+/// Computes and returns the mouse coords in ndc space
+/// @param[in] windowWidth the width of the current window.
+/// @param[in] windowHeight the height of the current window.
+/// @returns the computed mouse coords.
+glm::vec2 ComputeMouseCoordsInNDC(const float windowWidth, const float windowHeight);
+
+///-----------------------------------------------------------------------------------------------
 /// Computes a ray direction from the current mouse coordinates on the focused window values.
+/// @param[in] viewMatrix the current view matrix.
+/// @param[in] projMatrix the current projection matrix.
+/// @param[in] windowWidth the width of the current window.
+/// @param[in] windowHeight the height of the current window.
 /// @returns the computed ray direction.
 glm::vec3 ComputeMouseRayDirection(const glm::mat4& viewMatrix, const glm::mat4& projMatrix, const float windowWidth, const float windowHeight);
 
@@ -402,6 +421,14 @@ bool RayToPlaneIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDire
 /// @param[in] Frustum the frustum to test containment in.
 /// @returns whether the mesh is inside the frustum.
 bool IsMeshInsideFrustum(const glm::vec3& meshPosition, const glm::vec3& meshScale, const glm::vec3& meshDimensions, const Frustum& frustum);
+
+///-----------------------------------------------------------------------------------------------
+/// Computes and returns whether the given point is inside a rectangle.
+/// @param[in] rectangleBottomLeft rectangle's top left point.
+/// @param[in] rectangleTopRight rectangle's bottom right.
+/// @param[in] point point to test.
+/// @returns whether the point is inside the rectangle.
+bool IsPointInsideRectangle(const glm::vec2& rectangleBottomLeft, const glm::vec2& rectangleTopRight, const glm::vec2& point);
 
 }
 

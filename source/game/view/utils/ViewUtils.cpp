@@ -1,12 +1,14 @@
 ///------------------------------------------------------------------------------------------------
 ///  ViewUtils.cpp
-///  Genesis
+///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 16/03/2021.
 ///------------------------------------------------------------------------------------------------
 
 #include "ViewUtils.h"
+#include "../components/ClickableComponent.h"
 #include "../components/ViewStateComponent.h"
+#include "../components/ViewQueueSingletonComponent.h"
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/common/utils/MathUtils.h"
@@ -38,15 +40,17 @@ namespace view
 
 namespace
 {
-    static const StringId GUI_MODEL_SHADER_NAME  = StringId("default_gui");
-    static const StringId DEFAULT_FONT_NAME      = StringId("ancient_greek_font");
+    static const StringId GUI_MODEL_SHADER_NAME          = StringId("default_gui");
+    static const StringId DEFAULT_FONT_NAME              = StringId("ancient_greek_font");
+    static const StringId DEFAULT_INTERACTION_EVENT_NAME = StringId("close");
+
     static const std::string GUI_BASE_MODEL_NAME = "gui_base";
 
-    static const char* XML_VIEW_NODE_NAME    = "View";
-    static const char* XML_TEXTBOX_NODE_NAME = "Textbox";
+    static const char* XML_VIEW_NODE_NAME          = "View";
+    static const char* XML_TEXTBOX_NODE_NAME       = "Textbox";
+    static const char* XML_CLICKABLETEXT_NODE_NAME = "ClickableText";
 
-    static const char* BACKGROUND_ATTRIBUTE_NAME = "background_name";
-
+    static const char* BACKGROUND_ATTRIBUTE_NAME        = "background_name";
     static const char* BACKGROUND_X_ATTRIBUTE_NAME      = "x";
     static const char* BACKGROUND_Y_ATTRIBUTE_NAME      = "y";
     static const char* BACKGROUND_Z_ATTRIBUTE_NAME      = "z";
@@ -58,6 +62,19 @@ namespace
     static const char* TEXTBOX_Z_ATTRIBUTE_NAME      = "z";
     static const char* TEXTBOX_WIDTH_ATTRIBUTE_NAME  = "width";
     static const char* TEXTBOX_HEIGHT_ATTRIBUTE_NAME = "height";
+
+    static const char* CLICKABLETEXT_X_ATTRIBUTE_NAME                 = "x";
+    static const char* CLICKABLETEXT_Y_ATTRIBUTE_NAME                 = "y";
+    static const char* CLICKABLETEXT_Z_ATTRIBUTE_NAME                 = "z";
+    static const char* CLICKABLETEXT_SIZE_ATTRIBUTE_NAME              = "size";
+    static const char* CLICKABLETEXT_R_ATTRIBUTE_NAME                 = "red";
+    static const char* CLICKABLETEXT_G_ATTRIBUTE_NAME                 = "green";
+    static const char* CLICKABLETEXT_B_ATTRIBUTE_NAME                 = "blue";
+    static const char* CLICKABLETEXT_INTERACTION_R_ATTRIBUTE_NAME     = "interaction_red";
+    static const char* CLICKABLETEXT_INTERACTION_G_ATTRIBUTE_NAME     = "interaction_green";
+    static const char* CLICKABLETEXT_INTERACTION_B_ATTRIBUTE_NAME     = "interaction_blue";
+    static const char* CLICKABLETEXT_INTERACTION_EVENT_ATTRIBUTE_NAME = "interaction_event";
+
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -70,7 +87,19 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
 
 ///------------------------------------------------------------------------------------------------
 
-genesis::ecs::EntityId LoadView
+void QueueView
+(
+    const std::string& viewName,
+    const StringId entityName /* StringId() */
+)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    world.GetSingletonComponent<ViewQueueSingletonComponent>().mQueuedViews.push(std::make_pair(viewName, entityName));
+}
+
+///------------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId LoadAndShowView
 (
     const std::string& viewName,
     const StringId entityName /* StringId() */
@@ -80,6 +109,7 @@ genesis::ecs::EntityId LoadView
     auto viewEntity = world.CreateEntity();
     auto viewStateComponent = std::make_unique<ViewStateComponent>();
     
+    genesis::resources::ResourceLoadingService::GetInstance().UnloadResource(genesis::resources::ResourceLoadingService::RES_XML_ROOT + viewName + ".xml");
     auto xmlResourceId = genesis::resources::ResourceLoadingService::GetInstance().LoadResource(genesis::resources::ResourceLoadingService::RES_XML_ROOT + viewName + ".xml");
     const auto& xmlResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::DataFileResource>(xmlResourceId);
     
@@ -97,7 +127,7 @@ genesis::ecs::EntityId LoadView
     }
     
     world.AddComponent<ViewStateComponent>(viewEntity, std::move(viewStateComponent));
-    
+    world.GetSingletonComponent<ViewQueueSingletonComponent>().mActiveViewExists = true;
     return viewEntity;
 }
 
@@ -117,6 +147,7 @@ void DestroyView
     }
     
     world.DestroyEntity(viewEntityId);
+    world.GetSingletonComponent<ViewQueueSingletonComponent>().mActiveViewExists = false;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -170,6 +201,74 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
 #endif
         viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateGuiSprite(GUI_BASE_MODEL_NAME, std::string(node->first_attribute(BACKGROUND_ATTRIBUTE_NAME)->value()), GUI_MODEL_SHADER_NAME, viewPosition, glm::vec3(0.0f), viewScale));
     }
+    else if (std::strcmp(XML_CLICKABLETEXT_NODE_NAME, node->name()) == 0)
+    {
+        glm::vec4 clickableTextColor(1.0f);
+        glm::vec4 clickableTextInteractionColor(1.0f);
+        glm::vec3 clickableTextPosition(0.0f);
+        StringId clickableTextEventName = StringId();
+        float clickableTextSize(0.0f);
+        
+        
+        if (node->first_attribute(CLICKABLETEXT_X_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextPosition.x = std::atof(node->first_attribute(CLICKABLETEXT_X_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_Y_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextPosition.y = std::atof(node->first_attribute(CLICKABLETEXT_Y_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_Z_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextPosition.z = std::atof(node->first_attribute(CLICKABLETEXT_Z_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_SIZE_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextSize = std::atof(node->first_attribute(CLICKABLETEXT_SIZE_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_R_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextColor.r = std::atof(node->first_attribute(CLICKABLETEXT_R_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_G_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextColor.g = std::atof(node->first_attribute(CLICKABLETEXT_G_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_B_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextColor.b = std::atof(node->first_attribute(CLICKABLETEXT_B_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_INTERACTION_R_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextInteractionColor.r = std::atof(node->first_attribute(CLICKABLETEXT_INTERACTION_R_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_INTERACTION_G_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextInteractionColor.g = std::atof(node->first_attribute(CLICKABLETEXT_INTERACTION_G_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_INTERACTION_B_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextInteractionColor.b = std::atof(node->first_attribute(CLICKABLETEXT_INTERACTION_B_ATTRIBUTE_NAME)->value());
+        }
+        if (node->first_attribute(CLICKABLETEXT_INTERACTION_EVENT_ATTRIBUTE_NAME) != nullptr)
+        {
+            clickableTextEventName = StringId(std::string(node->first_attribute(CLICKABLETEXT_INTERACTION_EVENT_ATTRIBUTE_NAME)->value()));
+        }
+        
+        auto text = node->value();
+        assert(text != nullptr && "No clickable text string value in tags");
+        
+        auto entity = genesis::rendering::RenderText(std::string(text), DEFAULT_FONT_NAME, clickableTextSize, clickableTextPosition);
+        
+        auto clickableComponent = std::make_unique<ClickableComponent>();
+        clickableComponent->mTextColor = clickableTextColor;
+        clickableComponent->mInteractionColor = clickableTextInteractionColor;
+        clickableComponent->mInteractionEvent = clickableTextEventName;
+        
+        genesis::ecs::World::GetInstance().AddComponent<ClickableComponent>(entity, std::move(clickableComponent));
+        
+        viewStateComponent.mViewEntities.push_back(entity);
+    }
     else if (std::strcmp(XML_TEXTBOX_NODE_NAME, node->name()) == 0)
     {
         glm::vec3 textboxPosition(0.0f);
@@ -203,7 +302,7 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
 #endif
         
         auto text = node->value();
-        assert(text != nullptr && "No textbox string in tags");
+        assert(text != nullptr && "No textbox string value in tags");
         
         const auto textString = std::string(text);
         const auto textCharCount = textString.size();

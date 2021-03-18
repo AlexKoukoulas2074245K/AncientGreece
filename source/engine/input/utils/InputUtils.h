@@ -46,6 +46,26 @@ inline InputState GetButtonState(const Button button)
 }
 
 ///-----------------------------------------------------------------------------------------------
+/// Consumes and reset the state of the given key.
+/// @param[in] key the key to consume.
+inline void ConsumeKeyInput(const Key key)
+{
+    auto& world = ecs::World::GetInstance();
+    auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
+    inputStateComponent.mCurrentKeyboardState[key] = InputState::RELEASED;
+}
+
+///-----------------------------------------------------------------------------------------------
+/// Consumes and reset the state of the given button.
+/// @param[in] button the button to consume.
+inline void ConsumeButtonInput(const Button button)
+{
+    auto& world = ecs::World::GetInstance();
+    auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
+    inputStateComponent.mCurrentButtonsState[button] = InputState::RELEASED;
+}
+
+///-----------------------------------------------------------------------------------------------
 /// Returns current delta of the mouse wheel (> 0 scroll up, < 0 scroll down).
 /// @returns the delta of the mouse wheel.
 inline int GetMouseWheelDelta()

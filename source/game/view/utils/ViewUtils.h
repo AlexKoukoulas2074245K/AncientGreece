@@ -1,6 +1,6 @@
 ///------------------------------------------------------------------------------------------------
 ///  ViewUtils.h
-///  Genesis
+///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 16/03/2021.
 ///------------------------------------------------------------------------------------------------
@@ -19,7 +19,15 @@ namespace view
 
 ///------------------------------------------------------------------------------------------------
 
-genesis::ecs::EntityId LoadView
+void QueueView
+(
+    const std::string& viewName,
+    const StringId entityName = StringId()
+);
+
+///------------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId LoadAndShowView
 (
     const std::string& viewName,
     const StringId entityName = StringId()

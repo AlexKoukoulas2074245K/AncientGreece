@@ -1,16 +1,18 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldCameraControllerSystem.h
+///  OverworldPlayerTargetSelectionSystem.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 04/03/2021.
+///  Created by Alex Koukoulas on 05/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldCameraControllerSystem_h
-#define OverworldCameraControllerSystem_h
+#ifndef OverworldPlayerTargetSelectionSystem_h
+#define OverworldPlayerTargetSelectionSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+#include "../../engine/common/utils/MathUtils.h"
+#include "../../engine/common/utils/ColorUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -18,15 +20,12 @@ namespace overworld
 {
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldCameraControllerSystem final : public genesis::ecs::BaseSystem<genesis::ecs::NullComponent>
+class OverworldPlayerTargetSelectionSystem final : public genesis::ecs::BaseSystem<genesis::ecs::NullComponent>
 {
 public:
-    OverworldCameraControllerSystem();
+    OverworldPlayerTargetSelectionSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
-    
-private:
-    bool IsCameraOutOfBounds() const;
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -35,4 +34,4 @@ private:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* OverworldCameraControllerSystem_h */
+#endif /* OverworldPlayerTargetSelectionSystem_h */

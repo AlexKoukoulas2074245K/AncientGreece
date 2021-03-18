@@ -41,7 +41,7 @@ ModelAnimationSystem::ModelAnimationSystem()
 
 void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& entitiesToProcess) const
 {
-    auto& world = ecs::World::GetInstance();
+    const auto& world = ecs::World::GetInstance();
     for (const auto& entityId : entitiesToProcess)
     {
         auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
@@ -50,7 +50,7 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
             continue;
         }
         
-        auto& currentMesh = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
+        const auto& currentMesh = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
         if (!currentMesh.HasSkeleton())
         {
             continue;
@@ -71,10 +71,10 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
             else
             {
                 // Transition to next anim ongoing
-                auto& previousMesh = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mPreviousMeshResourceIndex]);
+                const auto& previousMesh = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mPreviousMeshResourceIndex]);
                 
-                auto transitionAnimationTime = std::fmod(renderableComponent.mTransitionAnimationTimeAccum, ANIMATION_TRANSITION_TIME);
-                auto previousAnimationTime = std::fmod(renderableComponent.mAnimationTimeAccum, previousMesh.GetAnimationInfo().mDuration);
+                const auto transitionAnimationTime = std::fmod(renderableComponent.mTransitionAnimationTimeAccum, ANIMATION_TRANSITION_TIME);
+                const auto previousAnimationTime = std::fmod(renderableComponent.mAnimationTimeAccum, previousMesh.GetAnimationInfo().mDuration);
                 CalculateTransitionalTransformsInHierarchy(previousAnimationTime, transitionAnimationTime, currentMesh.GetRootSkeletonNode(), transform, previousMesh, currentMesh, renderableComponent);
             }
         }
@@ -84,7 +84,7 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
             renderableComponent.mAnimationTimeAccum += dt;
             
             const auto& animationInfo = currentMesh.GetAnimationInfo();
-            auto animationTime = std::fmod(renderableComponent.mAnimationTimeAccum, animationInfo.mDuration);
+            const auto animationTime = std::fmod(renderableComponent.mAnimationTimeAccum, animationInfo.mDuration);
             
             CalculateTransformsInHierarchy(animationTime, currentMesh.GetRootSkeletonNode(), transform, currentMesh, renderableComponent);
         }
@@ -106,8 +106,8 @@ void ModelAnimationSystem::CalculateTransitionalTransformsInHierarchy(const floa
     
     if (previousMeshAnimationInfo.mBoneNameToAnimInfo.count(node->mNodeName) > 0)
     {
-        auto previousNodeAnim = previousMeshAnimationInfo.mBoneNameToAnimInfo.at(node->mNodeName);
-        auto transitionNodeAnim = currentMeshResource.GetAnimationInfo().mBoneNameToAnimInfo.at(node->mNodeName);
+        const auto& previousNodeAnim = previousMeshAnimationInfo.mBoneNameToAnimInfo.at(node->mNodeName);
+        const auto& transitionNodeAnim = currentMeshResource.GetAnimationInfo().mBoneNameToAnimInfo.at(node->mNodeName);
         
         // Find closest key frame
         auto keyFrameIndex = -1;
@@ -178,7 +178,7 @@ void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationT
     
     if (animationInfo.mBoneNameToAnimInfo.count(node->mNodeName) > 0)
     {
-        auto nodeAnim = animationInfo.mBoneNameToAnimInfo.at(node->mNodeName);
+        const auto& nodeAnim = animationInfo.mBoneNameToAnimInfo.at(node->mNodeName);
         
         // Find closest key frame
         auto keyFrameIndex = -1;

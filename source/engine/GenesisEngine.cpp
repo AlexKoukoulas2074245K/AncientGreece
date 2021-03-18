@@ -75,7 +75,7 @@ void GenesisEngine::RunGame(const GameStartupParameters& startupParameters, IGam
     {        
         UpdateFrameStatistics(dt, elapsedTicks, dtAccumulator, framesAccumulator);
         game.VOnUpdate(dt);
-        ecs::World::GetInstance().Update(dt);        
+        ecs::World::GetInstance().Update(dt);
     }
 }
 
