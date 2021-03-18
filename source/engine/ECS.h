@@ -49,11 +49,19 @@ static constexpr long long NULL_ENTITY_ID = 0LL;
 class World;
 class ISystem;
 class IComponent;
+class SystemUpdateWorker;
 
 using ComponentMask   = std::bitset<MAX_COMPONENTS>;
 using ComponentTypeId = int;
 using SystemTypeId    = int;
 using EntityId        = long long;
+
+///------------------------------------------------------------------------------------------------
+
+enum class SystemOperationMode
+{
+    SINGLE_THREADED, MULTI_THREADED
+};
 
 ///------------------------------------------------------------------------------------------------
 
@@ -114,7 +122,8 @@ public:
 
     /// Adds a system to the world and takes ownership of it
     /// @param[in] system the system instance to add to the world and take ownership over.
-    void AddSystem(std::unique_ptr<ISystem> system);
+    /// @param[in] operationMode (optional) threaded operation mode
+    void AddSystem(std::unique_ptr<ISystem> system, SystemOperationMode operationMode = SystemOperationMode::SINGLE_THREADED);
 
     /// Creates an entity and returns its corresponding entity id.     
     /// @returns the entity id of the newly constructed entity.
@@ -369,8 +378,10 @@ private:
     tsl::robin_map<std::type_index, std::vector<EntityId>> mEntitiesToUpdatePerSystem;
     
     std::vector<std::unique_ptr<ISystem>> mSystems;
-
+    std::vector<std::unique_ptr<SystemUpdateWorker>> mSystemUpdateWorkers;
+    
     EntityId mEntityCounter = 1LL;
+    
 };
 
 ///------------------------------------------------------------------------------------------------
@@ -378,6 +389,7 @@ private:
 class ISystem
 {
     friend class World;
+    friend class SystemUpdateWorker;
 public:
     ISystem() = default;
     virtual ~ISystem() = default;
@@ -394,6 +406,7 @@ private:
     
 private:
     StringId mSystemName;
+    bool mMultithreadedOperation = false;
 };
 
 ///------------------------------------------------------------------------------------------------

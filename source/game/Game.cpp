@@ -35,9 +35,11 @@
 #include "../engine/scripting/components/ScriptComponent.h"
 #include "../engine/scripting/systems/ScriptingSystem.h"
 
+#include <thread>
+
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 100;
+static int SPARTAN_COUNT = 300;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 extern float DEBUG_TEXTBOX_SIZE_DX;
@@ -64,7 +66,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
     
-    world.AddSystem(std::make_unique<genesis::rendering::ModelAnimationSystem>());
+    world.AddSystem(std::make_unique<genesis::rendering::ModelAnimationSystem>(), genesis::ecs::SystemOperationMode::MULTI_THREADED);
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 
@@ -87,7 +89,6 @@ void Game::VOnGameInit()
     {
         genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
     }
-    
 //    auto entity = genesis::rendering::LoadAndCreateGuiSprite("gui_base", "parchment", StringId("default_gui"));
 //    auto& transformComponent = genesis::ecs::World::GetInstance().GetComponent<genesis::TransformComponent>(entity);
 //    transformComponent.mScale /= 2.0f;

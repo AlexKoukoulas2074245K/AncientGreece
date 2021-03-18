@@ -75,6 +75,7 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
                 
                 const auto transitionAnimationTime = std::fmod(renderableComponent.mTransitionAnimationTimeAccum, ANIMATION_TRANSITION_TIME);
                 const auto previousAnimationTime = std::fmod(renderableComponent.mAnimationTimeAccum, previousMesh.GetAnimationInfo().mDuration);
+                
                 CalculateTransitionalTransformsInHierarchy(previousAnimationTime, transitionAnimationTime, currentMesh.GetRootSkeletonNode(), transform, previousMesh, currentMesh, renderableComponent);
             }
         }

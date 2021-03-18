@@ -9,6 +9,7 @@
 #include "common/components/NameComponent.h"
 
 #include <chrono>
+#include <thread>
 #include <typeinfo>
 
 ///------------------------------------------------------------------------------------------------
@@ -20,6 +21,34 @@ namespace genesis
 
 namespace ecs
 { 
+
+///------------------------------------------------------------------------------------------------
+
+class SystemUpdateWorker
+{
+public:
+    void RunSystemUpdate
+    (
+        const float dt,
+        const std::vector<EntityId> entityVec,
+        ISystem& system
+    )
+    {
+        mCurrentProcessingVec = std::move(entityVec);
+        mCurrentDt = dt;
+        mThread = std::thread([&]
+        {
+            system.VUpdate(mCurrentDt, mCurrentProcessingVec);
+        });
+    }
+    
+    void Join() { mThread.join(); }
+    
+private:
+    std::vector<genesis::ecs::EntityId> mCurrentProcessingVec;
+    std::thread mThread;
+    float mCurrentDt;
+};
 
 ///------------------------------------------------------------------------------------------------
 
@@ -57,14 +86,19 @@ const tsl::robin_map<StringId, long long, StringIdHasher>& World::GetSystemUpdat
 
 ///------------------------------------------------------------------------------------------------
 
-void World::AddSystem(std::unique_ptr<ISystem> system)
+void World::AddSystem(std::unique_ptr<ISystem> system, SystemOperationMode operationMode /* SystemOperationMode::SINGLE_THREADED */)
 {
     auto& systemRef = *system;
     
 #if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)
     system->mSystemName = GetSystemNameFromTypeIdString(std::string(typeid(systemRef).name()));
 #endif
-
+    
+    if (operationMode == SystemOperationMode::MULTI_THREADED && mSystemUpdateWorkers.size() > 0)
+    {
+        system->mMultithreadedOperation = true;
+    }
+    
     mSystems.push_back(std::move(system));
     mEntitiesToUpdatePerSystem[typeid(systemRef)];
 }
@@ -83,7 +117,28 @@ void World::Update(const float dt)
         auto& systemRef = *system;
         const auto& entityVec = mEntitiesToUpdatePerSystem.at(typeid(systemRef));
         
-        system->VUpdate(dt, entityVec);
+        const auto systemUpdateWorkerCount = mSystemUpdateWorkers.size();
+        if (system->mMultithreadedOperation && systemUpdateWorkerCount > 0)
+        {
+            const auto entityVecSlice = static_cast<int>(entityVec.size()/systemUpdateWorkerCount);
+            for (auto i = 0U; i < systemUpdateWorkerCount - 1; ++i)
+            {
+                const auto startSlice = i * entityVecSlice;
+                const auto endSlice = (i + 1) * entityVecSlice;
+                mSystemUpdateWorkers[i]->RunSystemUpdate(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.cbegin() + endSlice), systemRef);
+            }
+            const auto startSlice = (systemUpdateWorkerCount - 1) * entityVecSlice;
+            mSystemUpdateWorkers[systemUpdateWorkerCount - 1]->RunSystemUpdate(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.end()), systemRef);
+            
+            for (auto& worker: mSystemUpdateWorkers)
+            {
+                worker->Join();
+            }
+        }
+        else
+        {
+            system->VUpdate(dt, entityVec);
+        }
 
 #if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)        
         const auto& end = std::chrono::high_resolution_clock::now();
@@ -233,6 +288,12 @@ void World::OnEntityChanged(const EntityId entityId, const ComponentMask& newCom
 World::World()
 {
     mEntityComponentStore.reserve(ANTICIPATED_ENTITY_COUNT);
+    
+    auto threadWorkerCount = std::thread::hardware_concurrency();
+    for (auto i = 0U; i < threadWorkerCount; ++i)
+    {
+        mSystemUpdateWorkers.push_back(std::make_unique<SystemUpdateWorker>());
+    }
 }
 
 ///------------------------------------------------------------------------------------------------
