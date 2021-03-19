@@ -118,7 +118,7 @@ void World::Update(const float dt)
         const auto& entityVec = mEntitiesToUpdatePerSystem.at(typeid(systemRef));
         
         const auto systemUpdateWorkerCount = mSystemUpdateWorkers.size();
-        if (system->mMultithreadedOperation && systemUpdateWorkerCount > 0)
+        if (system->mMultithreadedOperation && systemUpdateWorkerCount > 0 && entityVec.size() >= systemUpdateWorkerCount)
         {
             const auto entityVecSlice = static_cast<int>(entityVec.size()/systemUpdateWorkerCount);
             for (auto i = 0U; i < systemUpdateWorkerCount - 1; ++i)
