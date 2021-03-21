@@ -27,6 +27,10 @@ namespace genesis
 
 ///-----------------------------------------------------------------------------------------------
 
+class UnitStatsComponent;
+
+///-----------------------------------------------------------------------------------------------
+
 namespace overworld
 {
 
@@ -35,7 +39,7 @@ namespace overworld
 class OverworldTargetComponent;
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldMovementControllerSystem final : public genesis::ecs::BaseSystem<genesis::TransformComponent, genesis::rendering::RenderableComponent, OverworldTargetComponent>
+class OverworldMovementControllerSystem final : public genesis::ecs::BaseSystem<genesis::TransformComponent, genesis::rendering::RenderableComponent, OverworldTargetComponent, UnitStatsComponent>
 {
 public:
     OverworldMovementControllerSystem();

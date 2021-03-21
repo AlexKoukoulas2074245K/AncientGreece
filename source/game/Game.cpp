@@ -6,6 +6,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "Game.h"
+#include "components/UnitStatsComponent.h"
 #include "overworld/components/HighlightableComponent.h"
 #include "overworld/components/OverworldTargetComponent.h"
 #include "overworld/systems/HighlightingSystem.h"
@@ -77,6 +78,8 @@ void Game::VOnSystemsInit()
 
 void Game::VOnGameInit()
 {
+    auto& world = genesis::ecs::World::GetInstance();
+    
     genesis::rendering::LoadFont(StringId("ancient_greek_font"), 16, 16);
     genesis::rendering::LoadAndCreateStaticModelByName("map", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map"));
     genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_1"));
@@ -86,12 +89,16 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
+    auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
+    auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
+    playerStatsComponent->mSpeedMultiplier = 2.0f;
+    world.AddComponent<UnitStatsComponent>(playerEntity, std::move(playerStatsComponent));
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
         auto spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan2", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
-        genesis::ecs::World::GetInstance().AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
+        world.AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
+        world.AddComponent<UnitStatsComponent>(spartanEntity, std::make_unique<UnitStatsComponent>());
     }
 //    auto entity = genesis::rendering::LoadAndCreateGuiSprite("gui_base", "parchment", StringId("default_gui"));
 //    auto& transformComponent = genesis::ecs::World::GetInstance().GetComponent<genesis::TransformComponent>(entity);

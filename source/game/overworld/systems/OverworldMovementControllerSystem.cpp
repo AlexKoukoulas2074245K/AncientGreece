@@ -7,6 +7,7 @@
 
 #include "OverworldMovementControllerSystem.h"
 #include "../components/OverworldTargetComponent.h"
+#include "../../components/UnitStatsComponent.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
@@ -22,8 +23,8 @@ namespace overworld
 namespace
 {
     static const float SUFFICIENTLY_CLOSE_THRESHOLD = 0.001f;
-    static const float ROTATION_SPEED = 5.0f;
-    static const float speed = 0.005f;
+    static const float ROTATION_SPEED               = 5.0f;
+    static const float BASE_UNIT_SPEED              = 0.002f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -41,6 +42,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
     
     for (const auto entityId: entitiesToProcess)
     {
+        const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
         auto& waypointComponent = world.GetComponent<OverworldTargetComponent>(entityId);
         auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
         
@@ -61,7 +63,8 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         // Else move and rotate towards target
         else
         {
-            UpdatePosition(dt, speed, waypointComponent.mTargetPosition, transformComponent.mPosition);
+            const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mSpeedMultiplier;
+            UpdatePosition(dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
             UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
             
             // Start walking animation
