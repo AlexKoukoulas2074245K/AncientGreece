@@ -11,8 +11,6 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
-#include "../../engine/common/utils/MathUtils.h"
-#include "../../engine/common/utils/ColorUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -20,12 +18,21 @@ namespace overworld
 {
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldPlayerTargetSelectionSystem final : public genesis::ecs::BaseSystem<genesis::ecs::NullComponent>
+
+class HighlightableComponent;
+class OverworldTargetComponent;
+
+///-----------------------------------------------------------------------------------------------
+class OverworldPlayerTargetSelectionSystem final : public genesis::ecs::BaseSystem<HighlightableComponent>
 {
 public:
     OverworldPlayerTargetSelectionSystem();
 
-    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const override;
+
+private:
+    genesis::ecs::EntityId GetEntityToFollow(const std::vector<genesis::ecs::EntityId>& entitiesToProcess, const genesis::ecs::EntityId playerEntity, genesis::ecs::World&) const;
+    void CalculateMapTarget(OverworldTargetComponent& targetComponent, genesis::ecs::World& world) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

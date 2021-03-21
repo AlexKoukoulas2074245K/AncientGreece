@@ -6,7 +6,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "OverworldMovementControllerSystem.h"
-#include "../components/OverworldWaypointTargetComponent.h"
+#include "../components/OverworldTargetComponent.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
@@ -41,8 +41,13 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
     
     for (const auto entityId: entitiesToProcess)
     {
-        const auto& waypointComponent = world.GetComponent<OverworldWaypointTargetComponent>(entityId);
+        auto& waypointComponent = world.GetComponent<OverworldTargetComponent>(entityId);
         auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
+        
+        if (waypointComponent.mOptionalEntityTarget != genesis::ecs::NULL_ENTITY_ID && world.HasEntity(waypointComponent.mOptionalEntityTarget))
+        {
+            waypointComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(waypointComponent.mOptionalEntityTarget).mPosition;
+        }
         
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
@@ -51,7 +56,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         {
             // Start Idle animation
             genesis::animation::ChangeAnimation(entityId, StringId("idle"));
-            world.RemoveComponent<OverworldWaypointTargetComponent>(entityId);
+            world.RemoveComponent<OverworldTargetComponent>(entityId);
         }
         // Else move and rotate towards target
         else

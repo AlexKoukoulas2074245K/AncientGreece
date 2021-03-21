@@ -6,7 +6,8 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "OverworldPlayerTargetSelectionSystem.h"
-#include "../components/OverworldWaypointTargetComponent.h"
+#include "../components/HighlightableComponent.h"
+#include "../components/OverworldTargetComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/common/utils/MathUtils.h"
@@ -48,11 +49,55 @@ OverworldPlayerTargetSelectionSystem::OverworldPlayerTargetSelectionSystem()
 
 ///-----------------------------------------------------------------------------------------------
 
-void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>&) const
+void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
-    if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) != genesis::input::InputState::TAPPED) return;
+    if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) != genesis::input::InputState::TAPPED)
+    {
+        return;
+    }
     
     auto& world = genesis::ecs::World::GetInstance();
+    
+    auto playerEntity = world.FindEntityWithName(StringId("player"));
+    auto targetComponent = std::make_unique<OverworldTargetComponent>();
+    auto entityToFollow = GetEntityToFollow(entitiesToProcess, playerEntity, world);
+    
+    if (entityToFollow != genesis::ecs::NULL_ENTITY_ID)
+    {
+        targetComponent->mOptionalEntityTarget = entityToFollow;
+    }
+    else
+    {
+        CalculateMapTarget(*targetComponent, world);
+    }
+    
+    if (world.HasComponent<OverworldTargetComponent>(playerEntity))
+    {
+        world.RemoveComponent<OverworldTargetComponent>(playerEntity);
+    }
+    world.AddComponent<OverworldTargetComponent>(playerEntity, std::move(targetComponent));
+
+}
+
+///-----------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId OverworldPlayerTargetSelectionSystem::GetEntityToFollow(const std::vector<genesis::ecs::EntityId>& entitiesToProcess, const genesis::ecs::EntityId playerEntity, genesis::ecs::World& world) const
+{
+    for (const auto entityId: entitiesToProcess)
+    {
+        if (world.GetComponent<HighlightableComponent>(entityId).mHighlighted && playerEntity != entityId)
+        {
+            return entityId;
+        }
+    }
+    
+    return genesis::ecs::NULL_ENTITY_ID;
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void OverworldPlayerTargetSelectionSystem::CalculateMapTarget(OverworldTargetComponent& targetComponent, genesis::ecs::World& world) const
+{
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
     auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
     
@@ -92,16 +137,8 @@ void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vecto
     const auto targetPixel = navmapTexture.GetRGBatPixel(targetPixelX, targetPixelY);
     
     // Attach waypoint component to player
-    auto playerEntity = world.FindEntityWithName(StringId("player"));
-    auto wayPointComponent = std::make_unique<OverworldWaypointTargetComponent>();
-    wayPointComponent->mTargetPosition = mapIntersectionPoint;
-    wayPointComponent->mTargetAreaType = RGB_TO_AREA_TYPE.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE.at(targetPixel) : WayPointTargetAreaType::NEUTRAL;
-    
-    if (world.HasComponent<OverworldWaypointTargetComponent>(playerEntity))
-    {
-        world.RemoveComponent<OverworldWaypointTargetComponent>(playerEntity);
-    }
-    world.AddComponent<OverworldWaypointTargetComponent>(playerEntity, std::move(wayPointComponent));
+    targetComponent.mTargetPosition = mapIntersectionPoint;
+    targetComponent.mTargetAreaType = RGB_TO_AREA_TYPE.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE.at(targetPixel) : WayPointTargetAreaType::NEUTRAL;
 }
 
 ///-----------------------------------------------------------------------------------------------

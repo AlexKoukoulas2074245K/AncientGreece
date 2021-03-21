@@ -104,6 +104,13 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
         uvs.emplace_back(uv->x, uv->y);
         normals.emplace_back(normal->x, normal->y, normal->z);
         bones.emplace_back(VertexBoneData());
+        
+        if (pos->x < minX) minX = pos->x;
+        if (pos->x > maxX) maxX = pos->x;
+        if (pos->y < minY) minY = pos->y;
+        if (pos->y > maxY) maxY = pos->y;
+        if (pos->z < minZ) minZ = pos->z;
+        if (pos->z > maxZ) maxZ = pos->z;
     }
     
     // Load Bone Data

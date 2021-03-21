@@ -6,7 +6,9 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "Game.h"
-#include "overworld/components/OverworldWaypointTargetComponent.h"
+#include "overworld/components/HighlightableComponent.h"
+#include "overworld/components/OverworldTargetComponent.h"
+#include "overworld/systems/HighlightingSystem.h"
 #include "overworld/systems/OverworldCameraControllerSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
@@ -39,7 +41,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 300;
+static int SPARTAN_COUNT = 15;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 extern float DEBUG_TEXTBOX_SIZE_DX;
@@ -62,6 +64,7 @@ void Game::VOnSystemsInit()
     
     world.AddSystem(std::make_unique<view::ViewManagementSystem>());
     
+    world.AddSystem(std::make_unique<overworld::HighlightingSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
@@ -87,7 +90,8 @@ void Game::VOnGameInit()
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
-        genesis::rendering::LoadAndCreateAnimatedModelByName("spartan2", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
+        auto spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan2", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
+        genesis::ecs::World::GetInstance().AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
     }
 //    auto entity = genesis::rendering::LoadAndCreateGuiSprite("gui_base", "parchment", StringId("default_gui"));
 //    auto& transformComponent = genesis::ecs::World::GetInstance().GetComponent<genesis::TransformComponent>(entity);
@@ -114,12 +118,12 @@ void Game::VOnUpdate(float& dt)
         for (int i = 0; i < SPARTAN_COUNT; ++i)
         {
             auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
-            if (!world.HasComponent<overworld::OverworldWaypointTargetComponent>(entity))
+            if (!world.HasComponent<overworld::OverworldTargetComponent>(entity))
             {
                 const auto& position = world.GetComponent<genesis::TransformComponent>(entity);
-                auto component = std::make_unique<overworld::OverworldWaypointTargetComponent>();
+                auto component = std::make_unique<overworld::OverworldTargetComponent>();
                 component->mTargetPosition = glm::vec3(genesis::math::RandomFloat(position.mPosition.x - 0.2f, position.mPosition.x + 0.2f),genesis::math::RandomFloat(position.mPosition.y -0.2f, position.mPosition.y + 0.2f),0.0f);
-                world.AddComponent<overworld::OverworldWaypointTargetComponent>(entity, std::move(component));
+                world.AddComponent<overworld::OverworldTargetComponent>(entity, std::move(component));
             }
         }
     }

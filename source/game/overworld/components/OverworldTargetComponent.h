@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldWaypointTargetComponent.h
+///  OverworldTargetComponent.h
 ///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 11/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldWaypointTargetComponent_h
-#define OverworldWaypointTargetComponent_h
+#ifndef OverworldTargetComponent_h
+#define OverworldTargetComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -39,9 +39,10 @@ const std::map<genesis::colors::RGBTriplet, WayPointTargetAreaType> RGB_TO_AREA_
 
 ///-----------------------------------------------------------------------------------------------
 
-class OverworldWaypointTargetComponent final: public genesis::ecs::IComponent
+class OverworldTargetComponent final: public genesis::ecs::IComponent
 {
 public:
+    genesis::ecs::EntityId mOptionalEntityTarget = genesis::ecs::NULL_ENTITY_ID;
     glm::vec3 mTargetPosition;
     WayPointTargetAreaType mTargetAreaType;
 };
@@ -52,4 +53,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* OverworldWaypointTargetComponent_h */
+#endif /* OverworldTargetComponent_h */
