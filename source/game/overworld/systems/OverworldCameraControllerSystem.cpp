@@ -24,12 +24,14 @@ namespace overworld
 
 namespace
 {
-    //const float ZERO_THRESHOLD                        = 0.01f;
-    const float CAMERA_MOVE_SPEED                     = 0.1f;
-    const float CAMERA_ZOOM_SPEED                     = 1.0f;
-    const float CAMERA_ZOOM_SPEED_DECELERATION        = 9.8f;
-    const float CAMERA_MAX_Z                          = -0.2f;
-    const float CAMERA_MIN_Z                          = -0.6f;
+    static const StringId PLAYER_ENTITY_NAME = StringId("player");
+
+    static const float CAMERA_PANNING_SPEED           = 0.2f;
+    static const float CAMERA_MOVE_TO_PLAYER_SPEED    = 1.0f;
+    static const float CAMERA_ZOOM_SPEED              = 1.0f;
+    static const float CAMERA_ZOOM_SPEED_DECELERATION = 9.8f;
+    static const float CAMERA_MAX_Z                   = -0.2f;
+    static const float CAMERA_MIN_Z                   = -0.6f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -52,19 +54,35 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
     // Panning Calculations
     if(genesis::input::GetKeyState(genesis::input::Key::A_KEY) == genesis::input::InputState::PRESSED)
     {
-        cameraComponent.mVelocity.x = -CAMERA_MOVE_SPEED;
+        cameraComponent.mVelocity.x = -CAMERA_PANNING_SPEED;
     }
     if(genesis::input::GetKeyState(genesis::input::Key::D_KEY) == genesis::input::InputState::PRESSED){
-        cameraComponent.mVelocity.x = CAMERA_MOVE_SPEED;
+        cameraComponent.mVelocity.x = CAMERA_PANNING_SPEED;
     }
     if(genesis::input::GetKeyState(genesis::input::Key::W_KEY) == genesis::input::InputState::PRESSED)
     {
-        cameraComponent.mVelocity.y = CAMERA_MOVE_SPEED;
+        cameraComponent.mVelocity.y = CAMERA_PANNING_SPEED;
     }
     if(genesis::input::GetKeyState(genesis::input::Key::S_KEY) == genesis::input::InputState::PRESSED)
     {
-        cameraComponent.mVelocity.y = -CAMERA_MOVE_SPEED;
+        cameraComponent.mVelocity.y = -CAMERA_PANNING_SPEED;
     }
+    
+    // Move to player if no panning
+    if (genesis::math::Abs(cameraComponent.mVelocity.y) < genesis::math::EQ_THRESHOLD && genesis::math::Abs(cameraComponent.mVelocity.x) < genesis::math::EQ_THRESHOLD)
+    {
+        const auto playerEntity = world.FindEntityWithName(PLAYER_ENTITY_NAME);
+        const auto& playerPosition = world.GetComponent<genesis::TransformComponent>(playerEntity).mPosition;
+        
+        // If we havent already reached the player move towards them
+        if (genesis::math::Abs(playerPosition.x - cameraComponent.mPosition.x) > genesis::math::EQ_THRESHOLD && genesis::math::Abs(playerPosition.y - cameraComponent.mPosition.y) > genesis::math::EQ_THRESHOLD)
+        {
+            const auto directionToPlayer = glm::normalize(playerPosition - cameraComponent.mPosition);
+            cameraComponent.mVelocity.x = directionToPlayer.x * CAMERA_MOVE_TO_PLAYER_SPEED;
+            cameraComponent.mVelocity.y = directionToPlayer.y * CAMERA_MOVE_TO_PLAYER_SPEED;
+        }
+    }
+    
     
     // Zoom Calculations
     if (genesis::input::GetMouseWheelDelta() > 0)
@@ -78,7 +96,7 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
     
     cameraComponent.mPosition += cameraComponent.mVelocity * dt;
     
-    // Decelerate zoom in velocity
+    // Decelerate zoom-in velocity
     if (cameraComponent.mVelocity.z > 0)
     {
         cameraComponent.mVelocity.z -= CAMERA_ZOOM_SPEED_DECELERATION * dt;

@@ -32,7 +32,8 @@ namespace overworld
 
 namespace
 {
-    static const StringId MAP_ENTITY_NAME = StringId("map");
+    static const StringId MAP_ENTITY_NAME    = StringId("map");
+    static const StringId PLAYER_ENTITY_NAME = StringId("player");
     
     static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";
 
@@ -58,7 +59,7 @@ void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vecto
     
     auto& world = genesis::ecs::World::GetInstance();
     
-    auto playerEntity = world.FindEntityWithName(StringId("player"));
+    auto playerEntity = world.FindEntityWithName(PLAYER_ENTITY_NAME);
     auto targetComponent = std::make_unique<OverworldTargetComponent>();
     auto entityToFollow = GetEntityToFollow(entitiesToProcess, playerEntity, world);
     
