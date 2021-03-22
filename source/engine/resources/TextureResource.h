@@ -41,8 +41,7 @@ public:
     ~TextureResource();
     
     GLuint GetGLTextureId() const;
-    int GetWidth() const;
-    int GetHeight() const;
+    const glm::vec2& GetDimensions() const;
     colors::RGBTriplet GetRGBatPixel(const int x, const int y) const;
 
 private:
@@ -56,8 +55,7 @@ private:
     
 private:
     SDL_Surface* const mSurface;
-    const int mWidth;
-    const int mHeight;
+    const glm::vec2 mDimensions;
     const GLuint mGLTextureId;
 };
 

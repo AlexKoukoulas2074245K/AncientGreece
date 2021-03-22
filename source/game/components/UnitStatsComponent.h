@@ -11,6 +11,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+#include "../overworld/AreaTypes.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -18,6 +19,7 @@ class UnitStatsComponent final: public genesis::ecs::IComponent
 {
 public:
     float mSpeedMultiplier = 1.0f;
+    overworld::AreaTypeMask mNavigableAreaTypes = overworld::areaTypeMasks::NEUTRAL;
 };
 
 ///-----------------------------------------------------------------------------------------------

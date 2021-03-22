@@ -38,16 +38,9 @@ GLuint TextureResource::GetGLTextureId() const
 
 ///------------------------------------------------------------------------------------------------
 
-int TextureResource::GetWidth() const
+const glm::vec2& TextureResource::GetDimensions() const
 {
-    return mWidth;
-}
-
-///------------------------------------------------------------------------------------------------
-
-int TextureResource::GetHeight() const
-{
-    return mHeight;
+    return mDimensions;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -70,8 +63,7 @@ TextureResource::TextureResource
     GLuint glTextureId
 )
     : mSurface(surface)
-    , mWidth(width)
-    , mHeight(height)
+    , mDimensions(width, height)
     , mGLTextureId(glTextureId)
 {
 }

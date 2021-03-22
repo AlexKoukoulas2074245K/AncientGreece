@@ -6,8 +6,11 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "OverworldPlayerTargetSelectionSystem.h"
+#include "../AreaTypes.h"
 #include "../components/HighlightableComponent.h"
 #include "../components/OverworldTargetComponent.h"
+#include "../utils/NavmapUtils.h"
+#include "../../components/UnitStatsComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/common/utils/MathUtils.h"
@@ -62,22 +65,27 @@ void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vecto
     auto playerEntity = world.FindEntityWithName(PLAYER_ENTITY_NAME);
     auto targetComponent = std::make_unique<OverworldTargetComponent>();
     auto entityToFollow = GetEntityToFollow(entitiesToProcess, playerEntity, world);
-    
+    auto isValidTarget = false;
     if (entityToFollow != genesis::ecs::NULL_ENTITY_ID)
     {
         targetComponent->mOptionalEntityTarget = entityToFollow;
+        isValidTarget = true;
     }
     else
     {
         CalculateMapTarget(*targetComponent, world);
+        const auto& playerStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
+        isValidTarget = (playerStatsComponent.mNavigableAreaTypes & targetComponent->mTargetAreaType) != 0;
     }
     
-    if (world.HasComponent<OverworldTargetComponent>(playerEntity))
+    if (isValidTarget)
     {
-        world.RemoveComponent<OverworldTargetComponent>(playerEntity);
+        if (world.HasComponent<OverworldTargetComponent>(playerEntity))
+        {
+            world.RemoveComponent<OverworldTargetComponent>(playerEntity);
+        }
+        world.AddComponent<OverworldTargetComponent>(playerEntity, std::move(targetComponent));
     }
-    world.AddComponent<OverworldTargetComponent>(playerEntity, std::move(targetComponent));
-
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -127,19 +135,15 @@ void OverworldPlayerTargetSelectionSystem::CalculateMapTarget(OverworldTargetCom
     auto rayDirection = genesis::math::ComputeMouseRayDirection(mViewMatrix, mProjectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
     genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, rayDirection, mapTransformComponent.mPosition, MAP_NORMAL, mapIntersectionPoint);
     
-    // Find relative displacement
-    const auto relativeXDisplacement = mapIntersectionPoint.x/(mapDimensions.x/2.0f);
-    const auto relativeYDisplacement = mapIntersectionPoint.y/(mapDimensions.y/2.0f);
-    
     // Calculate respective navmap pixel
     auto& navmapTexture = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::TextureResource>(NAVMAP_ASSET_PATH);
-    const auto targetPixelX = navmapTexture.GetWidth()/2 + relativeXDisplacement * navmapTexture.GetWidth()/2;
-    const auto targetPixelY = navmapTexture.GetHeight()/2 - relativeYDisplacement * navmapTexture.GetHeight()/2;
-    const auto targetPixel = navmapTexture.GetRGBatPixel(targetPixelX, targetPixelY);
+    
+    const auto pixelPosition = MapPositionToNavmapPixel(mapIntersectionPoint, mapDimensions, navmapTexture.GetDimensions());
+    const auto targetPixel = navmapTexture.GetRGBatPixel(pixelPosition.x, pixelPosition.y);
     
     // Attach waypoint component to player
     targetComponent.mTargetPosition = mapIntersectionPoint;
-    targetComponent.mTargetAreaType = RGB_TO_AREA_TYPE.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE.at(targetPixel) : areaTypeMasks::NEUTRAL;
+    targetComponent.mTargetAreaType = RGB_TO_AREA_TYPE_MASK.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE_MASK.at(targetPixel) : areaTypeMasks::NEUTRAL;
 }
 
 ///-----------------------------------------------------------------------------------------------
