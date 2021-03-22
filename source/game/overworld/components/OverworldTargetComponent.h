@@ -21,20 +21,25 @@ namespace overworld
     
 ///-----------------------------------------------------------------------------------------------
 
-enum class WayPointTargetAreaType
+namespace areaTypeMasks
 {
-    NEUTRAL, BLOCKED, FOREST, SEA, MOUNTAIN, HIGH_MOUNTAIN
+    static const int NEUTRAL       = 0x01;
+    static const int BLOCKED       = 0x02;
+    static const int FOREST        = 0x04;
+    static const int SEA           = 0x08;
+    static const int MOUNTAIN      = 0x10;
+    static const int HIGH_MOUNTAIN = 0x20;
 };
 
 ///-----------------------------------------------------------------------------------------------
 
-const std::map<genesis::colors::RGBTriplet, WayPointTargetAreaType> RGB_TO_AREA_TYPE =
+const std::map<genesis::colors::RGBTriplet, int> RGB_TO_AREA_TYPE =
 {
-    { genesis::colors::RGBTriplet(255, 255, 255), WayPointTargetAreaType::BLOCKED },
-    { genesis::colors::RGBTriplet(  0,   0, 255), WayPointTargetAreaType::SEA },
-    { genesis::colors::RGBTriplet(119, 119, 119), WayPointTargetAreaType::MOUNTAIN },
-    { genesis::colors::RGBTriplet( 51,  51,  51), WayPointTargetAreaType::HIGH_MOUNTAIN },
-    { genesis::colors::RGBTriplet(  0, 255,   0), WayPointTargetAreaType::FOREST }
+    { genesis::colors::RGBTriplet(255, 255, 255), areaTypeMasks::BLOCKED },
+    { genesis::colors::RGBTriplet(  0,   0, 255), areaTypeMasks::SEA },
+    { genesis::colors::RGBTriplet(119, 119, 119), areaTypeMasks::MOUNTAIN },
+    { genesis::colors::RGBTriplet( 51,  51,  51), areaTypeMasks::HIGH_MOUNTAIN },
+    { genesis::colors::RGBTriplet(  0, 255,   0), areaTypeMasks::FOREST }
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -44,7 +49,7 @@ class OverworldTargetComponent final: public genesis::ecs::IComponent
 public:
     genesis::ecs::EntityId mOptionalEntityTarget = genesis::ecs::NULL_ENTITY_ID;
     glm::vec3 mTargetPosition;
-    WayPointTargetAreaType mTargetAreaType;
+    int mTargetAreaType;
 };
 
 ///-----------------------------------------------------------------------------------------------

@@ -139,7 +139,7 @@ void OverworldPlayerTargetSelectionSystem::CalculateMapTarget(OverworldTargetCom
     
     // Attach waypoint component to player
     targetComponent.mTargetPosition = mapIntersectionPoint;
-    targetComponent.mTargetAreaType = RGB_TO_AREA_TYPE.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE.at(targetPixel) : WayPointTargetAreaType::NEUTRAL;
+    targetComponent.mTargetAreaType = RGB_TO_AREA_TYPE.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE.at(targetPixel) : areaTypeMasks::NEUTRAL;
 }
 
 ///-----------------------------------------------------------------------------------------------
