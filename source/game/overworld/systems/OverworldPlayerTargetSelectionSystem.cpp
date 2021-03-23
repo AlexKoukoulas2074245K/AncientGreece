@@ -80,6 +80,9 @@ void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vecto
     
     if (isValidTarget)
     {
+        auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
+        cameraComponent.mCameraState = genesis::rendering::CameraState::AUTO_CENTERING;
+        
         if (world.HasComponent<OverworldTargetComponent>(playerEntity))
         {
             world.RemoveComponent<OverworldTargetComponent>(playerEntity);

@@ -54,22 +54,26 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
     // Panning Calculations
     if(genesis::input::GetKeyState(genesis::input::Key::A_KEY) == genesis::input::InputState::PRESSED)
     {
+        cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
         cameraComponent.mVelocity.x = -CAMERA_PANNING_SPEED;
     }
-    if(genesis::input::GetKeyState(genesis::input::Key::D_KEY) == genesis::input::InputState::PRESSED){
+    if(genesis::input::GetKeyState(genesis::input::Key::D_KEY) == genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
         cameraComponent.mVelocity.x = CAMERA_PANNING_SPEED;
     }
     if(genesis::input::GetKeyState(genesis::input::Key::W_KEY) == genesis::input::InputState::PRESSED)
     {
+        cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
         cameraComponent.mVelocity.y = CAMERA_PANNING_SPEED;
     }
     if(genesis::input::GetKeyState(genesis::input::Key::S_KEY) == genesis::input::InputState::PRESSED)
     {
+        cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
         cameraComponent.mVelocity.y = -CAMERA_PANNING_SPEED;
     }
     
-    // Move to player if no panning
-    if (genesis::math::Abs(cameraComponent.mVelocity.y) < genesis::math::EQ_THRESHOLD && genesis::math::Abs(cameraComponent.mVelocity.x) < genesis::math::EQ_THRESHOLD)
+    if (cameraComponent.mCameraState == genesis::rendering::CameraState::AUTO_CENTERING)
     {
         const auto playerEntity = world.FindEntityWithName(PLAYER_ENTITY_NAME);
         const auto& playerPosition = world.GetComponent<genesis::TransformComponent>(playerEntity).mPosition;
@@ -82,7 +86,6 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
             cameraComponent.mVelocity.y = directionToPlayer.y * CAMERA_MOVE_TO_PLAYER_SPEED;
         }
     }
-    
     
     // Zoom Calculations
     if (genesis::input::GetMouseWheelDelta() > 0)

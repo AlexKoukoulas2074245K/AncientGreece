@@ -42,6 +42,13 @@ namespace
 
 ///-----------------------------------------------------------------------------------------------
 
+enum class CameraState
+{
+    AUTO_CENTERING, PANNING
+};
+
+///-----------------------------------------------------------------------------------------------
+
 class CameraSingletonComponent final: public ecs::IComponent
 {
 public:
@@ -57,6 +64,7 @@ public:
     float mZFar                 = DEFAULT_CAMERA_Z_FAR;
     float mPitch                = DEFAULT_CAMERA_PITCH;
     float mYaw                  = DEFAULT_CAMERA_YAW;
+    CameraState mCameraState    = CameraState::AUTO_CENTERING;
 };
 
 ///-----------------------------------------------------------------------------------------------

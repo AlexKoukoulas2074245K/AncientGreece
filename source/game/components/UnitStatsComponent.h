@@ -19,7 +19,7 @@ class UnitStatsComponent final: public genesis::ecs::IComponent
 {
 public:
     float mSpeedMultiplier = 1.0f;
-    overworld::AreaTypeMask mNavigableAreaTypes = overworld::areaTypeMasks::NEUTRAL;
+    overworld::AreaTypeMask mNavigableAreaTypes = overworld::areaTypeMasks::NEUTRAL | overworld::areaTypeMasks::SEA | overworld::areaTypeMasks::MOUNTAIN | overworld::areaTypeMasks::HIGH_MOUNTAIN | overworld::areaTypeMasks::FOREST;
 };
 
 ///-----------------------------------------------------------------------------------------------
