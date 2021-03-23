@@ -7,15 +7,11 @@
 
 #include "OverworldMovementControllerSystem.h"
 #include "../components/OverworldTargetComponent.h"
-#include "../utils/Pathfinding.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
-#include "../../../engine/resources/ResourceLoadingService.h"
-#include "../../../engine/resources/TextureResource.h"
-#include "../../../engine/resources/MeshResource.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -43,20 +39,22 @@ OverworldMovementControllerSystem::OverworldMovementControllerSystem()
 void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = genesis::ecs::World::GetInstance();
-
+    
     for (const auto entityId: entitiesToProcess)
     {
         const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
-        auto& targetComponent = world.GetComponent<OverworldTargetComponent>(entityId);
+        auto& waypointComponent = world.GetComponent<OverworldTargetComponent>(entityId);
         auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
         
-        if (targetComponent.mOptionalEntityTarget != genesis::ecs::NULL_ENTITY_ID && world.HasEntity(targetComponent.mOptionalEntityTarget))
+        if (waypointComponent.mOptionalEntityTarget != genesis::ecs::NULL_ENTITY_ID && world.HasEntity(waypointComponent.mOptionalEntityTarget))
         {
-            targetComponent.mTargetPositionPath.push_back( world.GetComponent<genesis::TransformComponent>(targetComponent.mOptionalEntityTarget).mPosition);
+            waypointComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(waypointComponent.mOptionalEntityTarget).mPosition;
         }
         
+        const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
+        
         // If we have arrived at target position
-        if (targetComponent.mTargetPositionPath.size() == 0)
+        if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD)
         {
             // Start Idle animation
             genesis::animation::ChangeAnimation(entityId, StringId("idle"));
@@ -65,21 +63,12 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         // Else move and rotate towards target
         else
         {
-            auto currentTargetPos = targetComponent.mTargetPositionPath.front();
-            auto vecToWaypoint = currentTargetPos - transformComponent.mPosition;
-            
             const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mSpeedMultiplier;
-            UpdatePosition(dt, unitSpeed, currentTargetPos, transformComponent.mPosition);
-            //UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
+            UpdatePosition(dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
+            UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
             
             // Start walking animation
             genesis::animation::ChangeAnimation(entityId, StringId("walking"));
-            
-            // Check for moving to the next position path step
-            if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD)
-            {
-                targetComponent.mTargetPositionPath.pop_front();
-            }
         }
     }
 }

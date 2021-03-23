@@ -14,7 +14,7 @@ namespace overworld
 
 ///------------------------------------------------------------------------------------------------
 
-glm::ivec2 MapPositionToNavmapPixel(const glm::vec3& mapPosition, const glm::vec3& mapDimensions, const glm::ivec2& navmapDimensions)
+glm::ivec2 MapPositionToNavmapPixel(const glm::vec3& mapPosition, const glm::vec3& mapDimensions, const glm::vec2& navmapDimensions)
 {
     // Find relative displacement
     const auto relativeXDisplacement = mapPosition.x/(mapDimensions.x/2.0f);
@@ -28,7 +28,7 @@ glm::ivec2 MapPositionToNavmapPixel(const glm::vec3& mapPosition, const glm::vec
 
 ///-----------------------------------------------------------------------------------------------
 
-glm::vec3 NavmapPixelToMapPosition(const glm::ivec2& pixelPosition, const glm::vec3& mapDimensions, const glm::ivec2& navmapDimensions)
+glm::vec3 NavmapPixelToMapPosition(const glm::ivec2& pixelPosition, const glm::vec3& mapDimensions, const glm::vec2& navmapDimensions)
 {
     const auto halfNavMapWidth = navmapDimensions.x * 0.5f;
     const auto halfNavMapHeight = navmapDimensions.y * 0.5f;

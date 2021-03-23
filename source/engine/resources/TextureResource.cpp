@@ -38,7 +38,7 @@ GLuint TextureResource::GetGLTextureId() const
 
 ///------------------------------------------------------------------------------------------------
 
-const glm::ivec2& TextureResource::GetDimensions() const
+const glm::vec2& TextureResource::GetDimensions() const
 {
     return mDimensions;
 }

@@ -19,11 +19,11 @@ namespace overworld
 
 ///------------------------------------------------------------------------------------------------
 
-glm::ivec2 MapPositionToNavmapPixel(const glm::vec3& mapPosition, const glm::vec3& mapDimensions, const glm::ivec2& navmapDimensions);
+glm::ivec2 MapPositionToNavmapPixel(const glm::vec3& mapPosition, const glm::vec3& mapDimensions, const glm::vec2& navmapDimensions);
 
 ///------------------------------------------------------------------------------------------------
 
-glm::vec3 NavmapPixelToMapPosition(const glm::ivec2& pixelPosition, const glm::vec3& mapDimensions, const glm::ivec2& navmapDimensions);
+glm::vec3 NavmapPixelToMapPosition(const glm::ivec2& pixelPosition, const glm::vec3& mapDimensions, const glm::vec2& navmapDimensions);
 
 ///------------------------------------------------------------------------------------------------
 

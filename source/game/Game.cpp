@@ -118,22 +118,22 @@ void Game::VOnUpdate(float& dt)
     
     dtAccum += dt;
     dtAccum2 += dt;
-//    
-//    if (dtAccum2 > 1.0f)
-//    {
-//        dtAccum2 = 0.0f;
-//        for (int i = 0; i < SPARTAN_COUNT; ++i)
-//        {
-//            auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
-//            if (!world.HasComponent<overworld::OverworldTargetComponent>(entity))
-//            {
-//                const auto& position = world.GetComponent<genesis::TransformComponent>(entity);
-//                auto component = std::make_unique<overworld::OverworldTargetComponent>();
-//                component->mTargetPosition = glm::vec3(genesis::math::RandomFloat(position.mPosition.x - 0.2f, position.mPosition.x + 0.2f),genesis::math::RandomFloat(position.mPosition.y -0.2f, position.mPosition.y + 0.2f),0.0f);
-//                world.AddComponent<overworld::OverworldTargetComponent>(entity, std::move(component));
-//            }
-//        }
-//    }
+    
+    if (dtAccum2 > 1.0f)
+    {
+        dtAccum2 = 0.0f;
+        for (int i = 0; i < SPARTAN_COUNT; ++i)
+        {
+            auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
+            if (!world.HasComponent<overworld::OverworldTargetComponent>(entity))
+            {
+                const auto& position = world.GetComponent<genesis::TransformComponent>(entity);
+                auto component = std::make_unique<overworld::OverworldTargetComponent>();
+                component->mTargetPosition = glm::vec3(genesis::math::RandomFloat(position.mPosition.x - 0.2f, position.mPosition.x + 0.2f),genesis::math::RandomFloat(position.mPosition.y -0.2f, position.mPosition.y + 0.2f),0.0f);
+                world.AddComponent<overworld::OverworldTargetComponent>(entity, std::move(component));
+            }
+        }
+    }
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
     
