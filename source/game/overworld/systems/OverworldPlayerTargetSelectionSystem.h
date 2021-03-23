@@ -10,6 +10,7 @@
 
 ///-----------------------------------------------------------------------------------------------
 
+#include "../AreaTypes.h"
 #include "../../engine/ECS.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -32,7 +33,8 @@ public:
 
 private:
     genesis::ecs::EntityId GetEntityToFollow(const std::vector<genesis::ecs::EntityId>& entitiesToProcess, const genesis::ecs::EntityId playerEntity, genesis::ecs::World&) const;
-    void CalculateMapTarget(OverworldTargetComponent& targetComponent, genesis::ecs::World& world) const;
+    void CalculateMapTarget(genesis::ecs::World& world, glm::vec3& targetPosition, AreaTypeMask& targetAreaType) const;
+    void FindPathToTarget(genesis::ecs::World* world, genesis::ecs::EntityId playerEntity, genesis::ecs::EntityId targetEntity, glm::vec3 targetPosition, AreaTypeMask targetAreaType) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

@@ -15,6 +15,8 @@
 #include "../../engine/common/utils/MathUtils.h"
 #include "../../engine/common/utils/ColorUtils.h"
 
+#include <list>
+
 ///-----------------------------------------------------------------------------------------------
 
 namespace overworld
@@ -26,7 +28,7 @@ class OverworldTargetComponent final: public genesis::ecs::IComponent
 {
 public:
     genesis::ecs::EntityId mOptionalEntityTarget = genesis::ecs::NULL_ENTITY_ID;
-    glm::vec3 mTargetPosition;
+    std::list<glm::vec3> mTargetPositionPath;
     AreaTypeMask mTargetAreaType;
 };
 
