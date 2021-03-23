@@ -57,6 +57,15 @@ struct MaterialProperties final
 
 ///-----------------------------------------------------------------------------------------------
 
+enum class RenderableType
+{
+    NORMAL_MODEL,
+    GUI_MODEL,
+    TEXT_3D_MODEL
+};
+
+///-----------------------------------------------------------------------------------------------
+
 class RenderableComponent final: public ecs::IComponent
 {
 public:
@@ -71,8 +80,8 @@ public:
     int mPreviousMeshResourceIndex      = -1;
     float mAnimationTimeAccum           = 0.0f;
     float mTransitionAnimationTimeAccum = 0.0f;
+    RenderableType mRenderableType      = RenderableType::NORMAL_MODEL;
     bool mIsVisible                     = true;
-    bool mIsGuiComponent                = false;
     bool mIsAffectedByLight             = false;
 };
 

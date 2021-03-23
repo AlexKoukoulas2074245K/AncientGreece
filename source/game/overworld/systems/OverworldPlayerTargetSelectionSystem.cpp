@@ -8,6 +8,7 @@
 #include "OverworldPlayerTargetSelectionSystem.h"
 #include "../AreaTypes.h"
 #include "../components/HighlightableComponent.h"
+#include "../components/OverworldMapPickingInfoSingletonComponent.h"
 #include "../components/OverworldTargetComponent.h"
 #include "../utils/NavmapUtils.h"
 #include "../../components/UnitStatsComponent.h"
@@ -17,7 +18,6 @@
 #include "../../../engine/input/utils/InputUtils.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
-#include "../../../engine/rendering/components/WindowSingletonComponent.h"
 #include "../../../engine/rendering/utils/MeshUtils.h"
 #include "../../../engine/resources/MeshResource.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
@@ -35,12 +35,11 @@ namespace overworld
 
 namespace
 {
-    static const StringId MAP_ENTITY_NAME    = StringId("map");
+    static const StringId MAP_ENTITY_NAME = StringId("map");
+
     static const StringId PLAYER_ENTITY_NAME = StringId("player");
     
     static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";
-
-    static const glm::vec3 MAP_NORMAL = glm::vec3(0.0f, 0.0f, -1.0f);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -110,42 +109,22 @@ genesis::ecs::EntityId OverworldPlayerTargetSelectionSystem::GetEntityToFollow(c
 
 void OverworldPlayerTargetSelectionSystem::CalculateMapTarget(OverworldTargetComponent& targetComponent, genesis::ecs::World& world) const
 {
-    auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
-    auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
-    
-    // Calculate render-constant camera view matrix
-    auto mViewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
-
-    // Calculate render-constant camera projection matrix
-    auto mProjectionMatrix = glm::perspectiveFovLH
-    (
-        cameraComponent.mFieldOfView,
-        windowComponent.mRenderableWidth,
-        windowComponent.mRenderableHeight,
-        cameraComponent.mZNear,
-        cameraComponent.mZFar
-    );
+    const auto& mapPickingInfoComponent = world.GetSingletonComponent<OverworldMapPickingInfoSingletonComponent>();
     
     // Find map entity
     auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
-    const auto& mapTransformComponent = world.GetComponent<genesis::TransformComponent>(mapEntity);
     const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(mapEntity);
     const auto& mapMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( renderableComponent.mMeshResourceIds.at(renderableComponent.mCurrentMeshResourceIndex));
     const auto& mapDimensions = mapMeshResource.GetDimensions();
     
-    // Calculate Mouse Intersection with map
-    glm::vec3 mapIntersectionPoint;
-    auto rayDirection = genesis::math::ComputeMouseRayDirection(mViewMatrix, mProjectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
-    genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, rayDirection, mapTransformComponent.mPosition, MAP_NORMAL, mapIntersectionPoint);
-    
     // Calculate respective navmap pixel
     auto& navmapTexture = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::TextureResource>(NAVMAP_ASSET_PATH);
     
-    const auto pixelPosition = MapPositionToNavmapPixel(mapIntersectionPoint, mapDimensions, navmapTexture.GetDimensions());
+    const auto pixelPosition = MapPositionToNavmapPixel(mapPickingInfoComponent.mMapIntersectionPoint, mapDimensions, navmapTexture.GetDimensions());
     const auto targetPixel = navmapTexture.GetRGBatPixel(pixelPosition.x, pixelPosition.y);
     
     // Attach waypoint component to player
-    targetComponent.mTargetPosition = mapIntersectionPoint;
+    targetComponent.mTargetPosition = mapPickingInfoComponent.mMapIntersectionPoint;
     targetComponent.mTargetAreaType = RGB_TO_AREA_TYPE_MASK.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE_MASK.at(targetPixel) : areaTypeMasks::NEUTRAL;
 }
 

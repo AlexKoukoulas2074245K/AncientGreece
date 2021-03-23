@@ -44,7 +44,6 @@ public:
 private:
     void ProcessClickableEntity(const genesis::ecs::EntityId entity, const genesis::ecs::EntityId parentViewEntity, const glm::vec2& mousePosNdc) const;
     void HandleEvent(const genesis::ecs::EntityId sourceEntityId, const StringId eventName) const;
-    genesis::math::Rectangle CalculateTextBoundingRect(const genesis::TransformComponent& transformComponent, const genesis::rendering::TextStringComponent& textStringComponent) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

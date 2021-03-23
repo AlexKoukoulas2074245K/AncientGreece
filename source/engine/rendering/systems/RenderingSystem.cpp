@@ -129,7 +129,7 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
     for (const auto& entityId : applicableEntities)
     {
         const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
-        if (renderableComponent.mIsGuiComponent)
+        if (renderableComponent.mRenderableType == RenderableType::GUI_MODEL || renderableComponent.mRenderableType == RenderableType::TEXT_3D_MODEL)
         {
             guiEntities.push_back(entityId);
             continue;
@@ -174,6 +174,23 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
         
         if (world.HasComponent<TextStringComponent>(entityId))
         {
+            const auto& textStringComponent = world.GetComponent<TextStringComponent>(entityId);
+            
+            if (renderableComponent.mRenderableType == RenderableType::TEXT_3D_MODEL)
+            {
+                // Frustum culling
+                if (!math::IsMeshInsideFrustum
+                (
+                    transformComponent.mPosition + glm::vec3(textStringComponent.mText.size() * textStringComponent.mCharacterSize/2, 0.0f, 0.0f),
+                    transformComponent.mScale,
+                    glm::vec3(textStringComponent.mText.size(), textStringComponent.mCharacterSize, textStringComponent.mCharacterSize),
+                    cameraComponent.mFrustum
+                ))
+                {
+                    continue;
+                }
+            }
+            
             RenderStringInternal
             (
                 transformComponent,
@@ -181,7 +198,7 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
                 cameraComponent,
                 lightStoreComponent,
                 shaderStoreComponent,
-                world.GetComponent<TextStringComponent>(entityId),
+                textStringComponent,
                 windowComponent,
                 renderingContextComponent
             );
@@ -258,7 +275,10 @@ void RenderingSystem::RenderStringInternal
         glm::vec3 scale    = transformComponent.mScale;
         glm::vec3 rotation = transformComponent.mRotation;
         
-        scale.x /= windowComponent.mAspectRatio;
+        if (renderableComponent.mRenderableType == RenderableType::GUI_MODEL)
+        {
+            scale.x /= windowComponent.mAspectRatio;
+        }
         
         glm::mat4 rotMatrix = glm::mat4_cast(math::EulerAnglesToQuat(rotation));
            
@@ -389,7 +409,7 @@ void RenderingSystem::RenderEntityInternal
     glm::vec3 scale    = transformComponent.mScale;
     glm::vec3 rotation = transformComponent.mRotation;
 
-    if (renderableComponent.mIsGuiComponent)
+    if (renderableComponent.mRenderableType == RenderableType::GUI_MODEL)
     {        
         scale.x /= windowComponent.mAspectRatio;        
     }  

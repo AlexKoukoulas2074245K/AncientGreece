@@ -34,7 +34,7 @@ namespace
     const glm::vec3 DEFAULT_CAMERA_UP_VECTOR    = math::Y_AXIS;
 
     const float DEFAULT_CAMERA_FIELD_OF_VIEW = math::PI / 6.0f;
-    const float DEFAULT_CAMERA_Z_NEAR        = 0.1f;
+    const float DEFAULT_CAMERA_Z_NEAR        = 0.01f;
     const float DEFAULT_CAMERA_Z_FAR         = 100.0f;
     const float DEFAULT_CAMERA_PITCH         = 0.0f;
     const float DEFAULT_CAMERA_YAW           = -1.5f * math::PI;

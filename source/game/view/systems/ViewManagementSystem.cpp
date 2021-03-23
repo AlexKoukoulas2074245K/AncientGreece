@@ -16,6 +16,7 @@
 #include "../../engine/rendering/components/RenderableComponent.h"
 #include "../../engine/rendering/components/TextStringComponent.h"
 #include "../../engine/rendering/components/WindowSingletonComponent.h"
+#include "../../engine/rendering/utils/FontUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -81,10 +82,7 @@ void ViewManagementSystem::ProcessClickableEntity(const genesis::ecs::EntityId e
     auto& world = genesis::ecs::World::GetInstance();
     auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entity);
     const auto& clickableComponent = world.GetComponent<ClickableComponent>(entity);
-    const auto& textComponent = world.GetComponent<genesis::rendering::TextStringComponent>(entity);
-    const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entity);
-    
-    const auto boundingRect = CalculateTextBoundingRect(transformComponent, textComponent);
+    const auto boundingRect = genesis::rendering::CalculateTextBoundingRect(entity);
     
     if (genesis::math::IsPointInsideRectangle(boundingRect.bottomLeft, boundingRect.topRight, mousePosNdc))
     {
@@ -110,20 +108,6 @@ void ViewManagementSystem::HandleEvent(const genesis::ecs::EntityId sourceEntity
     {
         DestroyView(sourceEntityId);
     }
-}
-
-///-----------------------------------------------------------------------------------------------
-
-genesis::math::Rectangle ViewManagementSystem::CalculateTextBoundingRect(const genesis::TransformComponent& transformComponent, const genesis::rendering::TextStringComponent& textStringComponent) const
-{
-    genesis::math::Rectangle result;
-    const auto renderedTextWidth = ((textStringComponent.mPaddingProportionalToSize * textStringComponent.mCharacterSize) * textStringComponent.mText.size());
-    const auto renderedTextHeight = textStringComponent.mCharacterSize;
-    
-    result.bottomLeft = glm::vec2(transformComponent.mPosition.x - textStringComponent.mCharacterSize/8.0f, transformComponent.mPosition.y - renderedTextHeight/4.0f);
-    result.topRight = glm::vec2(transformComponent.mPosition.x + renderedTextWidth - textStringComponent.mCharacterSize/8.0f, transformComponent.mPosition.y + renderedTextHeight/2.0f);
-    
-    return result;
 }
 
 

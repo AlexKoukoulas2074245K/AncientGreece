@@ -46,6 +46,7 @@ void LoadFont
 /// @param[in] size the size of the rendered text's individual glyphs.
 /// @param[in] position the position to render the string at.
 /// @param[in] color (optional) specifies the custom color of the rendered string.
+/// @param[in] is3d (optional) specifies whether the rendered text is a gui element or part of the 3d world.
 /// @returns the id of an entity holding the root TextStringComponent which contains all the character entities of the input string.
 ecs::EntityId RenderText
 (
@@ -53,7 +54,8 @@ ecs::EntityId RenderText
     const StringId& fontName,
     const float size,
     const glm::vec3& position,
-    const glm::vec4& color = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)
+    const glm::vec4& color = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f),
+    const bool is3d = false
 );
 
 ///------------------------------------------------------------------------------------------------
@@ -90,6 +92,16 @@ bool IsTextStringTheSameAsText
 (
     const ecs::EntityId textStringEntityId,
     const std::string& textToTest
+);
+
+///------------------------------------------------------------------------------------------------
+/// Calculates the bounding AABB of the given text entity
+///
+/// @param[in] textStringEntityId the name of the entity holding the text string component.
+/// @returns whether the bounding rect of the represented rendered string
+genesis::math::Rectangle CalculateTextBoundingRect
+(
+    const ecs::EntityId textStringEntityId
 );
 
 ///------------------------------------------------------------------------------------------------

@@ -123,6 +123,57 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
         cameraComponent.mPosition = oldCameraPosition;
     }
     
+    
+    if (genesis::input::GetKeyState(genesis::input::Key::UP_ARROW_KEY)== genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mPitch += dt;
+        if (cameraComponent.mPitch >= 2 * genesis::math::PI)
+        {
+            cameraComponent.mPitch = cameraComponent.mPitch - 2 * genesis::math::PI;
+        }
+    }
+    if (genesis::input::GetKeyState(genesis::input::Key::DOWN_ARROW_KEY)== genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mPitch -= dt;
+        if (cameraComponent.mPitch <= 0.0f)
+        {
+            cameraComponent.mPitch = 2 * genesis::math::PI + cameraComponent.mPitch;
+        }
+    }
+    if (genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY)== genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mYaw += dt;
+        if (cameraComponent.mYaw >= 2 * genesis::math::PI)
+        {
+            cameraComponent.mYaw = cameraComponent.mYaw - 2 * genesis::math::PI;
+        }
+    }
+    if (genesis::input::GetKeyState(genesis::input::Key::RIGHT_ARROW_KEY) == genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mYaw -= dt;
+        if (cameraComponent.mYaw <= 0.0f)
+        {
+            cameraComponent.mYaw = 2 * genesis::math::PI + cameraComponent.mYaw;
+        }
+    }
+    
+    if (genesis::input::GetKeyState(genesis::input::Key::J_KEY)== genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mPosition += dt * 0.5f * glm::normalize(glm::cross(cameraComponent.mFrontVector, cameraComponent.mUpVector));
+    }
+    if (genesis::input::GetKeyState(genesis::input::Key::L_KEY)== genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mPosition -= dt * 0.5f * glm::normalize(glm::cross(cameraComponent.mFrontVector, cameraComponent.mUpVector));
+    }
+    if (genesis::input::GetKeyState(genesis::input::Key::I_KEY)== genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mPosition += dt * 0.5f * cameraComponent.mFrontVector;
+    }
+    if (genesis::input::GetKeyState(genesis::input::Key::K_KEY)== genesis::input::InputState::PRESSED)
+    {
+        cameraComponent.mPosition -= dt * 0.5f * cameraComponent.mFrontVector;
+    }
+    
     // Establish front vector
     cameraComponent.mFrontVector.x = genesis::math::Cosf(cameraComponent.mYaw) * genesis::math::Cosf(cameraComponent.mPitch);
     cameraComponent.mFrontVector.y = genesis::math::Sinf(cameraComponent.mPitch);

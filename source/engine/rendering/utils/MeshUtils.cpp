@@ -167,7 +167,7 @@ ecs::EntityId LoadAndCreateGuiSprite
 
     auto renderableComponent = std::make_unique<RenderableComponent>();    
     renderableComponent->mShaderNameId = shaderName;
-    renderableComponent->mIsGuiComponent = true;
+    renderableComponent->mRenderableType = genesis::rendering::RenderableType::GUI_MODEL;
     renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
         LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));

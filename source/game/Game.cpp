@@ -11,6 +11,7 @@
 #include "overworld/components/OverworldTargetComponent.h"
 #include "overworld/systems/HighlightingSystem.h"
 #include "overworld/systems/OverworldCameraControllerSystem.h"
+#include "overworld/systems/OverworldMapPickingInfoSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
 #include "view/components/ViewQueueSingletonComponent.h"
@@ -65,6 +66,7 @@ void Game::VOnSystemsInit()
     
     world.AddSystem(std::make_unique<view::ViewManagementSystem>());
     
+    world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>());
     world.AddSystem(std::make_unique<overworld::HighlightingSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>());
@@ -100,6 +102,10 @@ void Game::VOnGameInit()
         world.AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
         world.AddComponent<UnitStatsComponent>(spartanEntity, std::make_unique<UnitStatsComponent>());
     }
+    
+    auto nameEntity = genesis::rendering::RenderText("Athenai the city of GODS!@£", StringId("ancient_greek_font"), 0.01f, glm::vec3(-0.016211, -0.040953, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), true);
+    world.AddComponent<overworld::HighlightableComponent>(nameEntity, std::make_unique<overworld::HighlightableComponent>());
+    
 //    auto entity = genesis::rendering::LoadAndCreateGuiSprite("gui_base", "parchment", StringId("default_gui"));
 //    auto& transformComponent = genesis::ecs::World::GetInstance().GetComponent<genesis::TransformComponent>(entity);
 //    transformComponent.mScale /= 2.0f;
