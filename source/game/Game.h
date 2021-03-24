@@ -21,6 +21,8 @@ public:
     void VOnGameInit() override;
     void VOnUpdate(float& dt) override;
     
+private:
+    void RegisterConsoleCommands() const;
 };       
 
 ///------------------------------------------------------------------------------------------------

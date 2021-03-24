@@ -18,6 +18,7 @@
 #include "../../../engine/input/utils/InputUtils.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
+#include "../../../engine/rendering/components/TextStringComponent.h"
 #include "../../../engine/rendering/utils/MeshUtils.h"
 #include "../../../engine/resources/MeshResource.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
@@ -96,6 +97,11 @@ genesis::ecs::EntityId OverworldPlayerTargetSelectionSystem::GetEntityToFollow(c
 {
     for (const auto entityId: entitiesToProcess)
     {
+        // Don't follow highlighted location texts
+        if (world.HasComponent<genesis::rendering::TextStringComponent>(entityId))
+        {
+            continue;
+        }
         if (world.GetComponent<HighlightableComponent>(entityId).mHighlighted && playerEntity != entityId)
         {
             return entityId;

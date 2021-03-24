@@ -26,6 +26,8 @@ public:
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
     
 private:
+    void NormalCameraOperation(const float dt) const;
+    void FreeCameraDebugOperation(const float dt) const;
     bool IsCameraOutOfBounds() const;
 };
 

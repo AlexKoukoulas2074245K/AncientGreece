@@ -62,7 +62,11 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
         if (world.HasComponent<genesis::rendering::TextStringComponent>(entityId))
         {
             const auto textRect = genesis::rendering::CalculateTextBoundingRect(entityId);
-            renderableComponent.mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = genesis::math::IsPointInsideRectangle(textRect.bottomLeft, textRect.topRight, glm::vec2(mapPickingInfoComponent.mMapIntersectionPoint.x, mapPickingInfoComponent.mMapIntersectionPoint.y)) ? CITY_HIGHLIGHTED_COLOR : CITY_DEFAULT_COLOR;
+            const auto intersectionExists =  genesis::math::IsPointInsideRectangle(textRect.bottomLeft, textRect.topRight, glm::vec2(mapPickingInfoComponent.mMapIntersectionPoint.x, mapPickingInfoComponent.mMapIntersectionPoint.y));
+            
+            renderableComponent.mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] =  intersectionExists ? CITY_HIGHLIGHTED_COLOR : CITY_DEFAULT_COLOR;
+            
+            highlightableComponent.mHighlighted = intersectionExists;
         }
         else
         {

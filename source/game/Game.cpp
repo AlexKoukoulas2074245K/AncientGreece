@@ -11,6 +11,7 @@
 #include "overworld/components/OverworldTargetComponent.h"
 #include "overworld/systems/HighlightingSystem.h"
 #include "overworld/systems/OverworldCameraControllerSystem.h"
+#include "overworld/systems/OverworldLocationInteractionSystem.h"
 #include "overworld/systems/OverworldMapPickingInfoSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
@@ -23,6 +24,7 @@
 #include "../engine/common/utils/MathUtils.h"
 #include "../engine/debug/components/DebugViewStateSingletonComponent.h"
 #include "../engine/debug/systems/ConsoleManagementSystem.h"
+#include "../engine/debug/utils/ConsoleCommandUtils.h"
 #include "../engine/debug/systems/DebugViewManagementSystem.h"
 #include "../engine/input/systems/RawInputHandlingSystem.h"
 #include "../engine/input/utils/InputUtils.h"
@@ -68,6 +70,7 @@ void Game::VOnSystemsInit()
     
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>());
     world.AddSystem(std::make_unique<overworld::HighlightingSystem>());
+    world.AddSystem(std::make_unique<overworld::OverworldLocationInteractionSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
@@ -80,6 +83,7 @@ void Game::VOnSystemsInit()
 
 void Game::VOnGameInit()
 {
+    RegisterConsoleCommands();
     auto& world = genesis::ecs::World::GetInstance();
     
     genesis::rendering::LoadFont(StringId("ancient_greek_font"), 16, 16);
@@ -90,6 +94,8 @@ void Game::VOnGameInit()
     genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_4"));
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
+    
+    genesis::rendering::LoadAndCreateGuiSprite("building", "building", StringId("default_gui"), glm::vec3(0.2f, 0.0f, -0.1f), glm::vec3(), glm::vec3(1.0f, 1.0f, 1.0f));
     
     auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
@@ -103,14 +109,9 @@ void Game::VOnGameInit()
         world.AddComponent<UnitStatsComponent>(spartanEntity, std::make_unique<UnitStatsComponent>());
     }
     
-    auto nameEntity = genesis::rendering::RenderText("Athenai the city of GODS!@£", StringId("ancient_greek_font"), 0.01f, glm::vec3(-0.016211, -0.040953, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), true);
+    auto nameEntity = genesis::rendering::RenderText("Athenai", StringId("ancient_greek_font"), 0.01f, glm::vec3(-0.016211, -0.020953, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), true);
     world.AddComponent<overworld::HighlightableComponent>(nameEntity, std::make_unique<overworld::HighlightableComponent>());
     
-//    auto entity = genesis::rendering::LoadAndCreateGuiSprite("gui_base", "parchment", StringId("default_gui"));
-//    auto& transformComponent = genesis::ecs::World::GetInstance().GetComponent<genesis::TransformComponent>(entity);
-//    transformComponent.mScale /= 2.0f;
-//    
-//    genesis::rendering::RenderText("This is a message to the owner 123", StringId("ancient_greek_font"), 0.08f, glm::vec3(-0.2f, 0.0f, -0.1f));
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -125,35 +126,35 @@ void Game::VOnUpdate(float& dt)
     dtAccum += dt;
     dtAccum2 += dt;
     
-    if (dtAccum2 > 1.0f)
-    {
-        dtAccum2 = 0.0f;
-        for (int i = 0; i < SPARTAN_COUNT; ++i)
-        {
-            auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
-            if (!world.HasComponent<overworld::OverworldTargetComponent>(entity))
-            {
-                const auto& position = world.GetComponent<genesis::TransformComponent>(entity);
-                auto component = std::make_unique<overworld::OverworldTargetComponent>();
-                component->mTargetPosition = glm::vec3(genesis::math::RandomFloat(position.mPosition.x - 0.2f, position.mPosition.x + 0.2f),genesis::math::RandomFloat(position.mPosition.y -0.2f, position.mPosition.y + 0.2f),0.0f);
-                world.AddComponent<overworld::OverworldTargetComponent>(entity, std::move(component));
-            }
-        }
-    }
+//    if (dtAccum2 > 1.0f)
+//    {
+//        dtAccum2 = 0.0f;
+//        for (int i = 0; i < SPARTAN_COUNT; ++i)
+//        {
+//            auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
+//            if (!world.HasComponent<overworld::OverworldTargetComponent>(entity))
+//            {
+//                const auto& position = world.GetComponent<genesis::TransformComponent>(entity);
+//                auto component = std::make_unique<overworld::OverworldTargetComponent>();
+//                component->mTargetPosition = glm::vec3(genesis::math::RandomFloat(position.mPosition.x - 0.2f, position.mPosition.x + 0.2f),genesis::math::RandomFloat(position.mPosition.y -0.2f, position.mPosition.y + 0.2f),0.0f);
+//                world.AddComponent<overworld::OverworldTargetComponent>(entity, std::move(component));
+//            }
+//        }
+//    }
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
     
-    if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)
-    {
-        if (world.FindEntityWithName(StringId("viewname")) != genesis::ecs::NULL_ENTITY_ID)
-        {
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-        }
-        else
-        {
-            view::QueueView("test", StringId("viewname"));
-        }
-    }
+//    if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)
+//    {
+//        if (world.FindEntityWithName(StringId("viewname")) != genesis::ecs::NULL_ENTITY_ID)
+//        {
+//            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
+//        }
+//        else
+//        {
+//            view::QueueView("test", StringId("viewname"));
+//        }
+//    }
     if (world.FindEntityWithName(StringId("viewname")) != genesis::ecs::NULL_ENTITY_ID)
     {
         if (genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY) == genesis::input::InputState::TAPPED)
@@ -205,6 +206,47 @@ void Game::VOnUpdate(float& dt)
             view::QueueView("test", StringId("viewname"));
         }
     }
+}
+
+///------------------------------------------------------------------------------------------------
+
+void Game::RegisterConsoleCommands() const
+{
+#if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)
+    genesis::debug::RegisterConsoleCommand(StringId("free_cam"), [](const std::vector<std::string>& commandTextComponents)
+    {
+        static const std::unordered_set<std::string> sAllowedOptions = { "on", "off" };
+
+        const std::string USAGE_STRING = "Usage: free_cam on|off";
+
+        if (commandTextComponents.size() != 2 || sAllowedOptions.count(StringToLower(commandTextComponents[1])) == 0)
+        {
+            return genesis::debug::ConsoleCommandResult(false, USAGE_STRING);
+        }
+
+        const auto& world = genesis::ecs::World::GetInstance();
+        auto& debugViewStateComponent = world.GetSingletonComponent<genesis::debug::DebugViewStateSingletonComponent>();
+
+        debugViewStateComponent.mFreeCamDebugEnabled = StringToLower(commandTextComponents[1]) == "on";
+
+        return genesis::debug::ConsoleCommandResult(true);
+    });
+    
+    genesis::debug::RegisterConsoleCommand(StringId("reset_cam"), [](const std::vector<std::string>& commandTextComponents)
+    {
+        const std::string USAGE_STRING = "Usage: reset_cam";
+
+        if (commandTextComponents.size() != 1)
+        {
+            return genesis::debug::ConsoleCommandResult(false, USAGE_STRING);
+        }
+
+        auto& world = genesis::ecs::World::GetInstance();
+        world.RemoveSingletonComponent<genesis::rendering::CameraSingletonComponent>();
+        world.SetSingletonComponent<genesis::rendering::CameraSingletonComponent>(std::make_unique<genesis::rendering::CameraSingletonComponent>());
+        return genesis::debug::ConsoleCommandResult(true);
+    });
+#endif
 }
 
 ///------------------------------------------------------------------------------------------------

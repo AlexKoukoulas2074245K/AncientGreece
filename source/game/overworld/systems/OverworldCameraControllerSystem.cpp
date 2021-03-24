@@ -7,6 +7,7 @@
 
 #include "OverworldCameraControllerSystem.h"
 #include "../../../engine/common/components/TransformComponent.h"
+#include "../../../engine/debug/components/DebugViewStateSingletonComponent.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/rendering/components/WindowSingletonComponent.h"
@@ -44,6 +45,30 @@ OverworldCameraControllerSystem::OverworldCameraControllerSystem()
 ///-----------------------------------------------------------------------------------------------
 
 void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    const auto& debugViewState = world.GetSingletonComponent<genesis::debug::DebugViewStateSingletonComponent>();
+    
+    if (debugViewState.mFreeCamDebugEnabled)
+    {
+        FreeCameraDebugOperation(dt);
+    }
+    else
+    {
+        NormalCameraOperation(dt);
+    }
+    
+    auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
+    
+    // Establish front vector
+    cameraComponent.mFrontVector.x = genesis::math::Cosf(cameraComponent.mYaw) * genesis::math::Cosf(cameraComponent.mPitch);
+    cameraComponent.mFrontVector.y = genesis::math::Sinf(cameraComponent.mPitch);
+    cameraComponent.mFrontVector.z = genesis::math::Sinf(cameraComponent.mYaw) * genesis::math::Cosf(cameraComponent.mPitch);
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void OverworldCameraControllerSystem::NormalCameraOperation(const float dt) const
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
@@ -122,7 +147,14 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
     {
         cameraComponent.mPosition = oldCameraPosition;
     }
-    
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void OverworldCameraControllerSystem::FreeCameraDebugOperation(const float dt) const
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
     
     if (genesis::input::GetKeyState(genesis::input::Key::UP_ARROW_KEY)== genesis::input::InputState::PRESSED)
     {
@@ -157,27 +189,22 @@ void OverworldCameraControllerSystem::VUpdate(const float dt, const std::vector<
         }
     }
     
-    if (genesis::input::GetKeyState(genesis::input::Key::J_KEY)== genesis::input::InputState::PRESSED)
+    if (genesis::input::GetKeyState(genesis::input::Key::A_KEY)== genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition += dt * 0.5f * glm::normalize(glm::cross(cameraComponent.mFrontVector, cameraComponent.mUpVector));
     }
-    if (genesis::input::GetKeyState(genesis::input::Key::L_KEY)== genesis::input::InputState::PRESSED)
+    if (genesis::input::GetKeyState(genesis::input::Key::D_KEY)== genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition -= dt * 0.5f * glm::normalize(glm::cross(cameraComponent.mFrontVector, cameraComponent.mUpVector));
     }
-    if (genesis::input::GetKeyState(genesis::input::Key::I_KEY)== genesis::input::InputState::PRESSED)
+    if (genesis::input::GetKeyState(genesis::input::Key::W_KEY)== genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition += dt * 0.5f * cameraComponent.mFrontVector;
     }
-    if (genesis::input::GetKeyState(genesis::input::Key::K_KEY)== genesis::input::InputState::PRESSED)
+    if (genesis::input::GetKeyState(genesis::input::Key::S_KEY)== genesis::input::InputState::PRESSED)
     {
         cameraComponent.mPosition -= dt * 0.5f * cameraComponent.mFrontVector;
     }
-    
-    // Establish front vector
-    cameraComponent.mFrontVector.x = genesis::math::Cosf(cameraComponent.mYaw) * genesis::math::Cosf(cameraComponent.mPitch);
-    cameraComponent.mFrontVector.y = genesis::math::Sinf(cameraComponent.mPitch);
-    cameraComponent.mFrontVector.z = genesis::math::Sinf(cameraComponent.mYaw) * genesis::math::Cosf(cameraComponent.mPitch);
 }
 
 ///-----------------------------------------------------------------------------------------------

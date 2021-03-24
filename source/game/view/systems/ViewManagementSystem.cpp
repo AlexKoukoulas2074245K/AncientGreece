@@ -91,13 +91,15 @@ void ViewManagementSystem::ProcessClickableEntity(const genesis::ecs::EntityId e
         if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) == genesis::input::InputState::TAPPED)
         {
             HandleEvent(parentViewEntity, clickableComponent.mInteractionEvent);
-            genesis::input::ConsumeButtonInput(genesis::input::Button::LEFT_BUTTON);
         }
     }
     else
     {
         renderableComponent.mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = clickableComponent.mTextColor;
     }
+    
+    genesis::input::ConsumeButtonInput(genesis::input::Button::LEFT_BUTTON);
+    genesis::input::ConsumeButtonInput(genesis::input::Button::RIGHT_BUTTON);
 }
 
 ///-----------------------------------------------------------------------------------------------

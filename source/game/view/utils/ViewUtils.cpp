@@ -87,6 +87,14 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
 
 ///------------------------------------------------------------------------------------------------
 
+bool HasActiveView()
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    return world.GetSingletonComponent<ViewQueueSingletonComponent>().mActiveViewExists;
+}
+
+///------------------------------------------------------------------------------------------------
+
 void QueueView
 (
     const std::string& viewName,
