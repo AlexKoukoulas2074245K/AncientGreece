@@ -61,6 +61,7 @@ enum class RenderableType
 {
     NORMAL_MODEL,
     GUI_MODEL,
+    GUI_3D_MODEL,
     TEXT_3D_MODEL
 };
 

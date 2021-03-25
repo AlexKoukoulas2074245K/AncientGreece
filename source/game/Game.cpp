@@ -15,6 +15,7 @@
 #include "overworld/systems/OverworldMapPickingInfoSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
+#include "utils/KeyValueUtils.h"
 #include "view/components/ViewQueueSingletonComponent.h"
 #include "view/systems/ViewManagementSystem.h"
 #include "view/utils/ViewUtils.h"
@@ -48,10 +49,12 @@
 static int SPARTAN_COUNT = 15;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
+#if !defined(NDEBUG)
 extern float DEBUG_TEXTBOX_SIZE_DX;
 extern float DEBUG_TEXTBOX_SIZE_DY;
 extern float DEBUG_TEXTBOX_DX;
 extern float DEBUG_TEXTBOX_DY;
+#endif
 
 ///------------------------------------------------------------------------------------------------
 
@@ -95,8 +98,6 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    genesis::rendering::LoadAndCreateGuiSprite("building", "building", StringId("default_gui"), glm::vec3(0.2f, 0.0f, -0.1f), glm::vec3(), glm::vec3(1.0f, 1.0f, 1.0f));
-    
     auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
     playerStatsComponent->mSpeedMultiplier = 2.0f;
@@ -109,9 +110,11 @@ void Game::VOnGameInit()
         world.AddComponent<UnitStatsComponent>(spartanEntity, std::make_unique<UnitStatsComponent>());
     }
     
-    auto nameEntity = genesis::rendering::RenderText("Athenai", StringId("ancient_greek_font"), 0.01f, glm::vec3(-0.016211, -0.020953, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), true);
+    auto nameEntity = genesis::rendering::RenderText("Athenai", StringId("ancient_greek_font"), 0.01f, glm::vec3(-0.016211, -0.020953, 0.00f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), true);
     world.AddComponent<overworld::HighlightableComponent>(nameEntity, std::make_unique<overworld::HighlightableComponent>());
     
+    WriteValue(StringId("var1"), "Alex");
+    WriteValue(StringId("var2"), "Alex");
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -155,6 +158,7 @@ void Game::VOnUpdate(float& dt)
 //            view::QueueView("test", StringId("viewname"));
 //        }
 //    }
+#if !defined(NDEBUG)
     if (world.FindEntityWithName(StringId("viewname")) != genesis::ecs::NULL_ENTITY_ID)
     {
         if (genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY) == genesis::input::InputState::TAPPED)
@@ -206,6 +210,7 @@ void Game::VOnUpdate(float& dt)
             view::QueueView("test", StringId("viewname"));
         }
     }
+#endif
 }
 
 ///------------------------------------------------------------------------------------------------

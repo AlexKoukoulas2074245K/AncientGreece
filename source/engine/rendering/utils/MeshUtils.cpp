@@ -154,6 +154,7 @@ ecs::EntityId LoadAndCreateGuiSprite
     const glm::vec3& initialPosition /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialRotation /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialScale /* glm::vec3(1.0f, 1.0f, 1.0f) */,
+    const bool is3d /* false */,
     const StringId entityName /* StringId() */
 )
 {
@@ -167,7 +168,7 @@ ecs::EntityId LoadAndCreateGuiSprite
 
     auto renderableComponent = std::make_unique<RenderableComponent>();    
     renderableComponent->mShaderNameId = shaderName;
-    renderableComponent->mRenderableType = genesis::rendering::RenderableType::GUI_MODEL;
+    renderableComponent->mRenderableType = is3d ? genesis::rendering::RenderableType::GUI_3D_MODEL: genesis::rendering::RenderableType::GUI_MODEL;
     renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
         LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));

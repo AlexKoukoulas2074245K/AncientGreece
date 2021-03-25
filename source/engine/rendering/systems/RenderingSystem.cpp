@@ -100,7 +100,7 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
     
     // Collect all entities that need to be processed
     std::vector<ecs::EntityId> applicableEntities = entitiesToProcess;
-    std::vector<genesis::ecs::EntityId> guiEntities;    
+    tsl::robin_map<RenderableType, std::vector<ecs::EntityId>> mGuiEntityGroups;
     
     // Set background color
     GL_CHECK(glClearColor
@@ -125,16 +125,12 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
 
         return lhsTransformComponent.mPosition.z > rhsTransformComponent.mPosition.z;
     });
-
+    
+    // Execute normal 3d model pass and save gui entities
     for (const auto& entityId : applicableEntities)
     {
         const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
-        if (renderableComponent.mRenderableType == RenderableType::GUI_MODEL || renderableComponent.mRenderableType == RenderableType::TEXT_3D_MODEL)
-        {
-            guiEntities.push_back(entityId);
-            continue;
-        }
-        else
+        if (renderableComponent.mRenderableType == RenderableType::NORMAL_MODEL)
         {
             const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
             const auto& currentMesh        = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
@@ -162,18 +158,23 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
                 renderingContextComponent
             );
         }
+        else
+        {
+            mGuiEntityGroups[renderableComponent.mRenderableType].push_back(entityId);
+        }
     }
     
-    // Execute GUI render pass
+    // Execute disabled detph test GUI pass
     GL_CHECK(glDisable(GL_DEPTH_TEST));
     
-    for (const auto& entityId : guiEntities)
+    // Render 3d texts
+    if (mGuiEntityGroups.count(RenderableType::TEXT_3D_MODEL))
     {
-        const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
-        const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
-        
-        if (world.HasComponent<TextStringComponent>(entityId))
+        const auto& text3dEntities = mGuiEntityGroups.at(RenderableType::TEXT_3D_MODEL);
+        for (const auto& entityId : text3dEntities)
         {
+            const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
+            const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
             const auto& textStringComponent = world.GetComponent<TextStringComponent>(entityId);
             
             if (renderableComponent.mRenderableType == RenderableType::TEXT_3D_MODEL)
@@ -203,8 +204,61 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
                 renderingContextComponent
             );
         }
-        else
+    }
+    
+    // Execute normal gui models pass
+    if (mGuiEntityGroups.count(RenderableType::GUI_MODEL))
+    {
+        const auto& guiEntities = mGuiEntityGroups.at(RenderableType::GUI_MODEL);
+        for (const auto& entityId : guiEntities)
         {
+            const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
+            const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
+            
+            // If normal gui text entity render text
+            if (world.HasComponent<TextStringComponent>(entityId))
+            {
+                const auto& textStringComponent = world.GetComponent<TextStringComponent>(entityId);
+                RenderStringInternal
+                (
+                    transformComponent,
+                    renderableComponent,
+                    cameraComponent,
+                    lightStoreComponent,
+                    shaderStoreComponent,
+                    textStringComponent,
+                    windowComponent,
+                    renderingContextComponent
+                );
+            }
+            // Else render normal gui entity
+            else
+            {
+                RenderEntityInternal
+                (
+                    transformComponent,
+                    renderableComponent,
+                    cameraComponent,
+                    lightStoreComponent,
+                    shaderStoreComponent,
+                    windowComponent,
+                    renderingContextComponent
+                );
+            }
+        }
+    }
+    
+    // Execute gui 3d model pass
+    GL_CHECK(glEnable(GL_DEPTH_TEST));
+    
+    if (mGuiEntityGroups.count(RenderableType::GUI_3D_MODEL))
+    {
+        const auto& gui3dEntities = mGuiEntityGroups.at(RenderableType::GUI_3D_MODEL);
+        for (const auto& entityId : gui3dEntities)
+        {
+            const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
+            const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
+            
             RenderEntityInternal
             (
                 transformComponent,
@@ -217,7 +271,7 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
             );
         }
     }
-
+    
     // Swap window buffers
     SDL_GL_SwapWindow(windowComponent.mWindowHandle);
 }

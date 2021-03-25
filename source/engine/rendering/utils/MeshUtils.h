@@ -71,6 +71,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
 /// @param[in] textureName the texture with the given name to look for in the resource models folder.
 /// @param[in] shaderName the shader with this name will be attached to the model.
 /// @param[in] initialPosition (optional) an initial position for the loaded model.
+/// @param[in] is3d (optional) specifies whether this is a 3d gui element (i.e. not influenced by aspect ratio)
 /// @param[in] entityName (optional) a string to name the entity with.
 /// @returns the entity id of the loaded entity.
 ecs::EntityId LoadAndCreateGuiSprite
@@ -81,6 +82,7 @@ ecs::EntityId LoadAndCreateGuiSprite
     const glm::vec3& initialPosition = glm::vec3(0.0f, 0.0f, 0.0f),
     const glm::vec3& initialRotation = glm::vec3(0.0f, 0.0f, 0.0f),
     const glm::vec3& initialScale = glm::vec3(1.0f, 1.0f, 1.0f),
+    const bool is3d = false,
     const StringId entityName = StringId()
 );
 

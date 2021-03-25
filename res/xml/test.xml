@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<View background_name="horizontal_parchment" x="0.0" y="0.0" z="-0.2" width="3.0" height="2.0">
-    <Textbox x="1.05" y="0.4" z="-0.3" width="3.0" height="0.3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Textbox>
-    <ClickableText x="-0.02" y="-0.5" z="-0.3" size="0.08" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="close">Blah</ClickableText>
+<View background_name="horizontal_parchment" x="0.0" y="0.0" z="1.0" width="3.0" height="2.0">
+    <Textbox x="1.05" y="0.4" z="0.5" width="3.0" height="0.5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed {var1} eiusmod {var2} incididunt ut labore et dolore magna aliqua.</Textbox>
+    <ClickableText x="-0.02" y="-0.5" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="close">BlahBlahBlajBlah</ClickableText>
+    <Text x="-0.4" y="-0.5" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">BlahText</Text>
+    <Model name="building" x="0.0" y="0.0" z="0.2" rot_x="0.7" rot_y="2.0" rot_z="0.65" scale_x="0.05" scale_y="0.05" scale_z="0.05"></Model>
 </View>

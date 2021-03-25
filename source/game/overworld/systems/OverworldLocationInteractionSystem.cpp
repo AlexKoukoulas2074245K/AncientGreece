@@ -73,7 +73,7 @@ void OverworldLocationInteractionSystem::VUpdate(const float, const std::vector<
             }
             else // rightButtonTapped
             {
-                view::QueueView("test");
+                view::QueueView("test", StringId("test"));
             }
         }
     }
