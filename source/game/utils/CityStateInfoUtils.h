@@ -31,4 +31,8 @@ genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId city
 
 ///------------------------------------------------------------------------------------------------
 
+genesis::colors::RgbTriplet<float> GetCityStateRenownColor(const StringId cityStateName);
+
+///------------------------------------------------------------------------------------------------
+
 #endif /* CityStateInfoUtils_h */
