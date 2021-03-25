@@ -18,7 +18,7 @@
 namespace
 {
     static const std::string CITY_STATE_INFO_FILE_PATH = genesis::resources::ResourceLoadingService::RES_DATA_ROOT + "city_state_db.json";
-
+    static const int UPPER_LIMIT_GARISSON_COLOR = 1000;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -59,6 +59,18 @@ CityStateInfo& GetCityStateInfo(const StringId cityStateName)
 {
     auto& world = genesis::ecs::World::GetInstance();
     return world.GetSingletonComponent<CityStateInfoSingletonComponent>().mCityStateNameToInfo.at(cityStateName);
+}
+
+///-----------------------------------------------------------------------------------------------
+
+genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId cityStateName)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto garisson =  world.GetSingletonComponent<CityStateInfoSingletonComponent>().mCityStateNameToInfo.at(cityStateName).mGarisson;
+    const auto garissonFillPercent = 100.0 * static_cast<float>(garisson)/(genesis::math::Max(garisson, UPPER_LIMIT_GARISSON_COLOR));
+    
+    genesis::colors::HsvTriplet<float> hsvTarget(100.0f - garissonFillPercent, 1.0f, 1.0f);
+    return genesis::colors::HsvToRgb(hsvTarget);
 }
 
 ///-----------------------------------------------------------------------------------------------

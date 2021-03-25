@@ -45,12 +45,12 @@ const glm::vec2& TextureResource::GetDimensions() const
 
 ///------------------------------------------------------------------------------------------------
 
-colors::RGBTriplet TextureResource::GetRGBatPixel(const int x, const int y) const
+colors::RgbTriplet<int> TextureResource::GetRgbAtPixel(const int x, const int y) const
 {
     Uint8 r,g,b;
     auto pixel = *(Uint32*)((Uint8*)mSurface->pixels + y * mSurface->pitch + x * mSurface->format->BytesPerPixel);
     SDL_GetRGB(pixel, mSurface->format, &r, &g, &b);
-    return colors::RGBTriplet(r, g, b);
+    return colors::RgbTriplet<int>(r, g, b);
 }
 
 ///------------------------------------------------------------------------------------------------

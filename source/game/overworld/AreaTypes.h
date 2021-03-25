@@ -35,13 +35,13 @@ namespace areaTypeMasks
 
 ///-----------------------------------------------------------------------------------------------
 
-const std::map<genesis::colors::RGBTriplet, AreaTypeMask> RGB_TO_AREA_TYPE_MASK =
+const std::map<genesis::colors::RgbTriplet<int>, AreaTypeMask> RGB_TO_AREA_TYPE_MASK =
 {
-    { genesis::colors::RGBTriplet(255, 255, 255), areaTypeMasks::BLOCKED },
-    { genesis::colors::RGBTriplet(  0,   0, 255), areaTypeMasks::SEA },
-    { genesis::colors::RGBTriplet(119, 119, 119), areaTypeMasks::MOUNTAIN },
-    { genesis::colors::RGBTriplet( 51,  51,  51), areaTypeMasks::HIGH_MOUNTAIN },
-    { genesis::colors::RGBTriplet(  0, 255,   0), areaTypeMasks::FOREST }
+    { genesis::colors::RgbTriplet(255, 255, 255), areaTypeMasks::BLOCKED },
+    { genesis::colors::RgbTriplet(  0,   0, 255), areaTypeMasks::SEA },
+    { genesis::colors::RgbTriplet(119, 119, 119), areaTypeMasks::MOUNTAIN },
+    { genesis::colors::RgbTriplet( 51,  51,  51), areaTypeMasks::HIGH_MOUNTAIN },
+    { genesis::colors::RgbTriplet(  0, 255,   0), areaTypeMasks::FOREST }
 };
 
 ///-----------------------------------------------------------------------------------------------

@@ -9,12 +9,12 @@
 #include "../components/HighlightableComponent.h"
 #include "../components/OverworldMapPickingInfoSingletonComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
+#include "../../../engine/common/utils/ColorUtils.h"
 #include "../../../engine/common/utils/MathUtils.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/rendering/components/TextStringComponent.h"
 #include "../../../engine/rendering/components/WindowSingletonComponent.h"
-#include "../../../engine/rendering/utils/Colors.h"
 #include "../../../engine/rendering/utils/FontUtils.h"
 #include "../../../engine/resources/MeshResource.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
@@ -32,8 +32,8 @@ namespace
     static const StringId HIGHLIGHTED_SKELETAL_MODEL_SHADER    = StringId("highlighted_skeletal_3d");
     static const StringId GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME = StringId("custom_color");
     
-    static const glm::vec4 CITY_DEFAULT_COLOR     = genesis::rendering::colors::BLACK;
-    static const glm::vec4 CITY_HIGHLIGHTED_COLOR = genesis::rendering::colors::GRAY;
+    static const glm::vec4 CITY_DEFAULT_COLOR     = genesis::colors::BLACK;
+    static const glm::vec4 CITY_HIGHLIGHTED_COLOR = genesis::colors::GRAY;
 }
 
 ///-----------------------------------------------------------------------------------------------

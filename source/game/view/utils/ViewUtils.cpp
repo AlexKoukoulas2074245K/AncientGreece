@@ -264,7 +264,7 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         }
         if (node->first_attribute(TEXT_R_ATTRIBUTE_NAME) != nullptr)
         {
-            textColor.r = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_R_ATTRIBUTE_NAME)->value()));
+            textColor.r = std::stof(ReplaceTextVariables(node->first_attribute(TEXT_R_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXT_G_ATTRIBUTE_NAME) != nullptr)
         {

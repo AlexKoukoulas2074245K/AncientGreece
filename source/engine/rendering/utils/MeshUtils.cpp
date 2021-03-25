@@ -7,7 +7,7 @@
 
 #include "MeshUtils.h"
 #include "../components/RenderableComponent.h"
-#include "../utils/Colors.h"
+#include "../../common/utils/ColorUtils.h"
 #include "../../common/components/NameComponent.h"
 #include "../../common/components/TransformComponent.h"
 #include "../../common/utils/FileUtils.h"
@@ -172,7 +172,7 @@ ecs::EntityId LoadAndCreateGuiSprite
     renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
         LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));
-    renderableComponent->mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = genesis::rendering::colors::BLACK;
+    renderableComponent->mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = genesis::colors::BLACK;
     renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource
     (
         resources::ResourceLoadingService::RES_TEXTURES_ROOT + textureName + ".png"

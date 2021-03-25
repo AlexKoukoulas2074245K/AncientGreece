@@ -129,7 +129,7 @@ void OverworldPlayerTargetSelectionSystem::CalculateMapTarget(OverworldTargetCom
     auto& navmapTexture = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::TextureResource>(NAVMAP_ASSET_PATH);
     
     const auto pixelPosition = MapPositionToNavmapPixel(mapPickingInfoComponent.mMapIntersectionPoint, mapDimensions, navmapTexture.GetDimensions());
-    const auto targetPixel = navmapTexture.GetRGBatPixel(pixelPosition.x, pixelPosition.y);
+    const auto targetPixel = navmapTexture.GetRgbAtPixel(pixelPosition.x, pixelPosition.y);
     
     // Attach waypoint component to player
     targetComponent.mTargetPosition = mapPickingInfoComponent.mMapIntersectionPoint;

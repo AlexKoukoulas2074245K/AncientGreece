@@ -42,7 +42,7 @@ public:
     
     GLuint GetGLTextureId() const;
     const glm::vec2& GetDimensions() const;
-    colors::RGBTriplet GetRGBatPixel(const int x, const int y) const;
+    colors::RgbTriplet<int> GetRgbAtPixel(const int x, const int y) const;
 
 private:
     TextureResource

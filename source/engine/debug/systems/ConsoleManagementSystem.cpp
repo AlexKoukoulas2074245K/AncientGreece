@@ -8,10 +8,10 @@
 #include "ConsoleManagementSystem.h"
 #include "../components/ConsoleStateSingletonComponent.h"
 #include "../../common/components/TransformComponent.h"
+#include "../../common/utils/ColorUtils.h"
 #include "../../input/utils/InputUtils.h"
 #include "../../rendering/components/RenderableComponent.h"
 #include "../../rendering/components/TextStringComponent.h"
-#include "../../rendering/utils/Colors.h"
 #include "../../rendering/utils/FontUtils.h"
 #include "../../rendering/utils/MeshUtils.h"
 
@@ -227,7 +227,7 @@ void ConsoleManagementSystem::ExecuteCommand() const
                 CONSOLE_TEXT_FONT_NAME,
                 CONSOLE_TEXT_SIZE, 
                 CONSOLE_CURRENT_COMMAND_TEXT_POSITION, 
-                rendering::colors::RED
+                colors::RED
             ));
             AddTextStringToConsolePastText(rendering::RenderText
             (
@@ -235,7 +235,7 @@ void ConsoleManagementSystem::ExecuteCommand() const
                 CONSOLE_TEXT_FONT_NAME,
                 CONSOLE_TEXT_SIZE,
                 CONSOLE_CURRENT_COMMAND_TEXT_POSITION,
-                rendering::colors::RED
+                colors::RED
             ));
         }
         // Otherwise execute to command logic and print result if any
@@ -255,7 +255,7 @@ void ConsoleManagementSystem::ExecuteCommand() const
                         CONSOLE_TEXT_FONT_NAME,
                         CONSOLE_TEXT_SIZE,
                         CONSOLE_CURRENT_COMMAND_TEXT_POSITION,
-                        commandResult.mSuccess ? rendering::colors::GREEN : rendering::colors::RED                    
+                        commandResult.mSuccess ? colors::GREEN : colors::RED                    
                     ));
                 }
             }

@@ -30,11 +30,14 @@ namespace overworld
 
 namespace
 {
-    static const StringId PLAYER_ENTITY_NAME = StringId("player");
-    static const StringId CITY_STATE_NAME_DS_KEY = StringId("city_state_name");
-    static const StringId CITY_STATE_RENOWN_DS_KEY = StringId("city_state_renown");
-    static const StringId CITY_STATE_GARISSON_DS_KEY = StringId("city_state_garisson");
-    static const StringId CITY_STATE_DESCRIPTION_DS_KEY = StringId("city_state_description");
+    static const StringId PLAYER_ENTITY_NAME               = StringId("player");
+    static const StringId CITY_STATE_NAME_DS_KEY           = StringId("city_state_name");
+    static const StringId CITY_STATE_RENOWN_DS_KEY         = StringId("city_state_renown");
+    static const StringId CITY_STATE_GARISSON_DS_KEY       = StringId("city_state_garisson");
+    static const StringId CITY_STATE_GARISSON_RED_DS_KEY   = StringId("city_state_garisson_red");
+    static const StringId CITY_STATE_GARISSON_GREEN_DS_KEY = StringId("city_state_garisson_green");
+    static const StringId CITY_STATE_GARISSON_BLUE_DS_KEY  = StringId("city_state_garisson_blue");
+    static const StringId CITY_STATE_DESCRIPTION_DS_KEY    = StringId("city_state_description");
 
     static const std::string CITY_STATE_PREVIEW_NAME = "city_state_preview";
 }
@@ -85,9 +88,14 @@ void OverworldLocationInteractionSystem::VUpdate(const float, const std::vector<
             {
                 const auto cityName = world.GetComponent<genesis::NameComponent>(entityId).mName;
                 const auto& cityStateInfo = GetCityStateInfo(cityName);
+                const auto garissonColor = GetCityStateGarissonColor(cityName);
+                
                 WriteValue(CITY_STATE_NAME_DS_KEY, cityName.GetString());
                 WriteValue(CITY_STATE_RENOWN_DS_KEY, std::to_string(cityStateInfo.mRenown));
                 WriteValue(CITY_STATE_GARISSON_DS_KEY, std::to_string(cityStateInfo.mGarisson));
+                WriteValue(CITY_STATE_GARISSON_RED_DS_KEY, std::to_string(garissonColor.mRed));
+                WriteValue(CITY_STATE_GARISSON_GREEN_DS_KEY, std::to_string(garissonColor.mGreen));
+                WriteValue(CITY_STATE_GARISSON_BLUE_DS_KEY, std::to_string(garissonColor.mBlue));
                 WriteValue(CITY_STATE_DESCRIPTION_DS_KEY, cityStateInfo.mDescription);
                 view::QueueView(CITY_STATE_PREVIEW_NAME);
             }

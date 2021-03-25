@@ -9,8 +9,8 @@
 #include "../components/HighlightableComponent.h"
 #include "../../components/CityStateInfoSingletonComponent.h"
 #include "../../../engine/ECS.h"
+#include "../../../engine/common/utils/ColorUtils.h"
 #include "../../../engine/rendering/utils/FontUtils.h"
-#include "../../../engine/rendering/utils/Colors.h"
 
 ///------------------------------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ void PopulateOverworldCityStates()
     
     for (const auto& cityStateInfoEntry: cityStateInfoComponent.mCityStateNameToInfo)
     {
-        auto cityStateEntity = genesis::rendering::RenderText(cityStateInfoEntry.first.GetString(), GAME_FONT_NAME, GetCityStateOverworldNameSize(cityStateInfoEntry.first), glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, 0.00f), genesis::rendering::colors::BLACK, true, cityStateInfoEntry.first);
+        auto cityStateEntity = genesis::rendering::RenderText(cityStateInfoEntry.first.GetString(), GAME_FONT_NAME, GetCityStateOverworldNameSize(cityStateInfoEntry.first), glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, 0.00f), genesis::colors::BLACK, true, cityStateInfoEntry.first);
 
         world.AddComponent<overworld::HighlightableComponent>(cityStateEntity, std::make_unique<overworld::HighlightableComponent>());
     }

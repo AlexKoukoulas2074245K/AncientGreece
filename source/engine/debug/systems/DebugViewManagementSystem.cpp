@@ -8,9 +8,9 @@
 #include "DebugViewManagementSystem.h"
 #include "../components/DebugViewStateSingletonComponent.h"
 #include "../../common/components/TransformComponent.h"
+#include "../../common/utils/ColorUtils.h"
 #include "../../rendering/components/LightStoreSingletonComponent.h"
 #include "../../rendering/components/RenderableComponent.h"
-#include "../../rendering/utils/Colors.h"
 #include "../../rendering/utils/FontUtils.h"
 #include "../../rendering/utils/MeshUtils.h"
 
@@ -166,14 +166,14 @@ void DebugViewManagementSystem::RenderFpsString() const
     const auto& world = ecs::World::GetInstance();
     auto& debugViewStateComponent = world.GetSingletonComponent<debug::DebugViewStateSingletonComponent>();
 
-    auto fpsTextColor = rendering::colors::BLACK;
+    auto fpsTextColor = colors::BLACK;
     if (debugViewStateComponent.mCurrentFps < 50)
     {
-        fpsTextColor = rendering::colors::YELLOW;
+        fpsTextColor = colors::YELLOW;
     }
     if (debugViewStateComponent.mCurrentFps < 20)
     {
-        fpsTextColor = rendering::colors::RED;
+        fpsTextColor = colors::RED;
     }
     
     debugViewStateComponent.mFpsStrings.first = rendering::RenderTextIfDifferentToPreviousString
@@ -211,7 +211,7 @@ void DebugViewManagementSystem::RenderEntityCountString() const
         TEXT_FONT_NAME,
         TEXT_SIZE,
         ENTITY_COUNT_TEXT_POSITION,
-        rendering::colors::BLACK
+        colors::BLACK
     );
 
     debugViewStateComponent.mEntityCountStrings.second = rendering::RenderTextIfDifferentToPreviousString
@@ -221,7 +221,7 @@ void DebugViewManagementSystem::RenderEntityCountString() const
         TEXT_FONT_NAME,
         TEXT_SIZE,
         ENTITY_COUNT_NUMBER_POSITION,
-        rendering::colors::BLACK
+        colors::BLACK
     );
 }
 
@@ -257,7 +257,7 @@ void DebugViewManagementSystem::RenderSystemUpdateStrings() const
             TEXT_FONT_NAME,
             TEXT_SIZE,
             systemNamePosition,
-            rendering::colors::BLACK
+            colors::BLACK
         );
 
         auto systemUpdateTimePosition = SYSTEM_UPDATE_TIME_STARTING_POSITION;
@@ -270,7 +270,7 @@ void DebugViewManagementSystem::RenderSystemUpdateStrings() const
             TEXT_FONT_NAME,
             TEXT_SIZE,
             systemUpdateTimePosition,
-            rendering::colors::BLACK
+            colors::BLACK
         );
 
         if (isFirstRendering)
