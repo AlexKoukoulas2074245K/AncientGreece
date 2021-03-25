@@ -10,6 +10,7 @@
 #include "../components/FontsStoreSingletonComponent.h"
 #include "../components/RenderableComponent.h"
 #include "../components/TextStringComponent.h"
+#include "../../common/components/NameComponent.h"
 #include "../../common/components/TransformComponent.h"
 #include "../../resources/ResourceLoadingService.h"
 #include "../../resources/DataFileResource.h"
@@ -106,7 +107,8 @@ ecs::EntityId RenderText
     const float size,
     const glm::vec3& position,
     const glm::vec4& color, /* glm::vec4(0.0f, 0.0f, 0.0f, 0.0f) */
-    const bool is3d /* false */
+    const bool is3d, /* false */
+    const StringId entityName
 )
 {
     auto& world = ecs::World::GetInstance();
@@ -142,6 +144,11 @@ ecs::EntityId RenderText
     world.AddComponent<TextStringComponent>(entity, std::move(textStringComponent));
     world.AddComponent<RenderableComponent>(entity, std::move(renderableComponent));
 
+    if (entityName != StringId())
+    {
+        world.AddComponent<NameComponent>(entity, std::make_unique<NameComponent>(entityName));
+    }
+    
     return entity;
 }
 

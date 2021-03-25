@@ -1,32 +1,29 @@
 ///------------------------------------------------------------------------------------------------
-///  Game.h
+///  CityStateInfoUtils.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 19/11/2019.
+///  Created by Alex Koukoulas on 25/03/2021.
 ///------------------------------------------------------------------------------------------------
 
-#ifndef App_h
-#define App_h
-
-///------------------------------------------------------------------------------------------------
-
-#include "../engine/IGame.h"
+#ifndef CityStateInfoUtils_h
+#define CityStateInfoUtils_h
 
 ///------------------------------------------------------------------------------------------------
 
-class Game final: public genesis::IGame
-{
-public:    
-    void VOnSystemsInit() override;
-    void VOnGameInit() override;
-    void VOnUpdate(float& dt) override;
-    
-private:
-    void RegisterConsoleCommands() const;
-    void LoadGameFonts() const;
-    void LoadAndCreateOverworldMapComponents() const;
-};       
+#include "../../engine/common/utils/StringUtils.h"
 
 ///------------------------------------------------------------------------------------------------
 
-#endif /* Game_h */
+struct CityStateInfo;
+
+///------------------------------------------------------------------------------------------------
+
+void LoadCityStateInfo();
+
+///------------------------------------------------------------------------------------------------
+
+CityStateInfo& GetCityStateInfo(const StringId cityStateName);
+
+///------------------------------------------------------------------------------------------------
+
+#endif /* CityStateInfoUtils_h */

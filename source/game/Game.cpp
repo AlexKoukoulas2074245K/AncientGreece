@@ -15,6 +15,8 @@
 #include "overworld/systems/OverworldMapPickingInfoSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
+#include "overworld/utils/OverworldCityStateUtils.h"
+#include "utils/CityStateInfoUtils.h"
 #include "utils/KeyValueUtils.h"
 #include "view/components/ViewQueueSingletonComponent.h"
 #include "view/systems/ViewManagementSystem.h"
@@ -46,7 +48,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 15;
+static int SPARTAN_COUNT = 1;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
@@ -87,14 +89,13 @@ void Game::VOnSystemsInit()
 void Game::VOnGameInit()
 {
     RegisterConsoleCommands();
-    auto& world = genesis::ecs::World::GetInstance();
+    LoadGameFonts();
+    LoadCityStateInfo();
+    overworld::PopulateOverworldCityStates();
+    LoadAndCreateOverworldMapComponents();
     
-    genesis::rendering::LoadFont(StringId("ancient_greek_font"), 16, 16);
-    genesis::rendering::LoadAndCreateStaticModelByName("map", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map"));
-    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_1"));
-    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_2"));
-    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_3"));
-    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_4"));
+    auto& world = genesis::ecs::World::GetInstance();
+
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
@@ -109,12 +110,6 @@ void Game::VOnGameInit()
         world.AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
         world.AddComponent<UnitStatsComponent>(spartanEntity, std::make_unique<UnitStatsComponent>());
     }
-    
-    auto nameEntity = genesis::rendering::RenderText("Athenai", StringId("ancient_greek_font"), 0.01f, glm::vec3(-0.016211, -0.020953, 0.00f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), true);
-    world.AddComponent<overworld::HighlightableComponent>(nameEntity, std::make_unique<overworld::HighlightableComponent>());
-    
-    WriteValue(StringId("var1"), "Alex");
-    WriteValue(StringId("var2"), "Alex");
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -256,3 +251,20 @@ void Game::RegisterConsoleCommands() const
 
 ///------------------------------------------------------------------------------------------------
 
+void Game::LoadGameFonts() const
+{
+    genesis::rendering::LoadFont(StringId("ancient_greek_font"), 16, 16);
+}
+
+///------------------------------------------------------------------------------------------------
+
+void Game::LoadAndCreateOverworldMapComponents() const
+{
+    genesis::rendering::LoadAndCreateStaticModelByName("map", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_1"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_2"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_3"));
+    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_4"));
+}
+
+///------------------------------------------------------------------------------------------------

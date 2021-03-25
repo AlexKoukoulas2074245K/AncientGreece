@@ -10,7 +10,11 @@
 #include "../components/HighlightableComponent.h"
 #include "../components/OverworldMapPickingInfoSingletonComponent.h"
 #include "../components/OverworldTargetComponent.h"
+#include "../../components/CityStateInfoSingletonComponent.h"
+#include "../../utils/CityStateInfoUtils.h"
+#include "../../utils/KeyValueUtils.h"
 #include "../../view/utils/ViewUtils.h"
+#include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/input/utils/InputUtils.h"
 #include "../../../engine/rendering/components/TextStringComponent.h"
@@ -27,6 +31,12 @@ namespace overworld
 namespace
 {
     static const StringId PLAYER_ENTITY_NAME = StringId("player");
+    static const StringId CITY_STATE_NAME_DS_KEY = StringId("city_state_name");
+    static const StringId CITY_STATE_RENOWN_DS_KEY = StringId("city_state_renown");
+    static const StringId CITY_STATE_GARISSON_DS_KEY = StringId("city_state_garisson");
+    static const StringId CITY_STATE_DESCRIPTION_DS_KEY = StringId("city_state_description");
+
+    static const std::string CITY_STATE_PREVIEW_NAME = "city_state_preview";
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -73,7 +83,13 @@ void OverworldLocationInteractionSystem::VUpdate(const float, const std::vector<
             }
             else // rightButtonTapped
             {
-                view::QueueView("test", StringId("test"));
+                const auto cityName = world.GetComponent<genesis::NameComponent>(entityId).mName;
+                const auto& cityStateInfo = GetCityStateInfo(cityName);
+                WriteValue(CITY_STATE_NAME_DS_KEY, cityName.GetString());
+                WriteValue(CITY_STATE_RENOWN_DS_KEY, std::to_string(cityStateInfo.mRenown));
+                WriteValue(CITY_STATE_GARISSON_DS_KEY, std::to_string(cityStateInfo.mGarisson));
+                WriteValue(CITY_STATE_DESCRIPTION_DS_KEY, cityStateInfo.mDescription);
+                view::QueueView(CITY_STATE_PREVIEW_NAME);
             }
         }
     }

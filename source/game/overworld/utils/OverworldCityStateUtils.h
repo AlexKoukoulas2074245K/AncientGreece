@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  KeyValueUtils.h
+///  OverworldCityStateUtils.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 24/03/2021.
+///  Created by Alex Koukoulas on 25/03/2021.
 ///------------------------------------------------------------------------------------------------
 
-#ifndef KeyValueUtils_h
-#define KeyValueUtils_h
+#ifndef OverworldCityStateUtils_h
+#define OverworldCityStateUtils_h
 
 ///------------------------------------------------------------------------------------------------
 
@@ -14,12 +14,21 @@
 
 ///------------------------------------------------------------------------------------------------
 
-void WriteValue(const StringId key, const std::string& value);
+namespace overworld
+{
 
 ///------------------------------------------------------------------------------------------------
 
-const std::string ReadValue(const StringId key);
+void PopulateOverworldCityStates();
 
 ///------------------------------------------------------------------------------------------------
 
-#endif /* KeyValueUtils_h */
+float GetCityStateOverworldNameSize(const StringId cityStateName);
+
+///------------------------------------------------------------------------------------------------
+
+}
+
+///------------------------------------------------------------------------------------------------
+
+#endif /* OverworldCityStateUtils_h */

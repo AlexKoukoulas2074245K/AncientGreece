@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View background_name="horizontal_parchment" x="0.0" y="0.0" z="1.0" width="3.0" height="2.0">
+	<Text x="-0.15" y="0.75" z="0.5" size="0.15" red="0.0" green="0.0" blue="0.0">{city_state_name}</Text>
+	<Text x="-0.5" y="0.55" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">Renown</Text>
+	<Text x="-0.1" y="0.55" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{city_state_renown}</Text>
+	<Text x="-0.5" y="0.45" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">Garisson</Text>
+	<Text x="-0.1" y="0.45" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{city_state_garisson}</Text>
+    <Textbox x="1.15" y="-0.25" z="0.5" width="3.3" height="0.5">{city_state_description}</Textbox>
+    <ClickableText x="-0.2" y="-0.7" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="close">Back to map</ClickableText>
+    <Model name="building" x="0.03" y="0.01" z="0.2" rot_x="0.7" rot_y="2.0" rot_z="0.65" scale_x="0.05" scale_y="0.05" scale_z="0.05"></Model>
+</View>

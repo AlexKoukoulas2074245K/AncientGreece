@@ -80,6 +80,8 @@ void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vecto
     
     if (isValidTarget)
     {
+        //Log(LogType::INFO, "%.6f, %.6f, %.6f", targetComponent->mTargetPosition.x, targetComponent->mTargetPosition.y, targetComponent->mTargetPosition.z);
+        
         auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
         cameraComponent.mCameraState = genesis::rendering::CameraState::AUTO_CENTERING;
         

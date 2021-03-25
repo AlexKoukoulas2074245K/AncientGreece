@@ -47,6 +47,7 @@ void LoadFont
 /// @param[in] position the position to render the string at.
 /// @param[in] color (optional) specifies the custom color of the rendered string.
 /// @param[in] is3d (optional) specifies whether the rendered text is a gui element or part of the 3d world.
+/// @param[in] entityName (optional) specifies the name of the entity holding the text component.
 /// @returns the id of an entity holding the root TextStringComponent which contains all the character entities of the input string.
 ecs::EntityId RenderText
 (
@@ -55,7 +56,8 @@ ecs::EntityId RenderText
     const float size,
     const glm::vec3& position,
     const glm::vec4& color = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f),
-    const bool is3d = false
+    const bool is3d = false,
+    const StringId entityName = StringId()
 );
 
 ///------------------------------------------------------------------------------------------------

@@ -1,0 +1,3 @@
+* City state coins
+* Greek names from bookmark
+* Dynamic day cycle
