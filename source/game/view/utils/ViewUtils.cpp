@@ -114,7 +114,7 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
 
 ///------------------------------------------------------------------------------------------------
 
-void ProcessAndReplaceTextVariables(std::string& text);
+std::string ReplaceTextVariables(const std::string& text);
 
 ///------------------------------------------------------------------------------------------------
 
@@ -213,23 +213,23 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         glm::vec3 viewScale(1.0f);
         if (node->first_attribute(BACKGROUND_X_ATTRIBUTE_NAME) != nullptr)
         {
-            viewPosition.x = std::atof(node->first_attribute(BACKGROUND_X_ATTRIBUTE_NAME)->value());
+            viewPosition.x = std::stof(ReplaceTextVariables(node->first_attribute(BACKGROUND_X_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(BACKGROUND_Y_ATTRIBUTE_NAME) != nullptr)
         {
-            viewPosition.y = std::atof(node->first_attribute(BACKGROUND_Y_ATTRIBUTE_NAME)->value());
+            viewPosition.y = std::stof(ReplaceTextVariables(node->first_attribute(BACKGROUND_Y_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(BACKGROUND_Z_ATTRIBUTE_NAME) != nullptr)
         {
-            viewPosition.z = std::atof(node->first_attribute(BACKGROUND_Z_ATTRIBUTE_NAME)->value());
+            viewPosition.z = std::stof(ReplaceTextVariables(node->first_attribute(BACKGROUND_Z_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(BACKGROUND_WIDTH_ATTRIBUTE_NAME) != nullptr)
         {
-            viewScale.x = std::atof(node->first_attribute(BACKGROUND_WIDTH_ATTRIBUTE_NAME)->value());
+            viewScale.x = std::stof(ReplaceTextVariables(node->first_attribute(BACKGROUND_WIDTH_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(BACKGROUND_HEIGHT_ATTRIBUTE_NAME) != nullptr)
         {
-            viewScale.y = std::atof(node->first_attribute(BACKGROUND_HEIGHT_ATTRIBUTE_NAME)->value());
+            viewScale.y = std::stof(ReplaceTextVariables(node->first_attribute(BACKGROUND_HEIGHT_ATTRIBUTE_NAME)->value()));
         }
         
         assert(node->first_attribute(BACKGROUND_ATTRIBUTE_NAME) != nullptr && "No background attribute in view");
@@ -238,7 +238,7 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         viewScale.x += DEBUG_VIEW_SIZE_DX;
         viewScale.y += DEBUG_VIEW_SIZE_DY;
 #endif
-        viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateGuiSprite(GUI_BASE_MODEL_NAME, std::string(node->first_attribute(BACKGROUND_ATTRIBUTE_NAME)->value()), GUI_MODEL_SHADER_NAME, viewPosition, glm::vec3(0.0f), viewScale));
+        viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateGuiSprite(GUI_BASE_MODEL_NAME, std::string(ReplaceTextVariables(node->first_attribute(BACKGROUND_ATTRIBUTE_NAME)->value())), GUI_MODEL_SHADER_NAME, viewPosition, glm::vec3(0.0f), viewScale));
     }
     else if (std::strcmp(XML_TEXT_NODE_NAME, node->name()) == 0)
     {
@@ -248,39 +248,37 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         
         if (node->first_attribute(TEXT_X_ATTRIBUTE_NAME) != nullptr)
         {
-            textPosition.x = std::atof(node->first_attribute(TEXT_X_ATTRIBUTE_NAME)->value());
+            textPosition.x = std::stof(ReplaceTextVariables(node->first_attribute(TEXT_X_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXT_Y_ATTRIBUTE_NAME) != nullptr)
         {
-            textPosition.y = std::atof(node->first_attribute(TEXT_Y_ATTRIBUTE_NAME)->value());
+            textPosition.y = std::stof(ReplaceTextVariables(node->first_attribute(TEXT_Y_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXT_Z_ATTRIBUTE_NAME) != nullptr)
         {
-            textPosition.z = std::atof(node->first_attribute(TEXT_Z_ATTRIBUTE_NAME)->value());
+            textPosition.z = std::stof(ReplaceTextVariables(node->first_attribute(TEXT_Z_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXT_SIZE_ATTRIBUTE_NAME) != nullptr)
         {
-            textSize = std::atof(node->first_attribute(TEXT_SIZE_ATTRIBUTE_NAME)->value());
+            textSize = std::stof(ReplaceTextVariables(node->first_attribute(TEXT_SIZE_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXT_R_ATTRIBUTE_NAME) != nullptr)
         {
-            textColor.r = std::atof(node->first_attribute(CLICKABLETEXT_R_ATTRIBUTE_NAME)->value());
+            textColor.r = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_R_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXT_G_ATTRIBUTE_NAME) != nullptr)
         {
-            textColor.g = std::atof(node->first_attribute(TEXT_G_ATTRIBUTE_NAME)->value());
+            textColor.g = std::stof(ReplaceTextVariables(node->first_attribute(TEXT_G_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXT_B_ATTRIBUTE_NAME) != nullptr)
         {
-            textColor.b = std::atof(node->first_attribute(TEXT_B_ATTRIBUTE_NAME)->value());
+            textColor.b = std::stof(ReplaceTextVariables(node->first_attribute(TEXT_B_ATTRIBUTE_NAME)->value()));
         }
         
         auto rawText = node->value();
         assert(rawText != nullptr && "No text string value in tags");
         
-        auto text = std::string(rawText);
-        ProcessAndReplaceTextVariables(text);
-        
+        auto text = ReplaceTextVariables(std::string(rawText));
         
         viewStateComponent.mViewEntities.push_back(genesis::rendering::RenderText(text, DEFAULT_FONT_NAME, textSize, textPosition, textColor));
     }
@@ -295,54 +293,53 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         
         if (node->first_attribute(CLICKABLETEXT_X_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextPosition.x = std::atof(node->first_attribute(CLICKABLETEXT_X_ATTRIBUTE_NAME)->value());
+            clickableTextPosition.x = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_X_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_Y_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextPosition.y = std::atof(node->first_attribute(CLICKABLETEXT_Y_ATTRIBUTE_NAME)->value());
+            clickableTextPosition.y = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_Y_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_Z_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextPosition.z = std::atof(node->first_attribute(CLICKABLETEXT_Z_ATTRIBUTE_NAME)->value());
+            clickableTextPosition.z = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_Z_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_SIZE_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextSize = std::atof(node->first_attribute(CLICKABLETEXT_SIZE_ATTRIBUTE_NAME)->value());
+            clickableTextSize = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_SIZE_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_R_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextColor.r = std::atof(node->first_attribute(CLICKABLETEXT_R_ATTRIBUTE_NAME)->value());
+            clickableTextColor.r = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_R_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_G_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextColor.g = std::atof(node->first_attribute(CLICKABLETEXT_G_ATTRIBUTE_NAME)->value());
+            clickableTextColor.g = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_G_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_B_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextColor.b = std::atof(node->first_attribute(CLICKABLETEXT_B_ATTRIBUTE_NAME)->value());
+            clickableTextColor.b = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_B_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_INTERACTION_R_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextInteractionColor.r = std::atof(node->first_attribute(CLICKABLETEXT_INTERACTION_R_ATTRIBUTE_NAME)->value());
+            clickableTextInteractionColor.r = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_INTERACTION_R_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_INTERACTION_G_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextInteractionColor.g = std::atof(node->first_attribute(CLICKABLETEXT_INTERACTION_G_ATTRIBUTE_NAME)->value());
+            clickableTextInteractionColor.g = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_INTERACTION_G_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_INTERACTION_B_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextInteractionColor.b = std::atof(node->first_attribute(CLICKABLETEXT_INTERACTION_B_ATTRIBUTE_NAME)->value());
+            clickableTextInteractionColor.b = std::stof(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_INTERACTION_B_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(CLICKABLETEXT_INTERACTION_EVENT_ATTRIBUTE_NAME) != nullptr)
         {
-            clickableTextEventName = StringId(std::string(node->first_attribute(CLICKABLETEXT_INTERACTION_EVENT_ATTRIBUTE_NAME)->value()));
+            clickableTextEventName = StringId(ReplaceTextVariables(node->first_attribute(CLICKABLETEXT_INTERACTION_EVENT_ATTRIBUTE_NAME)->value()));
         }
         
         auto rawText = node->value();
         assert(rawText != nullptr && "No text string value in tags");
         
-        auto text = std::string(rawText);
-        ProcessAndReplaceTextVariables(text);
+        auto text = ReplaceTextVariables(std::string(rawText));
         
         auto entity = genesis::rendering::RenderText(std::string(text), DEFAULT_FONT_NAME, clickableTextSize, clickableTextPosition);
         
@@ -361,23 +358,23 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         glm::vec2 textboxDimensions(0.0f);
         if (node->first_attribute(TEXTBOX_X_ATTRIBUTE_NAME) != nullptr)
         {
-            textboxPosition.x = std::atof(node->first_attribute(TEXTBOX_X_ATTRIBUTE_NAME)->value());
+            textboxPosition.x = std::stof(ReplaceTextVariables(node->first_attribute(TEXTBOX_X_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXTBOX_Y_ATTRIBUTE_NAME) != nullptr)
         {
-            textboxPosition.y = std::atof(node->first_attribute(TEXTBOX_Y_ATTRIBUTE_NAME)->value());
+            textboxPosition.y = std::stof(ReplaceTextVariables(node->first_attribute(TEXTBOX_Y_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXTBOX_Z_ATTRIBUTE_NAME) != nullptr)
         {
-            textboxPosition.z = std::atof(node->first_attribute(TEXTBOX_Z_ATTRIBUTE_NAME)->value());
+            textboxPosition.z = std::stof(ReplaceTextVariables(node->first_attribute(TEXTBOX_Z_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXTBOX_WIDTH_ATTRIBUTE_NAME) != nullptr)
         {
-            textboxDimensions.x = std::atof(node->first_attribute(TEXTBOX_WIDTH_ATTRIBUTE_NAME)->value());
+            textboxDimensions.x = std::stof(ReplaceTextVariables(node->first_attribute(TEXTBOX_WIDTH_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(TEXTBOX_HEIGHT_ATTRIBUTE_NAME) != nullptr)
         {
-            textboxDimensions.y = std::atof(node->first_attribute(TEXTBOX_HEIGHT_ATTRIBUTE_NAME)->value());
+            textboxDimensions.y = std::stof(ReplaceTextVariables(node->first_attribute(TEXTBOX_HEIGHT_ATTRIBUTE_NAME)->value()));
         }
         
 #if !defined(NDEBUG)
@@ -390,8 +387,7 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         auto rawText = node->value();
         assert(rawText != nullptr && "No text string value in tags");
         
-        auto text = std::string(rawText);
-        ProcessAndReplaceTextVariables(text);
+        auto text = ReplaceTextVariables(std::string(rawText));
         
         const auto textString = std::string(text);
         const auto textCharCount = textString.size();
@@ -433,39 +429,39 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         glm::vec3 modelScale(1.0f);
         if (node->first_attribute(MODEL_X_ATTRIBUTE_NAME) != nullptr)
         {
-            modelPosition.x = std::atof(node->first_attribute(MODEL_X_ATTRIBUTE_NAME)->value());
+            modelPosition.x = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_X_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(MODEL_Y_ATTRIBUTE_NAME) != nullptr)
         {
-            modelPosition.y = std::atof(node->first_attribute(MODEL_Y_ATTRIBUTE_NAME)->value());
+            modelPosition.y = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_Y_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(MODEL_Z_ATTRIBUTE_NAME) != nullptr)
         {
-            modelPosition.z = std::atof(node->first_attribute(MODEL_Z_ATTRIBUTE_NAME)->value());
+            modelPosition.z = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_Z_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(MODEL_ROT_X_ATTRIBUTE_NAME) != nullptr)
         {
-            modelRotation.x = std::atof(node->first_attribute(MODEL_ROT_X_ATTRIBUTE_NAME)->value());
+            modelRotation.x = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_ROT_X_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(MODEL_ROT_Y_ATTRIBUTE_NAME) != nullptr)
         {
-            modelRotation.y = std::atof(node->first_attribute(MODEL_ROT_Y_ATTRIBUTE_NAME)->value());
+            modelRotation.y = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_ROT_Y_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(MODEL_ROT_Z_ATTRIBUTE_NAME) != nullptr)
         {
-            modelRotation.z = std::atof(node->first_attribute(MODEL_ROT_Z_ATTRIBUTE_NAME)->value());
+            modelRotation.z = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_ROT_Z_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(MODEL_SCALE_X_ATTRIBUTE_NAME) != nullptr)
         {
-            modelScale.x = std::atof(node->first_attribute(MODEL_SCALE_X_ATTRIBUTE_NAME)->value());
+            modelScale.x = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_SCALE_X_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(MODEL_SCALE_Y_ATTRIBUTE_NAME) != nullptr)
         {
-            modelScale.y = std::atof(node->first_attribute(MODEL_SCALE_Y_ATTRIBUTE_NAME)->value());
+            modelScale.y = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_SCALE_Y_ATTRIBUTE_NAME)->value()));
         }
         if (node->first_attribute(MODEL_SCALE_Z_ATTRIBUTE_NAME) != nullptr)
         {
-            modelScale.z = std::atof(node->first_attribute(MODEL_SCALE_Z_ATTRIBUTE_NAME)->value());
+            modelScale.z = std::stof(ReplaceTextVariables(node->first_attribute(MODEL_SCALE_Z_ATTRIBUTE_NAME)->value()));
         }
         
                 
@@ -477,7 +473,7 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
 
         assert(node->first_attribute(MODEL_NAME_ATTRIBUTE_NAME) != nullptr && "No model name present");
         
-        auto modelName = std::string(node->first_attribute(MODEL_NAME_ATTRIBUTE_NAME)->value());
+        auto modelName = std::string(ReplaceTextVariables(node->first_attribute(MODEL_NAME_ATTRIBUTE_NAME)->value()));
         
         viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateGuiSprite(modelName, modelName, GUI_MODEL_3D_SHADER_NAME, modelPosition, modelRotation, modelScale, true));
     }
@@ -485,7 +481,10 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
 
 ///-----------------------------------------------------------------------------------------------
 
-void ProcessAndReplaceTextVariables(std::string& text)
+
+///-----------------------------------------------------------------------------------------------
+
+std::string ReplaceTextVariables(const std::string& text)
 {
     std::stringstream textBuilder;
     std::stringstream variableNameBuilder;
@@ -518,7 +517,7 @@ void ProcessAndReplaceTextVariables(std::string& text)
     }
     
     assert(!recordingVariableName && "Missing variable closing brace");
-    text = textBuilder.str();
+    return textBuilder.str();
 }
 
 ///-----------------------------------------------------------------------------------------------
