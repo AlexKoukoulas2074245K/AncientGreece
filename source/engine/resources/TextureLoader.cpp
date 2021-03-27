@@ -109,8 +109,9 @@ std::unique_ptr<IResource> TextureLoader::VCreateAndLoadResource(const std::stri
         sdlSurface->pixels
      ));
     
-    GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
     GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GL_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
     
     Log(LogType::INFO, "Loaded %s", resourcePath.c_str());
     

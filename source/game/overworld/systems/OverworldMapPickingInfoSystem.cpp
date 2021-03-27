@@ -61,11 +61,14 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
     
     // Find map entity
     auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
-    const auto& mapTransformComponent = world.GetComponent<genesis::TransformComponent>(mapEntity);
-    
-    // Calculate Mouse Intersection with map
-    mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(mViewMatrix, mProjectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
-    genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, mapTransformComponent.mPosition, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
+    if (mapEntity != genesis::ecs::NULL_ENTITY_ID)
+    {
+        const auto& mapTransformComponent = world.GetComponent<genesis::TransformComponent>(mapEntity);
+        
+        // Calculate Mouse Intersection with map
+        mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(mViewMatrix, mProjectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
+        genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, mapTransformComponent.mPosition, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
+    }
 }
 
 ///-----------------------------------------------------------------------------------------------

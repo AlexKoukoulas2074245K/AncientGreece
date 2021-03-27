@@ -231,17 +231,20 @@ bool OverworldCameraControllerSystem::IsCameraOutOfBounds() const
         // Find map edge entity
         auto entityId = world.FindEntityWithName(StringId("map_edge_" + std::to_string(i)));
         
-        // Temporary frustum for visibility calculation
-        auto frustum = genesis::rendering::CalculateCameraFrustum(viewMatrix, projectionMatrix);
-
-        const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
-        const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
-        const auto& currentMesh = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
-
-        // Check whether any map edge is visible at this time
-        if (genesis::math::IsMeshInsideFrustum(transformComponent.mPosition, transformComponent.mScale, currentMesh.GetDimensions(), frustum))
+        if (entityId != genesis::ecs::NULL_ENTITY_ID)
         {
-            return true;
+            // Temporary frustum for visibility calculation
+            auto frustum = genesis::rendering::CalculateCameraFrustum(viewMatrix, projectionMatrix);
+
+            const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
+            const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
+            const auto& currentMesh = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
+
+            // Check whether any map edge is visible at this time
+            if (genesis::math::IsMeshInsideFrustum(transformComponent.mPosition, transformComponent.mScale, currentMesh.GetDimensions(), frustum))
+            {
+                return true;
+            }
         }
     }
     

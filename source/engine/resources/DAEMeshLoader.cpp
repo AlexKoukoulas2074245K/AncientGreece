@@ -80,7 +80,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     auto globalInverseSceneTransform = scene->mRootNode->mTransformation;
     auto sceneTransform = math::AssimpMat4ToGlmMat4(globalInverseSceneTransform);
     
-    const aiMesh* mesh = scene->mMeshes[0];
+    const aiMesh* mesh = scene->mMeshes[scene->mNumMeshes - 1];
     const auto vertexCount = mesh->mNumVertices;
     
     std::vector<glm::vec3> vertices; vertices.reserve(vertexCount);

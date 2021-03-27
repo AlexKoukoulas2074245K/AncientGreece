@@ -164,9 +164,6 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
         }
     }
     
-    // Execute disabled detph test GUI pass
-    GL_CHECK(glDisable(GL_DEPTH_TEST));
-    
     // Render 3d texts
     if (mGuiEntityGroups.count(RenderableType::TEXT_3D_MODEL))
     {
@@ -205,6 +202,9 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
             );
         }
     }
+    
+    // Execute disabled detph test GUI pass
+    GL_CHECK(glDisable(GL_DEPTH_TEST));
     
     // Execute normal gui models pass
     if (mGuiEntityGroups.count(RenderableType::GUI_MODEL))

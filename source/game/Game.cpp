@@ -48,7 +48,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 1;
+static int SPARTAN_COUNT = 30;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
@@ -99,7 +99,7 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
+    auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("horseman", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
     playerStatsComponent->mSpeedMultiplier = 2.0f;
     world.AddComponent<UnitStatsComponent>(playerEntity, std::move(playerStatsComponent));
