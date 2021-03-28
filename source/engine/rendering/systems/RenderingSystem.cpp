@@ -403,7 +403,7 @@ void RenderingSystem::RenderStringInternal
         }
         
         // Perform draw call
-        GL_CHECK(glDrawElements(GL_TRIANGLES, currentMesh->GetElementCount(), GL_UNSIGNED_SHORT, (void*)0));
+        GL_CHECK(glDrawElements(GL_TRIANGLES, currentMesh->GetIndexCountPerMesh()[0], GL_UNSIGNED_SHORT, (void*)0));
     }
 }
 
@@ -438,21 +438,6 @@ void RenderingSystem::RenderEntityInternal
     else
     {
         currentShader = renderingContextComponent.previousShader;
-    }
-
-    // Update current mesh if necessary
-    const resources::MeshResource* currentMesh = nullptr;
-    if (renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex] != renderingContextComponent.previousMeshResourceId)
-    {
-        currentMesh = &resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
-        GL_CHECK(glBindVertexArray(currentMesh->GetVertexArrayObject()));
-
-        renderingContextComponent.previousMesh           = currentMesh;
-        renderingContextComponent.previousMeshResourceId = renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex];
-    }
-    else
-    {
-        currentMesh = renderingContextComponent.previousMesh;
     }
         
     // Calculate world matrix for entity
@@ -552,8 +537,30 @@ void RenderingSystem::RenderEntityInternal
         currentShader->SetInt(intUniformEntry.first, intUniformEntry.second);
     }
     
+    // Update current mesh if necessary
+    const resources::MeshResource* currentMesh = nullptr;
+    if (renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex] != renderingContextComponent.previousMeshResourceId)
+    {
+        currentMesh = &resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
+        GL_CHECK(glBindVertexArray(currentMesh->GetVertexArrayObject()));
+
+        renderingContextComponent.previousMesh           = currentMesh;
+        renderingContextComponent.previousMeshResourceId = renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex];
+    }
+    else
+    {
+        currentMesh = renderingContextComponent.previousMesh;
+    }
+
     // Perform draw call
-    GL_CHECK(glDrawElements(GL_TRIANGLES, currentMesh->GetElementCount(), GL_UNSIGNED_SHORT, (void*)0));
+    const auto& indexCountPerMesh = currentMesh->GetIndexCountPerMesh();
+    const auto& baseIndexPerMesh = currentMesh->GetBaseIndexPerMesh();
+    const auto& baseVertexPerMesh = currentMesh->GetBaseVertexPerMesh();
+    for (auto i = 0U; i < indexCountPerMesh.size(); ++i)
+    {
+        GL_CHECK(glDrawElementsBaseVertex(GL_TRIANGLES, indexCountPerMesh.at(i), GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * baseIndexPerMesh.at(i)), baseVertexPerMesh.at(i)));
+
+    }
 }
 
 ///-----------------------------------------------------------------------------------------------

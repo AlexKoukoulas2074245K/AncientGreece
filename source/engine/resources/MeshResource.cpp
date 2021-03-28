@@ -26,9 +26,23 @@ GLuint MeshResource::GetVertexArrayObject() const
 
 ///------------------------------------------------------------------------------------------------
 
-GLuint MeshResource::GetElementCount() const
+const std::vector<GLuint>& MeshResource::GetIndexCountPerMesh() const
 {
-    return mElementCount;
+    return mIndexCountPerMesh;
+}
+
+///------------------------------------------------------------------------------------------------
+
+const std::vector<GLuint>& MeshResource::GetBaseIndexPerMesh() const
+{
+    return mBaseIndexPerMesh;
+}
+
+///------------------------------------------------------------------------------------------------
+
+const std::vector<GLuint>& MeshResource::GetBaseVertexPerMesh() const
+{
+    return mBaseVertexPerMesh;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -82,13 +96,15 @@ const std::vector<glm::mat4>& MeshResource::GetBoneOffsetMatrices() const
 
 ///------------------------------------------------------------------------------------------------
 
-MeshResource::MeshResource(const AnimationInfo& animationInfo, const std::vector<glm::mat4>& boneOffsetMatrices, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions)
+MeshResource::MeshResource(const AnimationInfo& animationInfo, const std::vector<glm::mat4>& boneOffsetMatrices, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const std::vector<GLuint>& indexCountPerMesh, const std::vector<GLuint>& baseIndexPerMesh, const std::vector<GLuint>& baseVertexPerMesh, const glm::vec3& meshDimensions)
     : mAnimationInfo(animationInfo)
     , mBoneOffsetMatrices(boneOffsetMatrices)
     , mBoneNameToIdMap(boneMapping)
     , mSceneTransform(sceneTransform)
     , mVertexArrayObject(vertexArrayObject)
-    , mElementCount(elementCount)
+    , mIndexCountPerMesh(indexCountPerMesh)
+    , mBaseIndexPerMesh(baseIndexPerMesh)
+    , mBaseVertexPerMesh(baseVertexPerMesh)
     , mDimensions(meshDimensions)
 {
     mRootSkeletonNode = new SkeletonNode;
@@ -99,7 +115,9 @@ MeshResource::MeshResource(const GLuint vertexArrayObject, const GLuint elementC
     : mAnimationInfo()
     , mSceneTransform()
     , mVertexArrayObject(vertexArrayObject)
-    , mElementCount(elementCount)
+    , mIndexCountPerMesh({elementCount})
+    , mBaseIndexPerMesh({0})
+    , mBaseVertexPerMesh({0})
     , mDimensions(meshDimensions)
     , mRootSkeletonNode(nullptr)
 {

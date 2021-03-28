@@ -80,85 +80,123 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     auto globalInverseSceneTransform = scene->mRootNode->mTransformation;
     auto sceneTransform = math::AssimpMat4ToGlmMat4(globalInverseSceneTransform);
     
-    const aiMesh* mesh = scene->mMeshes[scene->mNumMeshes - 1];
-    const auto vertexCount = mesh->mNumVertices;
+    std::vector<GLuint> indexCountPerMesh;
+    std::vector<GLuint> baseIndexPerMesh;
+    std::vector<GLuint> baseVertexPerMesh;
     
-    std::vector<glm::vec3> vertices; vertices.reserve(vertexCount);
-    std::vector<glm::vec2> uvs; uvs.reserve(vertexCount);
-    std::vector<glm::vec3> normals; normals.reserve(vertexCount);
-    std::vector<VertexBoneData> bones; bones.reserve(vertexCount);
-    std::vector<unsigned short> indices;
+    auto totalVertexCount = 0U;
+    auto totalIndexCount = 0U;
+    
+    for (auto m = 0U; m < scene->mNumMeshes; ++m)
+    {
+        baseIndexPerMesh.push_back(totalIndexCount);
+        baseVertexPerMesh.push_back(totalVertexCount);
+        indexCountPerMesh.push_back(scene->mMeshes[m]->mNumFaces * 3);
+        totalIndexCount += scene->mMeshes[m]->mNumFaces * 3;
+        totalVertexCount += scene->mMeshes[m]->mNumVertices;
+    }
+    
+    std::vector<glm::vec3> vertices; vertices.reserve(totalVertexCount);
+    std::vector<glm::vec2> uvs; uvs.reserve(totalVertexCount);
+    std::vector<glm::vec3> normals; normals.reserve(totalVertexCount);
+    std::vector<VertexBoneData> bones; bones.reserve(totalVertexCount);
+    std::vector<unsigned short> indices; indices.reserve(totalIndexCount);
     std::vector<glm::mat4> boneOffsetMatrices;
     tsl::robin_map<StringId, unsigned int, StringIdHasher> boneNameToIdMap;
     AnimationInfo animationInfo;
     
     float minX = 100.0f, maxX = -100.0f, minY = 100.0f, maxY = -100.0f, minZ = 100.0f, maxZ = -100.0f;
     
-    // Load Vertex Data
-    for (unsigned int i = 0 ; i < vertexCount ; i++) {
-        const aiVector3D* pos = &(mesh->mVertices[i]);
-        const aiVector3D* normal = &(mesh->mNormals[i]);
-        const aiVector3D* uv = &(mesh->mTextureCoords[0][i]);
-        
-        vertices.emplace_back(glm::vec3(pos->x, pos->y, pos->z));
-        uvs.emplace_back(uv->x, uv->y);
-        normals.emplace_back(normal->x, normal->y, normal->z);
-        bones.emplace_back(VertexBoneData());
-        
-        if (pos->x < minX) minX = pos->x;
-        if (pos->x > maxX) maxX = pos->x;
-        if (pos->y < minY) minY = pos->y;
-        if (pos->y > maxY) maxY = pos->y;
-        if (pos->z < minZ) minZ = pos->z;
-        if (pos->z > maxZ) maxZ = pos->z;
+    for (auto m = 0U; m < scene->mNumMeshes; ++m)
+    {
+        const auto mesh = scene->mMeshes[m];
+        // Load Vertex Data
+        for (unsigned int i = 0 ; i < mesh->mNumVertices ; i++) {
+            const aiVector3D* pos = &(mesh->mVertices[i]);
+            const aiVector3D* normal = &(mesh->mNormals[i]);
+            const aiVector3D* uv =  &(mesh->mTextureCoords[0][i]);
+            
+            vertices.emplace_back(glm::vec3(pos->x, pos->y, pos->z));
+            uvs.emplace_back(uv->x, uv->y);
+            normals.emplace_back(normal->x, normal->y, normal->z);
+            bones.emplace_back(VertexBoneData());
+            
+            if (pos->x < minX) minX = pos->x;
+            if (pos->x > maxX) maxX = pos->x;
+            if (pos->y < minY) minY = pos->y;
+            if (pos->y > maxY) maxY = pos->y;
+            if (pos->z < minZ) minZ = pos->z;
+            if (pos->z > maxZ) maxZ = pos->z;
+        }
     }
     
     // Load Bone Data
-    for (unsigned int i = 0 ; i < mesh->mNumBones ; i++) {
-        unsigned int boneIndex = 0;
-        auto boneName = StringId(std::string(mesh->mBones[i]->mName.data));
+    for (auto m = 0U; m < scene->mNumMeshes; ++m)
+    {
+        const auto mesh = scene->mMeshes[m];
+        for (unsigned int i = 0 ; i < mesh->mNumBones ; i++) {
+            unsigned int boneIndex = 0;
+            auto boneName = StringId(std::string(mesh->mBones[i]->mName.data));
 
-        if (boneNameToIdMap.find(boneName) == boneNameToIdMap.end())
-        {
-            boneIndex = boneOffsetMatrices.size();
-            boneOffsetMatrices.push_back(glm::mat4(1.0f));
-        }
-        else
-        {
-            boneIndex = boneNameToIdMap[boneName];
-        }
-
-        boneNameToIdMap[boneName] = boneIndex;
-        boneOffsetMatrices[i] = math::AssimpMat4ToGlmMat4(mesh->mBones[i]->mOffsetMatrix);
-
-        for (unsigned int j = 0 ; j < mesh->mBones[i]->mNumWeights ; j++)
-        {
-            uint vertexIndex = mesh->mBones[i]->mWeights[j].mVertexId;
-            float weight = mesh->mBones[i]->mWeights[j].mWeight;
-            
-            bool foundBoneDataEntry = false;
-            for (unsigned int k = 0; k < MAX_NUM_BONES_AFFECTING_EACH_VERTEX; ++k)
+            if (boneNameToIdMap.find(boneName) == boneNameToIdMap.end())
             {
-                if (math::Abs(bones[vertexIndex].mBoneWeights[k]) < 0.00001f)
-                {
-                    bones[vertexIndex].mBoneIds[k] = boneIndex;
-                    bones[vertexIndex].mBoneWeights[k] = weight;
-                    foundBoneDataEntry = true;
-                    break;
-                }
+                boneIndex = boneOffsetMatrices.size();
+                boneOffsetMatrices.push_back(glm::mat4(1.0f));
             }
-            
-            assert(foundBoneDataEntry && std::string("More than: " +  std::to_string(MAX_NUM_BONES_AFFECTING_EACH_VERTEX) + " bone influences found").c_str());
+            else
+            {
+                boneIndex = boneNameToIdMap[boneName];
+            }
+
+            boneNameToIdMap[boneName] = boneIndex;
+            boneOffsetMatrices[boneIndex] = math::AssimpMat4ToGlmMat4(mesh->mBones[i]->mOffsetMatrix);
+
+            for (unsigned int j = 0 ; j < mesh->mBones[i]->mNumWeights ; j++)
+            {
+                uint vertexIndex = mesh->mBones[i]->mWeights[j].mVertexId + baseVertexPerMesh[m];
+                float weight = mesh->mBones[i]->mWeights[j].mWeight;
+                
+                bool foundBoneDataEntry = false;
+                for (unsigned int k = 0; k < MAX_NUM_BONES_AFFECTING_EACH_VERTEX; ++k)
+                {
+                    if (math::Abs(bones[vertexIndex].mBoneWeights[k]) < 0.00001f)
+                    {
+                        bones[vertexIndex].mBoneIds[k] = boneIndex;
+                        bones[vertexIndex].mBoneWeights[k] = weight;
+                        foundBoneDataEntry = true;
+                        break;
+                    }
+                }
+                
+                assert(foundBoneDataEntry && std::string("More than: " +  std::to_string(MAX_NUM_BONES_AFFECTING_EACH_VERTEX) + " bone influences found").c_str());
+            }
         }
     }
     
     // Load Face Data
-    for (unsigned int i = 0 ; i < mesh->mNumFaces ; i++) {
-        const aiFace& Face = mesh->mFaces[i];
-        assert(Face.mNumIndices == 3);
-        indices.push_back(Face.mIndices[0]);
-        indices.push_back(Face.mIndices[1]);
-        indices.push_back(Face.mIndices[2]);
+    for (auto m = 0U; m < scene->mNumMeshes; ++m)
+    {
+        const auto mesh = scene->mMeshes[m];
+        auto doesMeshHaveValidFaces = true;
+        for (unsigned int i = 0 ; i < mesh->mNumFaces && doesMeshHaveValidFaces; i++) {
+            const aiFace& face = mesh->mFaces[i];
+            for (unsigned int j = 0; j < 3 && doesMeshHaveValidFaces; ++j)
+            {
+                if (j >= face.mNumIndices)
+                {
+                    // Invalidate mesh
+                    doesMeshHaveValidFaces = false;
+                    indexCountPerMesh.erase(indexCountPerMesh.begin() + m);
+                    baseIndexPerMesh.erase(baseIndexPerMesh.begin() + m);
+                    baseVertexPerMesh.erase(baseVertexPerMesh.begin() + m);
+                    indices.push_back(0);
+                }
+                else
+                {
+                    indices.push_back(face.mIndices[j]);
+                }
+            }
+        }
     }
     
     // Load Animation Data
@@ -224,7 +262,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     
     // Bind and Buffer VBO
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject));
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, totalVertexCount * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW));
     
     // 1st attribute buffer : vertices
     GL_CHECK(glEnableVertexAttribArray(0));
@@ -232,7 +270,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     
     // Bind and buffer TBO
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, uvCoordsBufferObject));
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, totalVertexCount * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW));
     
     // 2nd attribute buffer: tex coords
     GL_CHECK(glEnableVertexAttribArray(1));
@@ -240,7 +278,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     
     // Bind and buffer NBO
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject));
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, totalVertexCount * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW));
     
     // 3rd attribute buffer: normals
     GL_CHECK(glEnableVertexAttribArray(2));
@@ -248,7 +286,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     
     // Bind and buffer BBO
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, bonesBufferObject));
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(VertexBoneData), &bones[0], GL_STATIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, totalVertexCount * sizeof(VertexBoneData), &bones[0], GL_STATIC_DRAW));
     
     // 4th attribute buffer: bone ids
     GL_CHECK(glEnableVertexAttribArray(3));
@@ -260,14 +298,14 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     
     // Bind and Buffer IBO
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject));
-    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW));
+    GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, totalIndexCount * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW));
     
     GL_CHECK(glBindVertexArray(0));
     
     // Calculate dimensions
     glm::vec3 meshDimensions(math::Abs(minX - maxX), math::Abs(minY - maxY), math::Abs(minZ - maxZ));
     
-    std::unique_ptr<MeshResource> meshResource(new MeshResource(animationInfo, boneOffsetMatrices, boneNameToIdMap, sceneTransform, scene->mRootNode, vertexArrayObject, indices.size(), meshDimensions));
+    std::unique_ptr<MeshResource> meshResource(new MeshResource(animationInfo, boneOffsetMatrices, boneNameToIdMap, sceneTransform, scene->mRootNode, vertexArrayObject, indexCountPerMesh, baseIndexPerMesh, baseVertexPerMesh, meshDimensions));
     
     importer.FreeScene();
     

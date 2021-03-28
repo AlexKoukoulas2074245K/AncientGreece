@@ -95,7 +95,9 @@ public:
     ~MeshResource();
     
     GLuint GetVertexArrayObject() const;
-    GLuint GetElementCount() const;
+    const std::vector<GLuint>& GetIndexCountPerMesh() const;
+    const std::vector<GLuint>& GetBaseIndexPerMesh() const;
+    const std::vector<GLuint>& GetBaseVertexPerMesh() const;
     const glm::vec3& GetDimensions() const;
     bool HasSkeleton() const;
     const SkeletonNode* GetRootSkeletonNode() const;
@@ -106,7 +108,7 @@ public:
     
 private:
     // Animated model (DAE) constructor
-    MeshResource(const AnimationInfo& animationInfo, const std::vector<glm::mat4>& boneOffsetMatrices, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
+    MeshResource(const AnimationInfo& animationInfo, const std::vector<glm::mat4>& boneOffsetMatrices, const tsl::robin_map<StringId, unsigned int, StringIdHasher>& boneMapping, const glm::mat4& sceneTransform, const aiNode* rootAssimpNode, const GLuint vertexArrayObject, const std::vector<GLuint>& indexCountPerMesh, const std::vector<GLuint>& baseIndexPerMesh, const std::vector<GLuint>& baseVertexPerMesh, const glm::vec3& meshDimensions);
     
     // Static model (OBJ) constructor
     MeshResource(const GLuint vertexArrayObject, const GLuint elementCount, const glm::vec3& meshDimensions);
@@ -121,7 +123,9 @@ private:
     const tsl::robin_map<StringId, unsigned int, StringIdHasher> mBoneNameToIdMap;
     const glm::mat4 mSceneTransform;
     const GLuint mVertexArrayObject;
-    const GLuint mElementCount;
+    const std::vector<GLuint> mIndexCountPerMesh;
+    const std::vector<GLuint> mBaseIndexPerMesh;
+    const std::vector<GLuint> mBaseVertexPerMesh;
     const glm::vec3 mDimensions;
     SkeletonNode* mRootSkeletonNode;
     
