@@ -177,18 +177,14 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     for (auto m = 0U; m < scene->mNumMeshes; ++m)
     {
         const auto mesh = scene->mMeshes[m];
-        auto doesMeshHaveValidFaces = true;
-        for (unsigned int i = 0 ; i < mesh->mNumFaces && doesMeshHaveValidFaces; i++) {
+        for (unsigned int i = 0 ; i < mesh->mNumFaces; i++) {
             const aiFace& face = mesh->mFaces[i];
-            for (unsigned int j = 0; j < 3 && doesMeshHaveValidFaces; ++j)
+            for (unsigned int j = 0; j < 3; ++j)
             {
                 if (j >= face.mNumIndices)
                 {
                     // Invalidate mesh
-                    doesMeshHaveValidFaces = false;
-                    indexCountPerMesh.erase(indexCountPerMesh.begin() + m);
-                    baseIndexPerMesh.erase(baseIndexPerMesh.begin() + m);
-                    baseVertexPerMesh.erase(baseVertexPerMesh.begin() + m);
+                    indexCountPerMesh[m] = 0;
                     indices.push_back(0);
                 }
                 else

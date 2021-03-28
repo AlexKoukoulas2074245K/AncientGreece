@@ -558,8 +558,10 @@ void RenderingSystem::RenderEntityInternal
     const auto& baseVertexPerMesh = currentMesh->GetBaseVertexPerMesh();
     for (auto i = 0U; i < indexCountPerMesh.size(); ++i)
     {
-        GL_CHECK(glDrawElementsBaseVertex(GL_TRIANGLES, indexCountPerMesh.at(i), GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * baseIndexPerMesh.at(i)), baseVertexPerMesh.at(i)));
-
+        if (indexCountPerMesh[i] > 0)
+        {
+            GL_CHECK(glDrawElementsBaseVertex(GL_TRIANGLES, indexCountPerMesh.at(i), GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * baseIndexPerMesh.at(i)), baseVertexPerMesh.at(i)));
+        }
     }
 }
 
