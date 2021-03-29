@@ -82,7 +82,7 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
         else
         {
             // Current anim playing
-            renderableComponent.mAnimationTimeAccum += dt;
+            renderableComponent.mAnimationTimeAccum += renderableComponent.mAnimationSpeed * dt;
             
             const auto& animationInfo = currentMesh.GetAnimationInfo();
             const auto animationTime = std::fmod(renderableComponent.mAnimationTimeAccum, animationInfo.mDuration);

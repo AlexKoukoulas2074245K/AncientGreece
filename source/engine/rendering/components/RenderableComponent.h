@@ -81,6 +81,7 @@ public:
     int mPreviousMeshResourceIndex      = -1;
     float mAnimationTimeAccum           = 0.0f;
     float mTransitionAnimationTimeAccum = 0.0f;
+    float mAnimationSpeed               = 1.0f;
     RenderableType mRenderableType      = RenderableType::NORMAL_MODEL;
     bool mIsVisible                     = true;
     bool mIsAffectedByLight             = false;

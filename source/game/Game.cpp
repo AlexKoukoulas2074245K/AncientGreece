@@ -101,7 +101,7 @@ void Game::VOnGameInit()
     
     auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("horseman", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
-    playerStatsComponent->mSpeedMultiplier = 2.0f;
+    playerStatsComponent->mSpeedMultiplier = 4.0f;
     world.AddComponent<UnitStatsComponent>(playerEntity, std::move(playerStatsComponent));
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)

@@ -6,12 +6,19 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "OverworldMovementControllerSystem.h"
+#include "../AreaTypes.h"
 #include "../components/OverworldTargetComponent.h"
+#include "../utils/NavmapUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
+#include "../../../engine/resources/ResourceLoadingService.h"
+#include "../../../engine/resources/MeshResource.h"
+#include "../../../engine/resources/TextureResource.h"
+
+#include <tsl/robin_map.h>
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -22,6 +29,17 @@ namespace overworld
 
 namespace
 {
+    const tsl::robin_map<AreaTypeMask, float> AREA_TYPE_TO_SPEED_MULTIPLIER =
+    {
+        { areaTypeMasks::FOREST, 0.5f },
+        { areaTypeMasks::MOUNTAIN, 0.5f },
+        { areaTypeMasks::HIGH_MOUNTAIN, 0.25f },
+    };
+
+    static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";
+
+    static const StringId MAP_ENTITY_NAME = StringId("map");
+
     static const float SUFFICIENTLY_CLOSE_THRESHOLD = 0.001f;
     static const float ROTATION_SPEED               = 5.0f;
     static const float BASE_UNIT_SPEED              = 0.002f;
@@ -39,6 +57,12 @@ OverworldMovementControllerSystem::OverworldMovementControllerSystem()
 void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = genesis::ecs::World::GetInstance();
+    auto& navmapTexture = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::TextureResource>(NAVMAP_ASSET_PATH);
+    
+    auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
+    const auto& mapRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(mapEntity);
+    const auto& mapMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( mapRenderableComponent.mMeshResourceIds.at(mapRenderableComponent.mCurrentMeshResourceIndex));
+    const auto& mapDimensions = mapMeshResource.GetDimensions();
     
     for (const auto entityId: entitiesToProcess)
     {
@@ -63,7 +87,8 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         // Else move and rotate towards target
         else
         {
-            const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mSpeedMultiplier;
+            const auto terrainSpeedMultiplier = GetTerrainSpeedMultiplier(transformComponent.mPosition, mapDimensions, navmapTexture);
+            const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mSpeedMultiplier * terrainSpeedMultiplier;
             UpdatePosition(dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
             UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
             
@@ -102,6 +127,26 @@ void OverworldMovementControllerSystem::UpdateRotation(const float dt, const flo
             entityRotation.z += genesis::math::PI * 2.0f;
         }
     }
+}
+
+///-----------------------------------------------------------------------------------------------
+
+float OverworldMovementControllerSystem::GetTerrainSpeedMultiplier(const glm::vec3& unitPosition, const glm::vec3& mapDimensions, const genesis::resources::TextureResource& navmapTexture) const
+{
+    auto terrainMultiplier = 1.0f;
+    const auto pixelPosition = MapPositionToNavmapPixel(unitPosition, mapDimensions, navmapTexture.GetDimensions());
+    const auto targetPixel = navmapTexture.GetRgbAtPixel(pixelPosition.x, pixelPosition.y);
+    
+    if (RGB_TO_AREA_TYPE_MASK.count(targetPixel))
+    {
+        const auto areaType = RGB_TO_AREA_TYPE_MASK.at(targetPixel);
+        if (AREA_TYPE_TO_SPEED_MULTIPLIER.count(areaType))
+        {
+            terrainMultiplier = AREA_TYPE_TO_SPEED_MULTIPLIER.at(areaType);
+        }
+    }
+    
+    return terrainMultiplier;
 }
 
 ///-----------------------------------------------------------------------------------------------
