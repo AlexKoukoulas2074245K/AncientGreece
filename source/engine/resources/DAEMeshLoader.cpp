@@ -107,9 +107,32 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     
     float minX = 100.0f, maxX = -100.0f, minY = 100.0f, maxY = -100.0f, minZ = 100.0f, maxZ = -100.0f;
     
+    // Load Face Data
     for (auto m = 0U; m < scene->mNumMeshes; ++m)
     {
         const auto mesh = scene->mMeshes[m];
+        for (unsigned int i = 0 ; i < mesh->mNumFaces; i++) {
+            const aiFace& face = mesh->mFaces[i];
+            for (unsigned int j = 0; j < 3; ++j)
+            {
+                if (j >= face.mNumIndices)
+                {
+                    // Invalidate mesh
+                    indexCountPerMesh[m] = 0;
+                    indices.push_back(0);
+                }
+                else
+                {
+                    indices.push_back(face.mIndices[j]);
+                }
+            }
+        }
+    }
+    
+    for (auto m = 0U; m < scene->mNumMeshes; ++m)
+    {
+        const auto mesh = scene->mMeshes[m];
+        
         // Load Vertex Data
         for (unsigned int i = 0 ; i < mesh->mNumVertices ; i++) {
             const aiVector3D* pos = &(mesh->mVertices[i]);
@@ -121,12 +144,15 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
             normals.emplace_back(normal->x, normal->y, normal->z);
             bones.emplace_back(VertexBoneData());
             
-            if (pos->x < minX) minX = pos->x;
-            if (pos->x > maxX) maxX = pos->x;
-            if (pos->y < minY) minY = pos->y;
-            if (pos->y > maxY) maxY = pos->y;
-            if (pos->z < minZ) minZ = pos->z;
-            if (pos->z > maxZ) maxZ = pos->z;
+            if (indexCountPerMesh[m] != 0)
+            {
+                if (pos->x < minX) minX = pos->x;
+                if (pos->x > maxX) maxX = pos->x;
+                if (pos->y < minY) minY = pos->y;
+                if (pos->y > maxY) maxY = pos->y;
+                if (pos->z < minZ) minZ = pos->z;
+                if (pos->z > maxZ) maxZ = pos->z;
+            }
         }
     }
     
@@ -169,28 +195,6 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
                 }
                 
                 assert(foundBoneDataEntry && std::string("More than: " +  std::to_string(MAX_NUM_BONES_AFFECTING_EACH_VERTEX) + " bone influences found").c_str());
-            }
-        }
-    }
-    
-    // Load Face Data
-    for (auto m = 0U; m < scene->mNumMeshes; ++m)
-    {
-        const auto mesh = scene->mMeshes[m];
-        for (unsigned int i = 0 ; i < mesh->mNumFaces; i++) {
-            const aiFace& face = mesh->mFaces[i];
-            for (unsigned int j = 0; j < 3; ++j)
-            {
-                if (j >= face.mNumIndices)
-                {
-                    // Invalidate mesh
-                    indexCountPerMesh[m] = 0;
-                    indices.push_back(0);
-                }
-                else
-                {
-                    indices.push_back(face.mIndices[j]);
-                }
             }
         }
     }

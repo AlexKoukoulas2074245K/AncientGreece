@@ -99,14 +99,15 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("horseman", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
+    auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("horseman", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0004f, 0.0004f, 0.0004f), StringId("player"));
     auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
     playerStatsComponent->mSpeedMultiplier = 4.0f;
     world.AddComponent<UnitStatsComponent>(playerEntity, std::move(playerStatsComponent));
+    world.AddComponent<overworld::HighlightableComponent>(playerEntity, std::make_unique<overworld::HighlightableComponent>());
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
-        auto spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan2", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
+        auto spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName((i % 2 == 0 ? "spartan2" : "horseman"), glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), (i % 2 == 0 ? glm::vec3(0.004f, 0.004f, 0.004f) : glm::vec3(0.0004f, 0.0004f, 0.0004f)), StringId("spartan_" + std::to_string(i)));
         world.AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
         world.AddComponent<UnitStatsComponent>(spartanEntity, std::make_unique<UnitStatsComponent>());
     }

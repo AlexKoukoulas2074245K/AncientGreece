@@ -79,6 +79,12 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
             
             renderableComponent.mShaderNameId = intersectionExists ? HIGHLIGHTED_SKELETAL_MODEL_SHADER : DEFAULT_SKELETAL_MODEL_SHADER;
             highlightableComponent.mHighlighted = intersectionExists;
+            
+            if (entityId == world.FindEntityWithName(StringId("player")))
+            {
+                const auto b = false;
+                (void)b;
+            }
         }
     }
 }
