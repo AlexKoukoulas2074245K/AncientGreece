@@ -75,7 +75,7 @@ void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vecto
     {
         CalculateMapTarget(*targetComponent, world);
         const auto& playerStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
-        isValidTarget = (playerStatsComponent.mNavigableAreaTypes & targetComponent->mTargetAreaType) != 0;
+        isValidTarget = (playerStatsComponent.mStats.mNavigableAreaTypes & targetComponent->mTargetAreaType) != 0;
     }
     
     if (isValidTarget)

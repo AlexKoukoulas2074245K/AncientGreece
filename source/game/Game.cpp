@@ -112,36 +112,40 @@ void Game::VOnGameInit()
     const auto playerModelName = "spartan";
     auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName(playerModelName, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
-    playerStatsComponent->mSpeedMultiplier = 4.0f;
-    playerStatsComponent->mUnitName = GetRandomAvailableUnitName();
-    playerStatsComponent->mModelName = StringId(playerModelName);
-    playerStatsComponent->mPartySize = genesis::math::RandomInt(1, 100);
+    playerStatsComponent->mStats.mSpeedMultiplier = 4.0f;
+    playerStatsComponent->mStats.mUnitName = GetRandomAvailableUnitName();
+    playerStatsComponent->mStats.mModelName = StringId(playerModelName);
     world.AddComponent<UnitStatsComponent>(playerEntity, std::move(playerStatsComponent));
-    //world.AddComponent<overworld::HighlightableComponent>(playerEntity, std::make_unique<overworld::HighlightableComponent>());
+    world.AddComponent<overworld::HighlightableComponent>(playerEntity, std::make_unique<overworld::HighlightableComponent>());
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
-        
         auto unitStatsComponent = std::make_unique<UnitStatsComponent>();
-        unitStatsComponent->mUnitName = GetRandomAvailableUnitName();
-        unitStatsComponent->mPartySize = genesis::math::RandomInt(1, 100);
+        unitStatsComponent->mStats.mUnitName = GetRandomAvailableUnitName();
+        unitStatsComponent->mStats.mHealth = genesis::math::RandomInt(0, 100);
+        
+        auto partySize = genesis::math::RandomInt(0, 10);
+        for (int i = 0; i < partySize; ++i)
+        {
+            UnitStats stats;
+        }
         
         auto spartanEntity = genesis::ecs::NULL_ENTITY_ID;
         
         if (i % 3 == 0)
         {
             spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("horseman", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0004f, 0.0004f, 0.0004f), StringId("spartan_" + std::to_string(i)));
-                unitStatsComponent->mModelName = StringId("horseman");
+                unitStatsComponent->mStats.mModelName = StringId("horseman");
         }
         else if (i % 3 == 1)
         {
             spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
-            unitStatsComponent->mModelName = StringId("spartan");
+            unitStatsComponent->mStats.mModelName = StringId("spartan");
         }
         else if (i % 3 == 2)
         {
             spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan2", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
-            unitStatsComponent->mModelName = StringId("spartan2");
+            unitStatsComponent->mStats.mModelName = StringId("spartan2");
         }
         
         world.AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());

@@ -18,7 +18,8 @@ namespace
 {
     static const std::string NAMES_LIST_FILE_PATH = genesis::resources::ResourceLoadingService::RES_DATA_ROOT + "names_list.dat";
 
-    static const int UPPER_LIMIT_PARTY = 100;
+    static const size_t UPPER_LIMIT_PARTY = 100;
+    static const int UPPER_LIMIT_HEALTH   = 100;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -54,7 +55,7 @@ StringId GetRandomAvailableUnitName()
 
 genesis::colors::RgbTriplet<float> GetUnitPartyColor(const UnitStatsComponent& unitStatsComponent)
 {
-    const auto partyFillPercent = 180.0 * static_cast<float>(unitStatsComponent.mPartySize)/(genesis::math::Max(unitStatsComponent.mPartySize, UPPER_LIMIT_PARTY));
+    const auto partyFillPercent = 180.0 * static_cast<float>(unitStatsComponent.mParty.size())/(genesis::math::Max(unitStatsComponent.mParty.size(), UPPER_LIMIT_PARTY));
     
     genesis::colors::HsvTriplet<float> hsvTarget(180.0f - partyFillPercent, 0.8f, 0.5f);
     return genesis::colors::HsvToRgb(hsvTarget);
@@ -63,3 +64,12 @@ genesis::colors::RgbTriplet<float> GetUnitPartyColor(const UnitStatsComponent& u
 
 ///-----------------------------------------------------------------------------------------------
 
+genesis::colors::RgbTriplet<float> GetUnitHealthColor(const UnitStatsComponent& unitStatsComponent)
+{
+    const auto healthFillPercent = 1.0 * static_cast<float>(unitStatsComponent.mStats.mHealth)/(genesis::math::Max(unitStatsComponent.mStats.mHealth, UPPER_LIMIT_HEALTH));
+    
+    genesis::colors::HsvTriplet<float> hsvTarget(0.0f, 1.0f, healthFillPercent);
+    return genesis::colors::HsvToRgb(hsvTarget);
+}
+
+///-----------------------------------------------------------------------------------------------

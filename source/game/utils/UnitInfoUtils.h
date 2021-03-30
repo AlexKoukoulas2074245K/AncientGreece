@@ -27,4 +27,8 @@ genesis::colors::RgbTriplet<float> GetUnitPartyColor(const UnitStatsComponent& u
 
 ///------------------------------------------------------------------------------------------------
 
+genesis::colors::RgbTriplet<float> GetUnitHealthColor(const UnitStatsComponent& unitStatsComponent);
+
+///------------------------------------------------------------------------------------------------
+
 #endif /* UnitInfoUtils_h */

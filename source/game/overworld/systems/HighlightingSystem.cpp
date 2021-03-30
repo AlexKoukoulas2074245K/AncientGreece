@@ -111,7 +111,6 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
             {
                 const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
                 CreateUnitPreviewPopup(transformComponent.mPosition, unitStatsComponent, cameraComponent.mPosition);
-                break;
             }
         }
     }
@@ -125,9 +124,9 @@ void HighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPosition, c
     auto& world = genesis::ecs::World::GetInstance();
     
     std::vector<genesis::ecs::EntityId> renderedTextEntities;
-    renderedTextEntities.push_back(genesis::rendering::RenderText(unitStatsComponent.mUnitName.GetString(), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + 2 * UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, UNIT_PREVIEW_POPUP_NAME));
+    renderedTextEntities.push_back(genesis::rendering::RenderText(unitStatsComponent.mStats.mUnitName.GetString(), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + 2 * UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, UNIT_PREVIEW_POPUP_NAME));
     renderedTextEntities.push_back(genesis::rendering::RenderText("Party:", GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, UNIT_PREVIEW_POPUP_NAME));
-    renderedTextEntities.push_back(genesis::rendering::RenderText(std::to_string(unitStatsComponent.mPartySize), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(PARTY_X_OFFSET, UNIT_DETAILS_Y_OFFSET + UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::RgbTripletToVec4( GetUnitPartyColor(unitStatsComponent)), true, UNIT_PREVIEW_POPUP_NAME));
+    renderedTextEntities.push_back(genesis::rendering::RenderText(std::to_string(unitStatsComponent.mParty.size()), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(PARTY_X_OFFSET, UNIT_DETAILS_Y_OFFSET + UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::RgbTripletToVec4( GetUnitPartyColor(unitStatsComponent)), true, UNIT_PREVIEW_POPUP_NAME));
     
     glm::vec2 minBotLeftCoords(1.0f, 1.0f);
     glm::vec2 maxTopRightCoords(-1.0f, -1.0f);

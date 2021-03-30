@@ -26,6 +26,10 @@ namespace
 
     static const StringId UNIT_NAME_DS_KEY             = StringId("unit_name");
     static const StringId UNIT_MODEL_NAME_DS_KEY       = StringId("unit_model_name");
+    static const StringId UNIT_HEALTH_DS_KEY           = StringId("unit_health");
+    static const StringId UNIT_HEALTH_RED_DS_KEY       = StringId("unit_health_red");
+    static const StringId UNIT_HEALTH_GREEN_DS_KEY     = StringId("unit_health_green");
+    static const StringId UNIT_HEALTH_BLUE_DS_KEY      = StringId("unit_health_blue");
     static const StringId UNIT_PARTY_SIZE_DS_KEY       = StringId("unit_party_size");
     static const StringId UNIT_PARTY_SIZE_RED_DS_KEY   = StringId("unit_party_size_red");
     static const StringId UNIT_PARTY_SIZE_GREEN_DS_KEY = StringId("unit_party_size_green");
@@ -57,14 +61,20 @@ void OverworldUnitInteractionHandlingSystem::VUpdate(const float, const std::vec
             const auto& unitTransformComponent = world.GetComponent<genesis::TransformComponent>(overworldUnitInteractionComponent.mOtherEntityId);
             const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldUnitInteractionComponent.mOtherEntityId);
             
-            const auto unitName           = unitStatsComponent.mUnitName;
-            const auto unitModelName      = unitStatsComponent.mModelName;
-            const auto unitPartySize      = unitStatsComponent.mPartySize;
+            const auto unitName           = unitStatsComponent.mStats.mUnitName;
+            const auto unitModelName      = unitStatsComponent.mStats.mModelName;
+            const auto unitHealth         = unitStatsComponent.mStats.mHealth;
+            const auto unitHealthColor    = GetUnitHealthColor(unitStatsComponent);
+            const auto unitPartySize      = unitStatsComponent.mParty.size();
             const auto unitPartySizeColor = GetUnitPartyColor(unitStatsComponent);
             const auto& unitScale         = unitTransformComponent.mScale;
             
             WriteValue(UNIT_NAME_DS_KEY, unitName.GetString());
             WriteValue(UNIT_MODEL_NAME_DS_KEY, unitModelName.GetString());
+            WriteValue(UNIT_HEALTH_DS_KEY, std::to_string(unitHealth));
+            WriteValue(UNIT_HEALTH_RED_DS_KEY, std::to_string(unitHealthColor.mRed));
+            WriteValue(UNIT_HEALTH_GREEN_DS_KEY, std::to_string(unitHealthColor.mGreen));
+            WriteValue(UNIT_HEALTH_BLUE_DS_KEY, std::to_string(unitHealthColor.mBlue));
             WriteValue(UNIT_PARTY_SIZE_DS_KEY, std::to_string(unitPartySize));
             WriteValue(UNIT_PARTY_SIZE_RED_DS_KEY, std::to_string(unitPartySizeColor.mRed));
             WriteValue(UNIT_PARTY_SIZE_GREEN_DS_KEY, std::to_string(unitPartySizeColor.mGreen));

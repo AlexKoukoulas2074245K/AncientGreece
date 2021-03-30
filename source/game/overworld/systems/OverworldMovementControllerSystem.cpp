@@ -100,7 +100,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         else
         {
             const auto terrainSpeedMultiplier = GetTerrainSpeedMultiplier(transformComponent.mPosition, mapDimensions, navmapTexture);
-            const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mSpeedMultiplier * terrainSpeedMultiplier;
+            const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mStats.mSpeedMultiplier * terrainSpeedMultiplier;
             UpdatePosition(dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
             UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
             

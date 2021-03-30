@@ -81,6 +81,9 @@ inline bool operator == (const RgbTriplet<T>& lhs, const RgbTriplet<T>& rhs)
 template <class T>
 struct HsvTriplet
 {
+    /// @param[h] h angle in degrees (0.0f - 360.0f)
+    /// @param[s] s saturation value (0.0f - 1.0f).
+    /// @param[v] v value (0.0f - 1.0f);
     HsvTriplet(const T h, const T s, const T v)
         : mHue(h)
         , mSat(s)
