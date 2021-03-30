@@ -225,7 +225,10 @@ bool OverworldCameraControllerSystem::IsCameraOutOfBounds() const
         cameraComponent.mZNear,
         cameraComponent.mZFar
     );
-
+    
+    // Temporary frustum for visibility calculation
+    auto frustum = genesis::rendering::CalculateCameraFrustum(viewMatrix, projectionMatrix);
+    
     for (int i = 1; i < 5; ++i)
     {
         // Find map edge entity
@@ -233,9 +236,6 @@ bool OverworldCameraControllerSystem::IsCameraOutOfBounds() const
         
         if (entityId != genesis::ecs::NULL_ENTITY_ID)
         {
-            // Temporary frustum for visibility calculation
-            auto frustum = genesis::rendering::CalculateCameraFrustum(viewMatrix, projectionMatrix);
-
             const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
             const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
             const auto& currentMesh = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);

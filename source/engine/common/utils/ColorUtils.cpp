@@ -132,6 +132,13 @@ RgbTriplet<float> HsvToRgb(const HsvTriplet<float> hsv)
 
 ///-----------------------------------------------------------------------------------------------
 
+glm::vec4 RgbTripletToVec4(const RgbTriplet<float> rgb)
+{
+    return glm::vec4(rgb.mRed, rgb.mGreen, rgb.mBlue, 1.0f);
+}
+
+///-----------------------------------------------------------------------------------------------
+
 }
 
 }

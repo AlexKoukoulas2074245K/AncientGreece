@@ -37,7 +37,7 @@ namespace
     static const std::string FONT_ATLAS_TEXTURE_FILE_EXTENSION = ".png";
 
     static const float DEFAULT_FONT_PADDING_PROPORTION_TO_SIZE = 0.333333f;
-    static const float FONT_3D_PADDING_PROPORTION_TO_SIZE = 0.73326;
+    static const float FONT_3D_PADDING_PROPORTION_TO_SIZE      = 0.8f;
 }
 
 ///------------------------------------------------------------------------------------------------

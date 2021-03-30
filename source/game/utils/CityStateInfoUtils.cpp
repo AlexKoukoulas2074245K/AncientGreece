@@ -18,7 +18,7 @@
 namespace
 {
     static const std::string CITY_STATE_INFO_FILE_PATH = genesis::resources::ResourceLoadingService::RES_DATA_ROOT + "city_state_db.json";
-    static const int UPPER_LIMIT_GARISSON = 1500;
+    static const int UPPER_LIMIT_GARISSON = 1100;
     static const int UPPER_LIMIT_RENOWN   = 100;
 }
 
@@ -68,9 +68,9 @@ genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId city
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto garisson =  world.GetSingletonComponent<CityStateInfoSingletonComponent>().mCityStateNameToInfo.at(cityStateName).mGarisson;
-    const auto garissonFillPercent = 100.0 * static_cast<float>(garisson)/(genesis::math::Max(garisson, UPPER_LIMIT_GARISSON));
+    const auto garissonFillPercent = 180.0 * static_cast<float>(garisson)/(genesis::math::Max(garisson, UPPER_LIMIT_GARISSON));
     
-    genesis::colors::HsvTriplet<float> hsvTarget(100.0f - garissonFillPercent, 0.8f, 0.5f);
+    genesis::colors::HsvTriplet<float> hsvTarget(180.0f - garissonFillPercent, 0.8f, 0.5f);
     return genesis::colors::HsvToRgb(hsvTarget);
 }
 
@@ -80,9 +80,9 @@ genesis::colors::RgbTriplet<float> GetCityStateRenownColor(const StringId citySt
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto renown =  world.GetSingletonComponent<CityStateInfoSingletonComponent>().mCityStateNameToInfo.at(cityStateName).mRenown;
-    const auto renownFillPercent = 100.0 * static_cast<float>(renown)/(genesis::math::Max(renown, UPPER_LIMIT_RENOWN));
+    const auto renownFillPercent = 180.0 * static_cast<float>(renown)/(genesis::math::Max(renown, UPPER_LIMIT_RENOWN));
     
-    genesis::colors::HsvTriplet<float> hsvTarget(100.0f - renownFillPercent, 0.8f, 0.5f);
+    genesis::colors::HsvTriplet<float> hsvTarget(180.0f - renownFillPercent, 0.8f, 0.5f);
     return genesis::colors::HsvToRgb(hsvTarget);
 }
 

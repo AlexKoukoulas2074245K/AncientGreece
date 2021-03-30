@@ -27,14 +27,17 @@ class TransformComponent;
 
 namespace rendering
 {
+    class RenderableComponent;
+}
 
 ///-----------------------------------------------------------------------------------------------
 
-class RenderableComponent;
+namespace animation
+{
 
 ///-----------------------------------------------------------------------------------------------
 
-class ModelAnimationSystem final: public ecs::BaseSystem<TransformComponent, RenderableComponent>
+class ModelAnimationSystem final: public ecs::BaseSystem<TransformComponent, rendering::RenderableComponent>
 {
 public:
     ModelAnimationSystem();
@@ -42,8 +45,8 @@ public:
     void VUpdate(const float dt, const std::vector<ecs::EntityId>&) const override;
     
 private:
-    void CalculateTransitionalTransformsInHierarchy(const float previousAnimationTime, const float transitionAnimationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& previousMeshResource, const resources::MeshResource& currentMeshResource, RenderableComponent& renderableComponent) const;
-    void CalculateTransformsInHierarchy(const float animationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& meshResource, RenderableComponent& renderableComponent) const;
+    void CalculateTransitionalTransformsInHierarchy(const float previousAnimationTime, const float transitionAnimationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& previousMeshResource, const resources::MeshResource& currentMeshResource, rendering::RenderableComponent& renderableComponent) const;
+    void CalculateTransformsInHierarchy(const float animationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& meshResource, rendering::RenderableComponent& renderableComponent) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

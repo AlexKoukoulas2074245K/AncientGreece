@@ -136,6 +136,13 @@ HsvTriplet<float> RgbToHsv(const RgbTriplet<float> rgb);
 RgbTriplet<float> HsvToRgb(const HsvTriplet<float> hsv);
 
 ///-----------------------------------------------------------------------------------------------
+/// Transforms an rgb triplet to a glm::vec4.
+///
+/// @param[in] rgb The rgb triplet (in range 0.0-1.0 to convert to hsv)
+/// @returns the conversion result
+glm::vec4 RgbTripletToVec4(const RgbTriplet<float> rgb);
+
+///-----------------------------------------------------------------------------------------------
 
 }
 

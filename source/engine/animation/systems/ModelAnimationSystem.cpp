@@ -6,10 +6,10 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "ModelAnimationSystem.h"
-#include "../components/RenderableComponent.h"
 #include "../../common/components/TransformComponent.h"
 #include "../../common/utils/Logging.h"
 #include "../../common/utils/MathUtils.h"
+#include "../../rendering/components/RenderableComponent.h"
 #include "../../resources/ResourceLoadingService.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ namespace genesis
 
 ///-----------------------------------------------------------------------------------------------
 
-namespace rendering
+namespace animation
 {
 
 ///-----------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
     const auto& world = ecs::World::GetInstance();
     for (const auto& entityId : entitiesToProcess)
     {
-        auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
+        auto& renderableComponent = world.GetComponent<rendering::RenderableComponent>(entityId);
         if (renderableComponent.mMeshResourceIds.size() <= 0)
         {
             continue;
@@ -100,7 +100,7 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
 
 ///-----------------------------------------------------------------------------------------------
 
-void ModelAnimationSystem::CalculateTransitionalTransformsInHierarchy(const float previousAnimationTime, const float transitionAnimationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& previousMeshResource, const resources::MeshResource& currentMeshResource, RenderableComponent& renderableComponent) const
+void ModelAnimationSystem::CalculateTransitionalTransformsInHierarchy(const float previousAnimationTime, const float transitionAnimationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& previousMeshResource, const resources::MeshResource& currentMeshResource, rendering::RenderableComponent& renderableComponent) const
 {
     auto nodeTransform = node->mTransform;
     const auto& previousMeshAnimationInfo = previousMeshResource.GetAnimationInfo();
@@ -172,7 +172,7 @@ void ModelAnimationSystem::CalculateTransitionalTransformsInHierarchy(const floa
 
 ///-----------------------------------------------------------------------------------------------
 
-void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& meshResource, RenderableComponent& renderableComponent) const
+void ModelAnimationSystem::CalculateTransformsInHierarchy(const float animationTime, const resources::SkeletonNode* node, const glm::mat4& parentTransform, const resources::MeshResource& meshResource, rendering::RenderableComponent& renderableComponent) const
 {
     auto nodeTransform = node->mTransform;
     const auto& animationInfo = meshResource.GetAnimationInfo();

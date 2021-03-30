@@ -47,10 +47,10 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
     auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
     
     // Calculate render-constant camera view matrix
-    auto mViewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
+    auto viewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
 
     // Calculate render-constant camera projection matrix
-    auto mProjectionMatrix = glm::perspectiveFovLH
+    auto projectionMatrix = glm::perspectiveFovLH
     (
         cameraComponent.mFieldOfView,
         windowComponent.mRenderableWidth,
@@ -66,7 +66,7 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
         const auto& mapTransformComponent = world.GetComponent<genesis::TransformComponent>(mapEntity);
         
         // Calculate Mouse Intersection with map
-        mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(mViewMatrix, mProjectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
+        mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(viewMatrix, projectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
         genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, mapTransformComponent.mPosition, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
     }
 }

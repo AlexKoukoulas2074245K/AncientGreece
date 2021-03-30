@@ -18,10 +18,12 @@
 #include "overworld/utils/OverworldCityStateUtils.h"
 #include "utils/CityStateInfoUtils.h"
 #include "utils/KeyValueUtils.h"
+#include "utils/UnitInfoUtils.h"
 #include "view/components/ViewQueueSingletonComponent.h"
 #include "view/systems/ViewManagementSystem.h"
 #include "view/utils/ViewUtils.h"
 #include "../engine/ECS.h"
+#include "../engine/animation/systems/ModelAnimationSystem.h"
 #include "../engine/common/components/TransformComponent.h"
 #include "../engine/common/utils/Logging.h"
 #include "../engine/common/utils/MathUtils.h"
@@ -38,7 +40,6 @@
 #include "../engine/rendering/utils/FontUtils.h"
 #include "../engine/rendering/utils/LightUtils.h"
 #include "../engine/rendering/utils/MeshUtils.h"
-#include "../engine/rendering/systems/ModelAnimationSystem.h"
 #include "../engine/rendering/systems/RenderingSystem.h"
 #include "../engine/resources/ResourceLoadingService.h"
 #include "../engine/scripting/components/ScriptComponent.h"
@@ -80,7 +81,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>());
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
     
-    world.AddSystem(std::make_unique<genesis::rendering::ModelAnimationSystem>(), genesis::ecs::SystemOperationMode::MULTI_THREADED);
+    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), genesis::ecs::SystemOperationMode::MULTI_THREADED);
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 
@@ -99,9 +100,11 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("horseman", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0004f, 0.0004f, 0.0004f), StringId("player"));
+    auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
     auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
     playerStatsComponent->mSpeedMultiplier = 4.0f;
+    playerStatsComponent->mUnitName = GetRandomAvailableUnitName();
+    playerStatsComponent->mPartySize = genesis::math::RandomInt(1, 100);
     world.AddComponent<UnitStatsComponent>(playerEntity, std::move(playerStatsComponent));
     world.AddComponent<overworld::HighlightableComponent>(playerEntity, std::make_unique<overworld::HighlightableComponent>());
     
@@ -109,7 +112,11 @@ void Game::VOnGameInit()
     {
         auto spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName((i % 2 == 0 ? "spartan2" : "horseman"), glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), (i % 2 == 0 ? glm::vec3(0.004f, 0.004f, 0.004f) : glm::vec3(0.0004f, 0.0004f, 0.0004f)), StringId("spartan_" + std::to_string(i)));
         world.AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
-        world.AddComponent<UnitStatsComponent>(spartanEntity, std::make_unique<UnitStatsComponent>());
+        
+        auto unitStatsComponent = std::make_unique<UnitStatsComponent>();
+        unitStatsComponent->mUnitName = GetRandomAvailableUnitName();
+        unitStatsComponent->mPartySize = genesis::math::RandomInt(1, 100);
+        world.AddComponent<UnitStatsComponent>(spartanEntity, std::move(unitStatsComponent));
     }
 }
 

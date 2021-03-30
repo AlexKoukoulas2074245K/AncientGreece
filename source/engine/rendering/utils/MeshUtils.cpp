@@ -7,6 +7,7 @@
 
 #include "MeshUtils.h"
 #include "../components/RenderableComponent.h"
+#include "../../animation/utils/AnimationUtils.h"
 #include "../../common/utils/ColorUtils.h"
 #include "../../common/components/NameComponent.h"
 #include "../../common/components/TransformComponent.h"
@@ -36,6 +37,7 @@ namespace
     static const StringId ATLAS_MODEL_NAME                     = StringId("gui_atlas_quad");
     static const StringId BONES_UNIFORM_NAME                   = StringId("bones");
     static const StringId GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME = StringId("custom_color");
+    static const StringId IDLE_ANIMATION_NAME                  = StringId("idle");
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -132,7 +134,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     (
         resources::ResourceLoadingService::RES_TEXTURES_ROOT + modelName + ".png"
     );
-    
+
     world.AddComponent<RenderableComponent>(modelEntity, std::move(renderableComponent));
     world.AddComponent<TransformComponent>(modelEntity, std::move(transformComponent));
 
@@ -140,7 +142,9 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     {
         world.AddComponent<NameComponent>(modelEntity, std::make_unique<NameComponent>(entityName));
     }
-
+    
+    animation::ChangeAnimation(modelEntity, IDLE_ANIMATION_NAME);
+    
     return modelEntity;
 }
 

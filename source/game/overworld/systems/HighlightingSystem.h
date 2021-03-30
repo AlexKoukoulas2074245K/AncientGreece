@@ -10,7 +10,12 @@
 
 ///-----------------------------------------------------------------------------------------------
 
-#include "../../engine/ECS.h"
+#include "../../../engine/ECS.h"
+#include "../../../engine/common/utils/MathUtils.h"
+
+///-----------------------------------------------------------------------------------------------
+
+class UnitStatsComponent;
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -28,6 +33,10 @@ public:
     HighlightingSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+    
+private:
+    void CreateUnitPreviewPopup(const glm::vec3& unitPosition, const UnitStatsComponent& unitStatsComponent, const glm::vec3& cameraPosition) const;
+    void DestroyUnitPreviewPopup() const;
 };
 
 ///-----------------------------------------------------------------------------------------------

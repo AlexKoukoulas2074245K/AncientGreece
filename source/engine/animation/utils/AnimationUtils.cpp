@@ -35,6 +35,21 @@ void ChangeAnimation(const ecs::EntityId entityId, const StringId animationName)
 
 ///-----------------------------------------------------------------------------------------------)
 
+int GetAnimationIndex(const ecs::EntityId entityId, const StringId animationName)
+{
+    const auto& world = ecs::World::GetInstance();
+    const auto& renderableComponent = world.GetComponent<rendering::RenderableComponent>(entityId);
+    
+    if (renderableComponent.mAnimNameToMeshIndex.count(animationName))
+    {
+        return renderableComponent.mAnimNameToMeshIndex.at(animationName);
+    }
+    
+    return -1;
+}
+
+///-----------------------------------------------------------------------------------------------)
+
 }
 
 }
