@@ -116,14 +116,19 @@ public:
     /// @returns a map containing the system name strings mapped to their current update times in miliseconds.
     const tsl::robin_map<StringId, long long, StringIdHasher>& GetSystemUpdateTimes() const;
 
+    /// Changes the context of the world.
+    /// @param[in] contextId the context id to change to.
+    void ChangeContext(const int contextId);
+    
     /// Performs a single update of the world simulation.
     /// @param[in] dt the inter-frame delta time in seconds.
     void Update(const float dt);
-
+    
     /// Adds a system to the world and takes ownership of it
     /// @param[in] system the system instance to add to the world and take ownership over.
+    /// @param[in] contextIdToOperateIn (optional) if the system is supposed to operate ONLY in a specific context, then this id would be polled during system update to determine whether the system should get updated. Otherwise passing in zero means that the system's update is not constrained in a particular context
     /// @param[in] operationMode (optional) threaded operation mode
-    void AddSystem(std::unique_ptr<ISystem> system, SystemOperationMode operationMode = SystemOperationMode::SINGLE_THREADED);
+    void AddSystem(std::unique_ptr<ISystem> system, const int contextIdToOperateIn = 0, SystemOperationMode operationMode = SystemOperationMode::SINGLE_THREADED);
 
     /// Creates an entity and returns its corresponding entity id.     
     /// @returns the entity id of the newly constructed entity.
@@ -381,7 +386,7 @@ private:
     std::vector<std::unique_ptr<SystemUpdateWorker>> mSystemUpdateWorkers;
     
     EntityId mEntityCounter = 1LL;
-    
+    int mCurrentContextId = 0;
 };
 
 ///------------------------------------------------------------------------------------------------
@@ -407,6 +412,7 @@ private:
 private:
     StringId mSystemName;
     bool mMultithreadedOperation = false;
+    int mContextIdToOperateIn = 0;
 };
 
 ///------------------------------------------------------------------------------------------------

@@ -86,7 +86,7 @@ const tsl::robin_map<StringId, long long, StringIdHasher>& World::GetSystemUpdat
 
 ///------------------------------------------------------------------------------------------------
 
-void World::AddSystem(std::unique_ptr<ISystem> system, SystemOperationMode operationMode /* SystemOperationMode::SINGLE_THREADED */)
+void World::AddSystem(std::unique_ptr<ISystem> system, const int contextIdToOperateIn /* 0 */, SystemOperationMode operationMode /* SystemOperationMode::SINGLE_THREADED */)
 {
     auto& systemRef = *system;
     
@@ -98,9 +98,17 @@ void World::AddSystem(std::unique_ptr<ISystem> system, SystemOperationMode opera
     {
         system->mMultithreadedOperation = true;
     }
+    system->mContextIdToOperateIn = contextIdToOperateIn;
     
     mSystems.push_back(std::move(system));
     mEntitiesToUpdatePerSystem[typeid(systemRef)];
+}
+
+///------------------------------------------------------------------------------------------------
+
+void World::ChangeContext(const int contextId)
+{
+    mCurrentContextId = contextId;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -114,32 +122,35 @@ void World::Update(const float dt)
 #if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)
         const auto& start = std::chrono::high_resolution_clock::now();
 #endif
-        auto& systemRef = *system;
-        const auto& entityVec = mEntitiesToUpdatePerSystem.at(typeid(systemRef));
-        
-        const auto systemUpdateWorkerCount = mSystemUpdateWorkers.size();
-        if (system->mMultithreadedOperation && systemUpdateWorkerCount > 0 && entityVec.size() >= systemUpdateWorkerCount)
+        if (system->mContextIdToOperateIn == 0 || mCurrentContextId == system->mContextIdToOperateIn)
         {
-            const auto entityVecSlice = static_cast<int>(entityVec.size()/systemUpdateWorkerCount);
-            for (auto i = 0U; i < systemUpdateWorkerCount - 1; ++i)
-            {
-                const auto startSlice = i * entityVecSlice;
-                const auto endSlice = (i + 1) * entityVecSlice;
-                mSystemUpdateWorkers[i]->RunSystemUpdate(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.cbegin() + endSlice), systemRef);
-            }
-            const auto startSlice = (systemUpdateWorkerCount - 1) * entityVecSlice;
-            mSystemUpdateWorkers[systemUpdateWorkerCount - 1]->RunSystemUpdate(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.end()), systemRef);
+            auto& systemRef = *system;
+            const auto& entityVec = mEntitiesToUpdatePerSystem.at(typeid(systemRef));
             
-            for (auto& worker: mSystemUpdateWorkers)
+            const auto systemUpdateWorkerCount = mSystemUpdateWorkers.size();
+            if (system->mMultithreadedOperation && systemUpdateWorkerCount > 0 && entityVec.size() >= systemUpdateWorkerCount)
             {
-                worker->Join();
+                const auto entityVecSlice = static_cast<int>(entityVec.size()/systemUpdateWorkerCount);
+                for (auto i = 0U; i < systemUpdateWorkerCount - 1; ++i)
+                {
+                    const auto startSlice = i * entityVecSlice;
+                    const auto endSlice = (i + 1) * entityVecSlice;
+                    mSystemUpdateWorkers[i]->RunSystemUpdate(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.cbegin() + endSlice), systemRef);
+                }
+                const auto startSlice = (systemUpdateWorkerCount - 1) * entityVecSlice;
+                mSystemUpdateWorkers[systemUpdateWorkerCount - 1]->RunSystemUpdate(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.end()), systemRef);
+                
+                for (auto& worker: mSystemUpdateWorkers)
+                {
+                    worker->Join();
+                }
+            }
+            else
+            {
+                system->VUpdate(dt, entityVec);
             }
         }
-        else
-        {
-            system->VUpdate(dt, entityVec);
-        }
-
+        
 #if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)        
         const auto& end = std::chrono::high_resolution_clock::now();
         const auto& duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);

@@ -6,6 +6,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "Game.h"
+#include "GameContexts.h"
 #include "components/UnitStatsComponent.h"
 #include "overworld/components/HighlightableComponent.h"
 #include "overworld/components/OverworldTargetComponent.h"
@@ -15,6 +16,7 @@
 #include "overworld/systems/OverworldMapPickingInfoSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
+#include "overworld/systems/OverworldUnitInteractionHandlingSystem.h"
 #include "overworld/utils/OverworldCityStateUtils.h"
 #include "utils/CityStateInfoUtils.h"
 #include "utils/KeyValueUtils.h"
@@ -74,14 +76,15 @@ void Game::VOnSystemsInit()
     
     world.AddSystem(std::make_unique<view::ViewManagementSystem>());
     
-    world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>());
-    world.AddSystem(std::make_unique<overworld::HighlightingSystem>());
-    world.AddSystem(std::make_unique<overworld::OverworldLocationInteractionSystem>());
-    world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>());
-    world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>());
-    world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>());
+    world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::OverworldLocationInteractionSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::OverworldUnitInteractionHandlingSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
     
-    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), genesis::ecs::SystemOperationMode::MULTI_THREADED);
+    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), 0, genesis::ecs::SystemOperationMode::MULTI_THREADED);
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 
@@ -89,13 +92,14 @@ void Game::VOnSystemsInit()
 
 void Game::VOnGameInit()
 {
+    auto& world = genesis::ecs::World::GetInstance();
+    world.ChangeContext(MAP_CONTEXT);
+    
     RegisterConsoleCommands();
     LoadGameFonts();
     LoadCityStateInfo();
     overworld::PopulateOverworldCityStates();
     LoadAndCreateOverworldMapComponents();
-    
-    auto& world = genesis::ecs::World::GetInstance();
 
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);

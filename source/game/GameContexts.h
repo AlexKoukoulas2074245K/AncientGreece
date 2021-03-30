@@ -1,28 +1,18 @@
 ///------------------------------------------------------------------------------------------------
-///  Main.cpp
+///  GameContexts.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 19/11/2019.
+///  Created by Alex Koukoulas on 30/03/2021.
 ///------------------------------------------------------------------------------------------------
 
-#include "Game.h"
-#include "../engine/GenesisEngine.h"
-
-#if defined(_WIN32) && !defined(NDEBUG)
-#include <vld.h>
-#endif
+#ifndef GameContexts_h
+#define GameContexts_h
 
 ///------------------------------------------------------------------------------------------------
 
-int main(int, char**)
-{
-    genesis::GenesisEngine engine;
-    genesis::GameStartupParameters startupParameters("AncientGreece", 0.8f);
-    
-    Game game;
-    engine.RunGame(startupParameters, game);
-}
+static constexpr int MAP_CONTEXT = 1;
+static constexpr int SKIRMISH_CONTEXT = 2;
 
 ///------------------------------------------------------------------------------------------------
 
-
+#endif /* GameContexts_h */

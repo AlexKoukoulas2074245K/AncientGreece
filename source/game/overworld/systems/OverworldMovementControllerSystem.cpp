@@ -8,6 +8,7 @@
 #include "OverworldMovementControllerSystem.h"
 #include "../AreaTypes.h"
 #include "../components/OverworldTargetComponent.h"
+#include "../components/OverworldUnitInteractionComponent.h"
 #include "../utils/NavmapUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
@@ -82,6 +83,15 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         // If we have arrived at target position
         if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD || (isFollowingEntity && HasCollidedWithTargetEntity(entityId, waypointComponent.mEntityTargetToFollow)))
         {
+            // Create interaction component
+            if (isFollowingEntity)
+            {
+                auto unitInteractionComponent = std::make_unique<OverworldUnitInteractionComponent>();
+                unitInteractionComponent->mInstigatorEntityId = entityId;
+                unitInteractionComponent->mOtherEntityId = waypointComponent.mEntityTargetToFollow;
+                world.AddComponent<OverworldUnitInteractionComponent>(world.CreateEntity(), std::move(unitInteractionComponent));
+            }
+            
             // Start Idle animation
             genesis::animation::ChangeAnimation(entityId, StringId("idle"));
             world.RemoveComponent<OverworldTargetComponent>(entityId);
