@@ -113,6 +113,13 @@ void World::ChangeContext(const int contextId)
 
 ///------------------------------------------------------------------------------------------------
 
+int World::GetContext() const
+{
+    return mCurrentContextId;
+}
+
+///------------------------------------------------------------------------------------------------
+
 void World::Update(const float dt)
 {
     RemoveEntitiesWithoutAnyComponents();

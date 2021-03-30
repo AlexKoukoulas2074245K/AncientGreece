@@ -1,38 +1,36 @@
 ///------------------------------------------------------------------------------------------------
-///  ViewQueueSingletonComponent.h
+///  ModelAnimationTogglingSystem.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 18/03/2021.
+///  Created by Alex Koukoulas on 30/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef ViewQueueSingletonComponent_h
-#define ViewQueueSingletonComponent_h
+#ifndef ModelAnimationTogglingSystem_h
+#define ModelAnimationTogglingSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
 
-#include <queue>
-#include <utility>
-
 ///-----------------------------------------------------------------------------------------------
 
-namespace view
+namespace genesis
 {
-
-///-----------------------------------------------------------------------------------------------
-
-class ViewQueueSingletonComponent final: public genesis::ecs::IComponent
-{
-public:
-    std::queue<std::pair<std::string, StringId>> mQueuedViews;
-    int mPreviousContextId = 0;
-};
-
-///-----------------------------------------------------------------------------------------------
-    
+    namespace rendering
+    {
+        class RenderableComponent;
+    }
 }
 
 ///-----------------------------------------------------------------------------------------------
+class ModelAnimationTogglingSystem final : public genesis::ecs::BaseSystem<genesis::rendering::RenderableComponent>
+{
+public:
+    ModelAnimationTogglingSystem();
 
-#endif /* ViewQueueSingletonComponent_h */
+    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+};
+
+///-----------------------------------------------------------------------------------------------
+
+#endif /* ModelAnimationTogglingSystem_h */

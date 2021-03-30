@@ -60,7 +60,7 @@ struct MaterialProperties final
 enum class RenderableType
 {
     NORMAL_MODEL,
-    GUI_MODEL,
+    GUI_SPRITE,
     GUI_3D_MODEL,
     TEXT_3D_MODEL
 };
@@ -85,6 +85,7 @@ public:
     RenderableType mRenderableType      = RenderableType::NORMAL_MODEL;
     bool mIsVisible                     = true;
     bool mIsAffectedByLight             = false;
+    bool mShouldAnimateSkeleton         = true;
 };
 
 ///-----------------------------------------------------------------------------------------------

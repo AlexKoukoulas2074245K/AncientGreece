@@ -9,6 +9,7 @@
 #include "../components/ClickableComponent.h"
 #include "../components/ViewStateComponent.h"
 #include "../components/ViewQueueSingletonComponent.h"
+#include "../../GameContexts.h"
 #include "../../utils/KeyValueUtils.h"
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/utils/Logging.h"
@@ -45,18 +46,19 @@ namespace view
 
 namespace
 {
-    static const StringId GUI_MODEL_SHADER_NAME          = StringId("default_gui");
-    static const StringId GUI_MODEL_3D_SHADER_NAME       = StringId("default_gui_3d");
-    static const StringId DEFAULT_FONT_NAME              = StringId("ancient_greek_font");
-    static const StringId DEFAULT_INTERACTION_EVENT_NAME = StringId("close");
+    static const StringId GUI_MODEL_SHADER_NAME             = StringId("default_gui");
+    static const StringId GUI_MODEL_3D_SHADER_NAME          = StringId("default_gui_3d");
+    static const StringId DEFAULT_FONT_NAME                 = StringId("ancient_greek_font");
+    static const StringId DEFAULT_INTERACTION_EVENT_NAME    = StringId("close");
 
     static const std::string GUI_BASE_MODEL_NAME = "gui_base";
 
-    static const char* XML_VIEW_NODE_NAME          = "View";
-    static const char* XML_TEXT_NODE_NAME          = "Text";
-    static const char* XML_TEXTBOX_NODE_NAME       = "Textbox";
-    static const char* XML_CLICKABLETEXT_NODE_NAME = "ClickableText";
-    static const char* XML_MODEL_NODE_NAME         = "Model";
+    static const char* XML_VIEW_NODE_NAME           = "View";
+    static const char* XML_TEXT_NODE_NAME           = "Text";
+    static const char* XML_TEXTBOX_NODE_NAME        = "Textbox";
+    static const char* XML_CLICKABLETEXT_NODE_NAME  = "ClickableText";
+    static const char* XML_MODEL_NODE_NAME          = "Model";
+    static const char* XML_ANIMATED_MODEL_NODE_NAME = "AnimatedModel";
 
     static const char* BACKGROUND_ATTRIBUTE_NAME        = "background_name";
     static const char* BACKGROUND_X_ATTRIBUTE_NAME      = "x";
@@ -101,7 +103,17 @@ namespace
     static const char* MODEL_SCALE_X_ATTRIBUTE_NAME = "scale_x";
     static const char* MODEL_SCALE_Y_ATTRIBUTE_NAME = "scale_y";
     static const char* MODEL_SCALE_Z_ATTRIBUTE_NAME = "scale_z";
-
+    
+    static const char* ANIMATED_MODEL_NAME_ATTRIBUTE_NAME    = "name";
+    static const char* ANIMATED_MODEL_X_ATTRIBUTE_NAME       = "x";
+    static const char* ANIMATED_MODEL_Y_ATTRIBUTE_NAME       = "y";
+    static const char* ANIMATED_MODEL_Z_ATTRIBUTE_NAME       = "z";
+    static const char* ANIMATED_MODEL_ROT_X_ATTRIBUTE_NAME   = "rot_x";
+    static const char* ANIMATED_MODEL_ROT_Y_ATTRIBUTE_NAME   = "rot_y";
+    static const char* ANIMATED_MODEL_ROT_Z_ATTRIBUTE_NAME   = "rot_z";
+    static const char* ANIMATED_MODEL_SCALE_X_ATTRIBUTE_NAME = "scale_x";
+    static const char* ANIMATED_MODEL_SCALE_Y_ATTRIBUTE_NAME = "scale_y";
+    static const char* ANIMATED_MODEL_SCALE_Z_ATTRIBUTE_NAME = "scale_z";
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -118,14 +130,6 @@ std::string ReplaceTextVariables(const std::string& text);
 
 ///------------------------------------------------------------------------------------------------
 
-bool HasActiveView()
-{
-    const auto& world = genesis::ecs::World::GetInstance();
-    return world.GetSingletonComponent<ViewQueueSingletonComponent>().mActiveViewExists;
-}
-
-///------------------------------------------------------------------------------------------------
-
 void QueueView
 (
     const std::string& viewName,
@@ -133,7 +137,9 @@ void QueueView
 )
 {
     auto& world = genesis::ecs::World::GetInstance();
-    world.GetSingletonComponent<ViewQueueSingletonComponent>().mQueuedViews.push(std::make_pair(viewName, entityName));
+    auto& viewQueueComponent = world.GetSingletonComponent<ViewQueueSingletonComponent>();
+    viewQueueComponent.mQueuedViews.push(std::make_pair(viewName, entityName));
+    viewQueueComponent.mPreviousContextId = world.GetContext();
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -166,7 +172,11 @@ genesis::ecs::EntityId LoadAndShowView
     }
     
     world.AddComponent<ViewStateComponent>(viewEntity, std::move(viewStateComponent));
-    world.GetSingletonComponent<ViewQueueSingletonComponent>().mActiveViewExists = true;
+    
+    auto& viewQueueComponent = world.GetSingletonComponent<ViewQueueSingletonComponent>();
+    viewQueueComponent.mPreviousContextId = world.GetContext();
+    world.ChangeContext(VIEW_CONTEXT);
+    
     return viewEntity;
 }
 
@@ -186,7 +196,10 @@ void DestroyView
     }
     
     world.DestroyEntity(viewEntityId);
-    world.GetSingletonComponent<ViewQueueSingletonComponent>().mActiveViewExists = false;
+    
+    auto& viewQueueComponent = world.GetSingletonComponent<ViewQueueSingletonComponent>();
+    world.ChangeContext(viewQueueComponent.mPreviousContextId);
+    viewQueueComponent.mPreviousContextId = 0;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -476,6 +489,60 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         auto modelName = std::string(ReplaceTextVariables(node->first_attribute(MODEL_NAME_ATTRIBUTE_NAME)->value()));
         
         viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateGuiSprite(modelName, modelName, GUI_MODEL_3D_SHADER_NAME, modelPosition, modelRotation, modelScale, true));
+    }
+    else if (std::strcmp(XML_ANIMATED_MODEL_NODE_NAME, node->name()) == 0)
+    {
+        glm::vec3 modelPosition(0.0f);
+        glm::vec3 modelRotation(0.0f);
+        glm::vec3 modelScale(1.0f);
+        if (node->first_attribute(ANIMATED_MODEL_X_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelPosition.x = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_X_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(ANIMATED_MODEL_Y_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelPosition.y = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_Y_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(ANIMATED_MODEL_Z_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelPosition.z = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_Z_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(ANIMATED_MODEL_ROT_X_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelRotation.x = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_ROT_X_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(ANIMATED_MODEL_ROT_Y_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelRotation.y = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_ROT_Y_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(ANIMATED_MODEL_ROT_Z_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelRotation.z = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_ROT_Z_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(ANIMATED_MODEL_SCALE_X_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelScale.x = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_SCALE_X_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(ANIMATED_MODEL_SCALE_Y_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelScale.y = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_SCALE_Y_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(ANIMATED_MODEL_SCALE_Z_ATTRIBUTE_NAME) != nullptr)
+        {
+            modelScale.z = std::stof(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_SCALE_Z_ATTRIBUTE_NAME)->value()));
+        }
+                
+#if !defined(NDEBUG)
+        modelRotation.x += DEBUG_MODEL_RX;
+        modelRotation.y += DEBUG_MODEL_RY;
+        modelRotation.z += DEBUG_MODEL_RZ;
+#endif
+
+        assert(node->first_attribute(ANIMATED_MODEL_NAME_ATTRIBUTE_NAME) != nullptr && "No model name present");
+        
+        auto modelName = std::string(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_NAME_ATTRIBUTE_NAME)->value()));
+        
+        viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateAnimatedModelByName(modelName, modelPosition, modelRotation, modelScale, StringId(), true));
     }
 }
 

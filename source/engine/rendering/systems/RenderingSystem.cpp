@@ -206,10 +206,10 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
     // Execute disabled detph test GUI pass
     GL_CHECK(glDisable(GL_DEPTH_TEST));
     
-    // Execute normal gui models pass
-    if (mGuiEntityGroups.count(RenderableType::GUI_MODEL))
+    // Execute normal gui sprite pass
+    if (mGuiEntityGroups.count(RenderableType::GUI_SPRITE))
     {
-        const auto& guiEntities = mGuiEntityGroups.at(RenderableType::GUI_MODEL);
+        const auto& guiEntities = mGuiEntityGroups.at(RenderableType::GUI_SPRITE);
         for (const auto& entityId : guiEntities)
         {
             const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
@@ -329,7 +329,7 @@ void RenderingSystem::RenderStringInternal
         glm::vec3 scale    = transformComponent.mScale;
         glm::vec3 rotation = transformComponent.mRotation;
         
-        if (renderableComponent.mRenderableType == RenderableType::GUI_MODEL)
+        if (renderableComponent.mRenderableType == RenderableType::GUI_SPRITE)
         {
             scale.x /= windowComponent.mAspectRatio;
         }
@@ -448,7 +448,7 @@ void RenderingSystem::RenderEntityInternal
     glm::vec3 scale    = transformComponent.mScale;
     glm::vec3 rotation = transformComponent.mRotation;
 
-    if (renderableComponent.mRenderableType == RenderableType::GUI_MODEL)
+    if (renderableComponent.mRenderableType == RenderableType::GUI_SPRITE)
     {        
         scale.x /= windowComponent.mAspectRatio;        
     }  

@@ -122,7 +122,7 @@ ecs::EntityId RenderText
     auto renderableComponent = std::make_unique<RenderableComponent>();
     renderableComponent->mTextureResourceId = resources::ResourceLoadingService::GetInstance().LoadResource(resources::ResourceLoadingService::RES_ATLASES_ROOT + fontName.GetString() + FONT_ATLAS_TEXTURE_FILE_EXTENSION);
     renderableComponent->mShaderNameId = is3d ? TEXT_3D_SHADER_NAME : TEXT_SHADER_NAME;
-    renderableComponent->mRenderableType = is3d ? genesis::rendering::RenderableType::TEXT_3D_MODEL : genesis::rendering::RenderableType::GUI_MODEL;
+    renderableComponent->mRenderableType = is3d ? genesis::rendering::RenderableType::TEXT_3D_MODEL : genesis::rendering::RenderableType::GUI_SPRITE;
     renderableComponent->mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = color;
     
     for (const auto& character : text)

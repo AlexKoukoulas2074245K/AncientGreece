@@ -50,6 +50,11 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
             continue;
         }
         
+        if (!renderableComponent.mShouldAnimateSkeleton)
+        {
+            continue;
+        }
+        
         const auto& currentMesh = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
         if (!currentMesh.HasSkeleton())
         {

@@ -33,6 +33,7 @@ namespace rendering
 namespace
 {
     static const StringId DEFAULT_SKELETAL_MODEL_SHADER        = StringId("default_skeletal_3d");
+    static const StringId GUI_ANIMATED_MODEL_3D_SHADER_NAME    = StringId("default_gui_skeletal_3d");
     static const StringId DEFAULT_MODEL_SHADER                 = StringId("default_3d");
     static const StringId ATLAS_MODEL_NAME                     = StringId("gui_atlas_quad");
     static const StringId BONES_UNIFORM_NAME                   = StringId("bones");
@@ -104,7 +105,8 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     const glm::vec3& initialPosition /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialRotation /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialScale /* glm::vec3(1.0f, 1.0f, 1.0f) */,
-    const StringId entityName /* StringId() */
+    const StringId entityName /* StringId() */,
+    const bool isGui /* false */
 )
 {
     auto& world = ecs::World::GetInstance();
@@ -116,7 +118,8 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     transformComponent->mScale = initialScale;
 
     auto renderableComponent = std::make_unique<RenderableComponent>();
-    renderableComponent->mShaderNameId = DEFAULT_SKELETAL_MODEL_SHADER;
+    renderableComponent->mRenderableType = isGui ? RenderableType::GUI_3D_MODEL : RenderableType::NORMAL_MODEL;
+    renderableComponent->mShaderNameId = isGui ? GUI_ANIMATED_MODEL_3D_SHADER_NAME: DEFAULT_SKELETAL_MODEL_SHADER;
     
     auto animFiles = GetAllFilenamesInDirectory(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/");
     for (const auto& fileName: animFiles)
@@ -172,7 +175,7 @@ ecs::EntityId LoadAndCreateGuiSprite
 
     auto renderableComponent = std::make_unique<RenderableComponent>();    
     renderableComponent->mShaderNameId = shaderName;
-    renderableComponent->mRenderableType = is3d ? genesis::rendering::RenderableType::GUI_3D_MODEL: genesis::rendering::RenderableType::GUI_MODEL;
+    renderableComponent->mRenderableType = is3d ? genesis::rendering::RenderableType::GUI_3D_MODEL: genesis::rendering::RenderableType::GUI_SPRITE;
     renderableComponent->mMeshResourceIds.push_back(
         resources::ResourceLoadingService::GetInstance().
         LoadResource(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + ".obj"));

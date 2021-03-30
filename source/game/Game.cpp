@@ -18,6 +18,7 @@
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
 #include "overworld/systems/OverworldUnitInteractionHandlingSystem.h"
 #include "overworld/utils/OverworldCityStateUtils.h"
+#include "systems/ModelAnimationTogglingSystem.h"
 #include "utils/CityStateInfoUtils.h"
 #include "utils/KeyValueUtils.h"
 #include "utils/UnitInfoUtils.h"
@@ -51,7 +52,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 30;
+static int SPARTAN_COUNT = 100;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
@@ -59,6 +60,9 @@ extern float DEBUG_TEXTBOX_SIZE_DX;
 extern float DEBUG_TEXTBOX_SIZE_DY;
 extern float DEBUG_TEXTBOX_DX;
 extern float DEBUG_TEXTBOX_DY;
+extern float DEBUG_MODEL_RX;
+extern float DEBUG_MODEL_RY;
+extern float DEBUG_MODEL_RZ;
 #endif
 
 ///------------------------------------------------------------------------------------------------
@@ -74,6 +78,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<genesis::debug::DebugViewManagementSystem>());
 #endif
     
+    world.AddSystem(std::make_unique<ModelAnimationTogglingSystem>());
     world.AddSystem(std::make_unique<view::ViewManagementSystem>());
     
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
@@ -131,7 +136,7 @@ void Game::VOnUpdate(float& dt)
     auto& world = genesis::ecs::World::GetInstance();
     
     auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
-    dt = world.GetSingletonComponent<view::ViewQueueSingletonComponent>().mActiveViewExists ? 0.0f : dt;
+    //dt = world.GetSingletonComponent<view::ViewQueueSingletonComponent>().mActiveViewExists ? 0.0f : dt;
     
     dtAccum += dt;
     dtAccum2 += dt;
@@ -154,67 +159,67 @@ void Game::VOnUpdate(float& dt)
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
     
-//    if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)
-//    {
-//        if (world.FindEntityWithName(StringId("viewname")) != genesis::ecs::NULL_ENTITY_ID)
-//        {
-//            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-//        }
-//        else
-//        {
-//            view::QueueView("test", StringId("viewname"));
-//        }
-//    }
 #if !defined(NDEBUG)
-    if (world.FindEntityWithName(StringId("viewname")) != genesis::ecs::NULL_ENTITY_ID)
+    if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)
+    {
+        if (world.FindEntityWithName(StringId("unit_interaction")) != genesis::ecs::NULL_ENTITY_ID)
+        {
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+        }
+        else
+        {
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
+        }
+    }
+    if (world.FindEntityWithName(StringId("unit_interaction")) != genesis::ecs::NULL_ENTITY_ID)
     {
         if (genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY) == genesis::input::InputState::TAPPED)
         {
-            DEBUG_TEXTBOX_DX -= 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-            view::QueueView("test", StringId("viewname"));
+            DEBUG_MODEL_RX -= 0.05f;
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::RIGHT_ARROW_KEY) == genesis::input::InputState::TAPPED)
         {
-            DEBUG_TEXTBOX_DX += 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-            view::QueueView("test", StringId("viewname"));
+            DEBUG_MODEL_RX += 0.05f;
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::UP_ARROW_KEY) == genesis::input::InputState::TAPPED)
         {
-            DEBUG_TEXTBOX_DY += 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-            view::QueueView("test", StringId("viewname"));
+            DEBUG_MODEL_RY += 0.05f;
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::DOWN_ARROW_KEY) == genesis::input::InputState::TAPPED)
         {
-            DEBUG_TEXTBOX_DY -= 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-            view::QueueView("test", StringId("viewname"));
+            DEBUG_MODEL_RY -= 0.05f;
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::T_KEY) == genesis::input::InputState::TAPPED)
         {
-            DEBUG_TEXTBOX_SIZE_DY += 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-            view::QueueView("test", StringId("viewname"));
+            DEBUG_MODEL_RZ += 0.05f;
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::G_KEY) == genesis::input::InputState::TAPPED)
         {
-            DEBUG_TEXTBOX_SIZE_DY -= 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-            view::QueueView("test", StringId("viewname"));
+            DEBUG_MODEL_RZ -= 0.05f;
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::F_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_TEXTBOX_SIZE_DX -= 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-            view::QueueView("test", StringId("viewname"));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::H_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_TEXTBOX_SIZE_DX += 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("viewname")));
-            view::QueueView("test", StringId("viewname"));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
     }
 #endif

@@ -120,6 +120,11 @@ public:
     /// @param[in] contextId the context id to change to.
     void ChangeContext(const int contextId);
     
+    /// Gets the active context of the world.
+    /// @returns the current context of the world
+    int GetContext() const;
+    
+    
     /// Performs a single update of the world simulation.
     /// @param[in] dt the inter-frame delta time in seconds.
     void Update(const float dt);
