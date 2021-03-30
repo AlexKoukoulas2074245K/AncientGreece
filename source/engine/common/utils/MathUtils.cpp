@@ -35,6 +35,13 @@ glm::vec2 ComputeMouseCoordsInNDC(const float windowWidth, const float windowHei
 
 ///-----------------------------------------------------------------------------------------------
 
+bool SphereToSphereIntersection(const glm::vec3& sphere1Center, const float sphere1Radius, const glm::vec3& sphere2Center, const float sphere2Radius)
+{
+    return glm::distance(sphere1Center, sphere2Center) < sphere1Radius + sphere2Radius;
+}
+
+///-----------------------------------------------------------------------------------------------
+
 glm::vec3 ComputeMouseRayDirection(const glm::mat4& viewMatrix, const glm::mat4& projMatrix, const float windowWidth, const float windowHeight)
 {
     const auto mousePosInNDC = ComputeMouseCoordsInNDC(windowWidth, windowHeight);

@@ -393,6 +393,16 @@ glm::vec2 ComputeMouseCoordsInNDC(const float windowWidth, const float windowHei
 glm::vec3 ComputeMouseRayDirection(const glm::mat4& viewMatrix, const glm::mat4& projMatrix, const float windowWidth, const float windowHeight);
 
 ///-----------------------------------------------------------------------------------------------
+/// Computes and returns whether the two given spheres intersect.
+///
+/// @param[in] sphere1Center the center of the first sphere.
+/// @param[in] sphere1Radius the radius of the first sphere.
+/// @param[in] sphere2Center the center of the second sphere.
+/// @param[in] sphere2Radius the radius of the second sphere.
+/// @returns whether an intersection is taking place.
+bool SphereToSphereIntersection(const glm::vec3& sphere1Center, const float sphere1Radius, const glm::vec3& sphere2Center, const float sphere2Radius);
+
+///-----------------------------------------------------------------------------------------------
 /// Computes and returns whether the given ray intersects with the given sphere.
 /// @see https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 /// @param[in] rayOrigin the origin of the ray (usually camera position for object picking).

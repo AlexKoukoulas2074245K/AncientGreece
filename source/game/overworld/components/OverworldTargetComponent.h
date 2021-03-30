@@ -25,7 +25,7 @@ namespace overworld
 class OverworldTargetComponent final: public genesis::ecs::IComponent
 {
 public:
-    genesis::ecs::EntityId mOptionalEntityTarget = genesis::ecs::NULL_ENTITY_ID;
+    genesis::ecs::EntityId mEntityTargetToFollow = genesis::ecs::NULL_ENTITY_ID;
     glm::vec3 mTargetPosition;
     AreaTypeMask mTargetAreaType;
 };

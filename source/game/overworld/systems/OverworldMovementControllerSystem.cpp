@@ -40,9 +40,10 @@ namespace
 
     static const StringId MAP_ENTITY_NAME = StringId("map");
 
-    static const float SUFFICIENTLY_CLOSE_THRESHOLD = 0.001f;
-    static const float ROTATION_SPEED               = 5.0f;
-    static const float BASE_UNIT_SPEED              = 0.002f;
+    static const float SUFFICIENTLY_CLOSE_THRESHOLD       = 0.001f;
+    static const float ROTATION_SPEED                     = 5.0f;
+    static const float BASE_UNIT_SPEED                    = 0.002f;
+    static const float ENTITY_SPHERE_COLLISION_MULTIPLIER = 0.25f * 0.3333f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -69,16 +70,17 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
         auto& waypointComponent = world.GetComponent<OverworldTargetComponent>(entityId);
         auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
+        const auto isFollowingEntity = waypointComponent.mEntityTargetToFollow != genesis::ecs::NULL_ENTITY_ID && world.HasEntity(waypointComponent.mEntityTargetToFollow);
         
-        if (waypointComponent.mOptionalEntityTarget != genesis::ecs::NULL_ENTITY_ID && world.HasEntity(waypointComponent.mOptionalEntityTarget))
+        if (isFollowingEntity)
         {
-            waypointComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(waypointComponent.mOptionalEntityTarget).mPosition;
+            waypointComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(waypointComponent.mEntityTargetToFollow).mPosition;
         }
         
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
         // If we have arrived at target position
-        if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD)
+        if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD || (isFollowingEntity && HasCollidedWithTargetEntity(entityId, waypointComponent.mEntityTargetToFollow)))
         {
             // Start Idle animation
             genesis::animation::ChangeAnimation(entityId, StringId("idle"));
@@ -147,6 +149,30 @@ float OverworldMovementControllerSystem::GetTerrainSpeedMultiplier(const glm::ve
     }
     
     return terrainMultiplier;
+}
+
+///-----------------------------------------------------------------------------------------------
+
+bool OverworldMovementControllerSystem::HasCollidedWithTargetEntity(const genesis::ecs::EntityId entity, const genesis::ecs::EntityId targetEntity) const
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    
+    const auto& currentEntityTransformComponent = world.GetComponent<genesis::TransformComponent>(entity);
+    const auto& targetEntityTransformComponent = world.GetComponent<genesis::TransformComponent>(targetEntity);
+    
+    const auto& currentEntityRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entity);
+    const auto& targetEntityRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(targetEntity);
+    
+    const auto& currentEntityMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( currentEntityRenderableComponent.mMeshResourceIds[currentEntityRenderableComponent.mCurrentMeshResourceIndex]);
+    const auto& targetEntityMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( targetEntityRenderableComponent.mMeshResourceIds[targetEntityRenderableComponent.mCurrentMeshResourceIndex]);
+    
+    const auto currentEntityScaledDimensions = currentEntityMeshResource.GetDimensions() * currentEntityTransformComponent.mScale;
+    const auto targetEntityScaledDimensions = targetEntityMeshResource.GetDimensions() * targetEntityTransformComponent.mScale;
+    
+    const auto currentEntitySphereRadius = (currentEntityScaledDimensions.x + currentEntityScaledDimensions.y + currentEntityScaledDimensions.z) * ENTITY_SPHERE_COLLISION_MULTIPLIER;
+    const auto targetEntitySphereRadius = (targetEntityScaledDimensions.x + targetEntityScaledDimensions.y + targetEntityScaledDimensions.z) * ENTITY_SPHERE_COLLISION_MULTIPLIER;
+    
+    return genesis::math::SphereToSphereIntersection(currentEntityTransformComponent.mPosition, currentEntitySphereRadius, targetEntityTransformComponent.mPosition, targetEntitySphereRadius);
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -54,7 +54,10 @@ public:
 private:
     void UpdatePosition(const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const;
     void UpdateRotation(const float dt, const float targetRotation, glm::vec3& entityRotation) const;
+    
     float GetTerrainSpeedMultiplier(const glm::vec3& unitPosition, const glm::vec3& mapDimensions, const genesis::resources::TextureResource& navmapTexture) const;
+    
+    bool HasCollidedWithTargetEntity(const genesis::ecs::EntityId entity, const genesis::ecs::EntityId targetEntity) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

@@ -68,7 +68,7 @@ void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vecto
     auto isValidTarget = false;
     if (entityToFollow != genesis::ecs::NULL_ENTITY_ID)
     {
-        targetComponent->mOptionalEntityTarget = entityToFollow;
+        targetComponent->mEntityTargetToFollow = entityToFollow;
         isValidTarget = true;
     }
     else
