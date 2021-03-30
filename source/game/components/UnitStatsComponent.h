@@ -19,6 +19,7 @@ class UnitStatsComponent final: public genesis::ecs::IComponent
 {
 public:
     StringId mUnitName = StringId();
+    StringId mModelName = StringId();
     int mPartySize = 0;
     float mSpeedMultiplier = 1.0f;
     overworld::AreaTypeMask mNavigableAreaTypes = overworld::areaTypeMasks::NEUTRAL | overworld::areaTypeMasks::SEA | overworld::areaTypeMasks::MOUNTAIN | overworld::areaTypeMasks::HIGH_MOUNTAIN | overworld::areaTypeMasks::FOREST;

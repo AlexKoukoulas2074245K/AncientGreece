@@ -1,11 +1,11 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldLocationInteractionSystem.cpp
+///  OverworldLocationInteractionHandlingSystem.cpp
 ///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 24/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#include "OverworldLocationInteractionSystem.h"
+#include "OverworldLocationInteractionHandlingSystem.h"
 #include "../AreaTypes.h"
 #include "../components/HighlightableComponent.h"
 #include "../components/OverworldMapPickingInfoSingletonComponent.h"
@@ -42,19 +42,19 @@ namespace
     static const StringId CITY_STATE_GARISSON_BLUE_DS_KEY  = StringId("city_state_garisson_blue");
     static const StringId CITY_STATE_DESCRIPTION_DS_KEY    = StringId("city_state_description");
 
-    static const std::string CITY_STATE_PREVIEW_NAME = "city_state_preview";
+    static const std::string CITY_STATE_PREVIEW_VIEW_NAME = "city_state_preview";
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-OverworldLocationInteractionSystem::OverworldLocationInteractionSystem()
+OverworldLocationInteractionHandlingSystem::OverworldLocationInteractionHandlingSystem()
     : BaseSystem()
 {
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-void OverworldLocationInteractionSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
+void OverworldLocationInteractionHandlingSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
     const auto leftMouseButtonTapped = genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) == genesis::input::InputState::TAPPED;
     
@@ -104,7 +104,7 @@ void OverworldLocationInteractionSystem::VUpdate(const float, const std::vector<
                 WriteValue(CITY_STATE_GARISSON_GREEN_DS_KEY, std::to_string(garissonColor.mGreen));
                 WriteValue(CITY_STATE_GARISSON_BLUE_DS_KEY, std::to_string(garissonColor.mBlue));
                 WriteValue(CITY_STATE_DESCRIPTION_DS_KEY, cityStateInfo.mDescription);
-                view::QueueView(CITY_STATE_PREVIEW_NAME);
+                view::QueueView(CITY_STATE_PREVIEW_VIEW_NAME);
             }
         }
     }

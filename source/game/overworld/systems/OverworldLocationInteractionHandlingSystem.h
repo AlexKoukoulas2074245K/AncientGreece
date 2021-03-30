@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldLocationInteractionSystem.h
+///  OverworldLocationInteractionHandlingSystem.h
 ///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 24/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldLocationInteractionSystem_h
-#define OverworldLocationInteractionSystem_h
+#ifndef OverworldLocationInteractionHandlingSystem_h
+#define OverworldLocationInteractionHandlingSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -32,10 +32,10 @@ namespace overworld
 class HighlightableComponent;
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldLocationInteractionSystem final : public genesis::ecs::BaseSystem<HighlightableComponent, genesis::rendering::TextStringComponent>
+class OverworldLocationInteractionHandlingSystem final : public genesis::ecs::BaseSystem<HighlightableComponent, genesis::rendering::TextStringComponent>
 {
 public:
-    OverworldLocationInteractionSystem();
+    OverworldLocationInteractionHandlingSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const override;
 };
@@ -46,4 +46,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* OverworldLocationInteractionSystem_h */
+#endif /* OverworldLocationInteractionHandlingSystem_h */
