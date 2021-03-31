@@ -7,6 +7,7 @@
 
 #include "Game.h"
 #include "GameContexts.h"
+#include "components/CollidableComponent.h"
 #include "components/UnitStatsComponent.h"
 #include "overworld/components/HighlightableComponent.h"
 #include "overworld/components/OverworldTargetComponent.h"
@@ -18,9 +19,11 @@
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
 #include "overworld/systems/OverworldUnitInteractionHandlingSystem.h"
 #include "overworld/utils/OverworldCityStateUtils.h"
+#include "scene/systems/SceneUpdaterSystem.h"
 #include "systems/ModelAnimationTogglingSystem.h"
 #include "utils/CityStateInfoUtils.h"
 #include "utils/KeyValueUtils.h"
+#include "utils/UnitCollisionUtils.h"
 #include "utils/UnitInfoUtils.h"
 #include "view/components/ViewQueueSingletonComponent.h"
 #include "view/systems/ViewManagementSystem.h"
@@ -89,6 +92,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldUnitInteractionHandlingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
     
+    world.AddSystem(std::make_unique<scene::SceneUpdaterSystem>());
     world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), 0, genesis::ecs::SystemOperationMode::MULTI_THREADED);
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
@@ -115,8 +119,11 @@ void Game::VOnGameInit()
     playerStatsComponent->mStats.mSpeedMultiplier = 4.0f;
     playerStatsComponent->mStats.mUnitName = GetRandomAvailableUnitName();
     playerStatsComponent->mStats.mModelName = StringId(playerModelName);
+    
     world.AddComponent<UnitStatsComponent>(playerEntity, std::move(playerStatsComponent));
     world.AddComponent<overworld::HighlightableComponent>(playerEntity, std::make_unique<overworld::HighlightableComponent>());
+    AddCollidableDataToUnit(playerEntity);
+    
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
@@ -149,8 +156,8 @@ void Game::VOnGameInit()
         }
         
         world.AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
-        
         world.AddComponent<UnitStatsComponent>(spartanEntity, std::move(unitStatsComponent));
+        AddCollidableDataToUnit(spartanEntity);
     }
 }
 
@@ -270,6 +277,25 @@ void Game::RegisterConsoleCommands() const
         auto& debugViewStateComponent = world.GetSingletonComponent<genesis::debug::DebugViewStateSingletonComponent>();
 
         debugViewStateComponent.mFreeCamDebugEnabled = StringToLower(commandTextComponents[1]) == "on";
+
+        return genesis::debug::ConsoleCommandResult(true);
+    });
+    
+    genesis::debug::RegisterConsoleCommand(StringId("scene_debug"), [](const std::vector<std::string>& commandTextComponents)
+    {
+        static const std::unordered_set<std::string> sAllowedOptions = { "on", "off" };
+
+        const std::string USAGE_STRING = "Usage: free_cam on|off";
+
+        if (commandTextComponents.size() != 2 || sAllowedOptions.count(StringToLower(commandTextComponents[1])) == 0)
+        {
+            return genesis::debug::ConsoleCommandResult(false, USAGE_STRING);
+        }
+
+        const auto& world = genesis::ecs::World::GetInstance();
+        auto& debugViewStateComponent = world.GetSingletonComponent<genesis::debug::DebugViewStateSingletonComponent>();
+
+        debugViewStateComponent.mSceneGraphDisplayEnabled = StringToLower(commandTextComponents[1]) == "on";
 
         return genesis::debug::ConsoleCommandResult(true);
     });

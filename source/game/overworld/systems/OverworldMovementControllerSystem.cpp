@@ -11,6 +11,7 @@
 #include "../components/OverworldUnitInteractionComponent.h"
 #include "../utils/NavmapUtils.h"
 #include "../../components/UnitStatsComponent.h"
+#include "../../utils/UnitCollisionUtils.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
@@ -44,7 +45,6 @@ namespace
     static const float SUFFICIENTLY_CLOSE_THRESHOLD       = 0.001f;
     static const float ROTATION_SPEED                     = 5.0f;
     static const float BASE_UNIT_SPEED                    = 0.002f;
-    static const float ENTITY_SPHERE_COLLISION_MULTIPLIER = 0.25f * 0.3333f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
         // If we have arrived at target position
-        if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD || (isFollowingEntity && HasCollidedWithTargetEntity(entityId, waypointComponent.mEntityTargetToFollow)))
+        if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD || (isFollowingEntity && AreEntitiesColliding(entityId, waypointComponent.mEntityTargetToFollow)))
         {
             // Create interaction component
             if (isFollowingEntity)
@@ -159,30 +159,6 @@ float OverworldMovementControllerSystem::GetTerrainSpeedMultiplier(const glm::ve
     }
     
     return terrainMultiplier;
-}
-
-///-----------------------------------------------------------------------------------------------
-
-bool OverworldMovementControllerSystem::HasCollidedWithTargetEntity(const genesis::ecs::EntityId entity, const genesis::ecs::EntityId targetEntity) const
-{
-    const auto& world = genesis::ecs::World::GetInstance();
-    
-    const auto& currentEntityTransformComponent = world.GetComponent<genesis::TransformComponent>(entity);
-    const auto& targetEntityTransformComponent = world.GetComponent<genesis::TransformComponent>(targetEntity);
-    
-    const auto& currentEntityRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entity);
-    const auto& targetEntityRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(targetEntity);
-    
-    const auto& currentEntityMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( currentEntityRenderableComponent.mMeshResourceIds[currentEntityRenderableComponent.mCurrentMeshResourceIndex]);
-    const auto& targetEntityMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( targetEntityRenderableComponent.mMeshResourceIds[targetEntityRenderableComponent.mCurrentMeshResourceIndex]);
-    
-    const auto currentEntityScaledDimensions = currentEntityMeshResource.GetDimensions() * currentEntityTransformComponent.mScale;
-    const auto targetEntityScaledDimensions = targetEntityMeshResource.GetDimensions() * targetEntityTransformComponent.mScale;
-    
-    const auto currentEntitySphereRadius = (currentEntityScaledDimensions.x + currentEntityScaledDimensions.y + currentEntityScaledDimensions.z) * ENTITY_SPHERE_COLLISION_MULTIPLIER;
-    const auto targetEntitySphereRadius = (targetEntityScaledDimensions.x + targetEntityScaledDimensions.y + targetEntityScaledDimensions.z) * ENTITY_SPHERE_COLLISION_MULTIPLIER;
-    
-    return genesis::math::SphereToSphereIntersection(currentEntityTransformComponent.mPosition, currentEntitySphereRadius, targetEntityTransformComponent.mPosition, targetEntitySphereRadius);
 }
 
 ///-----------------------------------------------------------------------------------------------
