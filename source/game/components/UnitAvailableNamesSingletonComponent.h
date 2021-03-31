@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  GlobalUnitInfoSingletonComponent.h
+///  UnitAvailableNamesSingletonComponent.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 29/03/2021.
+///  Created by Alex Koukoulas on 31/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef GlobalUnitInfoSingletonComponent_h
-#define GlobalUnitInfoSingletonComponent_h
+#ifndef UnitAvailableNamesSingletonComponent_h
+#define UnitAvailableNamesSingletonComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@
 
 ///-----------------------------------------------------------------------------------------------
 
-class GlobalUnitInfoSingletonComponent final: public genesis::ecs::IComponent
+class UnitAvailableNamesSingletonComponent final: public genesis::ecs::IComponent
 {
 public:
     std::vector<std::string> mAvailableUnitNamesList;
@@ -24,4 +24,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* GlobalUnitInfoSingletonComponent_h */
+#endif /* UnitAvailableNamesSingletonComponent_h */

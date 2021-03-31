@@ -22,8 +22,7 @@
 #include "scene/systems/SceneUpdaterSystem.h"
 #include "systems/ModelAnimationTogglingSystem.h"
 #include "utils/CityStateInfoUtils.h"
-#include "utils/KeyValueUtils.h"
-#include "utils/UnitCollisionUtils.h"
+#include "utils/UnitFactoryUtils.h"
 #include "utils/UnitInfoUtils.h"
 #include "view/components/ViewQueueSingletonComponent.h"
 #include "view/systems/ViewManagementSystem.h"
@@ -55,7 +54,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 100;
+static int SPARTAN_COUNT = 30;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
@@ -106,6 +105,7 @@ void Game::VOnGameInit()
     
     RegisterConsoleCommands();
     LoadGameFonts();
+    LoadUnitBaseStats();
     LoadCityStateInfo();
     overworld::PopulateOverworldCityStates();
     LoadAndCreateOverworldMapComponents();
@@ -113,51 +113,29 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    const auto playerModelName = "spartan";
-    auto playerEntity = genesis::rendering::LoadAndCreateAnimatedModelByName(playerModelName, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("player"));
-    auto playerStatsComponent = std::make_unique<UnitStatsComponent>();
-    playerStatsComponent->mStats.mSpeedMultiplier = 4.0f;
-    playerStatsComponent->mStats.mUnitName = GetRandomAvailableUnitName();
-    playerStatsComponent->mStats.mModelName = StringId(playerModelName);
-    
-    world.AddComponent<UnitStatsComponent>(playerEntity, std::move(playerStatsComponent));
-    world.AddComponent<overworld::HighlightableComponent>(playerEntity, std::make_unique<overworld::HighlightableComponent>());
-    AddCollidableDataToUnit(playerEntity);
-    
+    CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"), 4.0f);
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
-        auto unitStatsComponent = std::make_unique<UnitStatsComponent>();
-        unitStatsComponent->mStats.mUnitName = GetRandomAvailableUnitName();
-        unitStatsComponent->mStats.mHealth = genesis::math::RandomInt(0, 100);
+        auto position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
         
-        auto partySize = genesis::math::RandomInt(0, 10);
-        for (int i = 0; i < partySize; ++i)
-        {
-            UnitStats stats;
-        }
-        
-        auto spartanEntity = genesis::ecs::NULL_ENTITY_ID;
+        auto unitTypeName = StringId();
+        auto entityName = StringId("spartan_" + std::to_string(i));
         
         if (i % 3 == 0)
         {
-            spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("horseman", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0004f, 0.0004f, 0.0004f), StringId("spartan_" + std::to_string(i)));
-                unitStatsComponent->mStats.mModelName = StringId("horseman");
+            unitTypeName = StringId("Horse Archer");
         }
         else if (i % 3 == 1)
         {
-            spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
-            unitStatsComponent->mStats.mModelName = StringId("spartan");
+            unitTypeName = StringId("Spearman");
         }
         else if (i % 3 == 2)
         {
-            spartanEntity = genesis::rendering::LoadAndCreateAnimatedModelByName("spartan2", glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.004f, 0.004f, 0.004f), StringId("spartan_" + std::to_string(i)));
-            unitStatsComponent->mStats.mModelName = StringId("spartan2");
+            unitTypeName = StringId("Elite Spearman");
         }
         
-        world.AddComponent<overworld::HighlightableComponent>(spartanEntity, std::make_unique<overworld::HighlightableComponent>());
-        world.AddComponent<UnitStatsComponent>(spartanEntity, std::move(unitStatsComponent));
-        AddCollidableDataToUnit(spartanEntity);
+        CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, 1.0f, position);
     }
 }
 

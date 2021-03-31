@@ -6,17 +6,21 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "UnitInfoUtils.h"
-#include "../components/GlobalUnitInfoSingletonComponent.h"
+#include "../components/UnitAvailableNamesSingletonComponent.h"
+#include "../components/UnitBaseStatsSingletonComponent.h"
 #include "../components/UnitStatsComponent.h"
 #include "../../engine/common/utils/MathUtils.h"
 #include "../../engine/resources/DataFileResource.h"
 #include "../../engine/resources/ResourceLoadingService.h"
+
+#include <json.hpp>
 
 ///------------------------------------------------------------------------------------------------
 
 namespace
 {
     static const std::string NAMES_LIST_FILE_PATH = genesis::resources::ResourceLoadingService::RES_DATA_ROOT + "names_list.dat";
+    static const std::string UNIT_BASE_STATS_FILE_PATH = genesis::resources::ResourceLoadingService::RES_DATA_ROOT + "units_db.json";
 
     static const size_t UPPER_LIMIT_PARTY = 100;
     static const int UPPER_LIMIT_HEALTH   = 100;
@@ -24,15 +28,42 @@ namespace
 
 ///------------------------------------------------------------------------------------------------
 
-std::unique_ptr<GlobalUnitInfoSingletonComponent> InitializeGlobalUnitInfoComponent()
+std::unique_ptr<UnitAvailableNamesSingletonComponent> InitializeUnitAvailableNamesComponent()
 {
     auto& resourceLoadingService = genesis::resources::ResourceLoadingService::GetInstance();
     const auto namesListResourceId = resourceLoadingService.LoadResource(NAMES_LIST_FILE_PATH);
     const auto& namesListDataResource = resourceLoadingService.GetResource<genesis::resources::DataFileResource>(namesListResourceId);
     
-    auto globalUnitInfoComponent = std::make_unique<GlobalUnitInfoSingletonComponent>();
-    globalUnitInfoComponent->mAvailableUnitNamesList = StringSplit(namesListDataResource.GetContents(), ',');
-    return globalUnitInfoComponent;
+    auto unitAvailableNamesComponent = std::make_unique<UnitAvailableNamesSingletonComponent>();
+    unitAvailableNamesComponent->mAvailableUnitNamesList = StringSplit(namesListDataResource.GetContents(), ',');
+    return unitAvailableNamesComponent;
+}
+
+///------------------------------------------------------------------------------------------------
+
+void LoadUnitBaseStats()
+{
+    auto unitBaseStatsComponent = std::make_unique<UnitBaseStatsSingletonComponent>();
+    auto& resourceLoadingService = genesis::resources::ResourceLoadingService::GetInstance();
+    
+    // Get unit base stats file resource
+    auto resourceId = resourceLoadingService.LoadResource(UNIT_BASE_STATS_FILE_PATH);
+    const auto& unitBaseStatsResource = resourceLoadingService.GetResource<genesis::resources::DataFileResource>(resourceId);
+
+    // Parse unit base stats
+    const auto unitBaseStatsJson = nlohmann::json::parse(unitBaseStatsResource.GetContents());
+    for (auto iter = unitBaseStatsJson.cbegin(); iter != unitBaseStatsJson.end(); ++iter)
+    {
+        auto unitTypeName  = StringId(iter.key());
+        auto unitBaseStats = iter.value();
+        
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitModelName = StringId(unitBaseStats["model_name"].get<std::string>());
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitModelScaleFactor = unitBaseStats["model_scale_factor"].get<float>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mAttackAnimationDamageTrigger = unitBaseStats["attack_animation_damage_trigger"].get<float>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mBaseDamage = unitBaseStats["base_damage"].get<int>();
+    }
+    
+    genesis::ecs::World::GetInstance().SetSingletonComponent<UnitBaseStatsSingletonComponent>(std::move(unitBaseStatsComponent));
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -41,14 +72,21 @@ StringId GetRandomAvailableUnitName()
 {
     auto& world = genesis::ecs::World::GetInstance();
     
-    if (!world.HasSingletonComponent<GlobalUnitInfoSingletonComponent>())
+    if (!world.HasSingletonComponent<UnitAvailableNamesSingletonComponent>())
     {
-        world.SetSingletonComponent<GlobalUnitInfoSingletonComponent>(InitializeGlobalUnitInfoComponent());
+        world.SetSingletonComponent<UnitAvailableNamesSingletonComponent>(InitializeUnitAvailableNamesComponent());
     }
     
-    auto& globalUnitInfoComponent = world.GetSingletonComponent<GlobalUnitInfoSingletonComponent>();
+    auto& globalUnitInfoComponent = world.GetSingletonComponent<UnitAvailableNamesSingletonComponent>();
     const auto randomIndex = genesis::math::RandomInt(0, globalUnitInfoComponent.mAvailableUnitNamesList.size() - 1);
     return StringId(globalUnitInfoComponent.mAvailableUnitNamesList.at(randomIndex));
+}
+
+///-----------------------------------------------------------------------------------------------
+
+StringId GetUnitModelName(const StringId unitTypeName)
+{
+    return genesis::ecs::World::GetInstance().GetSingletonComponent<UnitBaseStatsSingletonComponent>().mUnitTypeNameToBaseStats.at(unitTypeName).mUnitModelName;
 }
 
 ///-----------------------------------------------------------------------------------------------

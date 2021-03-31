@@ -18,7 +18,7 @@
 struct UnitStats
 {
     StringId mUnitName = StringId();
-    StringId mModelName = StringId();
+    StringId mUnitType = StringId();
     int mHealth = 100;
     int mDamage = 10;
     float mSpeedMultiplier = 1.0f;

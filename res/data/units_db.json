@@ -1,0 +1,5 @@
+{
+	"Spearman": { "model_name": "spearman", "model_scale_factor": 0.004, "attack_animation_damage_trigger": 0.75, "base_damage": 15 },
+	"Elite Spearman": { "model_name": "elite_spearman", "model_scale_factor": 0.004, "attack_animation_damage_trigger": 0.75, "base_damage": 30 },
+	"Horse Archer": { "model_name": "horse_archer", "model_scale_factor": 0.0004, "attack_animation_damage_trigger": 0.625, "base_damage": 10 }
+}
