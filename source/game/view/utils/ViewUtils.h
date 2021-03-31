@@ -37,7 +37,8 @@ genesis::ecs::EntityId LoadAndShowView
 
 void DestroyView
 (
-    const genesis::ecs::EntityId viewEntityId
+    const genesis::ecs::EntityId viewEntityId,
+    const StringId destructionEventName
 );
 
 ///------------------------------------------------------------------------------------------------

@@ -27,6 +27,7 @@ class ViewQueueSingletonComponent final: public genesis::ecs::IComponent
 public:
     std::queue<std::pair<std::string, StringId>> mQueuedViews;
     int mPreviousContextId = 0;
+    StringId mLastViewDestructionEvent = StringId();
 };
 
 ///-----------------------------------------------------------------------------------------------

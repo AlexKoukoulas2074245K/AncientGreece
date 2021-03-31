@@ -146,7 +146,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
         world.AddComponent<NameComponent>(modelEntity, std::make_unique<NameComponent>(entityName));
     }
     
-    animation::ChangeAnimation(modelEntity, IDLE_ANIMATION_NAME);
+    animation::SetAnimation(modelEntity, IDLE_ANIMATION_NAME, true);
     
     return modelEntity;
 }

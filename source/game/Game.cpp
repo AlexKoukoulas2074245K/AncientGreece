@@ -7,11 +7,13 @@
 
 #include "Game.h"
 #include "GameContexts.h"
+#include "battle/systems/BattleCameraControllerSystem.h"
 #include "components/CollidableComponent.h"
 #include "components/UnitStatsComponent.h"
 #include "overworld/components/HighlightableComponent.h"
 #include "overworld/components/OverworldTargetComponent.h"
 #include "overworld/systems/HighlightingSystem.h"
+#include "overworld/systems/OverworldBattleProcessingSystem.h"
 #include "overworld/systems/OverworldCameraControllerSystem.h"
 #include "overworld/systems/OverworldLocationInteractionHandlingSystem.h"
 #include "overworld/systems/OverworldMapPickingInfoSystem.h"
@@ -83,12 +85,15 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<ModelAnimationTogglingSystem>());
     world.AddSystem(std::make_unique<view::ViewManagementSystem>());
     
+    world.AddSystem(std::make_unique<battle::BattleCameraControllerSystem>(), BATTLE_CONTEXT);
+    
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldLocationInteractionHandlingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldUnitInteractionHandlingSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::OverworldBattleProcessingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
     
     world.AddSystem(std::make_unique<scene::SceneUpdaterSystem>());
@@ -113,29 +118,52 @@ void Game::VOnGameInit()
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
     
-    CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"), 4.0f);
+    
+    const tsl::robin_map<int, StringId> intToModelType =
+    {
+        { 0, StringId("Spearman") },
+        { 1, StringId("Elite Spearman") },
+        { 2, StringId("Horse Archer") },
+    };
+    
+    auto playerEntity = CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"), 4.0f);
+    const auto partySize = genesis::math::RandomInt(0, 50);
+    auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
+    
+    for (auto j = 0; j < partySize; ++j)
+    {
+        const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
+        UnitStats us;
+        us.mHealth = 100;
+        us.mDamage = 0;
+        us.mSpeedMultiplier = 1.0f;
+        us.mUnitType = unitTypeRng;
+        unitStatsComponent.mParty.push_back(us);
+    }
+    
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
         auto position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
         
-        auto unitTypeName = StringId();
-        auto entityName = StringId("spartan_" + std::to_string(i));
+        auto unitTypeName = intToModelType.at(i % 3);
+        auto entityName = StringId("overworld_unit");
         
-        if (i % 3 == 0)
-        {
-            unitTypeName = StringId("Horse Archer");
-        }
-        else if (i % 3 == 1)
-        {
-            unitTypeName = StringId("Spearman");
-        }
-        else if (i % 3 == 2)
-        {
-            unitTypeName = StringId("Elite Spearman");
-        }
+        auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, 1.0f, position);
         
-        CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, 1.0f, position);
+        const auto partySize = genesis::math::RandomInt(0, 50);
+        auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
+        
+        for (auto j = 0; j < partySize; ++j)
+        {
+            const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
+            UnitStats us;
+            us.mHealth = 100;
+            us.mDamage = 0;
+            us.mSpeedMultiplier = 1.0f;
+            us.mUnitType = unitTypeRng;
+            unitStatsComponent.mParty.push_back(us);
+        }
     }
 }
 
@@ -146,26 +174,10 @@ void Game::VOnUpdate(float& dt)
     auto& world = genesis::ecs::World::GetInstance();
     
     auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
-    //dt = world.GetSingletonComponent<view::ViewQueueSingletonComponent>().mActiveViewExists ? 0.0f : dt;
     
     dtAccum += dt;
     dtAccum2 += dt;
     
-    if (dtAccum2 > 1.0f)
-    {
-        dtAccum2 = 0.0f;
-        for (int i = 0; i < SPARTAN_COUNT; ++i)
-        {
-            auto entity = world.FindEntityWithName(StringId("spartan_" + std::to_string(i)));
-            if (!world.HasComponent<overworld::OverworldTargetComponent>(entity))
-            {
-                const auto& position = world.GetComponent<genesis::TransformComponent>(entity);
-                auto component = std::make_unique<overworld::OverworldTargetComponent>();
-                component->mTargetPosition = glm::vec3(genesis::math::RandomFloat(position.mPosition.x - 0.2f, position.mPosition.x + 0.2f),genesis::math::RandomFloat(position.mPosition.y -0.2f, position.mPosition.y + 0.2f),0.0f);
-                world.AddComponent<overworld::OverworldTargetComponent>(entity, std::move(component));
-            }
-        }
-    }
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
     
@@ -186,49 +198,49 @@ void Game::VOnUpdate(float& dt)
         if (genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_MODEL_RX -= 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")), StringId());
             view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::RIGHT_ARROW_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_MODEL_RX += 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")), StringId());
             view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::UP_ARROW_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_MODEL_RY += 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")), StringId());
             view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::DOWN_ARROW_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_MODEL_RY -= 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")), StringId());
             view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::T_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_MODEL_RZ += 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")), StringId());
             view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::G_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_MODEL_RZ -= 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")), StringId());
             view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::F_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_TEXTBOX_SIZE_DX -= 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")), StringId());
             view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
         if (genesis::input::GetKeyState(genesis::input::Key::H_KEY) == genesis::input::InputState::TAPPED)
         {
             DEBUG_TEXTBOX_SIZE_DX += 0.05f;
-            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")));
+            view::DestroyView(world.FindEntityWithName(StringId("unit_interaction")), StringId());
             view::QueueView("unit_interaction", StringId("unit_interaction"));
         }
     }

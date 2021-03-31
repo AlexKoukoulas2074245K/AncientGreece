@@ -184,7 +184,8 @@ genesis::ecs::EntityId LoadAndShowView
 
 void DestroyView
 (
-    const genesis::ecs::EntityId viewEntityId
+    const genesis::ecs::EntityId viewEntityId,
+    const StringId destructionEventName
 )
 {
     auto& world = genesis::ecs::World::GetInstance();
@@ -200,6 +201,7 @@ void DestroyView
     auto& viewQueueComponent = world.GetSingletonComponent<ViewQueueSingletonComponent>();
     world.ChangeContext(viewQueueComponent.mPreviousContextId);
     viewQueueComponent.mPreviousContextId = 0;
+    viewQueueComponent.mLastViewDestructionEvent = destructionEventName;
 }
 
 ///-----------------------------------------------------------------------------------------------

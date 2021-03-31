@@ -28,7 +28,8 @@ namespace view
 namespace
 {
     static const StringId GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME = StringId("custom_color");
-    static const StringId CLOSE_EVENT_NAME = StringId("close");
+    static const StringId CLOSE_EVENT_NAME  = StringId("close");
+    static const StringId ATTACK_EVENT_NAME = StringId("attack");
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -57,6 +58,10 @@ void ViewManagementSystem::VUpdate(const float, const std::vector<genesis::ecs::
             entities.push_back(LoadAndShowView(viewEntry.first, viewEntry.second));
             viewQueueComponent.mQueuedViews.pop();
         }
+        else
+        {
+            return;
+        }
     }
     
     const auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
@@ -73,6 +78,9 @@ void ViewManagementSystem::VUpdate(const float, const std::vector<genesis::ecs::
             }
         }
     }
+    
+    genesis::input::ConsumeButtonInput(genesis::input::Button::LEFT_BUTTON);
+    genesis::input::ConsumeButtonInput(genesis::input::Button::RIGHT_BUTTON);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -97,9 +105,6 @@ void ViewManagementSystem::ProcessClickableEntity(const genesis::ecs::EntityId e
     {
         renderableComponent.mShaderUniforms.mShaderFloatVec4Uniforms[GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME] = clickableComponent.mTextColor;
     }
-    
-    genesis::input::ConsumeButtonInput(genesis::input::Button::LEFT_BUTTON);
-    genesis::input::ConsumeButtonInput(genesis::input::Button::RIGHT_BUTTON);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -108,7 +113,11 @@ void ViewManagementSystem::HandleEvent(const genesis::ecs::EntityId sourceEntity
 {
     if (eventName == CLOSE_EVENT_NAME)
     {
-        DestroyView(sourceEntityId);
+        DestroyView(sourceEntityId, eventName);
+    }
+    else if (eventName == ATTACK_EVENT_NAME)
+    {
+        DestroyView(sourceEntityId, eventName);
     }
 }
 

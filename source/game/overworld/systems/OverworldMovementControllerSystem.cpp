@@ -87,8 +87,8 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
             if (isFollowingEntity)
             {
                 auto unitInteractionComponent = std::make_unique<OverworldUnitInteractionComponent>();
-                unitInteractionComponent->mInstigatorEntityId = entityId;
-                unitInteractionComponent->mOtherEntityId = waypointComponent.mEntityTargetToFollow;
+                unitInteractionComponent->mUnitInteraction.mInstigatorEntityId = entityId;
+                unitInteractionComponent->mUnitInteraction.mOtherEntityId = waypointComponent.mEntityTargetToFollow;
                 world.AddComponent<OverworldUnitInteractionComponent>(world.CreateEntity(), std::move(unitInteractionComponent));
             }
             

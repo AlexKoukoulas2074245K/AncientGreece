@@ -19,11 +19,18 @@ namespace overworld
 
 ///-----------------------------------------------------------------------------------------------
 
+struct UnitInteraction
+{
+    genesis::ecs::EntityId mInstigatorEntityId = genesis::ecs::NULL_ENTITY_ID;
+    genesis::ecs::EntityId mOtherEntityId = genesis::ecs::NULL_ENTITY_ID;
+};
+
+///-----------------------------------------------------------------------------------------------
+
 class OverworldUnitInteractionComponent final: public genesis::ecs::IComponent
 {
 public:
-    genesis::ecs::EntityId mInstigatorEntityId = genesis::ecs::NULL_ENTITY_ID;
-    genesis::ecs::EntityId mOtherEntityId = genesis::ecs::NULL_ENTITY_ID;
+    UnitInteraction mUnitInteraction;
 };
 
 ///-----------------------------------------------------------------------------------------------

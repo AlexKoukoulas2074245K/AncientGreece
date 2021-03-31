@@ -89,7 +89,7 @@ StringId GetUnitModelName(const StringId unitTypeName)
     return genesis::ecs::World::GetInstance().GetSingletonComponent<UnitBaseStatsSingletonComponent>().mUnitTypeNameToBaseStats.at(unitTypeName).mUnitModelName;
 }
 
-///-----------------------------------------------------------------------------------------------
+///------------------------------------------------------------------------------------------------
 
 genesis::colors::RgbTriplet<float> GetUnitPartyColor(const UnitStatsComponent& unitStatsComponent)
 {

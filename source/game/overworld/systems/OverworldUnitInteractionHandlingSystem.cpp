@@ -7,6 +7,7 @@
 
 #include "OverworldUnitInteractionHandlingSystem.h"
 #include "../components/OverworldUnitInteractionComponent.h"
+#include "../utils/OverworldInteractionUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/KeyValueUtils.h"
 #include "../../utils/UnitInfoUtils.h"
@@ -56,10 +57,12 @@ void OverworldUnitInteractionHandlingSystem::VUpdate(const float, const std::vec
     {
         const auto& overworldUnitInteractionComponent = world.GetComponent<OverworldUnitInteractionComponent>(entityId);
         
-        if (world.HasEntity(overworldUnitInteractionComponent.mInstigatorEntityId) && world.HasEntity(overworldUnitInteractionComponent.mOtherEntityId))
+        if (world.HasEntity(overworldUnitInteractionComponent.mUnitInteraction.mInstigatorEntityId) && world.HasEntity(overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId))
         {
-            const auto& unitTransformComponent = world.GetComponent<genesis::TransformComponent>(overworldUnitInteractionComponent.mOtherEntityId);
-            const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldUnitInteractionComponent.mOtherEntityId);
+            SaveInteractionToHistory(overworldUnitInteractionComponent.mUnitInteraction.mInstigatorEntityId, overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId);
+            
+            const auto& unitTransformComponent = world.GetComponent<genesis::TransformComponent>(overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId);
+            const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId);
             
             const auto unitName           = unitStatsComponent.mStats.mUnitName;
             const auto unitModelName      = GetUnitModelName(unitStatsComponent.mStats.mUnitType);
