@@ -126,7 +126,7 @@ void Game::VOnGameInit()
         { 2, StringId("Horse Archer") },
     };
     
-    CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"), 4.0f);
+    CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"));
    
     
     
@@ -137,7 +137,7 @@ void Game::VOnGameInit()
         auto unitTypeName = intToModelType.at(i % 3);
         auto entityName = StringId("overworld_unit");
         
-        auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, 1.0f, position);
+        auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, position);
         
         const auto partySize = genesis::math::RandomInt(0, 50);
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
@@ -145,12 +145,7 @@ void Game::VOnGameInit()
         for (auto j = 0; j < partySize; ++j)
         {
             const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
-            UnitStats us;
-            us.mHealth = 100;
-            us.mDamage = 0;
-            us.mSpeedMultiplier = 1.0f;
-            us.mUnitType = unitTypeRng;
-            unitStatsComponent.mParty.push_back(us);
+            unitStatsComponent.mParty.push_back(GetUnitBaseStats(unitTypeRng));
         }
     }
 }

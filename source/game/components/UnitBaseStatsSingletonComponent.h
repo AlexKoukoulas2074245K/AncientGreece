@@ -11,25 +11,15 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+#include "../UnitStats.h"
 #include <tsl/robin_map.h>
-
-///-----------------------------------------------------------------------------------------------
-
-struct UnitBaseStats
-{
-    StringId mUnitModelName = StringId();
-    float mUnitModelScaleFactor = 1.0f;
-    float mAttackAnimationDamageTrigger = 1.0f;
-    int mBaseDamage = 0;
-    bool mIsRangedUnit = false;
-};
 
 ///-----------------------------------------------------------------------------------------------
 
 class UnitBaseStatsSingletonComponent final: public genesis::ecs::IComponent
 {
 public:
-    tsl::robin_map<StringId, UnitBaseStats, StringIdHasher> mUnitTypeNameToBaseStats;
+    tsl::robin_map<StringId, UnitStats, StringIdHasher> mUnitTypeNameToBaseStats;
 };
 
 ///-----------------------------------------------------------------------------------------------

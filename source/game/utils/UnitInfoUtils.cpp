@@ -60,8 +60,13 @@ void LoadUnitBaseStats()
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitModelName = StringId(unitBaseStats["model_name"].get<std::string>());
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitModelScaleFactor = unitBaseStats["model_scale_factor"].get<float>();
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mAttackAnimationDamageTrigger = unitBaseStats["attack_animation_damage_trigger"].get<float>();
-        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mBaseDamage = unitBaseStats["base_damage"].get<int>();
-        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mIsRangedUnit = unitBaseStats["is_ranged_unit"].get<bool>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mDamage = unitBaseStats["base_damage"].get<int>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mHealth = unitBaseStats["base_health"].get<int>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mSpeedMultiplier = unitBaseStats["base_speed_multiplier"].get<int>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mIsRangedUnit =
+        unitBaseStats["is_ranged_unit"].get<bool>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitType = unitTypeName;
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitName = unitTypeName;
     }
     
     genesis::ecs::World::GetInstance().SetSingletonComponent<UnitBaseStatsSingletonComponent>(std::move(unitBaseStatsComponent));
@@ -81,6 +86,13 @@ StringId GetRandomAvailableUnitName()
     auto& globalUnitInfoComponent = world.GetSingletonComponent<UnitAvailableNamesSingletonComponent>();
     const auto randomIndex = genesis::math::RandomInt(0, globalUnitInfoComponent.mAvailableUnitNamesList.size() - 1);
     return StringId(globalUnitInfoComponent.mAvailableUnitNamesList.at(randomIndex));
+}
+
+///-----------------------------------------------------------------------------------------------
+
+const UnitStats& GetUnitBaseStats(const StringId unitTypeName)
+{
+    return genesis::ecs::World::GetInstance().GetSingletonComponent<UnitBaseStatsSingletonComponent>().mUnitTypeNameToBaseStats.at(unitTypeName);
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -15,19 +15,24 @@
 
 ///------------------------------------------------------------------------------------------------
 
-genesis::ecs::EntityId CreateUnit(const StringId unitTypeName, const StringId unitName /* StringId() */, const StringId entityName /* StringId() */, const float speedMultipiler /* 1.0f */, const glm::vec3& position /* glm::vec3() */, const glm::vec3& rotation /* glm::vec3() */, const glm::vec3 scale /* glm::vec3() */)
+genesis::ecs::EntityId CreateUnit(const StringId unitTypeName, const StringId unitName /* StringId() */, const StringId entityName /* StringId() */, const glm::vec3& position /* glm::vec3() */, const glm::vec3& rotation /* glm::vec3() */, const glm::vec3 scale /* glm::vec3() */)
 {
     auto& world = genesis::ecs::World::GetInstance();
-    const auto& unitBaseStats = world.GetSingletonComponent<UnitBaseStatsSingletonComponent>().mUnitTypeNameToBaseStats.at(unitTypeName);
+    const auto& unitBaseStats = GetUnitBaseStats(unitTypeName);
     
     auto entity = genesis::rendering::LoadAndCreateAnimatedModelByName(unitBaseStats.mUnitModelName.GetString(), position, rotation, scale * unitBaseStats.mUnitModelScaleFactor, entityName);
     
     auto unitStatsComponent = std::make_unique<UnitStatsComponent>();
-    unitStatsComponent->mStats.mSpeedMultiplier = speedMultipiler;
-    unitStatsComponent->mStats.mUnitType = unitTypeName;
-    unitStatsComponent->mStats.mUnitName = unitName == StringId() ? unitTypeName : unitName;
-    unitStatsComponent->mStats.mDamage = unitBaseStats.mBaseDamage;
-    unitStatsComponent->mStats.mHealth = 100;
+    unitStatsComponent->mStats = unitBaseStats;
+    unitStatsComponent->mStats.mSpeedMultiplier = unitBaseStats.mSpeedMultiplier;
+    unitStatsComponent->mStats.mDamage = unitBaseStats.mDamage;
+    unitStatsComponent->mStats.mHealth = unitBaseStats.mHealth;
+    
+    if (unitName != StringId())
+    {
+        unitStatsComponent->mStats.mUnitName = unitName;
+    }
+    
     unitStatsComponent->mParty.push_back(unitStatsComponent->mStats);
     
     world.AddComponent<UnitStatsComponent>(entity, std::move(unitStatsComponent));

@@ -11,19 +11,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
-#include "../overworld/AreaTypes.h"
-
-///-----------------------------------------------------------------------------------------------
-
-struct UnitStats
-{
-    StringId mUnitName = StringId();
-    StringId mUnitType = StringId();
-    int mHealth = 100;
-    int mDamage = 10;
-    float mSpeedMultiplier = 1.0f;
-    overworld::AreaTypeMask mNavigableAreaTypes = overworld::areaTypeMasks::NEUTRAL | overworld::areaTypeMasks::SEA | overworld::areaTypeMasks::MOUNTAIN | overworld::areaTypeMasks::HIGH_MOUNTAIN | overworld::areaTypeMasks::FOREST;
-};
+#include "../UnitStats.h"
 
 ///-----------------------------------------------------------------------------------------------
 

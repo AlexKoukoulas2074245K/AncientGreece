@@ -15,7 +15,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-genesis::ecs::EntityId CreateUnit(const StringId unitTypeName, const StringId unitName = StringId(), const StringId entityName = StringId(), const float speedMultipiler = 1.0f, const glm::vec3& position = glm::vec3(), const glm::vec3& rotation = glm::vec3(), const glm::vec3 scale = glm::vec3(1.0f));
+genesis::ecs::EntityId CreateUnit(const StringId unitTypeName, const StringId unitName = StringId(), const StringId entityName = StringId(), const glm::vec3& position = glm::vec3(), const glm::vec3& rotation = glm::vec3(), const glm::vec3 scale = glm::vec3(1.0f));
 
 ///------------------------------------------------------------------------------------------------
 

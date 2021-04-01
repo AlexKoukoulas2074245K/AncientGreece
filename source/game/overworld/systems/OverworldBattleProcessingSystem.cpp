@@ -23,6 +23,7 @@
 #include "../../../engine/resources/MeshResource.h"
 
 #include <unordered_map>
+#include <algorithm>
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -58,9 +59,17 @@ void OverworldBattleProcessingSystem::VUpdate(const float, const std::vector<gen
         
         const auto& attackingSideStatsComponent = world.GetComponent<UnitStatsComponent>(lastInteraction.mInstigatorEntityId);
         auto attackingSideParty = attackingSideStatsComponent.mParty;
+        std::partition(attackingSideParty.begin(), attackingSideParty.end(), [](const UnitStats& a)
+        {
+            return !a.mIsRangedUnit;
+        });
         
         const auto& defendingSideStatsComponent = world.GetComponent<UnitStatsComponent>(lastInteraction.mOtherEntityId);
         auto defendingSideParty = defendingSideStatsComponent.mParty;
+        std::partition(defendingSideParty.begin(), defendingSideParty.end(), [](const UnitStats& a)
+        {
+            return !a.mIsRangedUnit;
+        });
         
         battle::QueueBattle(lastInteraction.mInstigatorEntityId, lastInteraction.mOtherEntityId);
         
@@ -115,7 +124,7 @@ void OverworldBattleProcessingSystem::VUpdate(const float, const std::vector<gen
         auto unitCounter = 1;
         for (const auto& unitStats: attackingSideParty)
         {
-            CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("battle_unit"), unitStats.mSpeedMultiplier, glm::vec3(xCounter, yCounter, 0.0f));
+            CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("battle_unit"), glm::vec3(xCounter, yCounter, 0.0f));
             
             xCounter += targetUnitXDistance;
             
@@ -132,7 +141,7 @@ void OverworldBattleProcessingSystem::VUpdate(const float, const std::vector<gen
         unitCounter = 1;
         for (const auto& unitStats: defendingSideParty)
         {
-            CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("battle_unit"), unitStats.mSpeedMultiplier, glm::vec3(xCounter, yCounter, 0.0f), glm::vec3(0.0f, 0.0f, genesis::math::PI));
+            CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("battle_unit"), glm::vec3(xCounter, yCounter, 0.0f), glm::vec3(0.0f, 0.0f, genesis::math::PI));
 
             xCounter += targetUnitXDistance;
             
