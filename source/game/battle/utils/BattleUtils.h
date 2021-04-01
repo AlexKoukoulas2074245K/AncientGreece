@@ -14,12 +14,18 @@
 
 ///------------------------------------------------------------------------------------------------
 
+struct UnitStats;
+
 namespace battle
 {
 
 ///------------------------------------------------------------------------------------------------
 
 void QueueBattle(const genesis::ecs::EntityId attackingEntity, const genesis::ecs::EntityId defendingEntity);
+
+///------------------------------------------------------------------------------------------------
+
+void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const genesis::ecs::EntityId attackingLeaderEntity, const genesis::ecs::EntityId defendingLeaderEntity);
 
 ///------------------------------------------------------------------------------------------------
 

@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldBattleProcessingSystem.h
+///  BattleSideComponent.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 31/03/2021.
+///  Created by Alex Koukoulas on 01/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldBattleProcessingSystem_h
-#define OverworldBattleProcessingSystem_h
+#ifndef BattleSideComponent_h
+#define BattleSideComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -14,25 +14,15 @@
 
 ///-----------------------------------------------------------------------------------------------
 
-struct UnitStats;
-
-///-----------------------------------------------------------------------------------------------
-
-namespace overworld
+namespace battle
 {
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldBattleProcessingSystem final : public genesis::ecs::BaseSystem<genesis::ecs::NullComponent>
+
+class BattleSideComponent final: public genesis::ecs::IComponent
 {
 public:
-    OverworldBattleProcessingSystem();
-
-    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
-    
-private:
-    void PrepareLiveBattle() const;
-    std::vector<UnitStats> PrepareBattleParty(const genesis::ecs::EntityId partyLeaderEntityId) const;
-    
+    StringId mBattleSideLeaderName = StringId();
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -41,4 +31,4 @@ private:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* OverworldBattleProcessingSystem_h */
+#endif /* BattleSideComponent_h */

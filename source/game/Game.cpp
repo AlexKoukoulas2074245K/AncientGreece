@@ -20,7 +20,7 @@
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
 #include "overworld/systems/OverworldUnitInteractionHandlingSystem.h"
-#include "overworld/utils/OverworldCityStateUtils.h"
+#include "overworld/utils/OverworldUtils.h"
 #include "scene/systems/SceneUpdaterSystem.h"
 #include "systems/ModelAnimationTogglingSystem.h"
 #include "utils/CityStateInfoUtils.h"
@@ -112,8 +112,8 @@ void Game::VOnGameInit()
     LoadGameFonts();
     LoadUnitBaseStats();
     LoadCityStateInfo();
-    overworld::PopulateOverworldCityStates();
-    LoadAndCreateOverworldMapComponents();
+    
+    overworld::PopulateOverworldEntities();
 
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
     genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
@@ -126,9 +126,15 @@ void Game::VOnGameInit()
         { 2, StringId("Horse Archer") },
     };
     
-    CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"));
+    auto playerEntity = CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"));
+    const auto partySize = genesis::math::RandomInt(0, 50);
+    auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
    
-    
+    for (auto j = 0; j < partySize; ++j)
+    {
+        const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
+        unitStatsComponent.mParty.push_back(GetUnitBaseStats(unitTypeRng));
+    }
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
@@ -295,17 +301,6 @@ void Game::RegisterConsoleCommands() const
 void Game::LoadGameFonts() const
 {
     genesis::rendering::LoadFont(StringId("ancient_greek_font"), 16, 16);
-}
-
-///------------------------------------------------------------------------------------------------
-
-void Game::LoadAndCreateOverworldMapComponents() const
-{
-    genesis::rendering::LoadAndCreateStaticModelByName("map", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map"));
-    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_1"));
-    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_2"));
-    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_3"));
-    genesis::rendering::LoadAndCreateStaticModelByName("map_edge", glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), StringId("map_edge_4"));
 }
 
 ///------------------------------------------------------------------------------------------------

@@ -24,7 +24,6 @@ public:
 private:
     void RegisterConsoleCommands() const;
     void LoadGameFonts() const;
-    void LoadAndCreateOverworldMapComponents() const;
 };       
 
 ///------------------------------------------------------------------------------------------------

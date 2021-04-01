@@ -1,16 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldCityStateUtils.h
+///  OverworldUtils.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 25/03/2021.
+///  Created by Alex Koukoulas on 01/04/2021.
 ///------------------------------------------------------------------------------------------------
 
-#ifndef OverworldCityStateUtils_h
-#define OverworldCityStateUtils_h
-
-///------------------------------------------------------------------------------------------------
-
-#include "../../../engine/common/utils/StringUtils.h"
+#ifndef OverworldUtils_h
+#define OverworldUtils_h
 
 ///------------------------------------------------------------------------------------------------
 
@@ -19,15 +15,11 @@ namespace overworld
 
 ///------------------------------------------------------------------------------------------------
 
-void PopulateOverworldCityStates();
+void PopulateOverworldEntities();
 
 ///------------------------------------------------------------------------------------------------
 
-void RemoveOverworldCityStates();
-
-///------------------------------------------------------------------------------------------------
-
-float GetCityStateOverworldNameSize(const StringId cityStateName);
+void DestroyOverworldEntities();
 
 ///------------------------------------------------------------------------------------------------
 
@@ -35,4 +27,4 @@ float GetCityStateOverworldNameSize(const StringId cityStateName);
 
 ///------------------------------------------------------------------------------------------------
 
-#endif /* OverworldCityStateUtils_h */
+#endif /* OverworldUtils_h */
