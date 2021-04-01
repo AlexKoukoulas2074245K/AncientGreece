@@ -15,7 +15,7 @@ namespace overworld
 
 ///------------------------------------------------------------------------------------------------
 
-void SaveInteractionToHistory(const genesis::ecs::EntityId instigatorEntityId, const genesis::ecs::EntityId otherEntityId)
+void SaveInteractionToHistory(const genesis::ecs::EntityId instigatorEntityId, const genesis::ecs::EntityId otherEntityId, const StringId instigatorEntityName, const StringId otherEntityName)
 {
     auto& world = genesis::ecs::World::GetInstance();
     if (!world.HasSingletonComponent<OverworldUnitInteractionHistorySingletonComponent>())
@@ -24,7 +24,7 @@ void SaveInteractionToHistory(const genesis::ecs::EntityId instigatorEntityId, c
     }
     
     auto& unitInteractionHistoryComponent = world.GetSingletonComponent<OverworldUnitInteractionHistorySingletonComponent>();
-    unitInteractionHistoryComponent.mUnitInteractions.push_back({instigatorEntityId, otherEntityId});
+    unitInteractionHistoryComponent.mUnitInteractions.push_back({instigatorEntityId, otherEntityId, instigatorEntityName, otherEntityName});
 }
 
 ///-----------------------------------------------------------------------------------------------

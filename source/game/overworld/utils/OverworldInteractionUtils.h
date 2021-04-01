@@ -23,7 +23,7 @@ struct UnitInteraction;
 
 ///------------------------------------------------------------------------------------------------
 
-void SaveInteractionToHistory(const genesis::ecs::EntityId instigatorEntityId, const genesis::ecs::EntityId otherEntityId);
+void SaveInteractionToHistory(const genesis::ecs::EntityId instigatorEntityId, const genesis::ecs::EntityId otherEntityId, const StringId instigatorEntityName, const StringId otherEntityName);
 
 ///------------------------------------------------------------------------------------------------
 

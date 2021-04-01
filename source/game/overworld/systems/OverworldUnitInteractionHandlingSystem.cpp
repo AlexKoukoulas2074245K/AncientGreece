@@ -12,6 +12,7 @@
 #include "../../utils/KeyValueUtils.h"
 #include "../../utils/UnitInfoUtils.h"
 #include "../../view/utils/ViewUtils.h"
+#include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -59,7 +60,7 @@ void OverworldUnitInteractionHandlingSystem::VUpdate(const float, const std::vec
         
         if (world.HasEntity(overworldUnitInteractionComponent.mUnitInteraction.mInstigatorEntityId) && world.HasEntity(overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId))
         {
-            SaveInteractionToHistory(overworldUnitInteractionComponent.mUnitInteraction.mInstigatorEntityId, overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId);
+            SaveInteractionToHistory(overworldUnitInteractionComponent.mUnitInteraction.mInstigatorEntityId,  overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId, overworldUnitInteractionComponent.mUnitInteraction.mInstigatorEntityName, overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityName);
             
             const auto& unitTransformComponent = world.GetComponent<genesis::TransformComponent>(overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId);
             const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldUnitInteractionComponent.mUnitInteraction.mOtherEntityId);

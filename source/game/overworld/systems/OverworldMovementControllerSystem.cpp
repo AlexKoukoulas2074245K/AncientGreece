@@ -13,6 +13,7 @@
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitCollisionUtils.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
+#include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
@@ -88,7 +89,9 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
             {
                 auto unitInteractionComponent = std::make_unique<OverworldUnitInteractionComponent>();
                 unitInteractionComponent->mUnitInteraction.mInstigatorEntityId = entityId;
+                unitInteractionComponent->mUnitInteraction.mInstigatorEntityName = world.GetComponent<genesis::NameComponent>(entityId).mName;
                 unitInteractionComponent->mUnitInteraction.mOtherEntityId = waypointComponent.mEntityTargetToFollow;
+                unitInteractionComponent->mUnitInteraction.mOtherEntityName = world.GetComponent<genesis::NameComponent>(waypointComponent.mEntityTargetToFollow).mName;
                 world.AddComponent<OverworldUnitInteractionComponent>(world.CreateEntity(), std::move(unitInteractionComponent));
             }
             
