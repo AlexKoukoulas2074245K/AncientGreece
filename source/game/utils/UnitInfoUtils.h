@@ -27,6 +27,10 @@ StringId GetRandomAvailableUnitName();
 
 ///------------------------------------------------------------------------------------------------
 
+size_t GetUnitPartySize(const UnitStatsComponent& unitStatsComponent);
+
+///------------------------------------------------------------------------------------------------
+
 StringId GetUnitModelName(const StringId unitTypeName);
 
 ///------------------------------------------------------------------------------------------------

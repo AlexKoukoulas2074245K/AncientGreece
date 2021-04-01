@@ -84,6 +84,7 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
     
     // Calculate render-constant camera view matrix
     cameraComponent.mViewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
+    cameraComponent.mViewMatrix = glm::rotate(cameraComponent.mViewMatrix, cameraComponent.mRoll, glm::vec3(0.0f, 0.0f, 1.0f));
     
     // Calculate render-constant camera projection matrix
     cameraComponent.mProjectionMatrix = glm::perspectiveFovLH

@@ -18,11 +18,12 @@ namespace battle
 
 namespace
 {
-    static const float BATTLE_CAMERA_X     = 0.01f;
-    static const float BATTLE_CAMERA_Y     = -0.6828f;
-    static const float BATTLE_CAMERA_Z     = -0.3813f;
-    static const float BATTLE_CAMERA_PITCH = 0.93099f;
+    static const float BATTLE_CAMERA_X     = 0.02906f;
+    static const float BATTLE_CAMERA_Y     = -0.28339f;
+    static const float BATTLE_CAMERA_Z     = -0.24034f;
+    static const float BATTLE_CAMERA_PITCH = 0.946990f;
     static const float BATTLE_CAMERA_YAW   = 1.6067f;
+    static const float BATTLE_CAMERA_ROLL  = 0.6024f;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -50,6 +51,7 @@ void PrepareBattleCamera()
     cameraComponent.mPosition.z = BATTLE_CAMERA_Z;
     cameraComponent.mYaw        = BATTLE_CAMERA_YAW;
     cameraComponent.mPitch      = BATTLE_CAMERA_PITCH;
+    cameraComponent.mRoll       = BATTLE_CAMERA_ROLL;
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -126,7 +126,7 @@ void HighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPosition, c
     std::vector<genesis::ecs::EntityId> renderedTextEntities;
     renderedTextEntities.push_back(genesis::rendering::RenderText(unitStatsComponent.mStats.mUnitName.GetString(), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + 2 * UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, UNIT_PREVIEW_POPUP_NAME));
     renderedTextEntities.push_back(genesis::rendering::RenderText("Party:", GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, UNIT_PREVIEW_POPUP_NAME));
-    renderedTextEntities.push_back(genesis::rendering::RenderText(std::to_string(unitStatsComponent.mParty.size()), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(PARTY_X_OFFSET, UNIT_DETAILS_Y_OFFSET + UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::RgbTripletToVec4( GetUnitPartyColor(unitStatsComponent)), true, UNIT_PREVIEW_POPUP_NAME));
+    renderedTextEntities.push_back(genesis::rendering::RenderText(std::to_string(GetUnitPartySize(unitStatsComponent)), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(PARTY_X_OFFSET, UNIT_DETAILS_Y_OFFSET + UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::RgbTripletToVec4( GetUnitPartyColor(unitStatsComponent)), true, UNIT_PREVIEW_POPUP_NAME));
     
     glm::vec2 minBotLeftCoords(1.0f, 1.0f);
     glm::vec2 maxTopRightCoords(-1.0f, -1.0f);

@@ -22,6 +22,8 @@
 #include "../../../engine/resources/ResourceLoadingService.h"
 #include "../../../engine/resources/MeshResource.h"
 
+#include <unordered_map>
+
 ///-----------------------------------------------------------------------------------------------
 
 namespace overworld
@@ -56,11 +58,9 @@ void OverworldBattleProcessingSystem::VUpdate(const float, const std::vector<gen
         
         const auto& attackingSideStatsComponent = world.GetComponent<UnitStatsComponent>(lastInteraction.mInstigatorEntityId);
         auto attackingSideParty = attackingSideStatsComponent.mParty;
-        attackingSideParty.push_back(attackingSideStatsComponent.mStats);
         
         const auto& defendingSideStatsComponent = world.GetComponent<UnitStatsComponent>(lastInteraction.mOtherEntityId);
         auto defendingSideParty = defendingSideStatsComponent.mParty;
-        defendingSideParty.push_back(defendingSideStatsComponent.mStats);
         
         battle::QueueBattle(lastInteraction.mInstigatorEntityId, lastInteraction.mOtherEntityId);
         
@@ -81,44 +81,66 @@ void OverworldBattleProcessingSystem::VUpdate(const float, const std::vector<gen
         
         battle::PrepareBattleCamera();
         
-        auto xCounter = 0.0f;
-        auto yCounter = 0.0f;
-        auto unitCounter = 0;
+        std::unordered_map<StringId, StringId, StringIdHasher> mUnitTypeSizeSeen;
+        auto targetUnitXDistance = 0.0f;
+        auto targetUnitYDistance = 0.0f;
         for (const auto& unitStats: attackingSideParty)
         {
-            auto unitEntity = CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("battle_unit"), unitStats.mSpeedMultiplier, glm::vec3(xCounter, yCounter, 0.0f));
+            if (mUnitTypeSizeSeen.count(unitStats.mUnitType))
+            {
+                continue;
+            }
             
-            const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(unitEntity);
-            const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(unitEntity);
+            auto testUnitEntity = CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("test_unit"));
+            
+            const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(testUnitEntity);
+            const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(testUnitEntity);
             const auto& meshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceIds.at(renderableComponent.mCurrentMeshResourceIndex));
             
-            xCounter += meshResource.GetDimensions().x * transformComponent.mScale.x;
+            if (meshResource.GetDimensions().x * transformComponent.mScale.x > targetUnitXDistance)
+            {
+                targetUnitXDistance = meshResource.GetDimensions().x * transformComponent.mScale.x;
+            }
+            if (meshResource.GetDimensions().y * transformComponent.mScale.y > targetUnitYDistance)
+            {
+                targetUnitYDistance = meshResource.GetDimensions().y * transformComponent.mScale.y;
+            }
+            
+            mUnitTypeSizeSeen[unitStats.mUnitType];
+            world.DestroyEntity(testUnitEntity);
+        }
+        
+        auto xCounter = 0.0f;
+        auto yCounter = 0.0f;
+        auto unitCounter = 1;
+        for (const auto& unitStats: attackingSideParty)
+        {
+            CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("battle_unit"), unitStats.mSpeedMultiplier, glm::vec3(xCounter, yCounter, 0.0f));
+            
+            xCounter += targetUnitXDistance;
             
             if (++unitCounter > 10)
             {
-                unitCounter = 0;
+                unitCounter = 1;
                 xCounter = 0;
-                yCounter -= meshResource.GetDimensions().y * transformComponent.mScale.y;
+                yCounter -= targetUnitYDistance;
             }
         }
         
         xCounter = 0.0f;
-        yCounter = 0.1f;
-        unitCounter = 0;
+        yCounter = 0.2f;
+        unitCounter = 1;
         for (const auto& unitStats: defendingSideParty)
         {
-            auto unitEntity = CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("battle_unit"), unitStats.mSpeedMultiplier, glm::vec3(xCounter, yCounter, 0.0f));
-            const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(unitEntity);
-            const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(unitEntity);
-            const auto& meshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceIds.at(renderableComponent.mCurrentMeshResourceIndex));
-            
-            xCounter += meshResource.GetDimensions().x * transformComponent.mScale.x;
+            CreateUnit(unitStats.mUnitType, unitStats.mUnitName, StringId("battle_unit"), unitStats.mSpeedMultiplier, glm::vec3(xCounter, yCounter, 0.0f), glm::vec3(0.0f, 0.0f, genesis::math::PI));
+
+            xCounter += targetUnitXDistance;
             
             if (++unitCounter > 10)
             {
-                unitCounter = 0;
+                unitCounter = 1;
                 xCounter = 0;
-                yCounter += meshResource.GetDimensions().y * transformComponent.mScale.y;
+                yCounter += targetUnitYDistance;
             }
         }
     }

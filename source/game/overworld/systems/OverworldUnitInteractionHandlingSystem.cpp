@@ -68,7 +68,7 @@ void OverworldUnitInteractionHandlingSystem::VUpdate(const float, const std::vec
             const auto unitModelName      = GetUnitModelName(unitStatsComponent.mStats.mUnitType);
             const auto unitHealth         = unitStatsComponent.mStats.mHealth;
             const auto unitHealthColor    = GetUnitHealthColor(unitStatsComponent);
-            const auto unitPartySize      = unitStatsComponent.mParty.size();
+            const auto unitPartySize      = GetUnitPartySize(unitStatsComponent);
             const auto unitPartySizeColor = GetUnitPartyColor(unitStatsComponent);
             const auto& unitScale         = unitTransformComponent.mScale;
             

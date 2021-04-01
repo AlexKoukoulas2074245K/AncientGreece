@@ -61,6 +61,7 @@ void LoadUnitBaseStats()
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitModelScaleFactor = unitBaseStats["model_scale_factor"].get<float>();
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mAttackAnimationDamageTrigger = unitBaseStats["attack_animation_damage_trigger"].get<float>();
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mBaseDamage = unitBaseStats["base_damage"].get<int>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mIsRangedUnit = unitBaseStats["is_ranged_unit"].get<bool>();
     }
     
     genesis::ecs::World::GetInstance().SetSingletonComponent<UnitBaseStatsSingletonComponent>(std::move(unitBaseStatsComponent));
@@ -84,6 +85,14 @@ StringId GetRandomAvailableUnitName()
 
 ///-----------------------------------------------------------------------------------------------
 
+size_t GetUnitPartySize(const UnitStatsComponent& unitStatsComponent)
+{
+    // Plus one to include leader
+    return unitStatsComponent.mParty.size();
+}
+
+///-----------------------------------------------------------------------------------------------
+
 StringId GetUnitModelName(const StringId unitTypeName)
 {
     return genesis::ecs::World::GetInstance().GetSingletonComponent<UnitBaseStatsSingletonComponent>().mUnitTypeNameToBaseStats.at(unitTypeName).mUnitModelName;
@@ -93,7 +102,8 @@ StringId GetUnitModelName(const StringId unitTypeName)
 
 genesis::colors::RgbTriplet<float> GetUnitPartyColor(const UnitStatsComponent& unitStatsComponent)
 {
-    const auto partyFillPercent = 180.0 * static_cast<float>(unitStatsComponent.mParty.size())/(genesis::math::Max(unitStatsComponent.mParty.size(), UPPER_LIMIT_PARTY));
+    const auto unitPartySize = GetUnitPartySize(unitStatsComponent);
+    const auto partyFillPercent = 180.0 * static_cast<float>(unitPartySize)/(genesis::math::Max(unitPartySize, UPPER_LIMIT_PARTY));
     
     genesis::colors::HsvTriplet<float> hsvTarget(180.0f - partyFillPercent, 0.8f, 0.5f);
     return genesis::colors::HsvToRgb(hsvTarget);

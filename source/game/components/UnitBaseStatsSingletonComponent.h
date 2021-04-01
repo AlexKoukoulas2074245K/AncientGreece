@@ -21,6 +21,7 @@ struct UnitBaseStats
     float mUnitModelScaleFactor = 1.0f;
     float mAttackAnimationDamageTrigger = 1.0f;
     int mBaseDamage = 0;
+    bool mIsRangedUnit = false;
 };
 
 ///-----------------------------------------------------------------------------------------------

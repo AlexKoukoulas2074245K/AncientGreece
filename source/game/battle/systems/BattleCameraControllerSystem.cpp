@@ -157,18 +157,18 @@ void BattleCameraControllerSystem::FreeCameraDebugOperation(const float dt) cons
     }
     if (genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY)== genesis::input::InputState::PRESSED)
     {
-        cameraComponent.mYaw += dt;
-        if (cameraComponent.mYaw >= 2 * genesis::math::PI)
+        cameraComponent.mRoll += dt;
+        if (cameraComponent.mRoll >= 2 * genesis::math::PI)
         {
-            cameraComponent.mYaw = cameraComponent.mYaw - 2 * genesis::math::PI;
+            cameraComponent.mRoll = cameraComponent.mRoll - 2 * genesis::math::PI;
         }
     }
     if (genesis::input::GetKeyState(genesis::input::Key::RIGHT_ARROW_KEY) == genesis::input::InputState::PRESSED)
     {
-        cameraComponent.mYaw -= dt;
-        if (cameraComponent.mYaw <= 0.0f)
+        cameraComponent.mRoll -= dt;
+        if (cameraComponent.mRoll <= 0.0f)
         {
-            cameraComponent.mYaw = 2 * genesis::math::PI + cameraComponent.mYaw;
+            cameraComponent.mRoll = 2 * genesis::math::PI + cameraComponent.mRoll;
         }
     }
     

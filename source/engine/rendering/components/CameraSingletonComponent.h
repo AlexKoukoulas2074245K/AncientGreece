@@ -38,6 +38,7 @@ namespace
     const float DEFAULT_CAMERA_Z_FAR         = 100.0f;
     const float DEFAULT_CAMERA_PITCH         = 0.0f;
     const float DEFAULT_CAMERA_YAW           = -1.5f * math::PI;
+    const float DEFAULT_CAMERA_ROLL          = 0.0f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -64,6 +65,7 @@ public:
     float mZFar                 = DEFAULT_CAMERA_Z_FAR;
     float mPitch                = DEFAULT_CAMERA_PITCH;
     float mYaw                  = DEFAULT_CAMERA_YAW;
+    float mRoll                 = DEFAULT_CAMERA_ROLL;
     CameraState mCameraState    = CameraState::AUTO_CENTERING;
 };
 

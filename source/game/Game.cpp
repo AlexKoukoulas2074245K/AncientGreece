@@ -126,20 +126,8 @@ void Game::VOnGameInit()
         { 2, StringId("Horse Archer") },
     };
     
-    auto playerEntity = CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"), 4.0f);
-    const auto partySize = genesis::math::RandomInt(0, 50);
-    auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
-    
-    for (auto j = 0; j < partySize; ++j)
-    {
-        const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
-        UnitStats us;
-        us.mHealth = 100;
-        us.mDamage = 0;
-        us.mSpeedMultiplier = 1.0f;
-        us.mUnitType = unitTypeRng;
-        unitStatsComponent.mParty.push_back(us);
-    }
+    CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"), 4.0f);
+   
     
     
     for (int i = 0; i < SPARTAN_COUNT; ++i)
