@@ -45,6 +45,7 @@ void OverworldBattleProcessingSystem::VUpdate(const float, const std::vector<gen
     {
         viewQueueComponent.mLastViewDestructionEvent = StringId();
         PrepareLiveBattle();
+        DestroyOverworldEntities();
         world.ChangeContext(BATTLE_CONTEXT);
     }
 }
@@ -60,8 +61,6 @@ void OverworldBattleProcessingSystem::PrepareLiveBattle() const
 
     battle::PrepareBattleCamera();
     battle::PopulateBattleEntities(attackingSideParty, defendingSideParty, lastUnitInteraction.mInstigatorEntityId, lastUnitInteraction.mOtherEntityId);
-    
-    DestroyOverworldEntities();
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -106,6 +106,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     const glm::vec3& initialRotation /* glm::vec3(0.0f, 0.0f, 0.0f) */,
     const glm::vec3& initialScale /* glm::vec3(1.0f, 1.0f, 1.0f) */,
     const StringId entityName /* StringId() */,
+    const float randomizationAnimationFactor /* false */,
     const bool isGui /* false */
 )
 {
@@ -120,6 +121,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     auto renderableComponent = std::make_unique<RenderableComponent>();
     renderableComponent->mRenderableType = isGui ? RenderableType::GUI_3D_MODEL : RenderableType::NORMAL_MODEL;
     renderableComponent->mShaderNameId = isGui ? GUI_ANIMATED_MODEL_3D_SHADER_NAME: DEFAULT_SKELETAL_MODEL_SHADER;
+    renderableComponent->mAnimationSpeed *= randomizationAnimationFactor;
     
     auto animFiles = GetAllFilenamesInDirectory(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/");
     for (const auto& fileName: animFiles)
@@ -137,7 +139,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     (
         resources::ResourceLoadingService::RES_TEXTURES_ROOT + modelName + ".png"
     );
-
+    
     world.AddComponent<RenderableComponent>(modelEntity, std::move(renderableComponent));
     world.AddComponent<TransformComponent>(modelEntity, std::move(transformComponent));
 
@@ -146,7 +148,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
         world.AddComponent<NameComponent>(modelEntity, std::make_unique<NameComponent>(entityName));
     }
     
-    animation::SetAnimation(modelEntity, IDLE_ANIMATION_NAME, true);
+    animation::ChangeAnimation(modelEntity, IDLE_ANIMATION_NAME);
     
     return modelEntity;
 }

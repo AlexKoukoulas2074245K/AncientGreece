@@ -21,20 +21,6 @@ namespace animation
 
 ///------------------------------------------------------------------------------------------------
 
-void SetAnimation(const ecs::EntityId entityId, const StringId animationName, const bool randomizeStartTime /* false */)
-{
-    auto& world = ecs::World::GetInstance();
-    auto& renderableComponent = world.GetComponent<rendering::RenderableComponent>(entityId);
-    
-    if (renderableComponent.mCurrentMeshResourceIndex != renderableComponent.mAnimNameToMeshIndex.at(animationName))
-    {
-        renderableComponent.mCurrentMeshResourceIndex = renderableComponent.mAnimNameToMeshIndex.at(animationName);
-        renderableComponent.mAnimationTimeAccum = randomizeStartTime ? genesis::math::RandomFloat() : 0.0f;
-    }
-}
-
-///------------------------------------------------------------------------------------------------
-
 void ChangeAnimation(const ecs::EntityId entityId, const StringId animationName)
 {
     auto& world = ecs::World::GetInstance();

@@ -8,6 +8,8 @@
 #include "Game.h"
 #include "GameContexts.h"
 #include "battle/systems/BattleCameraControllerSystem.h"
+#include "battle/systems/BattleMovementControllerSystem.h"
+#include "battle/systems/BattleTargetAcquisitionSystem.h"
 #include "components/CollidableComponent.h"
 #include "components/UnitStatsComponent.h"
 #include "overworld/components/HighlightableComponent.h"
@@ -86,6 +88,8 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<view::ViewManagementSystem>());
     
     world.AddSystem(std::make_unique<battle::BattleCameraControllerSystem>(), BATTLE_CONTEXT);
+    world.AddSystem(std::make_unique<battle::BattleTargetAcquisitionSystem>(), BATTLE_CONTEXT);
+    world.AddSystem(std::make_unique<battle::BattleMovementControllerSystem>(), BATTLE_CONTEXT);
     
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), MAP_CONTEXT);

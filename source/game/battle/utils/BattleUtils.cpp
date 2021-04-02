@@ -8,6 +8,7 @@
 #include "BattleUtils.h"
 #include "../components/BattleSideComponent.h"
 #include "../components/BattleQueueSingletonComponent.h"
+#include "../../components/CollidableComponent.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitFactoryUtils.h"
 #include "../../utils/UnitInfoUtils.h"
@@ -43,6 +44,7 @@ namespace
     static const float BATTLE_CAMERA_PITCH            = 0.946990f;
     static const float BATTLE_CAMERA_YAW              = 1.6067f;
     static const float BATTLE_CAMERA_ROLL             = 0.6024f;
+    static const float MELEE_COLLISION_UPSCALE_FACTOR = 1.2f;
 
     static const int MAX_UNITS_PER_ROW = 10;
 }
@@ -91,6 +93,21 @@ void PrepareBattleCamera()
     cameraComponent.mYaw        = BATTLE_CAMERA_YAW;
     cameraComponent.mPitch      = BATTLE_CAMERA_PITCH;
     cameraComponent.mRoll       = BATTLE_CAMERA_ROLL;
+}
+
+///-----------------------------------------------------------------------------------------------
+
+bool AreUnitsInMeleeDistance(const genesis::ecs::EntityId unitEntityA, const genesis::ecs::EntityId unitEntityB)
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    
+    const auto& unitATransformComponent = world.GetComponent<genesis::TransformComponent>(unitEntityA);
+    const auto& unitBTransformComponent = world.GetComponent<genesis::TransformComponent>(unitEntityB);
+    
+    const auto& unitACollidableComponent = world.GetComponent<CollidableComponent>(unitEntityA);
+    const auto& unitBCollidableComponent = world.GetComponent<CollidableComponent>(unitEntityB);
+    
+    return genesis::math::SphereToSphereIntersection(unitATransformComponent.mPosition, unitACollidableComponent.mCollidableDimensions.x * MELEE_COLLISION_UPSCALE_FACTOR, unitBTransformComponent.mPosition, unitBCollidableComponent.mCollidableDimensions.x * MELEE_COLLISION_UPSCALE_FACTOR);
 }
 
 ///-----------------------------------------------------------------------------------------------

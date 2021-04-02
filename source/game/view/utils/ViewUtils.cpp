@@ -544,7 +544,7 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         
         auto modelName = std::string(ReplaceTextVariables(node->first_attribute(ANIMATED_MODEL_NAME_ATTRIBUTE_NAME)->value()));
         
-        viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateAnimatedModelByName(modelName, modelPosition, modelRotation, modelScale, StringId(), true));
+        viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateAnimatedModelByName(modelName, modelPosition, modelRotation, modelScale, StringId(), 1.0f, true));
     }
 }
 

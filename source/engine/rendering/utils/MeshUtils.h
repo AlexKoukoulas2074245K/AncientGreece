@@ -54,6 +54,7 @@ ecs::EntityId LoadAndCreateStaticModelByName
 /// @param[in] initialRotation (optional) an initial rotation for the loaded model.
 /// @param[in] initialScale (optional) an initial scale for the loaded model.
 /// @param[in] entityName (optional) a string to name the entity with.
+/// @param[in] randomizationAnimationFactor (optional) a factor to provide randomness to animation times.
 /// @param[in] isGui (optional) specifies whether this model is a gui element.
 /// @returns the entity id of the loaded entity.
 ecs::EntityId LoadAndCreateAnimatedModelByName
@@ -63,6 +64,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     const glm::vec3& initialRotation = glm::vec3(0.0f, 0.0f, 0.0f),
     const glm::vec3& initialScale = glm::vec3(1.0f, 1.0f, 1.0f),
     const StringId entityName = StringId(),
+    const float randomizationAnimationFactor = 1.0f,
     const bool isGui = false
 );
 

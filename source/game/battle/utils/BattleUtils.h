@@ -29,6 +29,10 @@ void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, co
 
 ///------------------------------------------------------------------------------------------------
 
+bool AreUnitsInMeleeDistance(const genesis::ecs::EntityId unitEntityA, const genesis::ecs::EntityId unitEntityB);
+
+///------------------------------------------------------------------------------------------------
+
 void PrepareBattleCamera();
 
 ///------------------------------------------------------------------------------------------------

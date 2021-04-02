@@ -15,12 +15,20 @@
 
 ///------------------------------------------------------------------------------------------------
 
+namespace
+{
+    static const float ANIM_SPEED_RANDOM_MIN = 0.9f;
+    static const float ANIM_SPEED_RANDOM_MAX = 1.1f;
+}
+
+///------------------------------------------------------------------------------------------------
+
 genesis::ecs::EntityId CreateUnit(const StringId unitTypeName, const StringId unitName /* StringId() */, const StringId entityName /* StringId() */, const glm::vec3& position /* glm::vec3() */, const glm::vec3& rotation /* glm::vec3() */, const glm::vec3 scale /* glm::vec3() */)
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto& unitBaseStats = GetUnitBaseStats(unitTypeName);
     
-    auto entity = genesis::rendering::LoadAndCreateAnimatedModelByName(unitBaseStats.mUnitModelName.GetString(), position, rotation, scale * unitBaseStats.mUnitModelScaleFactor, entityName);
+    auto entity = genesis::rendering::LoadAndCreateAnimatedModelByName(unitBaseStats.mUnitModelName.GetString(), position, rotation, scale * unitBaseStats.mUnitModelScaleFactor, entityName, genesis::math::RandomFloat(ANIM_SPEED_RANDOM_MIN, ANIM_SPEED_RANDOM_MAX));
     
     auto unitStatsComponent = std::make_unique<UnitStatsComponent>();
     unitStatsComponent->mStats = unitBaseStats;
