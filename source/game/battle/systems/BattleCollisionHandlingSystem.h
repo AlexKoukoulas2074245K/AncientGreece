@@ -1,16 +1,19 @@
 ///------------------------------------------------------------------------------------------------
-///  BattleTargetAcquisitionSystem.h
+///  BattleCollisionHandlingSystem.h
 ///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 02/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef BattleTargetAcquisitionSystem_h
-#define BattleTargetAcquisitionSystem_h
+#ifndef BattleCollisionHandlingSystem_h
+#define BattleCollisionHandlingSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+#include "../../engine/common/utils/MathUtils.h"
+
+#include <tsl/robin_map.h>
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -21,25 +24,24 @@ namespace genesis
 
 ///-----------------------------------------------------------------------------------------------
 
+class CollidableComponent;
+
+///-----------------------------------------------------------------------------------------------
+
 namespace battle
 {
 
 ///-----------------------------------------------------------------------------------------------
-
-class BattleSideComponent;
-
-///-----------------------------------------------------------------------------------------------
-class BattleTargetAcquisitionSystem final : public genesis::ecs::BaseSystem<BattleSideComponent>
+class BattleCollisionHandlingSystem final : public genesis::ecs::BaseSystem<genesis::TransformComponent, CollidableComponent>
 {
 public:
-    BattleTargetAcquisitionSystem();
+    BattleCollisionHandlingSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
 
 private:
-    void ValidateCurrentTargetComponent(const genesis::ecs::EntityId entityId) const;
-    void PickOptimalTargetForEntity(const genesis::ecs::EntityId entityId, const std::vector<genesis::ecs::EntityId> entities) const;
-    genesis::ecs::EntityId FindClosestTargetUnit(const StringId currentEntityBattleLeader, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const;
+    void BuildCollisionDisplacementMap(const std::vector<genesis::ecs::EntityId>& entitiesToProcess, tsl::robin_map<genesis::ecs::EntityId, glm::vec3>& collisionDisplacementMap) const;
+    void ApplyCollisionDisplacements(const float dt, const tsl::robin_map<genesis::ecs::EntityId, glm::vec3>& collisionDisplacementMap) const;
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -48,4 +50,4 @@ private:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* BattleTargetAcquisitionSystem_h */
+#endif /* BattleCollisionHandlingSystem_h */

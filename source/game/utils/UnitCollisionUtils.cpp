@@ -54,3 +54,19 @@ bool AreEntitiesColliding(const genesis::ecs::EntityId entityA, const genesis::e
 }
 
 ///-----------------------------------------------------------------------------------------------
+
+bool AreEntitiesColliding(const genesis::ecs::EntityId entityA, const genesis::ecs::EntityId entityB, float& penetration)
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    
+    const auto& entityATransformComponent = world.GetComponent<genesis::TransformComponent>(entityA);
+    const auto& entityBTransformComponent = world.GetComponent<genesis::TransformComponent>(entityB);
+    
+    const auto& entityACollidableComponent = world.GetComponent<CollidableComponent>(entityA);
+    const auto& entityBCollidableComponent = world.GetComponent<CollidableComponent>(entityB);
+    
+    return genesis::math::SphereToSphereIntersection(entityATransformComponent.mPosition, entityACollidableComponent.mCollidableDimensions.x, entityBTransformComponent.mPosition, entityBCollidableComponent.mCollidableDimensions.x, penetration);
+}
+
+///-----------------------------------------------------------------------------------------------
+

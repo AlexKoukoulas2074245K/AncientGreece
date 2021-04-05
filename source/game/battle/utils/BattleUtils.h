@@ -33,6 +33,10 @@ bool AreUnitsInMeleeDistance(const genesis::ecs::EntityId unitEntityA, const gen
 
 ///------------------------------------------------------------------------------------------------
 
+bool AreUnitsInDoubleMeleeDistance(const genesis::ecs::EntityId unitEntityA, const genesis::ecs::EntityId unitEntityB);
+
+///------------------------------------------------------------------------------------------------
+
 void PrepareBattleCamera();
 
 ///------------------------------------------------------------------------------------------------

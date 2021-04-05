@@ -23,4 +23,8 @@ bool AreEntitiesColliding(const genesis::ecs::EntityId entityA, const genesis::e
 
 ///------------------------------------------------------------------------------------------------
 
+bool AreEntitiesColliding(const genesis::ecs::EntityId entityA, const genesis::ecs::EntityId entityB, float& penetration);
+
+///------------------------------------------------------------------------------------------------
+
 #endif /* UnitCollisionUtils_h */

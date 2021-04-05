@@ -21,6 +21,24 @@ namespace animation
 
 ///------------------------------------------------------------------------------------------------
 
+StringId GetCurrentAnimationName(const ecs::EntityId entityId)
+{
+    const auto& world = ecs::World::GetInstance();
+    const auto& renderableComponent = world.GetComponent<rendering::RenderableComponent>(entityId);
+    for (const auto& animNameToMeshIndexPair: renderableComponent.mAnimNameToMeshIndex)
+    {
+        if (animNameToMeshIndexPair.second == renderableComponent.mCurrentMeshResourceIndex)
+        {
+            return animNameToMeshIndexPair.first;
+        }
+    }
+    
+    assert(false && "No anim is playing");
+    return StringId();
+}
+
+///------------------------------------------------------------------------------------------------
+
 void ChangeAnimation(const ecs::EntityId entityId, const StringId animationName)
 {
     auto& world = ecs::World::GetInstance();

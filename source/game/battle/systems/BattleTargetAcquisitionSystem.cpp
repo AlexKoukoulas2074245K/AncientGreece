@@ -29,7 +29,7 @@ void BattleTargetAcquisitionSystem::VUpdate(const float, const std::vector<genes
     for (const auto& entityId: entitiesToProcess)
     {
         ValidateCurrentTargetComponent(entityId);
-        PickNewTargetForEntity(entityId, entitiesToProcess);
+        PickOptimalTargetForEntity(entityId, entitiesToProcess);
     }
 }
 
@@ -40,7 +40,7 @@ void BattleTargetAcquisitionSystem::ValidateCurrentTargetComponent(const genesis
     auto& world = genesis::ecs::World::GetInstance();
     if (world.HasComponent<BattleTargetComponent>(entityId))
     {
-        const auto& battleTargetComponent = world.GetComponent<BattleTargetComponent>(entityId);
+        auto& battleTargetComponent = world.GetComponent<BattleTargetComponent>(entityId);
         
         // If current unit has a target and target is still alive continue
         if (!world.HasEntity(battleTargetComponent.mTargetEntity))
@@ -53,40 +53,59 @@ void BattleTargetAcquisitionSystem::ValidateCurrentTargetComponent(const genesis
 
 ///-----------------------------------------------------------------------------------------------
 
-void BattleTargetAcquisitionSystem::PickNewTargetForEntity(const genesis::ecs::EntityId entityId, const std::vector<genesis::ecs::EntityId> entities) const
+void BattleTargetAcquisitionSystem::PickOptimalTargetForEntity(const genesis::ecs::EntityId entityId, const std::vector<genesis::ecs::EntityId> entities) const
 {
     auto& world = genesis::ecs::World::GetInstance();
+    const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
+    const auto& battleSideComponent = world.GetComponent<BattleSideComponent>(entityId);
+    
+    const auto targetUnitEntity = FindClosestTargetUnit(battleSideComponent.mBattleSideLeaderName, transformComponent, entities);
+    
     if (!world.HasComponent<BattleTargetComponent>(entityId))
     {
-        const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
-        const auto& battleSideComponent = world.GetComponent<BattleSideComponent>(entityId);
         auto battleTargetComponent = std::make_unique<BattleTargetComponent>();
-        
-        // Find closest enemy target
-        float minDistanceFound = 100.0f;
-        for (const auto& otherEntityId: entities)
-        {
-            const auto& otherBattleSideComponent = world.GetComponent<BattleSideComponent>(otherEntityId);
-            
-            // Don't process units in the same army
-            if (battleSideComponent.mBattleSideLeaderName == otherBattleSideComponent.mBattleSideLeaderName)
-            {
-                continue;
-            }
-            
-            const auto& otherTransformComponent = world.GetComponent<genesis::TransformComponent>(otherEntityId);
-            
-            // Compare square distances with current target
-            const auto dist2 = genesis::math::Distance2(transformComponent.mPosition, otherTransformComponent.mPosition);
-            if (dist2 < minDistanceFound)
-            {
-                minDistanceFound = dist2;
-                battleTargetComponent->mTargetEntity = otherEntityId;
-            }
-        }
-        
+        battleTargetComponent->mTargetEntity = targetUnitEntity;
+        assert(battleTargetComponent->mTargetEntity != genesis::ecs::NULL_ENTITY_ID && "Can't find target for unit");
         world.AddComponent<BattleTargetComponent>(entityId, std::move(battleTargetComponent));
     }
+    else
+    {
+        auto& battleTargetComponent = world.GetComponent<BattleTargetComponent>(entityId);
+        battleTargetComponent.mTargetEntity = targetUnitEntity;
+        assert(battleTargetComponent.mTargetEntity != genesis::ecs::NULL_ENTITY_ID && "Can't find target for unit");
+    }
+}
+
+///-----------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId BattleTargetAcquisitionSystem::FindClosestTargetUnit(const StringId currentEntityBattleLeader, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    auto closestTargetUnitEntity = genesis::ecs::NULL_ENTITY_ID;
+    auto minDistanceFound = 100.0f;
+    
+    for (const auto& otherEntityId: entities)
+    {
+        const auto& otherBattleSideComponent = world.GetComponent<BattleSideComponent>(otherEntityId);
+        
+        // Don't process units in the same army
+        if (currentEntityBattleLeader == otherBattleSideComponent.mBattleSideLeaderName)
+        {
+            continue;
+        }
+        
+        const auto& otherTransformComponent = world.GetComponent<genesis::TransformComponent>(otherEntityId);
+        
+        // Compare square distances with current target
+        const auto dist2 = genesis::math::Distance2(currentEntityTransformComponent.mPosition, otherTransformComponent.mPosition);
+        if (dist2 < minDistanceFound)
+        {
+            minDistanceFound = dist2;
+            closestTargetUnitEntity = otherEntityId;
+        }
+    }
+    
+    return closestTargetUnitEntity;
 }
 
 ///-----------------------------------------------------------------------------------------------

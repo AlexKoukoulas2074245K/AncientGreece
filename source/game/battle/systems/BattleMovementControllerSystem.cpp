@@ -25,7 +25,7 @@ namespace battle
 namespace
 {
     static const float ROTATION_SPEED  = 5.0f;
-    static const float BASE_UNIT_SPEED = 0.004f;
+    static const float BASE_UNIT_SPEED = 0.01f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -43,15 +43,20 @@ void BattleMovementControllerSystem::VUpdate(const float dt, const std::vector<g
     
     for (const auto entityId: entitiesToProcess)
     {
+        
         const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
-        auto& battleTargetComponent = world.GetComponent<BattleTargetComponent>(entityId);
+        const auto& battleTargetComponent = world.GetComponent<BattleTargetComponent>(entityId);
         auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
+
         const auto& targetTransformComponent = world.GetComponent<genesis::TransformComponent>(battleTargetComponent.mTargetEntity);
         
         const auto& vecToTarget = targetTransformComponent.mPosition - transformComponent.mPosition;
+        const auto distanceToTarget = glm::length(vecToTarget);
         
-        // If we have arrived at target position
-        if (AreUnitsInMeleeDistance(entityId, battleTargetComponent.mTargetEntity))
+        UpdateRotation(dt, -genesis::math::Arctan2(vecToTarget.x, vecToTarget.y), transformComponent.mRotation);
+        
+        // If we have arrived at target position, or current unit is range and is close enough to attack
+        if (AreUnitsInMeleeDistance(entityId, battleTargetComponent.mTargetEntity) || (unitStatsComponent.mStats.mIsRangedUnit && unitStatsComponent.mStats.mAttackRange >= distanceToTarget))
         {
             // Start Attack animation
             genesis::animation::ChangeAnimation(entityId, StringId("attacking"));
@@ -61,10 +66,12 @@ void BattleMovementControllerSystem::VUpdate(const float dt, const std::vector<g
         {
             const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mStats.mSpeedMultiplier;
             UpdatePosition(dt, unitSpeed, targetTransformComponent.mPosition, transformComponent.mPosition);
-            UpdateRotation(dt, -genesis::math::Arctan2(vecToTarget.x, vecToTarget.y), transformComponent.mRotation);
             
             // Start walking animation
-            genesis::animation::ChangeAnimation(entityId, StringId("walking"));
+            if (!AreUnitsInDoubleMeleeDistance(entityId, battleTargetComponent.mTargetEntity))
+            {
+                genesis::animation::ChangeAnimation(entityId, StringId("walking"));
+            }
         }
     }
 }

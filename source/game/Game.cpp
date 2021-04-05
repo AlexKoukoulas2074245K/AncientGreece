@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "GameContexts.h"
 #include "battle/systems/BattleCameraControllerSystem.h"
+#include "battle/systems/BattleCollisionHandlingSystem.h"
 #include "battle/systems/BattleMovementControllerSystem.h"
 #include "battle/systems/BattleTargetAcquisitionSystem.h"
 #include "components/CollidableComponent.h"
@@ -90,6 +91,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<battle::BattleCameraControllerSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleTargetAcquisitionSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleMovementControllerSystem>(), BATTLE_CONTEXT);
+    world.AddSystem(std::make_unique<battle::BattleCollisionHandlingSystem>(), BATTLE_CONTEXT);
     
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), MAP_CONTEXT);
@@ -130,10 +132,10 @@ void Game::VOnGameInit()
         { 2, StringId("Horse Archer") },
     };
     
-    auto playerEntity = CreateUnit(StringId("Spearman"), GetRandomAvailableUnitName(), StringId("player"));
-    const auto partySize = genesis::math::RandomInt(0, 50);
+    auto playerEntity = CreateUnit(StringId("Horse Archer"), GetRandomAvailableUnitName(), StringId("player"));
+    const auto partySize = genesis::math::RandomInt(0, 100);
     auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
-   
+
     for (auto j = 0; j < partySize; ++j)
     {
         const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
@@ -149,7 +151,7 @@ void Game::VOnGameInit()
         
         auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, position);
         
-        const auto partySize = genesis::math::RandomInt(0, 50);
+        const auto partySize = genesis::math::RandomInt(0, 200);
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
         
         for (auto j = 0; j < partySize; ++j)
@@ -186,6 +188,13 @@ void Game::VOnUpdate(float& dt)
 //            view::QueueView("unit_interaction", StringId("unit_interaction"));
 //        }
 //    }
+    if (world.GetContext() == BATTLE_CONTEXT && genesis::input::GetKeyState(genesis::input::Key::F_KEY) == genesis::input::InputState::TAPPED)
+    {
+        auto ents = world.FindAllEntitiesWithName(StringId("battle_unit"));
+        auto randomIndex = genesis::math::RandomInt(0, ents.size() - 1);
+        world.DestroyEntity(ents[randomIndex]);
+    }
+    
     if (world.FindEntityWithName(StringId("unit_interaction")) != genesis::ecs::NULL_ENTITY_ID)
     {
         if (genesis::input::GetKeyState(genesis::input::Key::LEFT_ARROW_KEY) == genesis::input::InputState::TAPPED)

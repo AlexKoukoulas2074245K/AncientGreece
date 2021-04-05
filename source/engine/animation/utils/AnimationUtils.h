@@ -24,6 +24,12 @@ namespace animation
 {
 
 ///------------------------------------------------------------------------------------------------
+/// Gets the name of the current animation playing
+///
+/// @param[in] entityId the entity hodling the animated model.
+StringId GetCurrentAnimationName(const ecs::EntityId entityId);
+
+///------------------------------------------------------------------------------------------------
 /// Changes the current playing animation of an animated model IF ITS NOT CURRENTLY PLAYING already
 ///
 /// @param[in] entityId the entity hodling the animated model.

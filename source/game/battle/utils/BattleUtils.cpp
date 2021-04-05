@@ -33,7 +33,7 @@ namespace battle
 namespace
 {
     static const StringId BATTLE_GROUND_ENTITY_NAME = StringId("battle_grass");
-    static const StringId BATTLE_UNITENTITY_NAME    = StringId("battle_unit");
+    static const StringId BATTLE_UNIT_ENTITY_NAME   = StringId("battle_unit");
 
     static const std::string BATTLE_GROUND_MODEL_NAME = "battle_grass";
     
@@ -112,6 +112,21 @@ bool AreUnitsInMeleeDistance(const genesis::ecs::EntityId unitEntityA, const gen
 
 ///-----------------------------------------------------------------------------------------------
 
+bool AreUnitsInDoubleMeleeDistance(const genesis::ecs::EntityId unitEntityA, const genesis::ecs::EntityId unitEntityB)
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    
+    const auto& unitATransformComponent = world.GetComponent<genesis::TransformComponent>(unitEntityA);
+    const auto& unitBTransformComponent = world.GetComponent<genesis::TransformComponent>(unitEntityB);
+    
+    const auto& unitACollidableComponent = world.GetComponent<CollidableComponent>(unitEntityA);
+    const auto& unitBCollidableComponent = world.GetComponent<CollidableComponent>(unitEntityB);
+    
+    return genesis::math::SphereToSphereIntersection(unitATransformComponent.mPosition, unitACollidableComponent.mCollidableDimensions.x * MELEE_COLLISION_UPSCALE_FACTOR * 2.0f, unitBTransformComponent.mPosition, unitBCollidableComponent.mCollidableDimensions.x * MELEE_COLLISION_UPSCALE_FACTOR * 2.0f);
+}
+
+///-----------------------------------------------------------------------------------------------
+
 void CreateBattleGround()
 {
     genesis::rendering::LoadAndCreateStaticModelByName(BATTLE_GROUND_MODEL_NAME, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), BATTLE_GROUND_ENTITY_NAME);
@@ -175,7 +190,7 @@ void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const floa
     auto unitCounter = 1;
     for (const auto& unitStats: sideParty)
     {
-        auto unitEntityId = CreateUnit(unitStats.mUnitType, unitStats.mUnitName, BATTLE_UNITENTITY_NAME, glm::vec3(xCounter, yCounter, 0.0f), glm::vec3(0.0f, 0.0f, (isAttackingSide ? 0.0f : genesis::math::PI)));
+        auto unitEntityId = CreateUnit(unitStats.mUnitType, unitStats.mUnitName, BATTLE_UNIT_ENTITY_NAME, glm::vec3(xCounter, yCounter, 0.0f), glm::vec3(0.0f, 0.0f, (isAttackingSide ? 0.0f : genesis::math::PI)));
         
         auto battleSideComponent = std::make_unique<BattleSideComponent>();
         battleSideComponent->mBattleSideLeaderName = leaderEntityName;

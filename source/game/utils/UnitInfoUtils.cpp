@@ -65,6 +65,12 @@ void LoadUnitBaseStats()
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mSpeedMultiplier = unitBaseStats["base_speed_multiplier"].get<int>();
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mIsRangedUnit =
         unitBaseStats["is_ranged_unit"].get<bool>();
+        
+        if (unitBaseStats.count("attack_range"))
+        {
+            unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mAttackRange = unitBaseStats["attack_range"].get<float>();
+        }
+        
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitType = unitTypeName;
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mUnitName = unitTypeName;
     }
