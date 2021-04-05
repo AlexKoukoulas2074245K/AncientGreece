@@ -141,7 +141,7 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
             (
                 transformComponent.mPosition,
                 transformComponent.mScale,
-                currentMesh.GetDimensions(),
+                (currentMesh.HasSkeleton() ? currentMesh.GetDimensions() * 2.0f : currentMesh.GetDimensions()),
                 cameraComponent.mFrustum
             ))
             {

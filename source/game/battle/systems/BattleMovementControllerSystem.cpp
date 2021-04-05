@@ -68,7 +68,7 @@ void BattleMovementControllerSystem::VUpdate(const float dt, const std::vector<g
             UpdatePosition(dt, unitSpeed, targetTransformComponent.mPosition, transformComponent.mPosition);
             
             // Start walking animation
-            if (!AreUnitsInDoubleMeleeDistance(entityId, battleTargetComponent.mTargetEntity))
+            if (!AreUnitsInDoubleMeleeDistance(entityId, battleTargetComponent.mTargetEntity) && (!unitStatsComponent.mStats.mIsRangedUnit || genesis::animation::GetCurrentAnimationName(entityId) != StringId("attacking")))
             {
                 genesis::animation::ChangeAnimation(entityId, StringId("walking"));
             }
