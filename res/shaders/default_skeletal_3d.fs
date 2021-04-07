@@ -3,6 +3,7 @@
 uniform sampler2D tex;
 uniform bool flip_tex_hor;
 uniform bool flip_tex_ver;
+uniform bool damaged_effect;
 uniform vec4 material_ambient;
 uniform vec4 material_diffuse;
 uniform vec4 material_specular;
@@ -64,6 +65,11 @@ void main()
 	}
 
 	frag_color = tex_color;
+
+	if (damaged_effect)
+	{
+		frag_color = 0.5f * (frag_color + vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	}
 
 	if (is_affected_by_light == 1)
 	{

@@ -6,7 +6,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "BattleDestructionTimerProcessingSystem.h"
-#include "../components/DestructionTimerComponent.h"
+#include "../components/BattleDestructionTimerComponent.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ void BattleDestructionTimerProcessingSystem::VUpdate(const float dt, const std::
     auto& world = genesis::ecs::World::GetInstance();
     for (const auto& entityId: entitiesToProcess)
     {
-        auto& destructionTimerComponent = world.GetComponent<DestructionTimerComponent>(entityId);
+        auto& destructionTimerComponent = world.GetComponent<BattleDestructionTimerComponent>(entityId);
         destructionTimerComponent.mDestructionTimer -= dt;
         if (destructionTimerComponent.mDestructionTimer <= 0.0f)
         {

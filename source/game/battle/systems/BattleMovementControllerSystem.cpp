@@ -6,9 +6,9 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "BattleMovementControllerSystem.h"
+#include "../components/BattleDestructionTimerComponent.h"
 #include "../components/BattleProjectileComponent.h"
 #include "../components/BattleTargetComponent.h"
-#include "../components/DestructionTimerComponent.h"
 #include "../utils/BattleUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
@@ -100,16 +100,19 @@ void BattleMovementControllerSystem::UpdateProjectile(const float dt, const gene
                 projectileComponent.mState = ProjectileState::ATTACHED_TO_TARGET;
                 projectileComponent.mTargetAttachmentDelta = targetPoint - transformComponent.mPosition;
                 
-                auto destructionTimerComponent = std::make_unique<DestructionTimerComponent>();
+                // Create self destruct component on projectile
+                auto destructionTimerComponent = std::make_unique<BattleDestructionTimerComponent>();
                 destructionTimerComponent->mDestructionTimer = PROJECTILE_TTL_ON_ATTACHMENT;
-                world.AddComponent<DestructionTimerComponent>(entityId, std::move(destructionTimerComponent));
+                world.AddComponent<BattleDestructionTimerComponent>(entityId, std::move(destructionTimerComponent));
+                
+                DamageUnit(battleTargetComponent.mTargetEntity, projectileComponent.mDamage);
             }
-        }break;
+        } break;
             
         case ProjectileState::ATTACHED_TO_TARGET:
         {
             transformComponent.mPosition = targetPoint - projectileComponent.mTargetAttachmentDelta;
-        }break;
+        } break;
     }
 }
 

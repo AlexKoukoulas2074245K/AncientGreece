@@ -403,6 +403,12 @@ void RenderingSystem::RenderStringInternal
             currentShader->SetInt(intUniformEntry.first, intUniformEntry.second);
         }
         
+        // Set other bool uniforms
+        for (const auto& boolUniformEntry : renderableComponent.mShaderUniforms.mShaderBoolUniforms)
+        {
+            currentShader->SetBool(boolUniformEntry.first, boolUniformEntry.second);
+        }
+        
         // Perform draw call
         GL_CHECK(glDrawElements(GL_TRIANGLES, currentMesh->GetIndexCountPerMesh()[0], GL_UNSIGNED_SHORT, (void*)0));
     }
@@ -536,6 +542,12 @@ void RenderingSystem::RenderEntityInternal
     for (const auto& intUniformEntry : renderableComponent.mShaderUniforms.mShaderIntUniforms)
     {
         currentShader->SetInt(intUniformEntry.first, intUniformEntry.second);
+    }
+    
+    // Set other bool uniforms
+    for (const auto& boolUniformEntry : renderableComponent.mShaderUniforms.mShaderBoolUniforms)
+    {
+        currentShader->SetBool(boolUniformEntry.first, boolUniformEntry.second);
     }
     
     // Update current mesh if necessary

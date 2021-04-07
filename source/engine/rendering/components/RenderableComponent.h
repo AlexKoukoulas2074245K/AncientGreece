@@ -43,6 +43,7 @@ struct ShaderUniforms final
     tsl::robin_map<StringId, glm::vec3, StringIdHasher> mShaderFloatVec3Uniforms;
     tsl::robin_map<StringId, float, StringIdHasher> mShaderFloatUniforms;
     tsl::robin_map<StringId, int, StringIdHasher> mShaderIntUniforms;
+    tsl::robin_map<StringId, bool, StringIdHasher> mShaderBoolUniforms;
 };
 
 ///-----------------------------------------------------------------------------------------------

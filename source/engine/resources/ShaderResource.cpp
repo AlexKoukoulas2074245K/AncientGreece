@@ -178,6 +178,18 @@ bool ShaderResource::SetInt(const StringId& uniformName, const int value) const
 
 ///------------------------------------------------------------------------------------------------
 
+bool ShaderResource::SetBool(const StringId& uniformName, const bool value) const
+{
+    if (mShaderUniformNamesToLocations.count(uniformName) > 0)
+    {
+        GL_CHECK(glUniform1i(mShaderUniformNamesToLocations.at(uniformName), value ? 1 : 0));
+        return true;
+    }
+    return false;
+}
+
+///------------------------------------------------------------------------------------------------
+
 GLuint ShaderResource::GetProgramId() const
 {
     return mProgramId;

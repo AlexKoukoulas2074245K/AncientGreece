@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  BattleDestructionTimerProcessingSystem.h
+///  BattleDestructionTimerComponent.h
 ///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 06/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef BattleDestructionTimerProcessingSystem_h
-#define BattleDestructionTimerProcessingSystem_h
+#ifndef BattleDestructionTimerComponent_h
+#define BattleDestructionTimerComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -19,21 +19,16 @@ namespace battle
 
 ///-----------------------------------------------------------------------------------------------
 
-class BattleDestructionTimerComponent;
-
-///-----------------------------------------------------------------------------------------------
-class BattleDestructionTimerProcessingSystem final : public genesis::ecs::BaseSystem<BattleDestructionTimerComponent>
+class BattleDestructionTimerComponent final: public genesis::ecs::IComponent
 {
 public:
-    BattleDestructionTimerProcessingSystem();
-
-    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+    float mDestructionTimer;
 };
 
 ///-----------------------------------------------------------------------------------------------
-
+    
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* BattleDestructionTimerProcessingSystem_h */
+#endif /* BattleDestructionTimerComponent_h */

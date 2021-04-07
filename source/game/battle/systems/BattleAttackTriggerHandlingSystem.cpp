@@ -30,6 +30,7 @@ namespace battle
 
 namespace
 {
+    static const StringId DAMAGED_EFFECT_UNIFORM_NAME = StringId("damaged_effect");
     static const std::string PROJECTILE_MODEL_NAME = "arrow";
     static const glm::vec3 PROJECTILE_SCALE = glm::vec3(0.002f, 0.002f, 0.002f);
 }
@@ -48,12 +49,14 @@ void BattleAttackTriggerHandlingSystem::VUpdate(const float dt, const std::vecto
     auto& world = genesis::ecs::World::GetInstance();
     for (const auto& entityId: entitiesToProcess)
     {
+        auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
+        renderableComponent.mShaderUniforms.mShaderBoolUniforms[DAMAGED_EFFECT_UNIFORM_NAME] = false;
+        
         if (genesis::animation::GetCurrentAnimationName(entityId) != StringId("attacking"))
         {
             continue;
         }
         
-        const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
         const auto& currentMesh = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
         const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
         
@@ -137,9 +140,13 @@ void BattleAttackTriggerHandlingSystem::CreateProjectile(const genesis::ecs::Ent
 
 ///-----------------------------------------------------------------------------------------------
 
-void BattleAttackTriggerHandlingSystem::DamageTarget(const genesis::ecs::EntityId) const
+void BattleAttackTriggerHandlingSystem::DamageTarget(const genesis::ecs::EntityId sourceEntityId) const
 {
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto& battleTargetComponent = world.GetComponent<BattleTargetComponent>(sourceEntityId);
+    const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(sourceEntityId);
     
+    DamageUnit(battleTargetComponent.mTargetEntity, unitStatsComponent.mStats.mDamage);
 }
 
 ///-----------------------------------------------------------------------------------------------

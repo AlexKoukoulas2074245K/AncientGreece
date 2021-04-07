@@ -10,6 +10,7 @@
 #include "battle/systems/BattleAttackTriggerHandlingSystem.h"
 #include "battle/systems/BattleCameraControllerSystem.h"
 #include "battle/systems/BattleCollisionHandlingSystem.h"
+#include "battle/systems/BattleDamageApplicationSystem.h"
 #include "battle/systems/BattleDestructionTimerProcessingSystem.h"
 #include "battle/systems/BattleMovementControllerSystem.h"
 #include "battle/systems/BattleTargetAcquisitionSystem.h"
@@ -95,6 +96,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<battle::BattleMovementControllerSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleCollisionHandlingSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleAttackTriggerHandlingSystem>(), BATTLE_CONTEXT);
+    world.AddSystem(std::make_unique<battle::BattleDamageApplicationSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleDestructionTimerProcessingSystem>(), BATTLE_CONTEXT);
     
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
@@ -137,7 +139,7 @@ void Game::VOnGameInit()
     };
     
     auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), StringId("player"));
-    const auto partySize = genesis::math::RandomInt(0, 20);
+    const auto partySize = genesis::math::RandomInt(0, 80);
     auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
 
     for (auto j = 0; j < partySize; ++j)
@@ -155,7 +157,7 @@ void Game::VOnGameInit()
         
         auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, position);
         
-        const auto partySize = genesis::math::RandomInt(0, 20);
+        const auto partySize = genesis::math::RandomInt(0, 80);
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
         
         for (auto j = 0; j < partySize; ++j)

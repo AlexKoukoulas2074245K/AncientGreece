@@ -10,6 +10,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
+#include "../../engine/ECS.h"
 #include "../../engine/common/utils/ColorUtils.h"
 #include "../../engine/common/utils/StringUtils.h"
 
@@ -37,6 +38,10 @@ size_t GetUnitPartySize(const UnitStatsComponent& unitStatsComponent);
 ///------------------------------------------------------------------------------------------------
 
 StringId GetUnitModelName(const StringId unitTypeName);
+
+///------------------------------------------------------------------------------------------------
+
+bool IsUnitDead(const genesis::ecs::EntityId unitEntity);
 
 ///------------------------------------------------------------------------------------------------
 

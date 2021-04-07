@@ -6,6 +6,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "BattleUtils.h"
+#include "../components/BattleDamageComponent.h"
 #include "../components/BattleSideComponent.h"
 #include "../components/BattleQueueSingletonComponent.h"
 #include "../../components/CollidableComponent.h"
@@ -56,6 +57,28 @@ void CreateBattleGround();
 void CalculateUnitTargetDistances(const std::vector<UnitStats>& party, float& targetUnitXDistance, float& targetUnitYDistance);
 void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId);
 void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId leaderEntityName, const bool isAttackingSide);
+
+///------------------------------------------------------------------------------------------------
+
+void DamageUnit(const genesis::ecs::EntityId unitEntity, const int damage)
+{
+    if (IsUnitDead(unitEntity))
+    {
+        return;
+    }
+    
+    auto& world = genesis::ecs::World::GetInstance();
+    if (world.HasComponent<BattleDamageComponent>(unitEntity))
+    {
+        world.GetComponent<BattleDamageComponent>(unitEntity).mDamage += damage;
+    }
+    else
+    {
+        auto damageComponent = std::make_unique<BattleDamageComponent>();
+        damageComponent->mDamage = damage;
+        world.AddComponent<BattleDamageComponent>(unitEntity, std::move(damageComponent));
+    }
+}
 
 ///------------------------------------------------------------------------------------------------
 

@@ -58,6 +58,7 @@ private:
     bool SetFloat(const StringId& uniformName, const float value) const;
     bool SetFloatArray(const StringId& uniformName, const std::vector<float>& values) const;
     bool SetInt(const StringId& uniformName, const int value) const;
+    bool SetBool(const StringId& uniformName, const bool value) const;
 
     GLuint GetProgramId() const;    
 

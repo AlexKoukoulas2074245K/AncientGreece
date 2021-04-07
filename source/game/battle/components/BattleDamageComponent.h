@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  DestructionTimerComponent.h
+///  BattleDamageComponent.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 06/04/2021.
+///  Created by Alex Koukoulas on 07/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef DestructionTimerComponent_h
-#define DestructionTimerComponent_h
+#ifndef BattleDamageComponent_h
+#define BattleDamageComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -19,10 +19,10 @@ namespace battle
 
 ///-----------------------------------------------------------------------------------------------
 
-class DestructionTimerComponent final: public genesis::ecs::IComponent
+class BattleDamageComponent final: public genesis::ecs::IComponent
 {
 public:
-    float mDestructionTimer;
+    int mDamage;
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -31,4 +31,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* DestructionTimerComponent_h */
+#endif /* BattleDamageComponent_h */

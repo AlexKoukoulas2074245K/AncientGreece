@@ -1,16 +1,20 @@
 ///------------------------------------------------------------------------------------------------
-///  BattleDestructionTimerProcessingSystem.h
+///  BattleDamageApplicationSystem.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 06/04/2021.
+///  Created by Alex Koukoulas on 07/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef BattleDestructionTimerProcessingSystem_h
-#define BattleDestructionTimerProcessingSystem_h
+#ifndef BattleDamageApplicationSystem_h
+#define BattleDamageApplicationSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+
+///-----------------------------------------------------------------------------------------------
+
+class UnitStatsComponent;
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -19,13 +23,13 @@ namespace battle
 
 ///-----------------------------------------------------------------------------------------------
 
-class BattleDestructionTimerComponent;
+class BattleDamageComponent;
 
 ///-----------------------------------------------------------------------------------------------
-class BattleDestructionTimerProcessingSystem final : public genesis::ecs::BaseSystem<BattleDestructionTimerComponent>
+class BattleDamageApplicationSystem final : public genesis::ecs::BaseSystem<UnitStatsComponent, BattleDamageComponent>
 {
 public:
-    BattleDestructionTimerProcessingSystem();
+    BattleDamageApplicationSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
 };
@@ -36,4 +40,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* BattleDestructionTimerProcessingSystem_h */
+#endif /* BattleDamageApplicationSystem_h */

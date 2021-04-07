@@ -118,6 +118,13 @@ StringId GetUnitModelName(const StringId unitTypeName)
 
 ///------------------------------------------------------------------------------------------------
 
+bool IsUnitDead(const genesis::ecs::EntityId unitEntity)
+{
+    return genesis::ecs::World::GetInstance().GetComponent<UnitStatsComponent>(unitEntity).mStats.mHealth <= 0;
+}
+
+///------------------------------------------------------------------------------------------------
+
 genesis::colors::RgbTriplet<float> GetUnitPartyColor(const UnitStatsComponent& unitStatsComponent)
 {
     const auto unitPartySize = GetUnitPartySize(unitStatsComponent);

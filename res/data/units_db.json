@@ -1,5 +1,5 @@
 {
-	"Spearman": { "model_name": "spearman", "is_ranged_unit": false, "model_scale_factor": 0.004, "attack_animation_damage_trigger": 0.75, "base_speed_multiplier": 1.0, "base_health": 100, "base_damage": 15 },
-	"Elite Spearman": { "model_name": "elite_spearman", "is_ranged_unit": false, "model_scale_factor": 0.004, "attack_animation_damage_trigger": 0.75, "base_speed_multiplier": 1.0, "base_health": 100, "base_damage": 30 },
-	"Horse Archer": { "model_name": "horse_archer", "is_ranged_unit": true, "model_scale_factor": 0.0004, "attack_animation_damage_trigger": 0.625, "base_speed_multiplier": 1.0, "base_health": 100, "base_damage": 10, "attack_range": 0.2 }
+	"Spearman": { "model_name": "spearman", "is_ranged_unit": false, "model_scale_factor": 0.004, "attack_animation_damage_trigger": 0.75, "base_speed_multiplier": 1.0, "base_health": 125, "base_damage": 20 },
+	"Elite Spearman": { "model_name": "elite_spearman", "is_ranged_unit": false, "model_scale_factor": 0.004, "attack_animation_damage_trigger": 0.75, "base_speed_multiplier": 1.0, "base_health": 150, "base_damage": 30 },
+	"Horse Archer": { "model_name": "horse_archer", "is_ranged_unit": true, "model_scale_factor": 0.0004, "attack_animation_damage_trigger": 0.625, "base_speed_multiplier": 1.0, "base_health": 100, "base_damage": 200, "attack_range": 0.2 }
 }
