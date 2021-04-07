@@ -6,8 +6,9 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "BattleCollisionHandlingSystem.h"
-#include "../components/BattleUnitCollisionComponent.h"
 #include "../components/BattleSideComponent.h"
+#include "../components/BattleUnitCollisionComponent.h"
+#include "../components/BattleProjectileComponent.h"
 #include "../../components/CollidableComponent.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitCollisionUtils.h"
@@ -56,6 +57,7 @@ void BattleCollisionHandlingSystem::BuildCollisionDisplacementMap(const std::vec
         }
         
         const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
+        const auto isCurrentEntityProjectile = world.HasComponent<BattleProjectileComponent>(entityId);
         
         const auto& collisionCandidates = sceneGraph->VGetCollisionCandidates(entityId);
         for (const auto& candidateEntity: collisionCandidates)
@@ -68,7 +70,9 @@ void BattleCollisionHandlingSystem::BuildCollisionDisplacementMap(const std::vec
             float penetration;
             const auto entitiesColliding = AreEntitiesColliding(entityId, candidateEntity, penetration);
             
-            if (entitiesColliding)
+            const auto isOtherEntityProjectile = world.HasComponent<BattleProjectileComponent>(candidateEntity);
+            
+            if (entitiesColliding && !isCurrentEntityProjectile && !isOtherEntityProjectile)
             {
                 const auto& otherTransformComponent = world.GetComponent<genesis::TransformComponent>(candidateEntity);
                 

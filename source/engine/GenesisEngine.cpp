@@ -286,8 +286,9 @@ bool AppShouldQuit()
                 {
                     auto& consoleStateComponent = world.GetSingletonComponent<debug::ConsoleStateSingletonComponent>();
                     if (consoleStateComponent.mEnabled)
-                    {                        
-                        consoleStateComponent.mCurrentCommandTextBuffer += std::string(event.text.text);
+                    {
+                        const auto textString = std::string(event.text.text);
+                        consoleStateComponent.mCurrentCommandTextBuffer += textString;
                     }                    
                 }                
             } 

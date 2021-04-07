@@ -140,6 +140,11 @@ void ConsoleManagementSystem::HandleConsoleSpecialInput() const
             ExecuteCommand();
         }
     }
+    
+    if (consoleStateComponent.mEnabled)
+    {
+        input::ConsumeAllKeys();
+    }
 }
 
 ///-----------------------------------------------------------------------------------------------

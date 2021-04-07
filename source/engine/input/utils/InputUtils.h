@@ -56,6 +56,18 @@ inline void ConsumeKeyInput(const Key key)
 }
 
 ///-----------------------------------------------------------------------------------------------
+/// Consumes and reset the state of all keys.
+inline void ConsumeAllKeys()
+{
+    auto& world = ecs::World::GetInstance();
+    auto& inputStateComponent = world.GetSingletonComponent<InputStateSingletonComponent>();
+    for (auto& keyPair: inputStateComponent.mCurrentKeyboardState)
+    {
+        inputStateComponent.mCurrentKeyboardState[keyPair.first] = InputState::RELEASED;
+    }
+}
+
+///-----------------------------------------------------------------------------------------------
 /// Consumes and reset the state of the given button.
 /// @param[in] button the button to consume.
 inline void ConsumeButtonInput(const Button button)

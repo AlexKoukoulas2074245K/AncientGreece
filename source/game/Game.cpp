@@ -7,8 +7,10 @@
 
 #include "Game.h"
 #include "GameContexts.h"
+#include "battle/systems/BattleAttackTriggerHandlingSystem.h"
 #include "battle/systems/BattleCameraControllerSystem.h"
 #include "battle/systems/BattleCollisionHandlingSystem.h"
+#include "battle/systems/BattleDestructionTimerProcessingSystem.h"
 #include "battle/systems/BattleMovementControllerSystem.h"
 #include "battle/systems/BattleTargetAcquisitionSystem.h"
 #include "components/CollidableComponent.h"
@@ -92,6 +94,8 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<battle::BattleTargetAcquisitionSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleMovementControllerSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleCollisionHandlingSystem>(), BATTLE_CONTEXT);
+    world.AddSystem(std::make_unique<battle::BattleAttackTriggerHandlingSystem>(), BATTLE_CONTEXT);
+    world.AddSystem(std::make_unique<battle::BattleDestructionTimerProcessingSystem>(), BATTLE_CONTEXT);
     
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), MAP_CONTEXT);
@@ -132,8 +136,8 @@ void Game::VOnGameInit()
         { 2, StringId("Horse Archer") },
     };
     
-    auto playerEntity = CreateUnit(StringId("Horse Archer"), GetRandomAvailableUnitName(), StringId("player"));
-    const auto partySize = genesis::math::RandomInt(0, 100);
+    auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), StringId("player"));
+    const auto partySize = genesis::math::RandomInt(0, 20);
     auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
 
     for (auto j = 0; j < partySize; ++j)
@@ -151,7 +155,7 @@ void Game::VOnGameInit()
         
         auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, position);
         
-        const auto partySize = genesis::math::RandomInt(0, 200);
+        const auto partySize = genesis::math::RandomInt(0, 20);
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
         
         for (auto j = 0; j < partySize; ++j)

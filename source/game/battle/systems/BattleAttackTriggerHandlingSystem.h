@@ -1,27 +1,34 @@
 ///------------------------------------------------------------------------------------------------
-///  BattleTargetAcquisitionSystem.h
+///  BattleAttackTriggerHandlingSystem.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 02/04/2021.
+///  Created by Alex Koukoulas on 05/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef BattleTargetAcquisitionSystem_h
-#define BattleTargetAcquisitionSystem_h
+#ifndef BattleAttackTriggerHandlingSystem_h
+#define BattleAttackTriggerHandlingSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
-
-///-----------------------------------------------------------------------------------------------
-
-class UnitStatsComponent;
+#include "../../engine/rendering/components/RenderableComponent.h"
 
 ///-----------------------------------------------------------------------------------------------
 
 namespace genesis
 {
     class TransformComponent;
+    
+    namespace rendering
+    {
+        class RenderableComponent;
+    }
 }
+
+///-----------------------------------------------------------------------------------------------
+
+class CollidableComponent;
+class UnitStatsComponent;
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -29,21 +36,19 @@ namespace battle
 {
 
 ///-----------------------------------------------------------------------------------------------
-
-class BattleSideComponent;
-
-///-----------------------------------------------------------------------------------------------
-class BattleTargetAcquisitionSystem final : public genesis::ecs::BaseSystem<UnitStatsComponent, BattleSideComponent>
+class BattleAttackTriggerHandlingSystem final : public genesis::ecs::BaseSystem<genesis::TransformComponent, genesis::rendering::RenderableComponent, CollidableComponent, UnitStatsComponent>
 {
 public:
-    BattleTargetAcquisitionSystem();
+    BattleAttackTriggerHandlingSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
-
+    
 private:
-    void ValidateCurrentTargetComponent(const genesis::ecs::EntityId entityId) const;
-    void PickOptimalTargetForEntity(const genesis::ecs::EntityId entityId, const std::vector<genesis::ecs::EntityId> entities) const;
-    genesis::ecs::EntityId FindClosestTargetUnit(const StringId currentEntityBattleLeader, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const;
+    void CreateProjectile(const genesis::ecs::EntityId sourceEntityId) const;
+    void DamageTarget(const genesis::ecs::EntityId sourceEntityId) const;
+    glm::vec3 CalculateProjectileTargetOffset(const glm::vec3& targetEntityScaledDimensions) const;
+    glm::vec3 CalculateProjectileOriginOffset(const glm::vec3& sourceEntityScaledDimensions) const;
+    glm::vec3 CalculateProjectileRotation(const glm::vec3& vecToTarget) const;
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -52,4 +57,4 @@ private:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* BattleTargetAcquisitionSystem_h */
+#endif /* BattleAttackTriggerHandlingSystem_h */

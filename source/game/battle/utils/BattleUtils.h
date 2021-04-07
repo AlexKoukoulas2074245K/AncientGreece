@@ -21,6 +21,10 @@ namespace battle
 
 ///------------------------------------------------------------------------------------------------
 
+void AddCollidableDataToArrow(const genesis::ecs::EntityId arrowEntity);
+
+///------------------------------------------------------------------------------------------------
+
 void QueueBattle(const genesis::ecs::EntityId attackingEntity, const genesis::ecs::EntityId defendingEntity);
 
 ///------------------------------------------------------------------------------------------------

@@ -38,7 +38,10 @@ public:
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
 
 private:
+    void UpdateProjectile(const float dt, const genesis::ecs::EntityId entityId) const;
+    void UpdateUnit(const float dt, const genesis::ecs::EntityId entityId) const;
     void UpdatePosition(const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const;
+    void UpdateProjectilePitch(const float dt, glm::vec3& entityRotation) const;
     void UpdateRotation(const float dt, const float targetRotation, glm::vec3& entityRotation) const;
 };
 

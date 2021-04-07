@@ -8,6 +8,7 @@
 #include "BattleTargetAcquisitionSystem.h"
 #include "../components/BattleSideComponent.h"
 #include "../components/BattleTargetComponent.h"
+#include "../../components/UnitStatsComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 
 ///-----------------------------------------------------------------------------------------------

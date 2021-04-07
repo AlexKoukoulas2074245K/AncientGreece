@@ -37,14 +37,15 @@ namespace
 
     static const std::string BATTLE_GROUND_MODEL_NAME = "battle_grass";
     
-    static const float BATTLE_DEFENDING_SIDE_Y_OFFSET = 0.2f;
-    static const float BATTLE_CAMERA_X                = 0.02906f;
-    static const float BATTLE_CAMERA_Y                = -0.28339f;
-    static const float BATTLE_CAMERA_Z                = -0.24034f;
-    static const float BATTLE_CAMERA_PITCH            = 0.946990f;
-    static const float BATTLE_CAMERA_YAW              = 1.6067f;
-    static const float BATTLE_CAMERA_ROLL             = 0.6024f;
-    static const float MELEE_COLLISION_UPSCALE_FACTOR = 1.2f;
+    static const float BATTLE_DEFENDING_SIDE_Y_OFFSET     = 0.2f;
+    static const float BATTLE_CAMERA_X                    = 0.02906f;
+    static const float BATTLE_CAMERA_Y                    = -0.28339f;
+    static const float BATTLE_CAMERA_Z                    = -0.24034f;
+    static const float BATTLE_CAMERA_PITCH                = 0.946990f;
+    static const float BATTLE_CAMERA_YAW                  = 1.6067f;
+    static const float BATTLE_CAMERA_ROLL                 = 0.6024f;
+    static const float MELEE_COLLISION_UPSCALE_FACTOR     = 1.2f;
+    static const float ENTITY_SPHERE_COLLISION_MULTIPLIER = 0.25f * 0.3333f;
 
     static const int MAX_UNITS_PER_ROW = 10;
 }
@@ -55,6 +56,24 @@ void CreateBattleGround();
 void CalculateUnitTargetDistances(const std::vector<UnitStats>& party, float& targetUnitXDistance, float& targetUnitYDistance);
 void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId);
 void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId leaderEntityName, const bool isAttackingSide);
+
+///------------------------------------------------------------------------------------------------
+
+void AddCollidableDataToArrow(const genesis::ecs::EntityId arrowEntity)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto& entityTransformComponent =
+    world.GetComponent<genesis::TransformComponent>(arrowEntity);
+    const auto& entityRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(arrowEntity);
+    const auto& entityMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( entityRenderableComponent.mMeshResourceIds[entityRenderableComponent.mCurrentMeshResourceIndex]);
+    const auto entityScaledDimensions = entityMeshResource.GetDimensions() * entityTransformComponent.mScale;
+    const auto entitySphereRadius = (entityScaledDimensions.x + entityScaledDimensions.y + entityScaledDimensions.z) * ENTITY_SPHERE_COLLISION_MULTIPLIER;
+    
+    auto collidableComponent = std::make_unique<CollidableComponent>();
+    collidableComponent->mCollidableDimensions.x = collidableComponent->mCollidableDimensions.y = collidableComponent->mCollidableDimensions.z = entitySphereRadius;
+    
+    world.AddComponent<CollidableComponent>(arrowEntity, std::move(collidableComponent));
+}
 
 ///------------------------------------------------------------------------------------------------
 
