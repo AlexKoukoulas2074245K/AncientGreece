@@ -11,6 +11,7 @@
 #include "../components/BattleTargetComponent.h"
 #include "../utils/BattleUtils.h"
 #include "../../components/UnitStatsComponent.h"
+#include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
@@ -121,6 +122,8 @@ void BattleMovementControllerSystem::UpdateProjectile(const float dt, const gene
 void BattleMovementControllerSystem::UpdateUnit(const float dt, const genesis::ecs::EntityId entityId) const
 {
     auto& world = genesis::ecs::World::GetInstance();
+    
+    if (IsUnitDead(entityId)) return;
     
     const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
     const auto& battleTargetComponent = world.GetComponent<BattleTargetComponent>(entityId);

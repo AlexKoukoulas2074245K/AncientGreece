@@ -9,6 +9,7 @@
 #include "../components/BattleSideComponent.h"
 #include "../components/BattleTargetComponent.h"
 #include "../../components/UnitStatsComponent.h"
+#include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -29,6 +30,8 @@ void BattleTargetAcquisitionSystem::VUpdate(const float, const std::vector<genes
 {
     for (const auto& entityId: entitiesToProcess)
     {
+        if (IsUnitDead(entityId)) continue;
+        
         ValidateCurrentTargetComponent(entityId);
         PickOptimalTargetForEntity(entityId, entitiesToProcess);
     }
@@ -44,7 +47,7 @@ void BattleTargetAcquisitionSystem::ValidateCurrentTargetComponent(const genesis
         auto& battleTargetComponent = world.GetComponent<BattleTargetComponent>(entityId);
         
         // If current unit has a target and target is still alive continue
-        if (!world.HasEntity(battleTargetComponent.mTargetEntity))
+        if (!world.HasEntity(battleTargetComponent.mTargetEntity) || IsUnitDead(battleTargetComponent.mTargetEntity))
         {
             // Else erase this units target and recalculate
             world.RemoveComponent<BattleTargetComponent>(entityId);
@@ -91,6 +94,11 @@ genesis::ecs::EntityId BattleTargetAcquisitionSystem::FindClosestTargetUnit(cons
         
         // Don't process units in the same army
         if (currentEntityBattleLeader == otherBattleSideComponent.mBattleSideLeaderName)
+        {
+            continue;
+        }
+        
+        if (IsUnitDead(otherEntityId))
         {
             continue;
         }

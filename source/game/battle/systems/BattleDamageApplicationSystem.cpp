@@ -8,8 +8,10 @@
 #include "BattleDamageApplicationSystem.h"
 #include "../components/BattleDamageComponent.h"
 #include "../components/BattleDestructionTimerComponent.h"
+#include "../../components/CollidableComponent.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitInfoUtils.h"
+#include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -22,6 +24,7 @@ namespace battle
 namespace
 {
     static const StringId DAMAGED_EFFECT_UNIFORM_NAME = StringId("damaged_effect");
+    static const float DEAD_UNIT_TTL = 5.0f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -46,9 +49,11 @@ void BattleDamageApplicationSystem::VUpdate(const float, const std::vector<genes
         unitStatsComponent.mStats.mHealth -= damageComponent.mDamage;
         if (unitStatsComponent.mStats.mHealth <= 0)
         {
+            genesis::animation::ChangeAnimation(entityId, StringId("dying"), false);
             auto destructionTimerComponent = std::make_unique<BattleDestructionTimerComponent>();
-            destructionTimerComponent->mDestructionTimer = 1.0f;
+            destructionTimerComponent->mDestructionTimer = DEAD_UNIT_TTL;
             world.AddComponent<BattleDestructionTimerComponent>(entityId, std::move(destructionTimerComponent));
+            world.RemoveComponent<CollidableComponent>(entityId);
         }
         
         renderableComponent.mShaderUniforms.mShaderBoolUniforms[DAMAGED_EFFECT_UNIFORM_NAME] = !IsUnitDead(entityId);

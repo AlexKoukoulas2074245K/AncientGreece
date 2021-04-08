@@ -87,9 +87,15 @@ void ModelAnimationSystem::VUpdate(const float dt, const std::vector<ecs::Entity
         else
         {
             // Current anim playing
-            renderableComponent.mAnimationTimeAccum += renderableComponent.mAnimationSpeed * dt;
-            
             const auto& animationInfo = currentMesh.GetAnimationInfo();
+            
+            renderableComponent.mAnimationTimeAccum += renderableComponent.mAnimationSpeed * dt;
+            if (renderableComponent.mAnimationTimeAccum >= animationInfo.mDuration && renderableComponent.mIsLoopingAnimation == false)
+            {
+                renderableComponent.mAnimationTimeAccum = animationInfo.mDuration - 0.0001f;
+                renderableComponent.mShouldAnimateSkeleton = false;
+            }
+            
             const auto animationTime = std::fmod(renderableComponent.mAnimationTimeAccum, animationInfo.mDuration);
             
             CalculateTransformsInHierarchy(animationTime, currentMesh.GetRootSkeletonNode(), transform, currentMesh, renderableComponent);

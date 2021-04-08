@@ -39,7 +39,7 @@ StringId GetCurrentAnimationName(const ecs::EntityId entityId)
 
 ///------------------------------------------------------------------------------------------------
 
-void ChangeAnimation(const ecs::EntityId entityId, const StringId animationName)
+void ChangeAnimation(const ecs::EntityId entityId, const StringId animationName, const bool loopAnimation /* true */)
 {
     auto& world = ecs::World::GetInstance();
     auto& renderableComponent = world.GetComponent<rendering::RenderableComponent>(entityId);
@@ -49,6 +49,8 @@ void ChangeAnimation(const ecs::EntityId entityId, const StringId animationName)
         renderableComponent.mPreviousMeshResourceIndex = renderableComponent.mCurrentMeshResourceIndex;
         renderableComponent.mCurrentMeshResourceIndex = renderableComponent.mAnimNameToMeshIndex.at(animationName);
         renderableComponent.mTransitionAnimationTimeAccum = 0.0f;
+        renderableComponent.mIsLoopingAnimation = loopAnimation;
+        renderableComponent.mShouldAnimateSkeleton = true;
     }
 }
 

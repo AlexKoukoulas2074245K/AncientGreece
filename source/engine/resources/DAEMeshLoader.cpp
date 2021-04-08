@@ -201,7 +201,6 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
     
     // Load Animation Data
     auto* currentAnimation = scene->mAnimations[0];
-    animationInfo.mDuration = static_cast<float>(currentAnimation->mDuration);
     animationInfo.mTicksPerSecond = static_cast<float>(currentAnimation->mTicksPerSecond);
     
     for (unsigned int i = 0; i < currentAnimation->mNumChannels; ++i)
@@ -236,6 +235,8 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
             scalingKey.mScale = math::AssimpVec3ToGlmVec3(nodeAnim->mScalingKeys[j].mValue);
             scalingKeys.push_back(scalingKey);
         }
+        
+        animationInfo.mDuration = positionKeys.back().mTime;
         
         animationInfo.mBoneNameToAnimInfo[nodeName].mPositionKeys = std::move(positionKeys);
         animationInfo.mBoneNameToAnimInfo[nodeName].mRotationKeys = std::move(rotationKeys);
