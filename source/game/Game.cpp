@@ -63,7 +63,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 4;
+static int SPARTAN_COUNT = 40;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
@@ -110,7 +110,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
     
     world.AddSystem(std::make_unique<scene::SceneUpdaterSystem>());
-    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), 0, genesis::ecs::SystemOperationMode::MULTI_THREADED);
+    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>());
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 
@@ -138,8 +138,6 @@ void Game::VOnGameInit()
         { 1, StringId("Elite Spearman") },
         { 2, StringId("Horse Archer") },
     };
-    
-    genesis::rendering::LoadAndCreateHeightMapByName("test_heightMap2", StringId("heightMap"));
     
     auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), StringId("player"));
     const auto partySize = genesis::math::RandomInt(0, 80);

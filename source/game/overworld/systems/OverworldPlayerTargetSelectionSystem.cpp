@@ -41,6 +41,8 @@ namespace
     static const StringId PLAYER_ENTITY_NAME = StringId("player");
     
     static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";
+
+    static const glm::vec3 MAP_DIMENSIONS = glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -119,16 +121,10 @@ void OverworldPlayerTargetSelectionSystem::CalculateMapTarget(OverworldTargetCom
 {
     const auto& mapPickingInfoComponent = world.GetSingletonComponent<OverworldMapPickingInfoSingletonComponent>();
     
-    // Find map entity
-    auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
-    const auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(mapEntity);
-    const auto& mapMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( renderableComponent.mMeshResourceIds.at(renderableComponent.mCurrentMeshResourceIndex));
-    const auto& mapDimensions = mapMeshResource.GetDimensions();
-    
     // Calculate respective navmap pixel
     auto& navmapTexture = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::TextureResource>(NAVMAP_ASSET_PATH);
     
-    const auto pixelPosition = MapPositionToNavmapPixel(mapPickingInfoComponent.mMapIntersectionPoint, mapDimensions, navmapTexture.GetDimensions());
+    const auto pixelPosition = MapPositionToNavmapPixel(mapPickingInfoComponent.mMapIntersectionPoint, MAP_DIMENSIONS, navmapTexture.GetDimensions());
     const auto targetPixel = navmapTexture.GetRgbAtPixel(pixelPosition.x, pixelPosition.y);
     
     // Attach waypoint component to player

@@ -39,7 +39,8 @@ namespace
     static const std::string HEIGHTMAP_TEXTURE_UNIFORM_NAME = "heightMap_texture_";
 
     static const StringId HEIGHTMAP_SHADER_NAME = StringId("heightMap");
-    
+
+    static const float HEIGHTMAP_HEIGHT_SCALE = 0.05f;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -77,19 +78,23 @@ ecs::EntityId LoadAndCreateHeightMapByName
     std::vector<glm::vec3> triangleNormals[2];
     std::vector<glm::vec3> normals;
     std::vector<unsigned int> indices;
+    std::vector<std::vector<float>> heightMapTileHeights;
     
     const auto textureU = heightMapCols * 0.1f;
     const auto textureV = heightMapRows * 0.1f;
     
     for (auto row = 0; row < heightMapRows; ++row)
     {
+        heightMapTileHeights.push_back({});
         for (auto col = 0; col < heightMapCols; ++col)
         {
             const auto colFactor = static_cast<float>(col)/(heightMapCols - 1);
             const auto rowFactor = static_cast<float>(row)/(heightMapRows - 1);
             const auto vertexHeight = heightMapTextureResource.GetRgbAtPixel(col, row).mRed/255.0f;
+            
             vertices.push_back(glm::vec3(-0.5f + colFactor, vertexHeight, -0.5f + rowFactor));
             uvs.push_back(glm::vec2(colFactor * textureU, rowFactor * textureV));
+            heightMapTileHeights[row].push_back(vertexHeight * HEIGHTMAP_HEIGHT_SCALE);
         }
     }
     
@@ -216,9 +221,9 @@ ecs::EntityId LoadAndCreateHeightMapByName
     const auto heightMapEntity = world.CreateEntity();
 
     auto transformComponent = std::make_unique<TransformComponent>();
-    transformComponent->mPosition = glm::vec3(0.0f, 0.0f, -0.1f);
+    transformComponent->mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     transformComponent->mRotation = glm::vec3(-genesis::math::PI/2.0f, 0.0f, genesis::math::PI);
-    transformComponent->mScale = glm::vec3(1.0f, 0.05f, 1.0f);
+    transformComponent->mScale = glm::vec3(1.0f, HEIGHTMAP_HEIGHT_SCALE, 1.0f);
 
     auto renderableComponent = std::make_unique<RenderableComponent>();
     renderableComponent->mShaderNameId = HEIGHTMAP_SHADER_NAME;
@@ -232,6 +237,7 @@ ecs::EntityId LoadAndCreateHeightMapByName
     heightMapComponent->mVertexArrayObject = vertexArrayObject;
     heightMapComponent->mHeightMapTextureDimensions = glm::vec2(heightMapCols, heightMapRows);
     heightMapComponent->mHeightMapTextureResourceIds = heightMapTextures;
+    heightMapComponent->mHeightMapTileHeights = heightMapTileHeights;
     
     world.AddComponent<HeightMapComponent>(heightMapEntity, std::move(heightMapComponent));
     world.AddComponent<RenderableComponent>(heightMapEntity, std::move(renderableComponent));

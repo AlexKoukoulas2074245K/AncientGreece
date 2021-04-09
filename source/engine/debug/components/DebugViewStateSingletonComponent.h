@@ -39,7 +39,7 @@ public:
     bool mFrameStatsDisplayEnabled = false;
     bool mSceneGraphDisplayEnabled = false;
     bool mLightDebugDisplayEnabled = false;
-    bool mFreeCamDebugEnabled      = true;
+    bool mFreeCamDebugEnabled      = false;
 };
 
 ///-----------------------------------------------------------------------------------------------

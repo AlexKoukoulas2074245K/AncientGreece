@@ -238,7 +238,7 @@ public:
             "Component is already present in this entity's component store");
         
         entityEntry.mComponents[componentTypeId] = std::move(component);
-        entityEntry.mMask |= 1 << componentTypeId;
+        entityEntry.mMask |= 1LL << componentTypeId;
         
         OnEntityChanged(entityId, entityEntry.mMask);
     }
@@ -262,7 +262,7 @@ public:
             "Component is not present in this entity's component store");
         
         entityEntry.mComponents[componentTypeId] = nullptr;
-        entityEntry.mMask ^= 1 << componentTypeId;
+        entityEntry.mMask ^= 1LL << componentTypeId;
         
         OnEntityChanged(entityId, entityEntry.mMask);
     }
@@ -334,7 +334,7 @@ public:
         static_assert(std::is_base_of<IComponent, FirstUtilizedComponentType>::value,
             "Attempted to extract mask from class not derived from IComponent");
         
-        return 1 << GetTypeHash<FirstUtilizedComponentType>();
+        return 1LL << GetTypeHash<FirstUtilizedComponentType>();
     }
 
     /// Calculates the bit mask of the given template arguments.
@@ -348,7 +348,7 @@ public:
 
         const auto componentTypeId = GetTypeHash<FirstUtilizedComponentType>();
 
-        return ComponentMask(1 << componentTypeId) |
+        return ComponentMask(1LL << componentTypeId) |
             CalculateComponentUsageMask<SecondUtilizedComponentType, RestUtilizedComponentTypes...>();
     }
     

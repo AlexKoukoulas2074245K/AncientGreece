@@ -43,9 +43,11 @@ namespace
 
     static const StringId MAP_ENTITY_NAME = StringId("map");
 
-    static const float SUFFICIENTLY_CLOSE_THRESHOLD       = 0.001f;
-    static const float ROTATION_SPEED                     = 5.0f;
-    static const float BASE_UNIT_SPEED                    = 0.004f;
+    static const float SUFFICIENTLY_CLOSE_THRESHOLD = 0.001f;
+    static const float ROTATION_SPEED               = 5.0f;
+    static const float BASE_UNIT_SPEED              = 0.004f;
+    
+    static const glm::vec3 MAP_DIMENSIONS = glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -62,11 +64,6 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
     auto& world = genesis::ecs::World::GetInstance();
     auto& navmapTexture = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::TextureResource>(NAVMAP_ASSET_PATH);
     
-    auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
-    const auto& mapRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(mapEntity);
-    const auto& mapMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( mapRenderableComponent.mMeshResourceIds.at(mapRenderableComponent.mCurrentMeshResourceIndex));
-    const auto& mapDimensions = mapMeshResource.GetDimensions();
-    
     for (const auto entityId: entitiesToProcess)
     {
         const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
@@ -78,6 +75,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         {
             waypointComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(waypointComponent.mEntityTargetToFollow).mPosition;
         }
+        
         
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
@@ -102,7 +100,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         // Else move and rotate towards target
         else
         {
-            const auto terrainSpeedMultiplier = GetTerrainSpeedMultiplier(transformComponent.mPosition, mapDimensions, navmapTexture);
+            const auto terrainSpeedMultiplier = GetTerrainSpeedMultiplier(transformComponent.mPosition, MAP_DIMENSIONS, navmapTexture);
             const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mStats.mSpeedMultiplier * terrainSpeedMultiplier;
             UpdatePosition(dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
             UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);

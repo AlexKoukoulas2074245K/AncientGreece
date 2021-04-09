@@ -12,6 +12,7 @@
 #include "../../../engine/common/utils/ColorUtils.h"
 #include "../../../engine/rendering/utils/FontUtils.h"
 #include "../../../engine/rendering/utils/MeshUtils.h"
+#include "../../../engine/rendering/utils/HeightMapUtils.h"
 
 ///------------------------------------------------------------------------------------------------
 
@@ -32,8 +33,9 @@ namespace
     static const StringId OVERWORLD_UNIT_ENTITY_NAME = StringId("overworld_unit");
     static const StringId PLAYER_UNIT_ENTITY_NAME    = StringId("player");
 
-    static const std::string NAME_PLATE_MODEL_NAME = "name_plate";
-    static const std::string MAP_EDGE_MODEL_NAME   = "map_edge";
+    static const std::string OVERWORLD_HEIGHTMAP_NAME = "overworld";
+    static const std::string NAME_PLATE_MODEL_NAME    = "name_plate";
+    static const std::string MAP_EDGE_MODEL_NAME      = "map_edge";
 
     static const float NAME_PLATE_Z                           = -0.001f;
     static const float NAME_PLATE_X_OFFSET_MULTIPLIER         = 1.0/20.0f;
@@ -87,7 +89,7 @@ float GetCityStateOverworldNameSize(const StringId cityStateName)
 
 void LoadAndCreateOverworldMapComponents()
 {
-    genesis::rendering::LoadAndCreateStaticModelByName(MAP_ENTITY_NAME.GetString(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_ENTITY_NAME);
+    genesis::rendering::LoadAndCreateHeightMapByName(OVERWORLD_HEIGHTMAP_NAME, MAP_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_1_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_2_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_3_ENTITY_NAME);

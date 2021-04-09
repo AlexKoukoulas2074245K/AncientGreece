@@ -47,7 +47,6 @@ void ScriptingSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& 
         const auto& scriptComponent = ecs::World::GetInstance().GetComponent<ScriptComponent>(entityId);
         LuaScriptingService::GetInstance().RunLuaScript(scriptComponent.mScriptName.GetString());
         LuaScriptingService::GetInstance().LuaCallGlobalFunction(sScriptTypeToLuaFuncName.at(scriptComponent.mScriptType), 3, entityId, dt, dtAccum);
-        
     }
 }
 

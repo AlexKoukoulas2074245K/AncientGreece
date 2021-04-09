@@ -39,6 +39,7 @@ public:
     GLuint mVertexArrayObject = 0;
     glm::vec2 mHeightMapTextureDimensions;
     std::vector<ResourceId> mHeightMapTextureResourceIds;
+    std::vector<std::vector<float>> mHeightMapTileHeights;
 };
 
 ///-----------------------------------------------------------------------------------------------

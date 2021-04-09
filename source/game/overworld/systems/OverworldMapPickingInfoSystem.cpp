@@ -26,6 +26,7 @@ namespace
 {
     static const StringId MAP_ENTITY_NAME = StringId("map");
     static const glm::vec3 MAP_NORMAL = glm::vec3(0.0f, 0.0f, -1.0f);
+    static const glm::vec3 MAP_POSITION = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -59,16 +60,9 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
         cameraComponent.mZFar
     );
     
-    // Find map entity
-    auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
-    if (mapEntity != genesis::ecs::NULL_ENTITY_ID)
-    {
-        const auto& mapTransformComponent = world.GetComponent<genesis::TransformComponent>(mapEntity);
-        
-        // Calculate Mouse Intersection with map
-        mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(viewMatrix, projectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
-        genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, mapTransformComponent.mPosition, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
-    }
+    // Calculate Mouse Intersection with map
+    mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(viewMatrix, projectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
+    genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, MAP_POSITION, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
 }
 
 ///-----------------------------------------------------------------------------------------------
