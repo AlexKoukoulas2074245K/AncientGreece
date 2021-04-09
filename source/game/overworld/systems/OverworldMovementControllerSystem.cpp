@@ -9,17 +9,14 @@
 #include "../AreaTypes.h"
 #include "../components/OverworldTargetComponent.h"
 #include "../components/OverworldUnitInteractionComponent.h"
-#include "../utils/NavmapUtils.h"
+#include "../utils/OverworldUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitCollisionUtils.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
-#include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
-#include "../../../engine/resources/MeshResource.h"
-#include "../../../engine/resources/TextureResource.h"
 
 #include <tsl/robin_map.h>
 
@@ -39,15 +36,11 @@ namespace
         { areaTypeMasks::HIGH_MOUNTAIN, 0.25f },
     };
 
-    static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";
-
     static const StringId MAP_ENTITY_NAME = StringId("map");
 
     static const float SUFFICIENTLY_CLOSE_THRESHOLD = 0.001f;
     static const float ROTATION_SPEED               = 5.0f;
-    static const float BASE_UNIT_SPEED              = 0.004f;
-    
-    static const glm::vec3 MAP_DIMENSIONS = glm::vec3(1.0f, 1.0f, 1.0f);
+    static const float BASE_UNIT_SPEED              = 0.008f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -62,7 +55,6 @@ OverworldMovementControllerSystem::OverworldMovementControllerSystem()
 void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = genesis::ecs::World::GetInstance();
-    auto& navmapTexture = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::TextureResource>(NAVMAP_ASSET_PATH);
     
     for (const auto entityId: entitiesToProcess)
     {
@@ -76,6 +68,10 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
             waypointComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(waypointComponent.mEntityTargetToFollow).mPosition;
         }
         
+        
+        // Set height to current terrain
+        transformComponent.mPosition.z = -GetTerrainHeightAtPosition(transformComponent.mPosition);
+        waypointComponent.mTargetPosition.z = transformComponent.mPosition.z;
         
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
@@ -100,7 +96,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         // Else move and rotate towards target
         else
         {
-            const auto terrainSpeedMultiplier = GetTerrainSpeedMultiplier(transformComponent.mPosition, MAP_DIMENSIONS, navmapTexture);
+            const auto terrainSpeedMultiplier = GetTerrainSpeedMultiplierAtPosition(transformComponent.mPosition);
             const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mStats.mSpeedMultiplier * terrainSpeedMultiplier;
             UpdatePosition(dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
             UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
@@ -140,26 +136,6 @@ void OverworldMovementControllerSystem::UpdateRotation(const float dt, const flo
             entityRotation.z += genesis::math::PI * 2.0f;
         }
     }
-}
-
-///-----------------------------------------------------------------------------------------------
-
-float OverworldMovementControllerSystem::GetTerrainSpeedMultiplier(const glm::vec3& unitPosition, const glm::vec3& mapDimensions, const genesis::resources::TextureResource& navmapTexture) const
-{
-    auto terrainMultiplier = 1.0f;
-    const auto pixelPosition = MapPositionToNavmapPixel(unitPosition, mapDimensions, navmapTexture.GetDimensions());
-    const auto targetPixel = navmapTexture.GetRgbAtPixel(pixelPosition.x, pixelPosition.y);
-    
-    if (RGB_TO_AREA_TYPE_MASK.count(targetPixel))
-    {
-        const auto areaType = RGB_TO_AREA_TYPE_MASK.at(targetPixel);
-        if (AREA_TYPE_TO_SPEED_MULTIPLIER.count(areaType))
-        {
-            terrainMultiplier = AREA_TYPE_TO_SPEED_MULTIPLIER.at(areaType);
-        }
-    }
-    
-    return terrainMultiplier;
 }
 
 ///-----------------------------------------------------------------------------------------------

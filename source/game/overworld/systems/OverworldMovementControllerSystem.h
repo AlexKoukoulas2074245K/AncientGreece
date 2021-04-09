@@ -18,16 +18,6 @@
 namespace genesis
 {
     class TransformComponent;
-
-    namespace rendering
-    {
-        class RenderableComponent;
-    }
-
-    namespace resources
-    {
-        class TextureResource;
-    }
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -44,7 +34,7 @@ namespace overworld
 class OverworldTargetComponent;
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldMovementControllerSystem final : public genesis::ecs::BaseSystem<genesis::TransformComponent, genesis::rendering::RenderableComponent, OverworldTargetComponent, UnitStatsComponent>
+class OverworldMovementControllerSystem final : public genesis::ecs::BaseSystem<genesis::TransformComponent, OverworldTargetComponent, UnitStatsComponent>
 {
 public:
     OverworldMovementControllerSystem();
@@ -54,8 +44,6 @@ public:
 private:
     void UpdatePosition(const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const;
     void UpdateRotation(const float dt, const float targetRotation, glm::vec3& entityRotation) const;
-    
-    float GetTerrainSpeedMultiplier(const glm::vec3& unitPosition, const glm::vec3& mapDimensions, const genesis::resources::TextureResource& navmapTexture) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

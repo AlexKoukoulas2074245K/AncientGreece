@@ -10,6 +10,7 @@
 #include "../../components/CityStateInfoSingletonComponent.h"
 #include "../../../engine/ECS.h"
 #include "../../../engine/common/utils/ColorUtils.h"
+#include "../../../engine/rendering/components/HeightMapComponent.h"
 #include "../../../engine/rendering/utils/FontUtils.h"
 #include "../../../engine/rendering/utils/MeshUtils.h"
 #include "../../../engine/rendering/utils/HeightMapUtils.h"
@@ -44,6 +45,10 @@ namespace
     static const float CITY_STATE_NAME_BASE_SIZE              = 0.001f;
     static const float CITY_STATE_NAME_Z                      = -0.002f;
     static const float CITY_STATE_NAME_SIZE_RENOWN_MULTIPLIER = 0.0001f;
+    static const float HEIGHTMAP_Z_OFFSET                     = 0.0001f;
+    static const float HEIGHTMAP_HEIGHT_SCALE                 = 0.05f;
+
+    static const glm::vec3 MAP_DIMENSIONS = glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -77,6 +82,33 @@ void DestroyOverworldEntities()
 }
 
 ///-----------------------------------------------------------------------------------------------
+
+float GetTerrainHeightAtPosition(const glm::vec3& position)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto& mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
+    const auto& heightMapComponent = world.GetComponent<genesis::rendering::HeightMapComponent>(mapEntity);
+    
+    const auto relativeXDisplacement = position.x/(MAP_DIMENSIONS.x/2.0f);
+    const auto relativeYDisplacement = position.y/(MAP_DIMENSIONS.y/2.0f);
+    const auto heightMapCols = heightMapComponent.mHeightMapTextureDimensions.x;
+    const auto heightMapRows = heightMapComponent.mHeightMapTextureDimensions.y;
+    
+    const auto heightMapCol = heightMapCols/2.0f + relativeXDisplacement * heightMapCols/2.0f;
+    const auto heightMapRow = heightMapRows/2 - relativeYDisplacement * heightMapRows/2;
+    
+    return heightMapComponent.mHeightMapTileHeights[heightMapRow][heightMapCols - heightMapCol] + HEIGHTMAP_Z_OFFSET;
+}
+
+///-----------------------------------------------------------------------------------------------
+
+float GetTerrainSpeedMultiplierAtPosition(const glm::vec3& position)
+{
+    const auto heightAtPosition = GetTerrainHeightAtPosition(position);
+    return 1.4f - heightAtPosition/HEIGHTMAP_HEIGHT_SCALE;
+}
+
+///------------------------------------------------------------------------------------------------
 
 float GetCityStateOverworldNameSize(const StringId cityStateName)
 {
