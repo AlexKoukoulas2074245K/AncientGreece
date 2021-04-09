@@ -53,6 +53,7 @@
 #include "../engine/rendering/utils/FontUtils.h"
 #include "../engine/rendering/utils/LightUtils.h"
 #include "../engine/rendering/utils/MeshUtils.h"
+#include "../engine/rendering/utils/HeightMapUtils.h"
 #include "../engine/rendering/systems/RenderingSystem.h"
 #include "../engine/resources/ResourceLoadingService.h"
 #include "../engine/scripting/components/ScriptComponent.h"
@@ -62,7 +63,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 30;
+static int SPARTAN_COUNT = 4;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
@@ -137,6 +138,8 @@ void Game::VOnGameInit()
         { 1, StringId("Elite Spearman") },
         { 2, StringId("Horse Archer") },
     };
+    
+    genesis::rendering::LoadAndCreateHeightMapByName("test_heightMap2", StringId("heightMap"));
     
     auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), StringId("player"));
     const auto partySize = genesis::math::RandomInt(0, 80);

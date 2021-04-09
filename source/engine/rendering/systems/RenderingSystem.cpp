@@ -8,6 +8,7 @@
 #include "RenderingSystem.h"
 #include "../components/CameraSingletonComponent.h"
 #include "../components/LightStoreSingletonComponent.h"
+#include "../components/HeightMapComponent.h"
 #include "../components/RenderableComponent.h"
 #include "../components/RenderingContextSingletonComponent.h"
 #include "../components/ShaderStoreSingletonComponent.h"
@@ -123,7 +124,6 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
     {
         const auto& lhsTransformComponent = world.GetComponent<TransformComponent>(lhs);
         const auto& rhsTransformComponent = world.GetComponent<TransformComponent>(rhs);
-
         return lhsTransformComponent.mPosition.z > rhsTransformComponent.mPosition.z;
     });
     
@@ -134,6 +134,14 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
         if (renderableComponent.mRenderableType == RenderableType::NORMAL_MODEL)
         {
             const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
+            
+            // Render heightmap entities
+            if (world.HasComponent<HeightMapComponent>(entityId))
+            {
+                RenderHeightMapInternal(transformComponent, renderableComponent, world.GetComponent<HeightMapComponent>(entityId), cameraComponent, lightStoreComponent, shaderStoreComponent, windowComponent, renderingContextComponent);
+                continue;
+            }
+            
             const auto& currentMesh        = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
 
             // Frustum culling
@@ -275,6 +283,145 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
     
     // Swap window buffers
     SDL_GL_SwapWindow(windowComponent.mWindowHandle);
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void RenderingSystem::RenderHeightMapInternal
+(
+    const TransformComponent& transformComponent,
+    const RenderableComponent& renderableComponent,
+    const HeightMapComponent& heightMapComponent,
+    const CameraSingletonComponent& cameraComponent,
+    const LightStoreSingletonComponent& lightStoreComponent,
+    const ShaderStoreSingletonComponent& shaderStoreComponent,
+    const WindowSingletonComponent& windowComponent,
+    RenderingContextSingletonComponent& renderingContextComponent
+) const
+{
+    // Update Shader is necessary
+    const resources::ShaderResource* currentShader = nullptr;
+    if (renderableComponent.mShaderNameId != renderingContextComponent.previousShaderNameId)
+    {
+        currentShader = &shaderStoreComponent.mShaders.at(renderableComponent.mShaderNameId);
+        GL_CHECK(glUseProgram(currentShader->GetProgramId()));
+
+        renderingContextComponent.previousShaderNameId = renderableComponent.mShaderNameId;
+        renderingContextComponent.previousShader       = currentShader;
+    }
+    else
+    {
+        currentShader = renderingContextComponent.previousShader;
+    }
+        
+    // Calculate world matrix for entity
+    glm::mat4 world(1.0f);
+        
+    // Correct display of hud and billboard entities
+    glm::vec3 position = transformComponent.mPosition;
+    glm::vec3 scale    = transformComponent.mScale;
+    glm::vec3 rotation = transformComponent.mRotation;
+
+    if (renderableComponent.mRenderableType == RenderableType::GUI_SPRITE)
+    {
+        scale.x /= windowComponent.mAspectRatio;
+    }
+    
+    glm::mat4 rotMatrix = glm::mat4_cast(math::EulerAnglesToQuat(rotation));
+    
+    world = glm::translate(world, position);
+    world *= rotMatrix;
+    world = glm::scale(world, scale);
+       
+
+    // Bind all heightmap textures
+    int textureIndex = 0;
+    for (auto textureResourceId: heightMapComponent.mHeightMapTextureResourceIds)
+    {
+        auto& currentTexture = resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(textureResourceId);
+        GL_CHECK(glActiveTexture(GL_TEXTURE0 + textureIndex++));
+        GL_CHECK(glBindTexture(GL_TEXTURE_2D, currentTexture.GetGLTextureId()));
+    }
+
+    // Set mvp uniforms
+    currentShader->SetMatrix4fv(WORLD_MARIX_UNIFORM_NAME, world);
+    currentShader->SetMatrix4fv(VIEW_MARIX_UNIFORM_NAME, cameraComponent.mViewMatrix);
+    currentShader->SetMatrix4fv(PROJECTION_MARIX_UNIFORM_NAME, cameraComponent.mProjectionMatrix);
+    currentShader->SetMatrix4fv(NORMAL_MATRIX_UNIFORM_NAME, rotMatrix);
+    currentShader->SetFloatVec4(MATERIAL_AMBIENT_UNIFORM_NAME, renderableComponent.mMaterial.mAmbient);
+    currentShader->SetFloatVec4(MATERIAL_DIFFUSE_UNIFORM_NAME, renderableComponent.mMaterial.mDiffuse);
+    currentShader->SetFloatVec4(MATERIAL_SPECULAR_UNIFORM_NAME, renderableComponent.mMaterial.mSpecular);
+    currentShader->SetFloat(MATERIAL_SHININESS_UNIFORM_NAME, renderableComponent.mMaterial.mShininess);
+    currentShader->SetFloatVec3Array(LIGHT_POSITIONS_UNIFORM_NAME, lightStoreComponent.mLightPositions);
+    currentShader->SetFloatArray(LIGHT_POWERS_UNIFORM_NAME, lightStoreComponent.mLightPowers);
+    currentShader->SetInt(IS_AFFECTED_BY_LIGHT_UNIFORM_NAME, renderableComponent.mIsAffectedByLight ? 1 : 0);
+    currentShader->SetFloatVec3(EYE_POSITION_UNIFORM_NAME, cameraComponent.mPosition);
+    
+    // Set other matrix uniforms
+    for (const auto& matrixUniformEntry: renderableComponent.mShaderUniforms.mShaderMatrixUniforms)
+    {
+        currentShader->SetMatrix4fv(matrixUniformEntry.first, matrixUniformEntry.second);
+    }
+    
+    // Set other matrix array uniforms
+    for (const auto& mat4arrayUniformEntry: renderableComponent.mShaderUniforms.mShaderMatrixArrayUniforms)
+    {
+        currentShader->SetMatrix4Array(mat4arrayUniformEntry.first, mat4arrayUniformEntry.second);
+    }
+
+    // Set other float vec4 array uniforms
+    for (const auto& vec4arrayUniformEntry: renderableComponent.mShaderUniforms.mShaderFloatVec4ArrayUniforms)
+    {
+        currentShader->SetFloatVec4Array(vec4arrayUniformEntry.first, vec4arrayUniformEntry.second);
+    }
+    
+    // Set other float vec3 array uniforms
+    for (const auto& vec3arrayUniformEntry: renderableComponent.mShaderUniforms.mShaderFloatVec3ArrayUniforms)
+    {
+        currentShader->SetFloatVec3Array(vec3arrayUniformEntry.first, vec3arrayUniformEntry.second);
+    }
+    
+    // Set other float vec4 uniforms
+    for (const auto& floatVec4UniformEntry : renderableComponent.mShaderUniforms.mShaderFloatVec4Uniforms)
+    {
+        currentShader->SetFloatVec4(floatVec4UniformEntry.first, floatVec4UniformEntry.second);
+    }
+    
+    // Set other float vec3 uniforms
+    for (const auto& floatVec3UniformEntry : renderableComponent.mShaderUniforms.mShaderFloatVec3Uniforms)
+    {
+        currentShader->SetFloatVec3(floatVec3UniformEntry.first, floatVec3UniformEntry.second);
+    }
+    
+    // Set other float uniforms
+    for (const auto& floatUniformEntry : renderableComponent.mShaderUniforms.mShaderFloatUniforms)
+    {
+        currentShader->SetFloat(floatUniformEntry.first, floatUniformEntry.second);
+    }
+    
+    // Set other int uniforms
+    for (const auto& intUniformEntry : renderableComponent.mShaderUniforms.mShaderIntUniforms)
+    {
+        currentShader->SetInt(intUniformEntry.first, intUniformEntry.second);
+    }
+    
+    // Set other bool uniforms
+    for (const auto& boolUniformEntry : renderableComponent.mShaderUniforms.mShaderBoolUniforms)
+    {
+        currentShader->SetBool(boolUniformEntry.first, boolUniformEntry.second);
+    }
+    
+    GL_CHECK(glBindVertexArray(heightMapComponent.mVertexArrayObject));
+    GL_CHECK(glEnable(GL_PRIMITIVE_RESTART));
+    
+    const auto heightMapCols = heightMapComponent.mHeightMapTextureDimensions.x;
+    const auto heightMapRows = heightMapComponent.mHeightMapTextureDimensions.y;
+    
+    GL_CHECK(glPrimitiveRestartIndex(heightMapCols * heightMapRows));
+    const auto numIndices = (heightMapRows - 1) * (heightMapCols * 2) + (heightMapRows - 1);
+    GL_CHECK(glDrawElements(GL_TRIANGLE_STRIP, numIndices, GL_UNSIGNED_INT, 0));
+    GL_CHECK(glDisable(GL_PRIMITIVE_RESTART));
+    GL_CHECK(glActiveTexture(GL_TEXTURE0));
 }
 
 ///-----------------------------------------------------------------------------------------------

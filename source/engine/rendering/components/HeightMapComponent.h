@@ -1,16 +1,18 @@
 ///------------------------------------------------------------------------------------------------
-///  DebugViewStateSingletonComponent.h
+///  HeightMapComponent.h
 ///  Genesis
 ///
-///  Created by Alex Koukoulas on 13/01/2020.
+///  Created by Alex Koukoulas on 08/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef DebugViewStateSingletonComponent_h
-#define DebugViewStateSingletonComponent_h
+#ifndef HeightMapComponent_h
+#define HeightMapComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../ECS.h"
+#include "../../common/utils/MathUtils.h"
+#include "../../common/utils/StringUtils.h"
 
 #include <vector>
 
@@ -21,25 +23,22 @@ namespace genesis
 
 ///-----------------------------------------------------------------------------------------------
 
-namespace debug
+namespace rendering
 {
-
 
 ///-----------------------------------------------------------------------------------------------
 
-class DebugViewStateSingletonComponent final: public ecs::IComponent
+using GLuint = unsigned int;
+using ResourceId = unsigned int;
+
+///-----------------------------------------------------------------------------------------------
+
+class HeightMapComponent final: public ecs::IComponent
 {
 public:
-    std::vector<std::pair<ecs::EntityId, ecs::EntityId>> mSystemNamesAndUpdateTimeStrings;    
-    std::vector<ecs::EntityId> mDebugLightEntities;
-    std::pair<ecs::EntityId, ecs::EntityId> mFpsStrings;
-    std::pair<ecs::EntityId, ecs::EntityId> mEntityCountStrings;
-
-    int mCurrentFps                = 0;
-    bool mFrameStatsDisplayEnabled = false;
-    bool mSceneGraphDisplayEnabled = false;
-    bool mLightDebugDisplayEnabled = false;
-    bool mFreeCamDebugEnabled      = true;
+    GLuint mVertexArrayObject = 0;
+    glm::vec2 mHeightMapTextureDimensions;
+    std::vector<ResourceId> mHeightMapTextureResourceIds;
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -50,4 +49,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* DebugViewStateSingletonComponent_h */
+#endif /* HeightMapComponent_h */

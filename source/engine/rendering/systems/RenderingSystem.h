@@ -35,13 +35,13 @@ namespace rendering
 ///-----------------------------------------------------------------------------------------------
 
 class CameraSingletonComponent;
+class HeightMapComponent;
 class LightStoreSingletonComponent;
 class RenderableComponent;
 class RenderingContextSingletonComponent;
 class TextStringComponent;
 class ShaderStoreSingletonComponent;
 class WindowSingletonComponent;
-
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -53,6 +53,18 @@ public:
     void VUpdate(const float dt, const std::vector<ecs::EntityId>&) const override;
 
 private:
+    void RenderHeightMapInternal
+    (
+        const TransformComponent& entityTransformComponent,
+        const RenderableComponent& entityRenderableComponent,
+        const HeightMapComponent& entityHeightMapComponent,
+        const CameraSingletonComponent& globalCameraComponent,
+        const LightStoreSingletonComponent& lightStoreComponent,
+        const ShaderStoreSingletonComponent& globalShaderStoreComponent,
+        const WindowSingletonComponent& globalWindowComponent,
+        RenderingContextSingletonComponent& renderingContextComponent
+    ) const;
+    
     void RenderStringInternal
     (
         const TransformComponent& entityTransformComponent,
