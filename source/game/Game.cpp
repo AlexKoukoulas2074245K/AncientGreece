@@ -152,6 +152,7 @@ void Game::VOnGameInit()
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
         auto position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
+        position.z = -overworld::GetTerrainHeightAtPosition(position);
         
         auto unitTypeName = intToModelType.at(i % 3);
         auto entityName = StringId("overworld_unit");

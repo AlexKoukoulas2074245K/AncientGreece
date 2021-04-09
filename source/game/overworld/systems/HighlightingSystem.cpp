@@ -152,7 +152,7 @@ void HighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPosition, c
     maxTopRightCoords.x -= maxRectWidth * 0.5f;
     minBotLeftCoords.x  -= maxRectWidth * 0.5f;
     
-    genesis::rendering::LoadAndCreateStaticModelByName(NAME_PLATE_MODEL_NAME, glm::vec3(minBotLeftCoords.x + maxRectWidth/2 - maxRectWidth * NAME_PLATE_X_OFFSET_MULTIPLIER, minBotLeftCoords.y + maxRectHeight/2.0, NAME_PLATE_Z), glm::vec3(), glm::vec3(maxRectWidth * NAME_PLATE_WIDTH_MULTIPLIER, maxRectHeight * NAME_PLATE_HEIGHT_MULTIPLIER, 1.0f), UNIT_PREVIEW_POPUP_NAME);
+    genesis::rendering::LoadAndCreateStaticModelByName(NAME_PLATE_MODEL_NAME, glm::vec3(minBotLeftCoords.x + maxRectWidth/2 - maxRectWidth * NAME_PLATE_X_OFFSET_MULTIPLIER, minBotLeftCoords.y + maxRectHeight/2.0, unitPosition.z + NAME_PLATE_Z), glm::vec3(), glm::vec3(maxRectWidth * NAME_PLATE_WIDTH_MULTIPLIER, maxRectHeight * NAME_PLATE_HEIGHT_MULTIPLIER, 1.0f), UNIT_PREVIEW_POPUP_NAME);
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -40,7 +40,7 @@ namespace
 
     static const float SUFFICIENTLY_CLOSE_THRESHOLD = 0.001f;
     static const float ROTATION_SPEED               = 5.0f;
-    static const float BASE_UNIT_SPEED              = 0.008f;
+    static const float BASE_UNIT_SPEED              = 0.006f;
 }
 
 ///-----------------------------------------------------------------------------------------------
