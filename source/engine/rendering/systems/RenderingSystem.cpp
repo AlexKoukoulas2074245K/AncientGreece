@@ -56,8 +56,10 @@ namespace
     const StringId MATERIAL_SHININESS_UNIFORM_NAME   = StringId("material_shininess");
     const StringId LIGHT_POSITIONS_UNIFORM_NAME      = StringId("light_positions");
     const StringId LIGHT_POWERS_UNIFORM_NAME         = StringId("light_powers");
+    const StringId DT_ACCUM_UNIFORM_NAME             = StringId("dt_accumulator");
     const StringId EYE_POSITION_UNIFORM_NAME         = StringId("eye_pos");
     const StringId IS_AFFECTED_BY_LIGHT_UNIFORM_NAME = StringId("is_affected_by_light");
+
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -72,7 +74,7 @@ RenderingSystem::RenderingSystem()
 
 ///-----------------------------------------------------------------------------------------------
 
-void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& entitiesToProcess) const
+void RenderingSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& entitiesToProcess) const
 {    
     auto& world = ecs::World::GetInstance();
 
@@ -82,6 +84,7 @@ void RenderingSystem::VUpdate(const float, const std::vector<ecs::EntityId>& ent
     const auto& lightStoreComponent  = world.GetSingletonComponent<LightStoreSingletonComponent>();
     auto& cameraComponent            = world.GetSingletonComponent<CameraSingletonComponent>();
     auto& renderingContextComponent  = world.GetSingletonComponent<RenderingContextSingletonComponent>();
+    renderingContextComponent.mDtAccumulator += dt;
     
     // Calculate render-constant camera view matrix
     cameraComponent.mViewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
@@ -352,6 +355,7 @@ void RenderingSystem::RenderHeightMapInternal
     currentShader->SetFloatVec4(MATERIAL_DIFFUSE_UNIFORM_NAME, renderableComponent.mMaterial.mDiffuse);
     currentShader->SetFloatVec4(MATERIAL_SPECULAR_UNIFORM_NAME, renderableComponent.mMaterial.mSpecular);
     currentShader->SetFloat(MATERIAL_SHININESS_UNIFORM_NAME, renderableComponent.mMaterial.mShininess);
+    currentShader->SetFloat(DT_ACCUM_UNIFORM_NAME, renderingContextComponent.mDtAccumulator);
     currentShader->SetFloatVec3Array(LIGHT_POSITIONS_UNIFORM_NAME, lightStoreComponent.mLightPositions);
     currentShader->SetFloatArray(LIGHT_POWERS_UNIFORM_NAME, lightStoreComponent.mLightPowers);
     currentShader->SetInt(IS_AFFECTED_BY_LIGHT_UNIFORM_NAME, renderableComponent.mIsAffectedByLight ? 1 : 0);
