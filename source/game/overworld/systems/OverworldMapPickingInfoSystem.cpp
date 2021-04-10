@@ -7,8 +7,10 @@
 
 #include "OverworldMapPickingInfoSystem.h"
 #include "../components/OverworldMapPickingInfoSingletonComponent.h"
+#include "../utils/OverworldUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
+#include "../../../engine/input/utils/InputUtils.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/rendering/components/WindowSingletonComponent.h"
@@ -63,6 +65,12 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
     // Calculate Mouse Intersection with map
     mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(viewMatrix, projectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
     genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, MAP_POSITION, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
+    mapPickingInfoComponent.mMapIntersectionPoint.z = -GetTerrainHeightAtPosition(mapPickingInfoComponent.mMapIntersectionPoint);
+    
+    if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) == genesis::input::InputState::TAPPED)
+    {
+        Log(LogType::INFO, "Map position %.6f, %.6f, %.6f", mapPickingInfoComponent.mMapIntersectionPoint.x, mapPickingInfoComponent.mMapIntersectionPoint.y, mapPickingInfoComponent.mMapIntersectionPoint.z);
+    }
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -82,7 +82,7 @@ void BattleTargetAcquisitionSystem::PickOptimalTargetForEntity(const genesis::ec
 
 ///-----------------------------------------------------------------------------------------------
 
-genesis::ecs::EntityId BattleTargetAcquisitionSystem::FindClosestTargetUnit(const StringId currentEntityBattleLeader, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const
+genesis::ecs::EntityId BattleTargetAcquisitionSystem::FindClosestTargetUnit(const StringId& currentEntityBattleLeader, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const
 {
     const auto& world = genesis::ecs::World::GetInstance();
     auto closestTargetUnitEntity = genesis::ecs::NULL_ENTITY_ID;

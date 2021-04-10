@@ -109,7 +109,7 @@ void ViewManagementSystem::ProcessClickableEntity(const genesis::ecs::EntityId e
 
 ///-----------------------------------------------------------------------------------------------
 
-void ViewManagementSystem::HandleEvent(const genesis::ecs::EntityId sourceEntityId, const StringId eventName) const
+void ViewManagementSystem::HandleEvent(const genesis::ecs::EntityId sourceEntityId, const StringId& eventName) const
 {
     if (eventName == CLOSE_EVENT_NAME)
     {

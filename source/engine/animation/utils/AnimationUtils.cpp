@@ -39,7 +39,7 @@ StringId GetCurrentAnimationName(const ecs::EntityId entityId)
 
 ///------------------------------------------------------------------------------------------------
 
-void ChangeAnimation(const ecs::EntityId entityId, const StringId animationName, const bool loopAnimation /* true */)
+void ChangeAnimation(const ecs::EntityId entityId, const StringId& animationName, const bool loopAnimation /* true */)
 {
     auto& world = ecs::World::GetInstance();
     auto& renderableComponent = world.GetComponent<rendering::RenderableComponent>(entityId);
@@ -56,7 +56,7 @@ void ChangeAnimation(const ecs::EntityId entityId, const StringId animationName,
 
 ///-----------------------------------------------------------------------------------------------)
 
-int GetAnimationIndex(const ecs::EntityId entityId, const StringId animationName)
+int GetAnimationIndex(const ecs::EntityId entityId, const StringId& animationName)
 {
     const auto& world = ecs::World::GetInstance();
     const auto& renderableComponent = world.GetComponent<rendering::RenderableComponent>(entityId);

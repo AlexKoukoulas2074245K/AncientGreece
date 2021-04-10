@@ -6,7 +6,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "OverworldBattleProcessingSystem.h"
-#include "../components/OverworldUnitInteractionHistorySingletonComponent.h"
+#include "../components/OverworldInteractionHistorySingletonComponent.h"
 #include "../utils/OverworldInteractionUtils.h"
 #include "../utils/OverworldUtils.h"
 #include "../../battle/utils/BattleUtils.h"
@@ -54,13 +54,13 @@ void OverworldBattleProcessingSystem::VUpdate(const float, const std::vector<gen
 
 void OverworldBattleProcessingSystem::PrepareLiveBattle() const
 {
-    const auto& lastUnitInteraction = GetLastUnitInteraction();
+    const auto& lastInteraction = GetLastInteraction();
     
-    auto attackingSideParty = PrepareBattleParty(lastUnitInteraction.mInstigatorEntityId);
-    auto defendingSideParty = PrepareBattleParty(lastUnitInteraction.mOtherEntityId);
+    auto attackingSideParty = PrepareBattleParty(lastInteraction.mInstigatorEntityId);
+    auto defendingSideParty = PrepareBattleParty(lastInteraction.mOtherEntityId);
 
     battle::PrepareBattleCamera();
-    battle::PopulateBattleEntities(attackingSideParty, defendingSideParty, lastUnitInteraction.mInstigatorEntityId, lastUnitInteraction.mOtherEntityId);
+    battle::PopulateBattleEntities(attackingSideParty, defendingSideParty, lastInteraction.mInstigatorEntityId, lastInteraction.mOtherEntityId);
 }
 
 ///-----------------------------------------------------------------------------------------------

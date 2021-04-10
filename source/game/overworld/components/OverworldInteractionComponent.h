@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldUnitInteractionComponent.h
+///  OverworldInteractionComponent.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 30/03/2021.
+///  Created by Alex Koukoulas on 10/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldUnitInteractionComponent_h
-#define OverworldUnitInteractionComponent_h
+#ifndef OverworldInteractionComponent_h
+#define OverworldInteractionComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ namespace overworld
 
 ///-----------------------------------------------------------------------------------------------
 
-struct UnitInteraction
+struct InteractionInfo
 {
     genesis::ecs::EntityId mInstigatorEntityId = genesis::ecs::NULL_ENTITY_ID;
     genesis::ecs::EntityId mOtherEntityId = genesis::ecs::NULL_ENTITY_ID;
@@ -29,10 +29,10 @@ struct UnitInteraction
 
 ///-----------------------------------------------------------------------------------------------
 
-class OverworldUnitInteractionComponent final: public genesis::ecs::IComponent
+class OverworldInteractionComponent final: public genesis::ecs::IComponent
 {
 public:
-    UnitInteraction mUnitInteraction;
+    InteractionInfo mInteraction;
 };
 
 ///-----------------------------------------------------------------------------------------------

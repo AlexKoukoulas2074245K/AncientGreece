@@ -20,6 +20,12 @@ namespace
     static const std::string CITY_STATE_INFO_FILE_PATH = genesis::resources::ResourceLoadingService::RES_DATA_ROOT + "city_state_db.json";
     static const int UPPER_LIMIT_GARISSON = 1100;
     static const int UPPER_LIMIT_RENOWN   = 100;
+
+    static const float CITY_STATE_RX = -genesis::math::PI/2.0;
+    static const float CITY_STATE_RY = 0.0f;
+
+    static const float CITY_STATE_NAME_BASE_SIZE              = 0.001f;
+    static const float CITY_STATE_NAME_SIZE_RENOWN_MULTIPLIER = 0.0001f;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -44,8 +50,16 @@ void LoadCityStateInfo()
         (
             cityStateInfo["x"].get<float>(),
             cityStateInfo["y"].get<float>(),
-            0.0f
+            cityStateInfo["z"].get<float>()
         );
+        
+        cityStateInfoComponent->mCityStateNameToInfo[cityStateName].mRotation = glm::vec3
+        (
+            CITY_STATE_RX,
+            CITY_STATE_RY,
+            cityStateInfo["rz"].get<float>()
+        );
+        
         cityStateInfoComponent->mCityStateNameToInfo[cityStateName].mRenown = cityStateInfo["renown"].get<int>();
         cityStateInfoComponent->mCityStateNameToInfo[cityStateName].mGarisson = cityStateInfo["garisson"].get<int>();
         cityStateInfoComponent->mCityStateNameToInfo[cityStateName].mDescription = cityStateInfo["description"].get<std::string>();
@@ -56,7 +70,16 @@ void LoadCityStateInfo()
 
 ///-----------------------------------------------------------------------------------------------
 
-CityStateInfo& GetCityStateInfo(const StringId cityStateName)
+float GetCityStateNameSize(const StringId& cityStateName)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto& cityStateInfoComponent = world.GetSingletonComponent<CityStateInfoSingletonComponent>();
+    return CITY_STATE_NAME_BASE_SIZE + CITY_STATE_NAME_SIZE_RENOWN_MULTIPLIER * cityStateInfoComponent.mCityStateNameToInfo.at(cityStateName).mRenown;
+}
+
+///-----------------------------------------------------------------------------------------------
+
+CityStateInfo& GetCityStateInfo(const StringId& cityStateName)
 {
     auto& world = genesis::ecs::World::GetInstance();
     return world.GetSingletonComponent<CityStateInfoSingletonComponent>().mCityStateNameToInfo.at(cityStateName);
@@ -64,7 +87,7 @@ CityStateInfo& GetCityStateInfo(const StringId cityStateName)
 
 ///-----------------------------------------------------------------------------------------------
 
-genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId cityStateName)
+genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId& cityStateName)
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto garisson =  world.GetSingletonComponent<CityStateInfoSingletonComponent>().mCityStateNameToInfo.at(cityStateName).mGarisson;
@@ -76,7 +99,7 @@ genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId city
 
 ///-----------------------------------------------------------------------------------------------
 
-genesis::colors::RgbTriplet<float> GetCityStateRenownColor(const StringId cityStateName)
+genesis::colors::RgbTriplet<float> GetCityStateRenownColor(const StringId& cityStateName)
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto renown =  world.GetSingletonComponent<CityStateInfoSingletonComponent>().mCityStateNameToInfo.at(cityStateName).mRenown;

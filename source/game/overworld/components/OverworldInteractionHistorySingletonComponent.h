@@ -1,16 +1,16 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldUnitInteractionHistorySingletonComponent.h
+///  OverworldInteractionHistorySingletonComponent.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 30/03/2021.
+///  Created by Alex Koukoulas on 10/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldUnitInteractionHistorySingletonComponent_h
-#define OverworldUnitInteractionHistorySingletonComponent_h
+#ifndef OverworldInteractionHistorySingletonComponent_h
+#define OverworldInteractionHistorySingletonComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
-#include "OverworldUnitInteractionComponent.h"
+#include "OverworldInteractionComponent.h"
 #include "../../engine/ECS.h"
 #include <vector>
 
@@ -21,10 +21,10 @@ namespace overworld
 
 ///-----------------------------------------------------------------------------------------------
 
-class OverworldUnitInteractionHistorySingletonComponent final: public genesis::ecs::IComponent
+class OverworldInteractionHistorySingletonComponent final: public genesis::ecs::IComponent
 {
 public:
-    std::vector<UnitInteraction> mUnitInteractions;
+    std::vector<InteractionInfo> mInteractions;
 };
 
 ///-----------------------------------------------------------------------------------------------

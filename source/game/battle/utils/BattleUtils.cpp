@@ -56,7 +56,7 @@ namespace
 void CreateBattleGround();
 void CalculateUnitTargetDistances(const std::vector<UnitStats>& party, float& targetUnitXDistance, float& targetUnitYDistance);
 void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId);
-void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId leaderEntityName, const bool isAttackingSide);
+void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderEntityName, const bool isAttackingSide);
 
 ///------------------------------------------------------------------------------------------------
 
@@ -223,7 +223,7 @@ void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const s
 
 ///------------------------------------------------------------------------------------------------
 
-void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId leaderEntityName, const bool isAttackingSide)
+void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderEntityName, const bool isAttackingSide)
 {
     auto& world = genesis::ecs::World::GetInstance();
     

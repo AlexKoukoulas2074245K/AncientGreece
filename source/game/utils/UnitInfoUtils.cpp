@@ -96,7 +96,7 @@ StringId GetRandomAvailableUnitName()
 
 ///-----------------------------------------------------------------------------------------------
 
-const UnitStats& GetUnitBaseStats(const StringId unitTypeName)
+const UnitStats& GetUnitBaseStats(const StringId& unitTypeName)
 {
     return genesis::ecs::World::GetInstance().GetSingletonComponent<UnitBaseStatsSingletonComponent>().mUnitTypeNameToBaseStats.at(unitTypeName);
 }
@@ -111,7 +111,7 @@ size_t GetUnitPartySize(const UnitStatsComponent& unitStatsComponent)
 
 ///-----------------------------------------------------------------------------------------------
 
-StringId GetUnitModelName(const StringId unitTypeName)
+const StringId& GetUnitModelName(const StringId& unitTypeName)
 {
     return genesis::ecs::World::GetInstance().GetSingletonComponent<UnitBaseStatsSingletonComponent>().mUnitTypeNameToBaseStats.at(unitTypeName).mUnitModelName;
 }

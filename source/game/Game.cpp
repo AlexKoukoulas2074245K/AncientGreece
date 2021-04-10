@@ -21,11 +21,10 @@
 #include "overworld/systems/HighlightingSystem.h"
 #include "overworld/systems/OverworldBattleProcessingSystem.h"
 #include "overworld/systems/OverworldCameraControllerSystem.h"
-#include "overworld/systems/OverworldLocationInteractionHandlingSystem.h"
 #include "overworld/systems/OverworldMapPickingInfoSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
+#include "overworld/systems/OverworldPlayerTargetInteractionHandlingSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
-#include "overworld/systems/OverworldUnitInteractionHandlingSystem.h"
 #include "overworld/utils/OverworldUtils.h"
 #include "scene/systems/SceneUpdaterSystem.h"
 #include "systems/ModelAnimationTogglingSystem.h"
@@ -102,10 +101,9 @@ void Game::VOnSystemsInit()
     
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), MAP_CONTEXT);
-    world.AddSystem(std::make_unique<overworld::OverworldLocationInteractionHandlingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>(), MAP_CONTEXT);
-    world.AddSystem(std::make_unique<overworld::OverworldUnitInteractionHandlingSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetInteractionHandlingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldBattleProcessingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
     

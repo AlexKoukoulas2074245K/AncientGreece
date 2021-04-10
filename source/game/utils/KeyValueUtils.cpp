@@ -17,7 +17,7 @@ namespace
 
 ///------------------------------------------------------------------------------------------------
 
-void WriteValue(const StringId key, const std::string& value)
+void WriteValue(const StringId& key, const std::string& value)
 {
     auto& world = genesis::ecs::World::GetInstance();
     if (!world.HasSingletonComponent<KeyValueDataStoreSingletonComponent>())
@@ -29,7 +29,7 @@ void WriteValue(const StringId key, const std::string& value)
 
 ///------------------------------------------------------------------------------------------------
 
-const std::string ReadValue(const StringId key)
+const std::string ReadValue(const StringId& key)
 {
     auto& world = genesis::ecs::World::GetInstance();
     if (!world.HasSingletonComponent<KeyValueDataStoreSingletonComponent>())

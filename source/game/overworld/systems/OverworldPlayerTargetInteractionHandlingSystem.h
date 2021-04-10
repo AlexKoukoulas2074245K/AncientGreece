@@ -1,26 +1,17 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldLocationInteractionHandlingSystem.h
+///  OverworldPlayerTargetInteractionHandlingSystem.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 24/03/2021.
+///  Created by Alex Koukoulas on 10/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldLocationInteractionHandlingSystem_h
-#define OverworldLocationInteractionHandlingSystem_h
+#ifndef OverworldPlayerTargetInteractionHandlingSystem_h
+#define OverworldPlayerTargetInteractionHandlingSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
-
-///-----------------------------------------------------------------------------------------------
-
-namespace genesis
-{
-    namespace rendering
-    {
-        class TextStringComponent;
-    }
-}
+#include "../../../engine/common/utils/MathUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -29,15 +20,16 @@ namespace overworld
 
 ///-----------------------------------------------------------------------------------------------
 
-class HighlightableComponent;
+class OverworldInteractionComponent;
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldLocationInteractionHandlingSystem final : public genesis::ecs::BaseSystem<HighlightableComponent, genesis::rendering::TextStringComponent>
+class OverworldPlayerTargetInteractionHandlingSystem final : public genesis::ecs::BaseSystem<OverworldInteractionComponent>
 {
 public:
-    OverworldLocationInteractionHandlingSystem();
+    OverworldPlayerTargetInteractionHandlingSystem();
 
-    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const override;
+    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -46,4 +38,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* OverworldLocationInteractionHandlingSystem_h */
+#endif /* OverworldPlayerTargetInteractionHandlingSystem_h */

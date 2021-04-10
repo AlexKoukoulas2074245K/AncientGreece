@@ -23,15 +23,19 @@ void LoadCityStateInfo();
 
 ///------------------------------------------------------------------------------------------------
 
-CityStateInfo& GetCityStateInfo(const StringId cityStateName);
+float GetCityStateNameSize(const StringId& cityStateName);
 
 ///------------------------------------------------------------------------------------------------
 
-genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId cityStateName);
+CityStateInfo& GetCityStateInfo(const StringId& cityStateName);
 
 ///------------------------------------------------------------------------------------------------
 
-genesis::colors::RgbTriplet<float> GetCityStateRenownColor(const StringId cityStateName);
+genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId& cityStateName);
+
+///------------------------------------------------------------------------------------------------
+
+genesis::colors::RgbTriplet<float> GetCityStateRenownColor(const StringId& cityStateName);
 
 ///------------------------------------------------------------------------------------------------
 

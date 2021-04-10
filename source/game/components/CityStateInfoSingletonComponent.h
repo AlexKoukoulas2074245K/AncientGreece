@@ -21,6 +21,7 @@ struct CityStateInfo
 {
     std::string mDescription;
     glm::vec3 mPosition;
+    glm::vec3 mRotation;
     int mRenown;
     int mGarisson;
 };

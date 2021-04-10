@@ -8,7 +8,7 @@
 #include "OverworldMovementControllerSystem.h"
 #include "../AreaTypes.h"
 #include "../components/OverworldTargetComponent.h"
-#include "../components/OverworldUnitInteractionComponent.h"
+#include "../components/OverworldInteractionComponent.h"
 #include "../utils/OverworldUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitCollisionUtils.h"
@@ -81,12 +81,12 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
             // Create interaction component
             if (isFollowingEntity)
             {
-                auto unitInteractionComponent = std::make_unique<OverworldUnitInteractionComponent>();
-                unitInteractionComponent->mUnitInteraction.mInstigatorEntityId = entityId;
-                unitInteractionComponent->mUnitInteraction.mInstigatorEntityName = world.GetComponent<genesis::NameComponent>(entityId).mName;
-                unitInteractionComponent->mUnitInteraction.mOtherEntityId = waypointComponent.mEntityTargetToFollow;
-                unitInteractionComponent->mUnitInteraction.mOtherEntityName = world.GetComponent<genesis::NameComponent>(waypointComponent.mEntityTargetToFollow).mName;
-                world.AddComponent<OverworldUnitInteractionComponent>(world.CreateEntity(), std::move(unitInteractionComponent));
+                auto interactionComponent = std::make_unique<OverworldInteractionComponent>();
+                interactionComponent->mInteraction.mInstigatorEntityId = entityId;
+                interactionComponent->mInteraction.mInstigatorEntityName = world.GetComponent<genesis::NameComponent>(entityId).mName;
+                interactionComponent->mInteraction.mOtherEntityId = waypointComponent.mEntityTargetToFollow;
+                interactionComponent->mInteraction.mOtherEntityName = world.GetComponent<genesis::NameComponent>(waypointComponent.mEntityTargetToFollow).mName;
+                world.AddComponent<OverworldInteractionComponent>(world.CreateEntity(), std::move(interactionComponent));
             }
             
             // Start Idle animation

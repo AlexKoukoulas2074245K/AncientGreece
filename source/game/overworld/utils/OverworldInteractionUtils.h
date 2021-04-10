@@ -19,15 +19,15 @@ namespace overworld
 
 ///------------------------------------------------------------------------------------------------
 
-struct UnitInteraction;
+struct InteractionInfo;
 
 ///------------------------------------------------------------------------------------------------
 
-void SaveInteractionToHistory(const genesis::ecs::EntityId instigatorEntityId, const genesis::ecs::EntityId otherEntityId, const StringId instigatorEntityName, const StringId otherEntityName);
+void SaveInteractionToHistory(const genesis::ecs::EntityId instigatorEntityId, const genesis::ecs::EntityId otherEntityId, const StringId& instigatorEntityName, const StringId& otherEntityName);
 
 ///------------------------------------------------------------------------------------------------
 
-const UnitInteraction& GetLastUnitInteraction();
+const InteractionInfo& GetLastInteraction();
 
 ///------------------------------------------------------------------------------------------------
 

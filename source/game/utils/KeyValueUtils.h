@@ -14,11 +14,11 @@
 
 ///------------------------------------------------------------------------------------------------
 
-void WriteValue(const StringId key, const std::string& value);
+void WriteValue(const StringId& key, const std::string& value);
 
 ///------------------------------------------------------------------------------------------------
 
-const std::string ReadValue(const StringId key);
+const std::string ReadValue(const StringId& key);
 
 ///------------------------------------------------------------------------------------------------
 
