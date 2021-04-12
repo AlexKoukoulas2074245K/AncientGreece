@@ -6,6 +6,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "ShaderLoader.h"
+#include "ResourceLoadingService.h"
 #include "../common/utils/Logging.h"
 #include "../common/utils/OSMessageBox.h"
 #include "../common/utils/StringUtils.h"
@@ -52,7 +53,8 @@ std::unique_ptr<IResource> ShaderLoader::VCreateAndLoadResource(const std::strin
     const auto vertexShaderId = GL_NO_CHECK(glCreateShader(GL_VERTEX_SHADER));
     
     // Read vertex shader source
-    const auto vertexShaderFileContents = ReadFileContents(resourcePath + VERTEX_SHADER_FILE_EXTENSION);
+    auto vertexShaderFileContents = ReadFileContents(resourcePath + VERTEX_SHADER_FILE_EXTENSION);
+    ReplaceIncludeDirectives(vertexShaderFileContents);
     const char* vertexShaderFileContentsPtr = vertexShaderFileContents.c_str();
 
     // Compile vertex shader
@@ -75,7 +77,8 @@ std::unique_ptr<IResource> ShaderLoader::VCreateAndLoadResource(const std::strin
     const auto fragmentShaderId = GL_NO_CHECK(glCreateShader(GL_FRAGMENT_SHADER));
     
     // Read vertex shader source
-    const auto fragmentShaderFileContents = ReadFileContents(resourcePath + FRAGMENT_SHADER_FILE_EXTENSION);
+    auto fragmentShaderFileContents = ReadFileContents(resourcePath + FRAGMENT_SHADER_FILE_EXTENSION);
+    ReplaceIncludeDirectives(fragmentShaderFileContents);
     const char* fragmentShaderFileContentsPtr = fragmentShaderFileContents.c_str();
     
     GL_CHECK(glShaderSource(fragmentShaderId, 1, &fragmentShaderFileContentsPtr, nullptr));
@@ -163,6 +166,28 @@ std::string ShaderLoader::ReadFileContents(const std::string& filePath) const
                std::istreambuf_iterator<char>());
     
     return contents;
+}
+
+///------------------------------------------------------------------------------------------------
+
+void ShaderLoader::ReplaceIncludeDirectives(std::string& shaderSource) const
+{
+    std::stringstream reconstructedSourceBuilder;
+    auto shaderSourceSplitByLine = StringSplit(shaderSource, '\n');
+    for (const auto& line: shaderSourceSplitByLine)
+    {
+        if (StringStartsWith(line, "#include"))
+        {
+            const auto fileSplitByQuotes = StringSplit(line, '"');
+            reconstructedSourceBuilder << '\n' <<  ReadFileContents(ResourceLoadingService::RES_SHADERS_ROOT +  fileSplitByQuotes[fileSplitByQuotes.size() - 1]);
+        }
+        else
+        {
+            reconstructedSourceBuilder << '\n' << line;
+        }
+    }
+        
+    shaderSource = reconstructedSourceBuilder.str();
 }
 
 ///------------------------------------------------------------------------------------------------

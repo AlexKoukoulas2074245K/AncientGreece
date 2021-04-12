@@ -108,7 +108,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
     
     world.AddSystem(std::make_unique<scene::SceneUpdaterSystem>());
-    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>());
+    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), 0, genesis::ecs::SystemOperationMode::MULTI_THREADED);
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 
@@ -177,10 +177,30 @@ void Game::VOnUpdate(float& dt)
     
     dtAccum2 += dt;
     
-    dtAccum += lightStoreComponent.mLightPositions[0].z <= 0.0f ? dt/2.0f : dt;
-    lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2.6666666);
-    lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2.6666666);
-//    Log(LogType::INFO, "%.6f, %.6f, %.6f", lightStoreComponent.mLightPositions[0].x, lightStoreComponent.mLightPositions[0].y, lightStoreComponent.mLightPositions[0].z);
+    const auto dayCycleSpeed = 1.0f/10.0f;
+    dtAccum += dayCycleSpeed * dt;
+    
+    const auto currentTimeStamp = std::fmod(dtAccum, genesis::math::PI * 2.0f);
+    Log(LogType::INFO, "%.6f", currentTimeStamp);
+    lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(currentTimeStamp);
+    lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(currentTimeStamp);
+    
+    const auto dayCycleFactor = (currentTimeStamp/(genesis::math::PI * 2.0f)) * 24.0f;
+    
+    std::string currentPeriod = "Night";
+    
+    if (dayCycleFactor <= 3.0f) currentPeriod = "Midnight";
+    else if (dayCycleFactor <= 6.0f) currentPeriod = "Dawn";
+    else if (dayCycleFactor <= 9.0f) currentPeriod = "Early Morning";
+    else if (dayCycleFactor <= 12.0f) currentPeriod = "Morning";
+    else if (dayCycleFactor <= 15.0f) currentPeriod = "Midday";
+    else if (dayCycleFactor <= 18.0f) currentPeriod = "Afternoon";
+    else if (dayCycleFactor <= 21.0f) currentPeriod = "Dusk";
+    else if (dayCycleFactor <= 24.0f) currentPeriod = "Night";
+    
+    world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_period")));
+    genesis::rendering::RenderText(currentPeriod, StringId("ancient_greek_font"), 0.1f, glm::vec3(-0.85f, -0.85f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), false, StringId("time_period"));
+    //    Log(LogType::INFO, "%.6f, %.6f, %.6f", lightStoreComponent.mLightPositions[0].x, lightStoreComponent.mLightPositions[0].y, lightStoreComponent.mLightPositions[0].z);
 #if !defined(NDEBUG)
 //    if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)
 //    {

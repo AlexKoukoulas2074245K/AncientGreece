@@ -48,6 +48,7 @@ private:
     ShaderLoader() = default;
     
     std::string ReadFileContents(const std::string& filePath) const;
+    void ReplaceIncludeDirectives(std::string& shaderSource) const;
     tsl::robin_map<StringId, GLuint, StringIdHasher> GetUniformNamesToLocationsMap
     (
         const GLuint programId,

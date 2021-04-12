@@ -59,7 +59,8 @@ namespace
     const StringId DT_ACCUM_UNIFORM_NAME             = StringId("dt_accumulator");
     const StringId EYE_POSITION_UNIFORM_NAME         = StringId("eye_pos");
     const StringId IS_AFFECTED_BY_LIGHT_UNIFORM_NAME = StringId("is_affected_by_light");
-
+    
+    const std::string SHADERS_INCLUDE_DIR = "include/";
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -785,6 +786,10 @@ std::set<std::string> RenderingSystem::GetAndFilterShaderNames() const
     std::set<std::string> shaderNames;
     for (const auto& shaderFilename : vertexAndFragmentShaderFilenames)
     {
+        if (StringStartsWith(SHADERS_INCLUDE_DIR, shaderFilename))
+        {
+            continue;
+        }
         shaderNames.insert(GetFileNameWithoutExtension(shaderFilename));
     }
     return shaderNames;
