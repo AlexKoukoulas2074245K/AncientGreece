@@ -67,7 +67,10 @@ void main()
 
 	if (is_affected_by_light == 1)
 	{
-		frag_color = frag_color * material_ambient + light_accumulator;
+		vec3 light_direction = normalize(light_positions[0]);
+		float diffuse_factor = max(dot(vec3(0.0f, 0.0f, -1.0f), light_direction), 0.0f);
+		vec4 light_ambient = vec4(material_ambient.rgb * diffuse_factor * 0.5f, 1.0f);
+		frag_color = frag_color * (vec4(material_ambient.rgb * 0.5f, 1.0f) + light_ambient) + light_accumulator;
 	}	
 
 }

@@ -106,7 +106,11 @@ float GetTerrainHeightAtPosition(const glm::vec3& position)
     const auto heightMapCol = heightMapCols/2.0f + relativeXDisplacement * heightMapCols/2.0f;
     const auto heightMapRow = heightMapRows/2 - relativeYDisplacement * heightMapRows/2;
     
-    return heightMapComponent.mHeightMapTileHeights[heightMapRow][heightMapCols - heightMapCol] + HEIGHTMAP_Z_OFFSET;
+    if (heightMapCol >= 0 && heightMapRow >= 0 && heightMapCol < heightMapCols && heightMapRow < heightMapRows)
+    {
+        return heightMapComponent.mHeightMapTileHeights[heightMapRow][heightMapCols - heightMapCol] + HEIGHTMAP_Z_OFFSET;
+    }
+    return 0.0f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -166,6 +170,14 @@ void PopulateOverworldCityStates()
     for (const auto& cityStateInfoEntry: cityStateInfoComponent.mCityStateNameToInfo)
     {
         auto cityStateEntity = genesis::rendering::LoadAndCreateStaticModelByName(CITY_STATE_BUILDING_MODEL_NAME, cityStateInfoEntry.second.mPosition, cityStateInfoEntry.second.mRotation, GetCityStateOverworldScale(cityStateInfoEntry.first), cityStateInfoEntry.first);
+        
+        auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(cityStateEntity);
+        renderableComponent.mMaterial.mAmbient = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        renderableComponent.mMaterial.mDiffuse = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
+        renderableComponent.mMaterial.mSpecular = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
+        renderableComponent.mMaterial.mShininess = 1.0f;
+        renderableComponent.mIsAffectedByLight = true;
+        
 //        auto cityStateEntity = genesis::rendering::RenderText(cityStateInfoEntry.first.GetString(), GAME_FONT_NAME, GetCityStateOverworldNameSize(cityStateInfoEntry.first), glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, CITY_STATE_NAME_Z), genesis::colors::BLACK, true, cityStateInfoEntry.first);
 //
 //        const auto textRect = genesis::rendering::CalculateTextBoundingRect(cityStateEntity);

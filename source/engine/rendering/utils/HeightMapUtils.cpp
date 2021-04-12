@@ -70,8 +70,8 @@ ecs::EntityId LoadAndCreateHeightMapByName
     
     // Read heightMap values
     const auto& heightMapDimensions = heightMapTextureResource.GetDimensions();
-    const auto heightMapRows = heightMapDimensions.y;
-    const auto heightMapCols = heightMapDimensions.x;
+    const auto heightMapRows = static_cast<int>(heightMapDimensions.y);
+    const auto heightMapCols = static_cast<int>(heightMapDimensions.x);
     
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> uvs;
@@ -98,6 +98,9 @@ ecs::EntityId LoadAndCreateHeightMapByName
         }
     }
     
+    triangleNormals[0].resize((heightMapRows - 1) * (heightMapCols - 1));
+    triangleNormals[1].resize((heightMapRows - 1) * (heightMapCols - 1));
+    
     for (auto row = 0; row < heightMapRows - 1; ++row)
     {
         for (auto col = 0; col < heightMapCols - 1; ++col)
@@ -108,6 +111,10 @@ ecs::EntityId LoadAndCreateHeightMapByName
                 vertices[(row + 1) * heightMapCols + col],
                 vertices[(row + 1) * heightMapCols + (col +1)]
             };
+            triangle0[0].y *= HEIGHTMAP_HEIGHT_SCALE;
+            triangle0[1].y *= HEIGHTMAP_HEIGHT_SCALE;
+            triangle0[2].y *= HEIGHTMAP_HEIGHT_SCALE;
+            
             glm::vec3 triangle1[] =
             {
                 vertices[(row + 1) * heightMapCols + (col +1)],
@@ -115,11 +122,15 @@ ecs::EntityId LoadAndCreateHeightMapByName
                 vertices[row * heightMapCols + col]
             };
             
-            glm::vec3 triangle0Norm = glm::cross(triangle0[0]-triangle0[1], triangle0[1]-triangle0[2]);
-            glm::vec3 triangle1Norm = glm::cross(triangle1[0]-triangle1[1], triangle1[1]-triangle1[2]);
+            triangle1[0].y *= HEIGHTMAP_HEIGHT_SCALE;
+            triangle1[1].y *= HEIGHTMAP_HEIGHT_SCALE;
+            triangle1[2].y *= HEIGHTMAP_HEIGHT_SCALE;
             
-            triangleNormals[0].push_back(glm::normalize(triangle0Norm));
-            triangleNormals[1].push_back(glm::normalize(triangle1Norm));
+            glm::vec3 triangle0Norm = glm::cross(triangle0[1]-triangle0[0], triangle0[2]-triangle0[0]);
+            glm::vec3 triangle1Norm = glm::cross(triangle1[1]-triangle1[0], triangle1[2]-triangle1[0]);
+            
+            triangleNormals[0][row * heightMapCols + col] = glm::normalize(triangle0Norm);
+            triangleNormals[1][row * heightMapCols + col] = glm::normalize(triangle1Norm);
         }
     }
     
@@ -128,33 +139,33 @@ ecs::EntityId LoadAndCreateHeightMapByName
         for (auto col = 0; col < heightMapCols; ++col)
         {
             glm::vec3 finalNormal = glm::vec3(0.0f);
-            
+
             // Look for upper-left triangles
             if(col != 0 && row != 0)
             {
                 finalNormal += triangleNormals[0][(row - 1) * heightMapCols + (col - 1)];
                 finalNormal += triangleNormals[1][(row - 1) * heightMapCols + (col - 1)];
             }
-            
+
             // Look for upper-right triangles
             if(row != 0 && col != heightMapCols - 1)
             {
                 finalNormal += triangleNormals[0][(row - 1) * heightMapCols + col];
             }
-            
+
             // Look for bottom-right triangles
             if(row != heightMapRows - 1 && col != heightMapCols - 1)
             {
                 finalNormal += triangleNormals[0][row * heightMapCols + col];
                 finalNormal += triangleNormals[1][row * heightMapCols + col];
             }
-    
+
             // Look for bottom-left triangles
             if(row != heightMapRows - 1 && col != 0)
             {
                 finalNormal += triangleNormals[1][row * heightMapCols + (col - 1)];
             }
-    
+
             normals.push_back(glm::normalize(finalNormal));
         }
     }
@@ -227,6 +238,11 @@ ecs::EntityId LoadAndCreateHeightMapByName
 
     auto renderableComponent = std::make_unique<RenderableComponent>();
     renderableComponent->mShaderNameId = HEIGHTMAP_SHADER_NAME;
+    renderableComponent->mMaterial.mAmbient = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    renderableComponent->mMaterial.mDiffuse = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
+    renderableComponent->mMaterial.mSpecular = glm::vec4(0.00f, 0.00f, 0.00f, 1.0f);
+    renderableComponent->mMaterial.mShininess = 1.0f;
+    renderableComponent->mIsAffectedByLight = true;
     
     for (auto i = 0U; i < heightMapTextures.size(); ++i)
     {

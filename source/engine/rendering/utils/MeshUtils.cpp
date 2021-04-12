@@ -123,6 +123,15 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
     renderableComponent->mShaderNameId = isGui ? GUI_ANIMATED_MODEL_3D_SHADER_NAME: DEFAULT_SKELETAL_MODEL_SHADER;
     renderableComponent->mAnimationSpeed *= randomizationAnimationFactor;
     
+    if (!isGui)
+    {
+        renderableComponent->mMaterial.mAmbient = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        renderableComponent->mMaterial.mDiffuse = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+        renderableComponent->mMaterial.mSpecular = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        renderableComponent->mMaterial.mShininess = 1.0f;
+        renderableComponent->mIsAffectedByLight = true;
+    }
+    
     auto animFiles = GetAllFilenamesInDirectory(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/");
     for (const auto& fileName: animFiles)
     {

@@ -126,9 +126,7 @@ void Game::VOnGameInit()
     
     overworld::PopulateOverworldEntities();
 
-    genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 1.0f), 4.0f);
-    genesis::rendering::AddLightSource(glm::vec3(2.0f, 2.0f, 0.0f), 4.0f);
-    
+    genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 0.5f), 1.0f);
     
     const tsl::robin_map<int, StringId> intToModelType =
     {
@@ -176,12 +174,13 @@ void Game::VOnUpdate(float& dt)
     
     auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
     
-    dtAccum += dt;
+    
     dtAccum2 += dt;
     
-    lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2) * 2;
-    lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2) * 2;
-    
+    dtAccum += lightStoreComponent.mLightPositions[0].z <= 0.0f ? dt/2.0f : dt;
+    lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dtAccum/2.6666666);
+    lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dtAccum/2.6666666);
+//    Log(LogType::INFO, "%.6f, %.6f, %.6f", lightStoreComponent.mLightPositions[0].x, lightStoreComponent.mLightPositions[0].y, lightStoreComponent.mLightPositions[0].z);
 #if !defined(NDEBUG)
 //    if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)
 //    {
