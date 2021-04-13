@@ -53,6 +53,9 @@ public:
     void VUpdate(const float dt, const std::vector<ecs::EntityId>&) const override;
 
 private:
+    void DepthRenderingPass(const std::vector<ecs::EntityId>& applicableEntities) const;
+    void FinalRenderingPass(const std::vector<ecs::EntityId>& applicableEntities) const;
+    
     void RenderHeightMapInternal
     (
         const TransformComponent& entityTransformComponent,
@@ -90,6 +93,8 @@ private:
     
     void InitializeCamera() const;
     void InitializeLights() const;
+    void InitializeShadowMapTexture() const;
+    void InitializeFrameBuffers() const;
     void CompileAndLoadShaders() const;
 
     std::set<std::string> GetAndFilterShaderNames() const;

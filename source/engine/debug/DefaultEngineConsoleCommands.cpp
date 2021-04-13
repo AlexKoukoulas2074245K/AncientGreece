@@ -9,6 +9,7 @@
 #include "components/DebugViewStateSingletonComponent.h"
 #include "utils/ConsoleCommandUtils.h"
 #include "../common/components/TransformComponent.h"
+#include "../rendering/components/RenderingContextSingletonComponent.h"
 
 #include <unordered_set>
 
@@ -94,6 +95,25 @@ void RegisterDefaultEngineConsoleCommands()
         auto& debugViewStateComponent = world.GetSingletonComponent<debug::DebugViewStateSingletonComponent>();
 
         debugViewStateComponent.mLightDebugDisplayEnabled = StringToLower(commandTextComponents[1]) == "on";
+
+        return debug::ConsoleCommandResult(true);
+    });
+    
+    debug::RegisterConsoleCommand(StringId("shadows"), [](const std::vector<std::string>& commandTextComponents)
+    {
+        static const std::unordered_set<std::string> sAllowedOptions = { "on", "off" };
+
+        const std::string USAGE_STRING = "Usage: shadows on|off";
+
+        if (commandTextComponents.size() != 2 || sAllowedOptions.count(StringToLower(commandTextComponents[1])) == 0)
+        {
+            return debug::ConsoleCommandResult(false, USAGE_STRING);
+        }
+
+        const auto& world = ecs::World::GetInstance();
+        auto& renderingContextComponent = world.GetSingletonComponent<rendering::RenderingContextSingletonComponent>();
+
+        renderingContextComponent.mShadowsEnabled = StringToLower(commandTextComponents[1]) == "on";
 
         return debug::ConsoleCommandResult(true);
     });

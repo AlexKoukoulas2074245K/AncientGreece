@@ -1,16 +1,16 @@
 #version 330 core
 
 uniform sampler2D tex;
-uniform bool flip_tex_hor;
-uniform bool flip_tex_ver;
+uniform vec3 light_positions[32];
+uniform float light_powers[32];
 uniform vec4 material_ambient;
 uniform vec4 material_diffuse;
 uniform vec4 material_specular;
-uniform float material_shininess;
-uniform int is_affected_by_light;
-uniform vec3 light_positions[32];
-uniform float light_powers[32];
 uniform vec3 eye_pos;
+uniform float material_shininess;
+uniform bool flip_tex_hor;
+uniform bool flip_tex_ver;
+uniform bool is_affected_by_light;
 
 in vec2 uv_frag;
 in vec3 normal_interp;
@@ -33,10 +33,9 @@ void main()
 	// Get texture color
     vec4 tex_color = texture(tex, vec2(final_uv_x, final_uv_y));
 
-    
 	frag_color = tex_color;
 
-	if (is_affected_by_light == 1)
+	if (is_affected_by_light)
 	{ 
 		vec3 normal = normalize(normal_interp);
 

@@ -177,6 +177,7 @@ void PopulateOverworldCityStates()
         renderableComponent.mMaterial.mSpecular = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
         renderableComponent.mMaterial.mShininess = 1.0f;
         renderableComponent.mIsAffectedByLight = true;
+        renderableComponent.mIsCastingShadows = true;
         
 //        auto cityStateEntity = genesis::rendering::RenderText(cityStateInfoEntry.first.GetString(), GAME_FONT_NAME, GetCityStateOverworldNameSize(cityStateInfoEntry.first), glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, CITY_STATE_NAME_Z), genesis::colors::BLACK, true, cityStateInfoEntry.first);
 //

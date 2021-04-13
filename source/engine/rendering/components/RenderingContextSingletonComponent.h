@@ -39,10 +39,13 @@ class RenderingContextSingletonComponent final : public ecs::IComponent
 {
 public:        
     // Core state
-    SDL_GLContext mGLContext         = nullptr;
-    GLuint mDefaultVertexArrayObject = 0;
-    glm::vec4 mClearColor            = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-    float mDtAccumulator             = 0.0f;
+    SDL_GLContext mGLContext          = nullptr;
+    GLuint mDefaultVertexArrayObject  = 0;
+    GLuint mDepthMapFrameBufferObject = 0;
+    GLuint mShadowMapTexture          = 0;
+    glm::vec4 mClearColor             = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    float mDtAccumulator              = 0.0f;
+    bool mShadowsEnabled              = true;
     
     // Previous render call resource pointers
     const resources::ShaderResource* previousShader   = nullptr;

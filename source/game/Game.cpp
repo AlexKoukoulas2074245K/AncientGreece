@@ -108,7 +108,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
     
     world.AddSystem(std::make_unique<scene::SceneUpdaterSystem>());
-    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), 0, genesis::ecs::SystemOperationMode::MULTI_THREADED);
+    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>());
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 
@@ -181,7 +181,6 @@ void Game::VOnUpdate(float& dt)
     dtAccum += dayCycleSpeed * dt;
     
     const auto currentTimeStamp = std::fmod(dtAccum, genesis::math::PI * 2.0f);
-    Log(LogType::INFO, "%.6f", currentTimeStamp);
     lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(currentTimeStamp);
     lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(currentTimeStamp);
     
@@ -200,6 +199,7 @@ void Game::VOnUpdate(float& dt)
     
     world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_period")));
     genesis::rendering::RenderText(currentPeriod, StringId("ancient_greek_font"), 0.1f, glm::vec3(-0.85f, -0.85f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), false, StringId("time_period"));
+    
     //    Log(LogType::INFO, "%.6f, %.6f, %.6f", lightStoreComponent.mLightPositions[0].x, lightStoreComponent.mLightPositions[0].y, lightStoreComponent.mLightPositions[0].z);
 #if !defined(NDEBUG)
 //    if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)

@@ -240,8 +240,8 @@ ecs::EntityId LoadAndCreateHeightMapByName
     renderableComponent->mShaderNameId = HEIGHTMAP_SHADER_NAME;
     renderableComponent->mMaterial.mAmbient = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     renderableComponent->mMaterial.mDiffuse = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
-    renderableComponent->mMaterial.mSpecular = glm::vec4(0.00f, 0.00f, 0.00f, 1.0f);
-    renderableComponent->mMaterial.mShininess = 1.0f;
+    renderableComponent->mMaterial.mSpecular = glm::vec4(0.00f, 0.00f, 0.00f, 0.0f);
+    renderableComponent->mMaterial.mShininess = 0.0f;
     renderableComponent->mIsAffectedByLight = true;
     
     for (auto i = 0U; i < heightMapTextures.size(); ++i)

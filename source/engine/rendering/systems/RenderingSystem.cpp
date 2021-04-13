@@ -46,21 +46,29 @@ namespace rendering
 
 namespace
 {
-    const StringId WORLD_MARIX_UNIFORM_NAME          = StringId("world");
-    const StringId VIEW_MARIX_UNIFORM_NAME           = StringId("view");
-    const StringId PROJECTION_MARIX_UNIFORM_NAME     = StringId("proj");
-    const StringId NORMAL_MATRIX_UNIFORM_NAME        = StringId("norm");
-    const StringId MATERIAL_AMBIENT_UNIFORM_NAME     = StringId("material_ambient");
-    const StringId MATERIAL_DIFFUSE_UNIFORM_NAME     = StringId("material_diffuse");
-    const StringId MATERIAL_SPECULAR_UNIFORM_NAME    = StringId("material_specular");
-    const StringId MATERIAL_SHININESS_UNIFORM_NAME   = StringId("material_shininess");
-    const StringId LIGHT_POSITIONS_UNIFORM_NAME      = StringId("light_positions");
-    const StringId LIGHT_POWERS_UNIFORM_NAME         = StringId("light_powers");
-    const StringId DT_ACCUM_UNIFORM_NAME             = StringId("dt_accumulator");
-    const StringId EYE_POSITION_UNIFORM_NAME         = StringId("eye_pos");
-    const StringId IS_AFFECTED_BY_LIGHT_UNIFORM_NAME = StringId("is_affected_by_light");
+    static const StringId WORLD_MARIX_UNIFORM_NAME          = StringId("world");
+    static const StringId VIEW_MARIX_UNIFORM_NAME           = StringId("view");
+    static const StringId PROJECTION_MARIX_UNIFORM_NAME     = StringId("proj");
+    static const StringId NORMAL_MATRIX_UNIFORM_NAME        = StringId("norm");
+    static const StringId MATERIAL_AMBIENT_UNIFORM_NAME     = StringId("material_ambient");
+    static const StringId MATERIAL_DIFFUSE_UNIFORM_NAME     = StringId("material_diffuse");
+    static const StringId MATERIAL_SPECULAR_UNIFORM_NAME    = StringId("material_specular");
+    static const StringId MATERIAL_SHININESS_UNIFORM_NAME   = StringId("material_shininess");
+    static const StringId LIGHT_POSITIONS_UNIFORM_NAME      = StringId("light_positions");
+    static const StringId LIGHT_POWERS_UNIFORM_NAME         = StringId("light_powers");
+    static const StringId DT_ACCUM_UNIFORM_NAME             = StringId("dt_accumulator");
+    static const StringId EYE_POSITION_UNIFORM_NAME         = StringId("eye_pos");
+    static const StringId IS_AFFECTED_BY_LIGHT_UNIFORM_NAME = StringId("is_affected_by_light");
+    static const StringId LIGHT_SPACE_MATRIX_UNIFORM_NAME   = StringId("light_space_matrix");
+    static const StringId SHADOW_MAP_TEXTURE_UNIFORM_NAME   = StringId("shadowMap_texture");
+    static const StringId SHADOWS_ENABLED_UNIFORM_NAME      = StringId("shadows_enabled");
+    static const StringId SKELETAL_MODEL_DEPTH_SHADER_NAME  = StringId("skeletal_model_depth");
+    static const StringId STATIC_MODEL_DEPTH_SHADER_NAME    = StringId("static_model_depth");
     
-    const std::string SHADERS_INCLUDE_DIR = "include/";
+    static const std::string SHADERS_INCLUDE_DIR = "include/";
+
+    static const unsigned int SHADOW_TEXTURE_WIDTH  = 4096;
+    static const unsigned int SHADOW_TEXTURE_HEIGHT = 4096;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -70,6 +78,8 @@ RenderingSystem::RenderingSystem()
 {
     InitializeCamera();
     InitializeLights();
+    InitializeShadowMapTexture();
+    InitializeFrameBuffers();
     CompileAndLoadShaders();
 }
 
@@ -81,8 +91,6 @@ void RenderingSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& 
 
     // Get common rendering singleton components
     const auto& windowComponent      = world.GetSingletonComponent<WindowSingletonComponent>();
-    const auto& shaderStoreComponent = world.GetSingletonComponent<ShaderStoreSingletonComponent>();
-    const auto& lightStoreComponent  = world.GetSingletonComponent<LightStoreSingletonComponent>();
     auto& cameraComponent            = world.GetSingletonComponent<CameraSingletonComponent>();
     auto& renderingContextComponent  = world.GetSingletonComponent<RenderingContextSingletonComponent>();
     renderingContextComponent.mDtAccumulator += dt;
@@ -106,7 +114,145 @@ void RenderingSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& 
     
     // Collect all entities that need to be processed
     std::vector<ecs::EntityId> applicableEntities = entitiesToProcess;
-    tsl::robin_map<RenderableType, std::vector<ecs::EntityId>> mGuiEntityGroups;
+    
+    // Sort entities based on their depth order to correct transparency
+    std::sort(applicableEntities.begin(), applicableEntities.end(), [&world](const genesis::ecs::EntityId& lhs, const genesis::ecs::EntityId& rhs)
+    {
+        const auto& lhsTransformComponent = world.GetComponent<TransformComponent>(lhs);
+        const auto& rhsTransformComponent = world.GetComponent<TransformComponent>(rhs);
+        return lhsTransformComponent.mPosition.z > rhsTransformComponent.mPosition.z;
+    });
+    
+    if (renderingContextComponent.mShadowsEnabled)
+    {
+        DepthRenderingPass(applicableEntities);
+    }
+
+    FinalRenderingPass(applicableEntities);
+    
+    // Swap window buffers
+    SDL_GL_SwapWindow(windowComponent.mWindowHandle);
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& applicableEntities) const
+{
+    auto& world = ecs::World::GetInstance();
+
+    // Get common rendering singleton components
+    const auto& shaderStoreComponent = world.GetSingletonComponent<ShaderStoreSingletonComponent>();
+    auto& renderingContextComponent  = world.GetSingletonComponent<RenderingContextSingletonComponent>();
+    auto& lightStoreComponent  = world.GetSingletonComponent<LightStoreSingletonComponent>();
+    
+    // Bind Depth frame buffer
+    GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, renderingContextComponent.mDepthMapFrameBufferObject));
+    
+    // Bind shadow viewport
+    GL_CHECK(glViewport(0, 0, SHADOW_TEXTURE_WIDTH, SHADOW_TEXTURE_HEIGHT));
+    
+    // Clear depth buffer
+    GL_CHECK(glClear(GL_DEPTH_BUFFER_BIT));
+            
+    // Calculate main shadow casting ligth's matrices
+    auto lightProjectionMatrix = glm::ortho(-0.5f, 0.5f, -0.5f, 0.5f, 0.1f, 7.5f);
+    auto lightViewMatrix = glm::lookAt(lightStoreComponent.mLightPositions[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    lightStoreComponent.mMainShadowCastingLightMatrix = lightProjectionMatrix * lightViewMatrix;
+    
+    // Execute shadow depth pass for 3d models
+    for (const auto& entityId : applicableEntities)
+    {
+        const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
+        if (renderableComponent.mIsCastingShadows)
+        {
+            const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
+            const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
+
+            if (!renderableComponent.mIsVisible)
+            {
+                return;
+            }
+            
+            // Update current mesh if necessary
+            const resources::MeshResource* currentMesh = nullptr;
+            if (renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex] != renderingContextComponent.previousMeshResourceId)
+            {
+                currentMesh = &resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
+                GL_CHECK(glBindVertexArray(currentMesh->GetVertexArrayObject()));
+
+                renderingContextComponent.previousMesh           = currentMesh;
+                renderingContextComponent.previousMeshResourceId = renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex];
+            }
+            else
+            {
+                currentMesh = renderingContextComponent.previousMesh;
+            }
+            
+            // Calculate world matrix for entity
+            glm::mat4 world(1.0f);
+                
+            // Correct display of hud and billboard entities
+            glm::vec3 position = transformComponent.mPosition;
+            glm::vec3 scale    = transformComponent.mScale;
+            glm::vec3 rotation = transformComponent.mRotation;
+            
+            glm::mat4 rotMatrix = glm::mat4_cast(math::EulerAnglesToQuat(rotation));
+            
+            world = glm::translate(world, position);
+            world *= rotMatrix;
+            world = glm::scale(world, scale);
+
+            auto& currentShader = shaderStoreComponent.mShaders.at(currentMesh->HasSkeleton() ? SKELETAL_MODEL_DEPTH_SHADER_NAME : STATIC_MODEL_DEPTH_SHADER_NAME);
+            GL_CHECK(glUseProgram(currentShader.GetProgramId()));
+            currentShader.SetMatrix4fv(LIGHT_SPACE_MATRIX_UNIFORM_NAME, lightStoreComponent.mMainShadowCastingLightMatrix);
+            
+            currentShader.SetMatrix4fv(WORLD_MARIX_UNIFORM_NAME, world);
+            
+            // Set other matrix uniforms
+            for (const auto& matrixUniformEntry: renderableComponent.mShaderUniforms.mShaderMatrixUniforms)
+            {
+                currentShader.SetMatrix4fv(matrixUniformEntry.first, matrixUniformEntry.second);
+            }
+            
+            // Set other matrix array uniforms
+            for (const auto& mat4arrayUniformEntry: renderableComponent.mShaderUniforms.mShaderMatrixArrayUniforms)
+            {
+                currentShader.SetMatrix4Array(mat4arrayUniformEntry.first, mat4arrayUniformEntry.second);
+            }
+
+            // Perform draw call
+            const auto& indexCountPerMesh = currentMesh->GetIndexCountPerMesh();
+            const auto& baseIndexPerMesh = currentMesh->GetBaseIndexPerMesh();
+            const auto& baseVertexPerMesh = currentMesh->GetBaseVertexPerMesh();
+            for (auto i = 0U; i < indexCountPerMesh.size(); ++i)
+            {
+                if (indexCountPerMesh[i] > 0)
+                {
+                    GL_CHECK(glDrawElementsBaseVertex(GL_TRIANGLES, indexCountPerMesh.at(i), GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * baseIndexPerMesh.at(i)), baseVertexPerMesh.at(i)));
+                }
+            }
+        }
+    }
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& applicableEntities) const
+{
+    auto& world = ecs::World::GetInstance();
+    
+    // Get common rendering singleton components
+    const auto& windowComponent      = world.GetSingletonComponent<WindowSingletonComponent>();
+    const auto& shaderStoreComponent = world.GetSingletonComponent<ShaderStoreSingletonComponent>();
+    const auto& lightStoreComponent  = world.GetSingletonComponent<LightStoreSingletonComponent>();
+    const auto& cameraComponent            = world.GetSingletonComponent<CameraSingletonComponent>();
+    auto& renderingContextComponent  = world.GetSingletonComponent<RenderingContextSingletonComponent>();
+    
+    // Bind default frame buffer
+    GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    
+    // Set View Port
+    GL_CHECK(glViewport(0, 0, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight));
     
     // Set background color
     GL_CHECK(glClearColor
@@ -116,22 +262,12 @@ void RenderingSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& 
         renderingContextComponent.mClearColor.z,
         renderingContextComponent.mClearColor.w
     ));
-    
+
     // Clear buffers
     GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
-    // Enable depth
-    GL_CHECK(glEnable(GL_DEPTH_TEST));
-        
-    // Sort entities based on their depth order to correct transparency
-    std::sort(applicableEntities.begin(), applicableEntities.end(), [&world](const genesis::ecs::EntityId& lhs, const genesis::ecs::EntityId& rhs)
-    {
-        const auto& lhsTransformComponent = world.GetComponent<TransformComponent>(lhs);
-        const auto& rhsTransformComponent = world.GetComponent<TransformComponent>(rhs);
-        return lhsTransformComponent.mPosition.z > rhsTransformComponent.mPosition.z;
-    });
     
     // Execute normal 3d model pass and save gui entities
+    tsl::robin_map<RenderableType, std::vector<ecs::EntityId>> mGuiEntityGroups;
     for (const auto& entityId : applicableEntities)
     {
         const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
@@ -284,9 +420,6 @@ void RenderingSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& 
             );
         }
     }
-    
-    // Swap window buffers
-    SDL_GL_SwapWindow(windowComponent.mWindowHandle);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -345,13 +478,20 @@ void RenderingSystem::RenderHeightMapInternal
         auto& currentTexture = resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(textureResourceId);
         GL_CHECK(glActiveTexture(GL_TEXTURE0 + textureIndex++));
         GL_CHECK(glBindTexture(GL_TEXTURE_2D, currentTexture.GetGLTextureId()));
+        
     }
-
+    
+    currentShader->SetBool(SHADOWS_ENABLED_UNIFORM_NAME, renderingContextComponent.mShadowsEnabled);
+    currentShader->SetInt(SHADOW_MAP_TEXTURE_UNIFORM_NAME, textureIndex);
+    GL_CHECK(glActiveTexture(GL_TEXTURE0 + textureIndex));
+    GL_CHECK(glBindTexture(GL_TEXTURE_2D, renderingContextComponent.mShadowMapTexture));
+    
     // Set mvp uniforms
     currentShader->SetMatrix4fv(WORLD_MARIX_UNIFORM_NAME, world);
     currentShader->SetMatrix4fv(VIEW_MARIX_UNIFORM_NAME, cameraComponent.mViewMatrix);
     currentShader->SetMatrix4fv(PROJECTION_MARIX_UNIFORM_NAME, cameraComponent.mProjectionMatrix);
     currentShader->SetMatrix4fv(NORMAL_MATRIX_UNIFORM_NAME, rotMatrix);
+    currentShader->SetMatrix4fv(LIGHT_SPACE_MATRIX_UNIFORM_NAME, lightStoreComponent.mMainShadowCastingLightMatrix);
     currentShader->SetFloatVec4(MATERIAL_AMBIENT_UNIFORM_NAME, renderableComponent.mMaterial.mAmbient);
     currentShader->SetFloatVec4(MATERIAL_DIFFUSE_UNIFORM_NAME, renderableComponent.mMaterial.mDiffuse);
     currentShader->SetFloatVec4(MATERIAL_SPECULAR_UNIFORM_NAME, renderableComponent.mMaterial.mSpecular);
@@ -359,7 +499,7 @@ void RenderingSystem::RenderHeightMapInternal
     currentShader->SetFloat(DT_ACCUM_UNIFORM_NAME, renderingContextComponent.mDtAccumulator);
     currentShader->SetFloatVec3Array(LIGHT_POSITIONS_UNIFORM_NAME, lightStoreComponent.mLightPositions);
     currentShader->SetFloatArray(LIGHT_POWERS_UNIFORM_NAME, lightStoreComponent.mLightPowers);
-    currentShader->SetInt(IS_AFFECTED_BY_LIGHT_UNIFORM_NAME, renderableComponent.mIsAffectedByLight ? 1 : 0);
+    currentShader->SetBool(IS_AFFECTED_BY_LIGHT_UNIFORM_NAME, renderableComponent.mIsAffectedByLight);
     currentShader->SetFloatVec3(EYE_POSITION_UNIFORM_NAME, cameraComponent.mPosition);
     
     // Set other matrix uniforms
@@ -504,7 +644,7 @@ void RenderingSystem::RenderStringInternal
         currentShader->SetFloat(MATERIAL_SHININESS_UNIFORM_NAME, renderableComponent.mMaterial.mShininess);
         currentShader->SetFloatVec3Array(LIGHT_POSITIONS_UNIFORM_NAME, lightStoreComponent.mLightPositions);
         currentShader->SetFloatArray(LIGHT_POWERS_UNIFORM_NAME, lightStoreComponent.mLightPowers);
-        currentShader->SetInt(IS_AFFECTED_BY_LIGHT_UNIFORM_NAME, renderableComponent.mIsAffectedByLight ? 1 : 0);
+        currentShader->SetBool(IS_AFFECTED_BY_LIGHT_UNIFORM_NAME, renderableComponent.mIsAffectedByLight);
         currentShader->SetFloatVec3(EYE_POSITION_UNIFORM_NAME, cameraComponent.mPosition);
         
         // Set other matrix uniforms
@@ -645,7 +785,7 @@ void RenderingSystem::RenderEntityInternal
     currentShader->SetFloat(MATERIAL_SHININESS_UNIFORM_NAME, renderableComponent.mMaterial.mShininess);
     currentShader->SetFloatVec3Array(LIGHT_POSITIONS_UNIFORM_NAME, lightStoreComponent.mLightPositions);
     currentShader->SetFloatArray(LIGHT_POWERS_UNIFORM_NAME, lightStoreComponent.mLightPowers);
-    currentShader->SetInt(IS_AFFECTED_BY_LIGHT_UNIFORM_NAME, renderableComponent.mIsAffectedByLight ? 1 : 0);
+    currentShader->SetBool(IS_AFFECTED_BY_LIGHT_UNIFORM_NAME, renderableComponent.mIsAffectedByLight);
     currentShader->SetFloatVec3(EYE_POSITION_UNIFORM_NAME, cameraComponent.mPosition);
     
     // Set other matrix uniforms
@@ -742,6 +882,38 @@ void RenderingSystem::InitializeCamera() const
 void RenderingSystem::InitializeLights() const
 {
     ecs::World::GetInstance().SetSingletonComponent<LightStoreSingletonComponent>(std::make_unique<LightStoreSingletonComponent>());
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void RenderingSystem::InitializeShadowMapTexture() const
+{
+    auto& renderingContextComponent = ecs::World::GetInstance().GetSingletonComponent<RenderingContextSingletonComponent>();
+    GL_CHECK(glGenTextures(1, &renderingContextComponent.mShadowMapTexture));
+    GL_CHECK(glBindTexture(GL_TEXTURE_2D, renderingContextComponent.mShadowMapTexture));
+    GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+                 SHADOW_TEXTURE_WIDTH, SHADOW_TEXTURE_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL));
+    GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+    GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+    GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
+    GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
+    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+    GL_CHECK(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void RenderingSystem::InitializeFrameBuffers() const
+{
+    auto& renderingContextComponent = ecs::World::GetInstance().GetSingletonComponent<RenderingContextSingletonComponent>();
+    
+    GL_CHECK(glGenFramebuffers(1, &renderingContextComponent.mDepthMapFrameBufferObject));
+    GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, renderingContextComponent.mDepthMapFrameBufferObject));
+    GL_CHECK(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, renderingContextComponent.mShadowMapTexture, 0));
+    GL_CHECK(glDrawBuffer(GL_NONE));
+    
+    assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+    GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 ///-----------------------------------------------------------------------------------------------

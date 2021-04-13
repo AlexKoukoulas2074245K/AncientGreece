@@ -130,6 +130,7 @@ ecs::EntityId LoadAndCreateAnimatedModelByName
         renderableComponent->mMaterial.mSpecular = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
         renderableComponent->mMaterial.mShininess = 1.0f;
         renderableComponent->mIsAffectedByLight = true;
+        renderableComponent->mIsCastingShadows = true;
     }
     
     auto animFiles = GetAllFilenamesInDirectory(resources::ResourceLoadingService::RES_MODELS_ROOT + modelName + "/");

@@ -86,6 +86,7 @@ public:
     RenderableType mRenderableType      = RenderableType::NORMAL_MODEL;
     bool mIsVisible                     = true;
     bool mIsAffectedByLight             = false;
+    bool mIsCastingShadows              = false;
     bool mIsLoopingAnimation            = false;
     bool mShouldAnimateSkeleton         = true;
 };
