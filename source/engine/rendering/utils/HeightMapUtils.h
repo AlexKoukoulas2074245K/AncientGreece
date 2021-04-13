@@ -11,6 +11,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "../../ECS.h"
+#include "../../common/utils/MathUtils.h"
 
 ///------------------------------------------------------------------------------------------------
 
@@ -40,7 +41,17 @@ ecs::EntityId LoadAndCreateHeightMapByName
 );
 
 ///------------------------------------------------------------------------------------------------
+/// Returns the z height of the entity's heighmap at the position provided
+///
+/// Note: this helper function assumes that the heightMap name is a folder inside textures/heightMaps and
+/// where the heightMap.png is the actual heightMap texture, while the one or more textures inside heightMap_textures
+/// are the textures to blend depending on vertex height.
+/// @param[in] heightMapEntityId the entity holding a HeightMap component.
+/// @param[in] position the position to check.
+/// @returns the calculated height at position.
+float GetTerrainHeightAtPosition(const genesis::ecs::EntityId heightMapEntityId, const glm::vec3& position);
 
+///------------------------------------------------------------------------------------------------
 }
 
 }

@@ -45,10 +45,8 @@ namespace
     static const std::string MAP_EDGE_MODEL_NAME            = "map_edge";
     static const std::string CITY_STATE_BUILDING_MODEL_NAME = "building";
 
-    static const float HEIGHTMAP_Z_OFFSET                     = 0.01f;
     static const float ENTITY_SPHERE_COLLISION_MULTIPLIER     = 0.25f * 0.3333f;
 
-    static const glm::vec3 MAP_DIMENSIONS                     = glm::vec3(1.0f, 1.0f, 1.0f);
     static const glm::vec3 CITY_STATE_BASE_SCALE              = glm::vec3(0.01f);
     static const glm::vec3 CITY_STATE_SCALE_RENOWN_MULTIPLIER = glm::vec3(0.0003f);
 }
@@ -86,36 +84,13 @@ void DestroyOverworldEntities()
 
 ///-----------------------------------------------------------------------------------------------
 
-float GetTerrainHeightAtPosition(const glm::vec3& position)
-{
-    auto& world = genesis::ecs::World::GetInstance();
-    const auto& mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
-    const auto& heightMapComponent = world.GetComponent<genesis::rendering::HeightMapComponent>(mapEntity);
-    
-    const auto relativeXDisplacement = position.x/(MAP_DIMENSIONS.x/2.0f);
-    const auto relativeYDisplacement = position.y/(MAP_DIMENSIONS.y/2.0f);
-    const auto heightMapCols = heightMapComponent.mHeightMapTextureDimensions.x;
-    const auto heightMapRows = heightMapComponent.mHeightMapTextureDimensions.y;
-    
-    const auto heightMapCol = heightMapCols/2.0f + relativeXDisplacement * heightMapCols/2.0f;
-    const auto heightMapRow = heightMapRows/2 - relativeYDisplacement * heightMapRows/2;
-    
-    if (heightMapCol >= 0 && heightMapRow >= 0 && heightMapCol < heightMapCols && heightMapRow < heightMapRows)
-    {
-        return heightMapComponent.mHeightMapTileHeights[heightMapRow][heightMapCols - heightMapCol] + HEIGHTMAP_Z_OFFSET;
-    }
-    return 0.0f;
-}
-
-///-----------------------------------------------------------------------------------------------
-
 float GetTerrainSpeedMultiplierAtPosition(const glm::vec3& position)
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto& mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
     const auto& heightMapComponent = world.GetComponent<genesis::rendering::HeightMapComponent>(mapEntity);
     
-    const auto heightAtPosition = GetTerrainHeightAtPosition(position);
+    const auto heightAtPosition = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
     return 1.4f - (heightAtPosition/heightMapComponent.mHeightMapScale);
 }
 
@@ -164,10 +139,11 @@ void PopulateOverworldCityStates()
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto& cityStateInfoComponent = world.GetSingletonComponent<CityStateInfoSingletonComponent>();
+    const auto& mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
     
     for (const auto& cityStateInfoEntry: cityStateInfoComponent.mCityStateNameToInfo)
     {
-        const auto cityStateZ = -GetTerrainHeightAtPosition(cityStateInfoEntry.second.mPosition);
+        const auto cityStateZ = -genesis::rendering::GetTerrainHeightAtPosition(mapEntity, cityStateInfoEntry.second.mPosition);
         const auto finalPosition = glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, cityStateZ);
         auto cityStateEntity = genesis::rendering::LoadAndCreateStaticModelByName(CITY_STATE_BUILDING_MODEL_NAME,    finalPosition, cityStateInfoEntry.second.mRotation, GetCityStateOverworldScale(cityStateInfoEntry.first), cityStateInfoEntry.first);
         

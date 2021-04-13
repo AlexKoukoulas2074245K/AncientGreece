@@ -42,7 +42,7 @@ public:
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
 
 private:
-    void UpdatePosition(const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const;
+    void UpdatePosition(const genesis::ecs::EntityId mapEntity, const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const;
     void UpdateRotation(const float dt, const float targetRotation, glm::vec3& entityRotation) const;
 };
 

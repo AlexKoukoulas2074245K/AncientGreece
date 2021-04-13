@@ -135,8 +135,10 @@ void Game::VOnGameInit()
         { 2, StringId("Horse Archer") },
     };
     
+    const auto mapEntity = world.FindEntityWithName(StringId("map"));
+    
     auto position = glm::vec3(0.0f, 0.0f, 0.0f);
-    position.z = -overworld::GetTerrainHeightAtPosition(position);
+    position.z = -genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
     auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), StringId("player"), position);
     
     const auto partySize = genesis::math::RandomInt(0, 80);
@@ -151,7 +153,7 @@ void Game::VOnGameInit()
     for (int i = 0; i < SPARTAN_COUNT; ++i)
     {
         auto position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
-        position.z = -overworld::GetTerrainHeightAtPosition(position);
+        position.z = -genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
         
         auto unitTypeName = intToModelType.at(i % 3);
         auto entityName = StringId("overworld_unit");

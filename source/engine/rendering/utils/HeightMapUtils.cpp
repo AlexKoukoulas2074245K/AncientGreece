@@ -39,6 +39,8 @@ namespace
     static const std::string HEIGHTMAP_TEXTURE_UNIFORM_NAME = "heightMap_texture_";
 
     static const StringId HEIGHTMAP_SHADER_NAME = StringId("heightMap");
+
+    static const float HEIGHTMAP_Z_OFFSET = 0.001f;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -265,6 +267,29 @@ ecs::EntityId LoadAndCreateHeightMapByName
     }
     
     return heightMapEntity;
+}
+
+///-----------------------------------------------------------------------------------------------
+
+float GetTerrainHeightAtPosition(const genesis::ecs::EntityId heightMapEntityId, const glm::vec3& position)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto& heightMapComponent = world.GetComponent<rendering::HeightMapComponent>(heightMapEntityId);
+    //const auto& heightMapTransformComponent = world.GetComponent<TransformComponent>(heightMapEntityId);
+    
+    const auto relativeXDisplacement = position.x/(1.0f/2.0f);
+    const auto relativeYDisplacement = position.y/(1.0f/2.0f);
+    const auto heightMapCols = heightMapComponent.mHeightMapTextureDimensions.x;
+    const auto heightMapRows = heightMapComponent.mHeightMapTextureDimensions.y;
+    
+    const auto heightMapCol = heightMapCols/2.0f + relativeXDisplacement * heightMapCols/2.0f;
+    const auto heightMapRow = heightMapRows/2 - relativeYDisplacement * heightMapRows/2;
+    
+    if (heightMapCol >= 0 && heightMapRow >= 0 && heightMapCol < heightMapCols && heightMapRow < heightMapRows)
+    {
+        return heightMapComponent.mHeightMapTileHeights[heightMapRow][heightMapCols - heightMapCol] + HEIGHTMAP_Z_OFFSET;
+    }
+    return 0.0f;
 }
 
 ///-----------------------------------------------------------------------------------------------

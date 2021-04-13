@@ -16,6 +16,7 @@
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
+#include "../../../engine/rendering/utils/HeightMapUtils.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
 
 #include <tsl/robin_map.h>
@@ -56,6 +57,7 @@ OverworldMovementControllerSystem::OverworldMovementControllerSystem()
 void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = genesis::ecs::World::GetInstance();
+    auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
     
     for (const auto entityId: entitiesToProcess)
     {
@@ -68,11 +70,6 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         {
             waypointComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(waypointComponent.mEntityTargetToFollow).mPosition;
         }
-        
-        
-//        // Set height to current terrain
-//        transformComponent.mPosition.z = -GetTerrainHeightAtPosition(transformComponent.mPosition);
-//        waypointComponent.mTargetPosition.z = transformComponent.mPosition.z;
         
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
@@ -99,7 +96,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         {
             const auto terrainSpeedMultiplier = GetTerrainSpeedMultiplierAtPosition(transformComponent.mPosition);
             const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mStats.mSpeedMultiplier * terrainSpeedMultiplier;
-            UpdatePosition(dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
+            UpdatePosition(mapEntity, dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
             UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
             
             // Start walking animation
@@ -110,12 +107,12 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
 
 ///-----------------------------------------------------------------------------------------------
 
-void OverworldMovementControllerSystem::UpdatePosition(const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const
+void OverworldMovementControllerSystem::UpdatePosition(const genesis::ecs::EntityId mapEntity, const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const
 {
     const auto& movementDirection = glm::normalize(targetPosition - entityPosition);
     entityPosition.x += movementDirection.x * speed * dt;
     entityPosition.y += movementDirection.y * speed * dt;
-    entityPosition.z += (-GetTerrainHeightAtPosition(entityPosition) - entityPosition.z) * UNIT_ASCENDING_DESCENDING_SPEED_FACTOR * speed * dt;
+    entityPosition.z += (-genesis::rendering::GetTerrainHeightAtPosition(mapEntity, entityPosition) - entityPosition.z) * UNIT_ASCENDING_DESCENDING_SPEED_FACTOR * speed * dt;
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
+#include "../../../engine/rendering/utils/HeightMapUtils.h"
 #include "../../../engine/rendering/utils/MeshUtils.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
 #include "../../../engine/resources/MeshResource.h"
@@ -35,9 +36,9 @@ namespace
 {
     static const StringId BATTLE_GROUND_ENTITY_NAME = StringId("battle_grass");
     static const StringId BATTLE_UNIT_ENTITY_NAME   = StringId("battle_unit");
-
-    static const std::string BATTLE_GROUND_MODEL_NAME = "battle_grass";
     
+    static const std::string BATTLE_HEIGHT_MAP_NAME = "battle";
+
     static const float BATTLE_DEFENDING_SIDE_Y_OFFSET     = 0.2f;
     static const float BATTLE_CAMERA_X                    = 0.02906f;
     static const float BATTLE_CAMERA_Y                    = -0.28339f;
@@ -171,7 +172,7 @@ bool AreUnitsInDoubleMeleeDistance(const genesis::ecs::EntityId unitEntityA, con
 
 void CreateBattleGround()
 {
-    genesis::rendering::LoadAndCreateStaticModelByName(BATTLE_GROUND_MODEL_NAME, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), BATTLE_GROUND_ENTITY_NAME);
+    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.001f, BATTLE_GROUND_ENTITY_NAME);
 }
 
 ///------------------------------------------------------------------------------------------------

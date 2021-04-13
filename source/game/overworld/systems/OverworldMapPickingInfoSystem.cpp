@@ -14,6 +14,7 @@
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/rendering/components/WindowSingletonComponent.h"
+#include "../../../engine/rendering/utils/HeightMapUtils.h"
 #include "../../../engine/resources/MeshResource.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
 
@@ -45,9 +46,10 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto& mapPickingInfoComponent = world.GetSingletonComponent<OverworldMapPickingInfoSingletonComponent>();
-    
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
     auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
+    
+    auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
     
     // Calculate render-constant camera view matrix
     auto viewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
@@ -65,7 +67,7 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
     // Calculate Mouse Intersection with map
     mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(viewMatrix, projectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
     genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, MAP_POSITION, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
-    mapPickingInfoComponent.mMapIntersectionPoint.z = -GetTerrainHeightAtPosition(mapPickingInfoComponent.mMapIntersectionPoint);
+    mapPickingInfoComponent.mMapIntersectionPoint.z = -genesis::rendering::GetTerrainHeightAtPosition(mapEntity, mapPickingInfoComponent.mMapIntersectionPoint);
     
     if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) == genesis::input::InputState::TAPPED)
     {
