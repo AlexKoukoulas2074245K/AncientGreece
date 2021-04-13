@@ -45,13 +45,7 @@ namespace
     static const std::string MAP_EDGE_MODEL_NAME            = "map_edge";
     static const std::string CITY_STATE_BUILDING_MODEL_NAME = "building";
 
-//    static const float NAME_PLATE_Z                           = -0.001f;
-//    static const float NAME_PLATE_X_OFFSET_MULTIPLIER         = 1.0/20.0f;
-//    static const float NAME_PLATE_HEIGHT_MULTIPLIER           = 1.2f;
-//    static const float NAME_PLATE_WIDTH_MULTIPLIER            = 1.1f;
-//    static const float CITY_STATE_NAME_Z                      = -0.002f;
-    static const float HEIGHTMAP_Z_OFFSET                     = 0.001f;
-    static const float HEIGHTMAP_HEIGHT_SCALE                 = 0.05f;
+    static const float HEIGHTMAP_Z_OFFSET                     = 0.01f;
     static const float ENTITY_SPHERE_COLLISION_MULTIPLIER     = 0.25f * 0.3333f;
 
     static const glm::vec3 MAP_DIMENSIONS                     = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -72,8 +66,8 @@ void RemoveOverworldMapComponents();
 
 void PopulateOverworldEntities()
 {
-    overworld::PopulateOverworldCityStates();
     LoadAndCreateOverworldMapComponents();
+    overworld::PopulateOverworldCityStates();
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -117,8 +111,12 @@ float GetTerrainHeightAtPosition(const glm::vec3& position)
 
 float GetTerrainSpeedMultiplierAtPosition(const glm::vec3& position)
 {
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto& mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
+    const auto& heightMapComponent = world.GetComponent<genesis::rendering::HeightMapComponent>(mapEntity);
+    
     const auto heightAtPosition = GetTerrainHeightAtPosition(position);
-    return 1.4f - heightAtPosition/HEIGHTMAP_HEIGHT_SCALE;
+    return 1.4f - (heightAtPosition/heightMapComponent.mHeightMapScale);
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -152,7 +150,7 @@ glm::vec3 GetCityStateOverworldScale(const StringId& cityStateName)
 
 void LoadAndCreateOverworldMapComponents()
 {
-    genesis::rendering::LoadAndCreateHeightMapByName(OVERWORLD_HEIGHTMAP_NAME, MAP_ENTITY_NAME);
+    genesis::rendering::LoadAndCreateHeightMapByName(OVERWORLD_HEIGHTMAP_NAME, 0.07f, MAP_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_1_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_2_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_3_ENTITY_NAME);
@@ -169,7 +167,9 @@ void PopulateOverworldCityStates()
     
     for (const auto& cityStateInfoEntry: cityStateInfoComponent.mCityStateNameToInfo)
     {
-        auto cityStateEntity = genesis::rendering::LoadAndCreateStaticModelByName(CITY_STATE_BUILDING_MODEL_NAME, cityStateInfoEntry.second.mPosition, cityStateInfoEntry.second.mRotation, GetCityStateOverworldScale(cityStateInfoEntry.first), cityStateInfoEntry.first);
+        const auto cityStateZ = -GetTerrainHeightAtPosition(cityStateInfoEntry.second.mPosition);
+        const auto finalPosition = glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, cityStateZ);
+        auto cityStateEntity = genesis::rendering::LoadAndCreateStaticModelByName(CITY_STATE_BUILDING_MODEL_NAME,    finalPosition, cityStateInfoEntry.second.mRotation, GetCityStateOverworldScale(cityStateInfoEntry.first), cityStateInfoEntry.first);
         
         auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(cityStateEntity);
         renderableComponent.mMaterial.mAmbient = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -178,14 +178,6 @@ void PopulateOverworldCityStates()
         renderableComponent.mMaterial.mShininess = 1.0f;
         renderableComponent.mIsAffectedByLight = true;
         renderableComponent.mIsCastingShadows = true;
-        
-//        auto cityStateEntity = genesis::rendering::RenderText(cityStateInfoEntry.first.GetString(), GAME_FONT_NAME, GetCityStateOverworldNameSize(cityStateInfoEntry.first), glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, CITY_STATE_NAME_Z), genesis::colors::BLACK, true, cityStateInfoEntry.first);
-//
-//        const auto textRect = genesis::rendering::CalculateTextBoundingRect(cityStateEntity);
-//        const auto textWidth = textRect.topRight.x - textRect.bottomLeft.x;
-//        const auto textHeight = textRect.topRight.y - textRect.bottomLeft.y;
-//
-//        genesis::rendering::LoadAndCreateStaticModelByName(NAME_PLATE_MODEL_NAME, glm::vec3(textRect.bottomLeft.x + textWidth/2 - textWidth * NAME_PLATE_X_OFFSET_MULTIPLIER, textRect.bottomLeft.y + textHeight/2.0, NAME_PLATE_Z), glm::vec3(), glm::vec3(textWidth * NAME_PLATE_WIDTH_MULTIPLIER, textHeight * NAME_PLATE_HEIGHT_MULTIPLIER, 1.0f), cityStateInfoEntry.first);
         
         world.AddComponent<overworld::HighlightableComponent>(cityStateEntity, std::make_unique<overworld::HighlightableComponent>());
         

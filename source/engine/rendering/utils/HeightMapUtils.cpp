@@ -39,8 +39,6 @@ namespace
     static const std::string HEIGHTMAP_TEXTURE_UNIFORM_NAME = "heightMap_texture_";
 
     static const StringId HEIGHTMAP_SHADER_NAME = StringId("heightMap");
-
-    static const float HEIGHTMAP_HEIGHT_SCALE = 0.05f;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -48,6 +46,7 @@ namespace
 ecs::EntityId LoadAndCreateHeightMapByName
 (
     const std::string& heightMapName,
+    const float heightMapHeightScale,
     const StringId entityName /* StringId() */
 )
 {
@@ -94,7 +93,7 @@ ecs::EntityId LoadAndCreateHeightMapByName
             
             vertices.push_back(glm::vec3(-0.5f + colFactor, vertexHeight, -0.5f + rowFactor));
             uvs.push_back(glm::vec2(colFactor * textureU, rowFactor * textureV));
-            heightMapTileHeights[row].push_back(vertexHeight * HEIGHTMAP_HEIGHT_SCALE);
+            heightMapTileHeights[row].push_back(vertexHeight * heightMapHeightScale);
         }
     }
     
@@ -111,9 +110,9 @@ ecs::EntityId LoadAndCreateHeightMapByName
                 vertices[(row + 1) * heightMapCols + col],
                 vertices[(row + 1) * heightMapCols + (col +1)]
             };
-            triangle0[0].y *= HEIGHTMAP_HEIGHT_SCALE;
-            triangle0[1].y *= HEIGHTMAP_HEIGHT_SCALE;
-            triangle0[2].y *= HEIGHTMAP_HEIGHT_SCALE;
+            triangle0[0].y *= heightMapHeightScale;
+            triangle0[1].y *= heightMapHeightScale;
+            triangle0[2].y *= heightMapHeightScale;
             
             glm::vec3 triangle1[] =
             {
@@ -122,9 +121,9 @@ ecs::EntityId LoadAndCreateHeightMapByName
                 vertices[row * heightMapCols + col]
             };
             
-            triangle1[0].y *= HEIGHTMAP_HEIGHT_SCALE;
-            triangle1[1].y *= HEIGHTMAP_HEIGHT_SCALE;
-            triangle1[2].y *= HEIGHTMAP_HEIGHT_SCALE;
+            triangle1[0].y *= heightMapHeightScale;
+            triangle1[1].y *= heightMapHeightScale;
+            triangle1[2].y *= heightMapHeightScale;
             
             glm::vec3 triangle0Norm = glm::cross(triangle0[1]-triangle0[0], triangle0[2]-triangle0[0]);
             glm::vec3 triangle1Norm = glm::cross(triangle1[1]-triangle1[0], triangle1[2]-triangle1[0]);
@@ -234,7 +233,7 @@ ecs::EntityId LoadAndCreateHeightMapByName
     auto transformComponent = std::make_unique<TransformComponent>();
     transformComponent->mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     transformComponent->mRotation = glm::vec3(-genesis::math::PI/2.0f, 0.0f, genesis::math::PI);
-    transformComponent->mScale = glm::vec3(1.0f, HEIGHTMAP_HEIGHT_SCALE, 1.0f);
+    transformComponent->mScale = glm::vec3(1.0f, heightMapHeightScale, 1.0f);
 
     auto renderableComponent = std::make_unique<RenderableComponent>();
     renderableComponent->mShaderNameId = HEIGHTMAP_SHADER_NAME;
@@ -254,6 +253,7 @@ ecs::EntityId LoadAndCreateHeightMapByName
     heightMapComponent->mHeightMapTextureDimensions = glm::vec2(heightMapCols, heightMapRows);
     heightMapComponent->mHeightMapTextureResourceIds = heightMapTextures;
     heightMapComponent->mHeightMapTileHeights = heightMapTileHeights;
+    heightMapComponent->mHeightMapScale = heightMapHeightScale;
     
     world.AddComponent<HeightMapComponent>(heightMapEntity, std::move(heightMapComponent));
     world.AddComponent<RenderableComponent>(heightMapEntity, std::move(renderableComponent));

@@ -38,9 +38,10 @@ namespace
 
     static const StringId MAP_ENTITY_NAME = StringId("map");
 
-    static const float SUFFICIENTLY_CLOSE_THRESHOLD = 0.001f;
-    static const float ROTATION_SPEED               = 5.0f;
-    static const float BASE_UNIT_SPEED              = 0.006f;
+    static const float SUFFICIENTLY_CLOSE_THRESHOLD           = 0.001f;
+    static const float ROTATION_SPEED                         = 5.0f;
+    static const float BASE_UNIT_SPEED                        = 0.006f;
+    static const float UNIT_ASCENDING_DESCENDING_SPEED_FACTOR = 300.0f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -69,9 +70,9 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         }
         
         
-        // Set height to current terrain
-        transformComponent.mPosition.z = -GetTerrainHeightAtPosition(transformComponent.mPosition);
-        waypointComponent.mTargetPosition.z = transformComponent.mPosition.z;
+//        // Set height to current terrain
+//        transformComponent.mPosition.z = -GetTerrainHeightAtPosition(transformComponent.mPosition);
+//        waypointComponent.mTargetPosition.z = transformComponent.mPosition.z;
         
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
@@ -112,7 +113,9 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
 void OverworldMovementControllerSystem::UpdatePosition(const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const
 {
     const auto& movementDirection = glm::normalize(targetPosition - entityPosition);
-    entityPosition += movementDirection * speed * dt;
+    entityPosition.x += movementDirection.x * speed * dt;
+    entityPosition.y += movementDirection.y * speed * dt;
+    entityPosition.z += (-GetTerrainHeightAtPosition(entityPosition) - entityPosition.z) * UNIT_ASCENDING_DESCENDING_SPEED_FACTOR * speed * dt;
 }
 
 ///-----------------------------------------------------------------------------------------------
