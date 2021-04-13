@@ -15,11 +15,14 @@
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/ColorUtils.h"
 #include "../../../engine/common/utils/MathUtils.h"
+#include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/rendering/components/TextStringComponent.h"
 #include "../../../engine/rendering/components/WindowSingletonComponent.h"
 #include "../../../engine/rendering/utils/FontUtils.h"
 #include "../../../engine/rendering/utils/MeshUtils.h"
+#include "../../../engine/resources/MeshResource.h"
+#include "../../../engine/resources/ResourceLoadingService.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -51,7 +54,6 @@ namespace
     static const float UNIT_DETAILS_Y_OFFSET           = 0.005f;
     static const float CITY_STATE_NAME_Z               = -0.035f;
     static const float CITY_STATE_DETAILS_Y_OFFSET     = 0.0005f;
-    static const float HIGHLIGHTING_DISTANCE_THRESHOLD = 0.01f;
 
 }
 
@@ -68,7 +70,8 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto& mapPickingInfoComponent = world.GetSingletonComponent<OverworldMapPickingInfoSingletonComponent>();
-   
+   const auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
+    
     DestroyUnitPreviewPopup();
     for (const auto entityId: entitiesToProcess)
     {
@@ -89,8 +92,12 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
         auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
         auto& highlightableComponent = world.GetComponent<HighlightableComponent>(entityId);
         const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
-        
-        const auto intersectionExists = genesis::math::Abs(transformComponent.mPosition.x - mapPickingInfoComponent.mMapIntersectionPoint.x) < HIGHLIGHTING_DISTANCE_THRESHOLD && genesis::math::Abs(transformComponent.mPosition.y -  mapPickingInfoComponent.mMapIntersectionPoint.y) < HIGHLIGHTING_DISTANCE_THRESHOLD;
+        const auto& meshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( renderableComponent.mMeshResourceIds.at(renderableComponent.mCurrentMeshResourceIndex));
+            const auto& scaledMeshDimensions = meshResource.GetDimensions() * transformComponent.mScale;
+        const auto averageHalfDimension = (scaledMeshDimensions.x + scaledMeshDimensions.y + scaledMeshDimensions.z) * 0.333f * 0.5f;
+
+        float t;
+        const auto intersectionExists = genesis::math::RayToSphereIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, transformComponent.mPosition, averageHalfDimension, t);
         
         highlightableComponent.mHighlighted = intersectionExists;
         
