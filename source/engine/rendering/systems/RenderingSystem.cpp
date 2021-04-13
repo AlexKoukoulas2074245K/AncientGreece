@@ -173,20 +173,9 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
                 return;
             }
             
-            // Update current mesh if necessary
-            const resources::MeshResource* currentMesh = nullptr;
-            if (renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex] != renderingContextComponent.previousMeshResourceId)
-            {
-                currentMesh = &resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
-                GL_CHECK(glBindVertexArray(currentMesh->GetVertexArrayObject()));
 
-                renderingContextComponent.previousMesh           = currentMesh;
-                renderingContextComponent.previousMeshResourceId = renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex];
-            }
-            else
-            {
-                currentMesh = renderingContextComponent.previousMesh;
-            }
+            const auto& currentMesh = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
+            GL_CHECK(glBindVertexArray(currentMesh.GetVertexArrayObject()));
             
             // Calculate world matrix for entity
             glm::mat4 world(1.0f);
@@ -202,7 +191,7 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
             world *= rotMatrix;
             world = glm::scale(world, scale);
 
-            auto& currentShader = shaderStoreComponent.mShaders.at(currentMesh->HasSkeleton() ? SKELETAL_MODEL_DEPTH_SHADER_NAME : STATIC_MODEL_DEPTH_SHADER_NAME);
+            auto& currentShader = shaderStoreComponent.mShaders.at(currentMesh.HasSkeleton() ? SKELETAL_MODEL_DEPTH_SHADER_NAME : STATIC_MODEL_DEPTH_SHADER_NAME);
             GL_CHECK(glUseProgram(currentShader.GetProgramId()));
             currentShader.SetMatrix4fv(LIGHT_SPACE_MATRIX_UNIFORM_NAME, lightStoreComponent.mMainShadowCastingLightMatrix);
             
@@ -221,9 +210,9 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
             }
 
             // Perform draw call
-            const auto& indexCountPerMesh = currentMesh->GetIndexCountPerMesh();
-            const auto& baseIndexPerMesh = currentMesh->GetBaseIndexPerMesh();
-            const auto& baseVertexPerMesh = currentMesh->GetBaseVertexPerMesh();
+            const auto& indexCountPerMesh = currentMesh.GetIndexCountPerMesh();
+            const auto& baseIndexPerMesh = currentMesh.GetBaseIndexPerMesh();
+            const auto& baseVertexPerMesh = currentMesh.GetBaseVertexPerMesh();
             for (auto i = 0U; i < indexCountPerMesh.size(); ++i)
             {
                 if (indexCountPerMesh[i] > 0)

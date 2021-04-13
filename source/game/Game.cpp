@@ -135,7 +135,10 @@ void Game::VOnGameInit()
         { 2, StringId("Horse Archer") },
     };
     
-    auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), StringId("player"));
+    auto position = glm::vec3(0.0f, 0.0f, 0.0f);
+    position.z = -overworld::GetTerrainHeightAtPosition(position);
+    auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), StringId("player"), position);
+    
     const auto partySize = genesis::math::RandomInt(0, 80);
     auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
 

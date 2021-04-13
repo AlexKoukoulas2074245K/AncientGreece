@@ -50,7 +50,7 @@ namespace
 //    static const float NAME_PLATE_HEIGHT_MULTIPLIER           = 1.2f;
 //    static const float NAME_PLATE_WIDTH_MULTIPLIER            = 1.1f;
 //    static const float CITY_STATE_NAME_Z                      = -0.002f;
-    static const float HEIGHTMAP_Z_OFFSET                     = 0.0001f;
+    static const float HEIGHTMAP_Z_OFFSET                     = 0.001f;
     static const float HEIGHTMAP_HEIGHT_SCALE                 = 0.05f;
     static const float ENTITY_SPHERE_COLLISION_MULTIPLIER     = 0.25f * 0.3333f;
 

@@ -13,6 +13,7 @@
 #include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
+#include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/common/utils/ColorUtils.h"
 #include "../../../engine/common/utils/MathUtils.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
@@ -71,7 +72,7 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
     auto& world = genesis::ecs::World::GetInstance();
     const auto& mapPickingInfoComponent = world.GetSingletonComponent<OverworldMapPickingInfoSingletonComponent>();
     const auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
-    
+   
     DestroyUnitPreviewPopup();
     for (const auto entityId: entitiesToProcess)
     {
