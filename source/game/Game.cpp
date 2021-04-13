@@ -108,7 +108,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
     
     world.AddSystem(std::make_unique<scene::SceneUpdaterSystem>());
-    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>());
+    world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), 0, genesis::ecs::SystemOperationMode::MULTI_THREADED);
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 

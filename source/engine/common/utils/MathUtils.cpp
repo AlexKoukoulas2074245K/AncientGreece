@@ -35,6 +35,26 @@ glm::vec2 ComputeMouseCoordsInNDC(const float windowWidth, const float windowHei
 
 ///-----------------------------------------------------------------------------------------------
 
+glm::vec3 ComputeMouseRayDirection(const glm::mat4& viewMatrix, const glm::mat4& projMatrix, const float windowWidth, const float windowHeight)
+{
+    const auto mousePosInNDC = ComputeMouseCoordsInNDC(windowWidth, windowHeight);
+
+    const auto& invVP = glm::inverse(projMatrix * viewMatrix);
+    const auto& screenPos = glm::vec4(mousePosInNDC.x, mousePosInNDC.y, 1.0f, 1.0f);
+    const auto& worldPos = invVP * screenPos;
+    
+    return glm::normalize(glm::vec3(worldPos));
+}
+
+///-----------------------------------------------------------------------------------------------
+
+bool PointInSphereTest(const glm::vec3& posPoint, const glm::vec3& sphereCenter, const float sphereRadius)
+{
+    return glm::distance(sphereCenter, posPoint) < sphereRadius;
+}
+
+///------------------------------------------------------------------------------------------------
+
 bool SphereToSphereIntersection(const glm::vec3& sphere1Center, const float sphere1Radius, const glm::vec3& sphere2Center, const float sphere2Radius)
 {
     return glm::distance(sphere1Center, sphere2Center) < sphere1Radius + sphere2Radius;
@@ -47,19 +67,6 @@ bool SphereToSphereIntersection(const glm::vec3& sphere1Center, const float sphe
     auto sphereDistance = glm::distance(sphere1Center, sphere2Center);
     penetration = (sphere1Radius + sphere2Radius) - sphereDistance;
     return  sphereDistance < sphere1Radius + sphere2Radius;
-}
-
-///-----------------------------------------------------------------------------------------------
-
-glm::vec3 ComputeMouseRayDirection(const glm::mat4& viewMatrix, const glm::mat4& projMatrix, const float windowWidth, const float windowHeight)
-{
-    const auto mousePosInNDC = ComputeMouseCoordsInNDC(windowWidth, windowHeight);
-
-    const auto& invVP = glm::inverse(projMatrix * viewMatrix);
-    const auto& screenPos = glm::vec4(mousePosInNDC.x, mousePosInNDC.y, 1.0f, 1.0f);
-    const auto& worldPos = invVP * screenPos;
-    
-    return glm::normalize(glm::vec3(worldPos));
 }
 
 ///------------------------------------------------------------------------------------------------
