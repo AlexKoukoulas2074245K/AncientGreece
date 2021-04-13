@@ -94,7 +94,7 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
         const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
         const auto& meshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( renderableComponent.mMeshResourceIds.at(renderableComponent.mCurrentMeshResourceIndex));
             const auto& scaledMeshDimensions = meshResource.GetDimensions() * transformComponent.mScale;
-        const auto averageHalfDimension = (scaledMeshDimensions.x + scaledMeshDimensions.y + scaledMeshDimensions.z) * 0.333f * 0.5f;
+        const auto averageHalfDimension = (scaledMeshDimensions.x + scaledMeshDimensions.y + scaledMeshDimensions.z) * 0.333f * 0.75f;
 
         float t;
         const auto intersectionExists = genesis::math::RayToSphereIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, transformComponent.mPosition, averageHalfDimension, t);
