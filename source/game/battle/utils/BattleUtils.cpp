@@ -34,8 +34,8 @@ namespace battle
 
 namespace
 {
-    static const StringId BATTLE_GROUND_ENTITY_NAME = StringId("battle_grass");
-    static const StringId BATTLE_UNIT_ENTITY_NAME   = StringId("battle_unit");
+    static const StringId BATTLE_MAP_ENTITY_NAME  = StringId("battle_grass");
+    static const StringId BATTLE_UNIT_ENTITY_NAME = StringId("battle_unit");
     
     static const std::string BATTLE_HEIGHT_MAP_NAME = "battle";
 
@@ -58,6 +58,13 @@ void CreateBattleGround();
 void CalculateUnitTargetDistances(const std::vector<UnitStats>& party, float& targetUnitXDistance, float& targetUnitYDistance);
 void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId);
 void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderEntityName, const bool isAttackingSide);
+
+///------------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId GetMapEntity()
+{
+    return genesis::ecs::World::GetInstance().FindEntityWithName(BATTLE_MAP_ENTITY_NAME);
+}
 
 ///------------------------------------------------------------------------------------------------
 
@@ -172,7 +179,7 @@ bool AreUnitsInDoubleMeleeDistance(const genesis::ecs::EntityId unitEntityA, con
 
 void CreateBattleGround()
 {
-    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.001f, BATTLE_GROUND_ENTITY_NAME);
+    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.1f, 4.0f, BATTLE_MAP_ENTITY_NAME);
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -227,13 +234,15 @@ void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const s
 void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderEntityName, const bool isAttackingSide)
 {
     auto& world = genesis::ecs::World::GetInstance();
+    auto groundEntity = GetMapEntity();
     
     auto xCounter = 0.0f;
     auto yCounter = isAttackingSide ? 0.0f : BATTLE_DEFENDING_SIDE_Y_OFFSET;
     auto unitCounter = 1;
     for (const auto& unitStats: sideParty)
     {
-        auto unitEntityId = CreateUnit(unitStats.mUnitType, unitStats.mUnitName, BATTLE_UNIT_ENTITY_NAME, glm::vec3(xCounter, yCounter, 0.0f), glm::vec3(0.0f, 0.0f, (isAttackingSide ? 0.0f : genesis::math::PI)));
+        auto targetZ = genesis::rendering::GetTerrainHeightAtPosition(groundEntity, glm::vec3(xCounter, yCounter, 0.0f));
+        auto unitEntityId = CreateUnit(unitStats.mUnitType, unitStats.mUnitName, BATTLE_UNIT_ENTITY_NAME, glm::vec3(xCounter, yCounter, targetZ), glm::vec3(0.0f, 0.0f, (isAttackingSide ? 0.0f : genesis::math::PI)));
         
         auto battleSideComponent = std::make_unique<BattleSideComponent>();
         battleSideComponent->mBattleSideLeaderName = leaderEntityName;

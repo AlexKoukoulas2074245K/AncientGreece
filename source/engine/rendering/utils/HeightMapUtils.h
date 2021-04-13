@@ -31,12 +31,14 @@ namespace rendering
 /// are the textures to blend depending on vertex height.
 /// @param[in] heightMapName the model with the given name to look for in the resource models folder.
 /// @param[in] heightMapHeightScale the height scale of the height map (i.e. highest peak height)
+/// @param[in] heightMapWidthScale the width scale of the height map (i.e. x, z scale)
 /// @param[in] entityName (optional) a string to name the entity with.
 /// @returns the entity id of the loaded heightMap entity.
 ecs::EntityId LoadAndCreateHeightMapByName
 (
     const std::string& heightMapName,
     const float heightMapHeightScale,
+    const float heightMapWidthScale,
     const StringId entityName = StringId()
 );
 

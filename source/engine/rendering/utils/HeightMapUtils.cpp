@@ -49,6 +49,7 @@ ecs::EntityId LoadAndCreateHeightMapByName
 (
     const std::string& heightMapName,
     const float heightMapHeightScale,
+    const float heightMapWidthScale,
     const StringId entityName /* StringId() */
 )
 {
@@ -235,7 +236,7 @@ ecs::EntityId LoadAndCreateHeightMapByName
     auto transformComponent = std::make_unique<TransformComponent>();
     transformComponent->mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     transformComponent->mRotation = glm::vec3(-genesis::math::PI/2.0f, 0.0f, genesis::math::PI);
-    transformComponent->mScale = glm::vec3(1.0f, heightMapHeightScale, 1.0f);
+    transformComponent->mScale = glm::vec3(heightMapWidthScale, heightMapHeightScale, heightMapWidthScale);
 
     auto renderableComponent = std::make_unique<RenderableComponent>();
     renderableComponent->mShaderNameId = HEIGHTMAP_SHADER_NAME;
@@ -275,10 +276,10 @@ float GetTerrainHeightAtPosition(const genesis::ecs::EntityId heightMapEntityId,
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto& heightMapComponent = world.GetComponent<rendering::HeightMapComponent>(heightMapEntityId);
-    //const auto& heightMapTransformComponent = world.GetComponent<TransformComponent>(heightMapEntityId);
+    const auto& transformComponent = world.GetComponent<TransformComponent>(heightMapEntityId);
     
-    const auto relativeXDisplacement = position.x/(1.0f/2.0f);
-    const auto relativeYDisplacement = position.y/(1.0f/2.0f);
+    const auto relativeXDisplacement = position.x/(transformComponent.mScale.x/2.0f);
+    const auto relativeYDisplacement = position.y/(transformComponent.mScale.z/2.0f);
     const auto heightMapCols = heightMapComponent.mHeightMapTextureDimensions.x;
     const auto heightMapRows = heightMapComponent.mHeightMapTextureDimensions.y;
     
@@ -287,7 +288,7 @@ float GetTerrainHeightAtPosition(const genesis::ecs::EntityId heightMapEntityId,
     
     if (heightMapCol >= 0 && heightMapRow >= 0 && heightMapCol < heightMapCols && heightMapRow < heightMapRows)
     {
-        return heightMapComponent.mHeightMapTileHeights[heightMapRow][heightMapCols - heightMapCol] + HEIGHTMAP_Z_OFFSET;
+        return -(heightMapComponent.mHeightMapTileHeights[heightMapRow][heightMapCols - heightMapCol] + HEIGHTMAP_Z_OFFSET);
     }
     return 0.0f;
 }

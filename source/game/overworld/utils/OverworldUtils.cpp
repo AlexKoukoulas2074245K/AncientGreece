@@ -62,6 +62,13 @@ void RemoveOverworldMapComponents();
 
 ///------------------------------------------------------------------------------------------------
 
+genesis::ecs::EntityId GetMapEntity()
+{
+    return genesis::ecs::World::GetInstance().FindEntityWithName(MAP_ENTITY_NAME);
+}
+
+///------------------------------------------------------------------------------------------------
+
 void PopulateOverworldEntities()
 {
     LoadAndCreateOverworldMapComponents();
@@ -90,7 +97,7 @@ float GetTerrainSpeedMultiplierAtPosition(const glm::vec3& position)
     const auto& mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
     const auto& heightMapComponent = world.GetComponent<genesis::rendering::HeightMapComponent>(mapEntity);
     
-    const auto heightAtPosition = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
+    const auto heightAtPosition = -genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
     return 1.4f - (heightAtPosition/heightMapComponent.mHeightMapScale);
 }
 
@@ -125,7 +132,7 @@ glm::vec3 GetCityStateOverworldScale(const StringId& cityStateName)
 
 void LoadAndCreateOverworldMapComponents()
 {
-    genesis::rendering::LoadAndCreateHeightMapByName(OVERWORLD_HEIGHTMAP_NAME, 0.07f, MAP_ENTITY_NAME);
+    genesis::rendering::LoadAndCreateHeightMapByName(OVERWORLD_HEIGHTMAP_NAME, 0.07f, 1.0f, MAP_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_1_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_2_ENTITY_NAME);
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_3_ENTITY_NAME);
@@ -143,7 +150,7 @@ void PopulateOverworldCityStates()
     
     for (const auto& cityStateInfoEntry: cityStateInfoComponent.mCityStateNameToInfo)
     {
-        const auto cityStateZ = -genesis::rendering::GetTerrainHeightAtPosition(mapEntity, cityStateInfoEntry.second.mPosition);
+        const auto cityStateZ = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, cityStateInfoEntry.second.mPosition);
         const auto finalPosition = glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, cityStateZ);
         auto cityStateEntity = genesis::rendering::LoadAndCreateStaticModelByName(CITY_STATE_BUILDING_MODEL_NAME,    finalPosition, cityStateInfoEntry.second.mRotation, GetCityStateOverworldScale(cityStateInfoEntry.first), cityStateInfoEntry.first);
         

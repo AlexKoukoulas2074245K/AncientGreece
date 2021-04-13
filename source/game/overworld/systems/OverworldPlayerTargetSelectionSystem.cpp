@@ -36,8 +36,6 @@ namespace overworld
 
 namespace
 {
-    static const StringId MAP_ENTITY_NAME = StringId("map");
-
     static const StringId PLAYER_ENTITY_NAME = StringId("player");
     
     static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";

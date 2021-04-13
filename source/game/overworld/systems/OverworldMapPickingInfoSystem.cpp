@@ -27,7 +27,6 @@ namespace overworld
 
 namespace
 {
-    static const StringId MAP_ENTITY_NAME = StringId("map");
     static const glm::vec3 MAP_NORMAL = glm::vec3(0.0f, 0.0f, -1.0f);
     static const glm::vec3 MAP_POSITION = glm::vec3(0.0f, 0.0f, 0.0f);
 }
@@ -49,7 +48,7 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
     auto& windowComponent = world.GetSingletonComponent<genesis::rendering::WindowSingletonComponent>();
     
-    auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
+    auto mapEntity = GetMapEntity();
     
     // Calculate render-constant camera view matrix
     auto viewMatrix = glm::lookAtLH(cameraComponent.mPosition, cameraComponent.mPosition + cameraComponent.mFrontVector, cameraComponent.mUpVector);
@@ -67,7 +66,7 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
     // Calculate Mouse Intersection with map
     mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(viewMatrix, projectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
     genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, MAP_POSITION, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
-    mapPickingInfoComponent.mMapIntersectionPoint.z = -genesis::rendering::GetTerrainHeightAtPosition(mapEntity, mapPickingInfoComponent.mMapIntersectionPoint);
+    mapPickingInfoComponent.mMapIntersectionPoint.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, mapPickingInfoComponent.mMapIntersectionPoint);
     
     if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) == genesis::input::InputState::TAPPED)
     {

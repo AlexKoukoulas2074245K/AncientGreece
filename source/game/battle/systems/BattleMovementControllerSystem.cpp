@@ -16,6 +16,7 @@
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
+#include "../../../engine/rendering/utils/HeightMapUtils.h"
 #include "../../../engine/resources/MeshResource.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -27,12 +28,13 @@ namespace battle
 
 namespace
 {
-    static const float ROTATION_SPEED                       = 5.0f;
-    static const float BASE_UNIT_SPEED                      = 0.01f;
-	static const float BASE_PROJECTILE_SPEED                = 0.2f;
-    static const float PROJECTILE_TARGET_DISTANCE_THRESHOLD = 0.01f;
-    static const float PROJECTILE_PITCH_DOWN_SPEED          = 0.2f;
-    static const float PROJECTILE_TTL_ON_ATTACHMENT         = 1.0f;
+    static const float ROTATION_SPEED                         = 5.0f;
+    static const float BASE_UNIT_SPEED                        = 0.01f;
+	static const float BASE_PROJECTILE_SPEED                  = 0.2f;
+    static const float PROJECTILE_TARGET_DISTANCE_THRESHOLD   = 0.01f;
+    static const float PROJECTILE_PITCH_DOWN_SPEED            = 0.2f;
+    static const float PROJECTILE_TTL_ON_ATTACHMENT           = 1.0f;
+    static const float UNIT_ASCENDING_DESCENDING_SPEED_FACTOR = 300.0f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -47,6 +49,7 @@ BattleMovementControllerSystem::BattleMovementControllerSystem()
 void BattleMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = genesis::ecs::World::GetInstance();
+    auto mapEntity = GetMapEntity();
     
     for (const auto entityId: entitiesToProcess)
     {
@@ -57,7 +60,7 @@ void BattleMovementControllerSystem::VUpdate(const float dt, const std::vector<g
         }
         else
         {
-            UpdateUnit(dt, entityId);
+            UpdateUnit(mapEntity, dt, entityId);
         }
     }
 }
@@ -92,7 +95,7 @@ void BattleMovementControllerSystem::UpdateProjectile(const float dt, const gene
             if (distanceToTarget > PROJECTILE_TARGET_DISTANCE_THRESHOLD)
             {
                 const auto unitSpeed = BASE_PROJECTILE_SPEED;
-                UpdatePosition(dt, unitSpeed, targetPoint, transformComponent.mPosition);
+                UpdatePosition(genesis::ecs::NULL_ENTITY_ID, dt, unitSpeed, targetPoint, transformComponent.mPosition);
                 UpdateRotation(dt, -genesis::math::Arctan2(vecToTarget.x, vecToTarget.y), transformComponent.mRotation);
                 UpdateProjectilePitch(dt, transformComponent.mRotation);
             }
@@ -119,7 +122,7 @@ void BattleMovementControllerSystem::UpdateProjectile(const float dt, const gene
 
 ///-----------------------------------------------------------------------------------------------
 
-void BattleMovementControllerSystem::UpdateUnit(const float dt, const genesis::ecs::EntityId entityId) const
+void BattleMovementControllerSystem::UpdateUnit(const genesis::ecs::EntityId mapEntity, const float dt, const genesis::ecs::EntityId entityId) const
 {
     auto& world = genesis::ecs::World::GetInstance();
     
@@ -146,7 +149,7 @@ void BattleMovementControllerSystem::UpdateUnit(const float dt, const genesis::e
     else
     {
         const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mStats.mSpeedMultiplier;
-        UpdatePosition(dt, unitSpeed, targetTransformComponent.mPosition, transformComponent.mPosition);
+        UpdatePosition(mapEntity, dt, unitSpeed, targetTransformComponent.mPosition, transformComponent.mPosition);
         
         // Start walking animation
         if (!AreUnitsInDoubleMeleeDistance(entityId, battleTargetComponent.mTargetEntity) && (!unitStatsComponent.mStats.mIsRangedUnit || genesis::animation::GetCurrentAnimationName(entityId) != StringId("attacking")))
@@ -158,10 +161,16 @@ void BattleMovementControllerSystem::UpdateUnit(const float dt, const genesis::e
 
 ///-----------------------------------------------------------------------------------------------
 
-void BattleMovementControllerSystem::UpdatePosition(const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const
+void BattleMovementControllerSystem::UpdatePosition(const genesis::ecs::EntityId mapEntity, const float dt, const float speed, const glm::vec3& targetPosition, glm::vec3& entityPosition) const
 {
     const auto& movementDirection = glm::normalize(targetPosition - entityPosition);
-    entityPosition += movementDirection * speed * dt;
+    entityPosition.x += movementDirection.x * speed * dt;
+    entityPosition.y += movementDirection.y * speed * dt;
+    
+    if (mapEntity != genesis::ecs::NULL_ENTITY_ID)
+    {
+        entityPosition.z += (genesis::rendering::GetTerrainHeightAtPosition(mapEntity, entityPosition) - entityPosition.z) * UNIT_ASCENDING_DESCENDING_SPEED_FACTOR * speed * dt;
+    }
 }
 
 ///-----------------------------------------------------------------------------------------------

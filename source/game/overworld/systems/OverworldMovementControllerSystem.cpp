@@ -37,8 +37,6 @@ namespace
         { areaTypeMasks::HIGH_MOUNTAIN, 0.25f },
     };
 
-    static const StringId MAP_ENTITY_NAME = StringId("map");
-
     static const float SUFFICIENTLY_CLOSE_THRESHOLD           = 0.001f;
     static const float ROTATION_SPEED                         = 5.0f;
     static const float BASE_UNIT_SPEED                        = 0.006f;
@@ -57,7 +55,7 @@ OverworldMovementControllerSystem::OverworldMovementControllerSystem()
 void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = genesis::ecs::World::GetInstance();
-    auto mapEntity = world.FindEntityWithName(MAP_ENTITY_NAME);
+    auto mapEntity = GetMapEntity();
     
     for (const auto entityId: entitiesToProcess)
     {
@@ -112,7 +110,7 @@ void OverworldMovementControllerSystem::UpdatePosition(const genesis::ecs::Entit
     const auto& movementDirection = glm::normalize(targetPosition - entityPosition);
     entityPosition.x += movementDirection.x * speed * dt;
     entityPosition.y += movementDirection.y * speed * dt;
-    entityPosition.z += (-genesis::rendering::GetTerrainHeightAtPosition(mapEntity, entityPosition) - entityPosition.z) * UNIT_ASCENDING_DESCENDING_SPEED_FACTOR * speed * dt;
+    entityPosition.z += (genesis::rendering::GetTerrainHeightAtPosition(mapEntity, entityPosition) - entityPosition.z) * UNIT_ASCENDING_DESCENDING_SPEED_FACTOR * speed * dt;
 }
 
 ///-----------------------------------------------------------------------------------------------
