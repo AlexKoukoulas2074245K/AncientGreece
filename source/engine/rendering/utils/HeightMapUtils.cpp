@@ -6,6 +6,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "HeightMapUtils.h"
+#include "DiamondSquareHeightMapGenerator.h"
 #include "../components/HeightMapComponent.h"
 #include "../components/RenderableComponent.h"
 #include "../opengl/Context.h"
@@ -43,6 +44,7 @@ namespace
     static const float HEIGHTMAP_Z_OFFSET = 0.001f;
 }
 
+
 ///------------------------------------------------------------------------------------------------
 
 ecs::EntityId LoadAndCreateHeightMapByName
@@ -50,7 +52,8 @@ ecs::EntityId LoadAndCreateHeightMapByName
     const std::string& heightMapName,
     const float heightMapHeightScale,
     const float heightMapWidthScale,
-    const StringId entityName /* StringId() */
+    const StringId entityName /* StringId() */,
+    const HeightMapGenerationType generationType /* HeightMapGenerationType::FROM_TEXTURE */
 )
 {
     auto& resourceLoadingService = resources::ResourceLoadingService::GetInstance();
@@ -59,7 +62,14 @@ ecs::EntityId LoadAndCreateHeightMapByName
     
     // Load heightMap image
     auto heightMapResourceId = resourceLoadingService.LoadResource(heightMapsDirectory + heightMapName + "/" + HEIGHTMAP_IMAGE_FILE_NAME);
-    const auto& heightMapTextureResource = resourceLoadingService.GetResource<resources::TextureResource>(heightMapResourceId);
+    auto& heightMapTextureResource = resourceLoadingService.GetResource<resources::TextureResource>(heightMapResourceId);
+    
+    // Generate height map on the fly if specified
+    if (generationType != HeightMapGenerationType::FROM_TEXTURE)
+    {
+        const auto roughness = generationType == HeightMapGenerationType::RANDOM_LOW_ROUGHNESS ? 0.9f : 2.0f;
+        heightMapTextureResource.ChangeTexture(DiamondSquareHeightMapGenerator::GenerateRandomHeightMap(roughness));
+    }
     
     // Load heightMap textures
     std::vector<resources::ResourceId> heightMapTextures;

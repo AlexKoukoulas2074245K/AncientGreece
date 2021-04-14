@@ -121,7 +121,7 @@ std::unique_ptr<IResource> TextureLoader::VCreateAndLoadResource(const std::stri
     const auto surfaceWidth = sdlSurface->w;
     const auto surfaceHeight = sdlSurface->h;
     
-    return std::unique_ptr<IResource>(new TextureResource(sdlSurface, surfaceWidth, surfaceHeight, glTextureId));
+    return std::unique_ptr<IResource>(new TextureResource(sdlSurface, surfaceWidth, surfaceHeight, mode, textureFormat, glTextureId));
 }
 
 ///------------------------------------------------------------------------------------------------

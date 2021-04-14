@@ -181,6 +181,10 @@ void Game::VOnUpdate(float& dt)
     
     
     dtAccum2 += dt;
+    if (dtAccum2 >= 2.0f)
+    {
+        dtAccum2 = 0.0f;
+    }
     
     const auto dayCycleSpeed = 1.0f/10.0f;
     dtAccum += dayCycleSpeed * dt;

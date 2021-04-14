@@ -40,23 +40,29 @@ class TextureResource final: public IResource
 public:
     ~TextureResource();
     
+    void ChangeTexture(SDL_Surface* const surface);
+    
     GLuint GetGLTextureId() const;
     const glm::vec2& GetDimensions() const;
     colors::RgbTriplet<int> GetRgbAtPixel(const int x, const int y) const;
-
+    
 private:
     TextureResource
     (
         SDL_Surface* const surface,
         const int width, 
         const int height,
+        const int mode,
+        const int format,
         GLuint glTextureId
     );
     
 private:
-    SDL_Surface* const mSurface;
-    const glm::vec2 mDimensions;
-    const GLuint mGLTextureId;
+    SDL_Surface* mSurface;
+    glm::vec2 mDimensions;
+    int mMode;
+    int mFormat;
+    GLuint mGLTextureId;
 };
 
 ///------------------------------------------------------------------------------------------------

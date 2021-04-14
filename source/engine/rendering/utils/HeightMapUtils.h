@@ -24,7 +24,14 @@ namespace rendering
 {
 
 ///------------------------------------------------------------------------------------------------
-/// Returns an entity holding the loaded heightMap based on the model name supplied.
+
+enum class HeightMapGenerationType
+{
+    FROM_TEXTURE, RANDOM_LOW_ROUGHNESS, RANDOM_HIGH_ROUGHNESS
+};
+
+///------------------------------------------------------------------------------------------------
+/// Returns an entity holding the loaded heightMap based on the parameters supplied.
 ///
 /// Note: this helper function assumes that the heightMap name is a folder inside textures/heightMaps and
 /// where the heightMap.png is the actual heightMap texture, while the one or more textures inside heightMap_textures
@@ -33,13 +40,15 @@ namespace rendering
 /// @param[in] heightMapHeightScale the height scale of the height map (i.e. highest peak height)
 /// @param[in] heightMapWidthScale the width scale of the height map (i.e. x, z scale)
 /// @param[in] entityName (optional) a string to name the entity with.
+/// @param[in] generationType (optional) whether or not the generated heightmap will be based on the asset or on the procedural heightmap generation system.
 /// @returns the entity id of the loaded heightMap entity.
 ecs::EntityId LoadAndCreateHeightMapByName
 (
     const std::string& heightMapName,
     const float heightMapHeightScale,
     const float heightMapWidthScale,
-    const StringId entityName = StringId()
+    const StringId entityName = StringId(),
+    const HeightMapGenerationType generationType = HeightMapGenerationType::FROM_TEXTURE
 );
 
 ///------------------------------------------------------------------------------------------------

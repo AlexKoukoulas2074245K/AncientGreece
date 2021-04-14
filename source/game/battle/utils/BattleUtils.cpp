@@ -179,7 +179,7 @@ bool AreUnitsInDoubleMeleeDistance(const genesis::ecs::EntityId unitEntityA, con
 
 void CreateBattleGround()
 {
-    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.1f, 4.0f, BATTLE_MAP_ENTITY_NAME);
+    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.05f, 4.0f, BATTLE_MAP_ENTITY_NAME, genesis::rendering::HeightMapGenerationType::RANDOM_HIGH_ROUGHNESS);
 }
 
 ///------------------------------------------------------------------------------------------------
