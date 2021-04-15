@@ -26,7 +26,7 @@ namespace resources
 TextureResource::~TextureResource()
 {
     GL_CHECK(glDeleteTextures(1, &mGLTextureId));
-    SDL_FreeSurface(mSurface);
+    if (mSurface) SDL_FreeSurface(mSurface);
 }
 
 ///------------------------------------------------------------------------------------------------

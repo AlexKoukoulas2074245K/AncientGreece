@@ -12,6 +12,7 @@
 #include "battle/systems/BattleCollisionHandlingSystem.h"
 #include "battle/systems/BattleDamageApplicationSystem.h"
 #include "battle/systems/BattleDestructionTimerProcessingSystem.h"
+#include "battle/systems/BattleEndHandlingSystem.h"
 #include "battle/systems/BattleMovementControllerSystem.h"
 #include "battle/systems/BattleTargetAcquisitionSystem.h"
 #include "components/CollidableComponent.h"
@@ -62,7 +63,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 40;
+static int SPARTAN_COUNT = 5;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
@@ -91,6 +92,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<ModelAnimationTogglingSystem>());
     world.AddSystem(std::make_unique<view::ViewManagementSystem>());
     
+    world.AddSystem(std::make_unique<battle::BattleEndHandlingSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleCameraControllerSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleTargetAcquisitionSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleMovementControllerSystem>(), BATTLE_CONTEXT);
@@ -173,10 +175,7 @@ void Game::VOnGameInit()
         }
     }
     
-    const auto& playerPosition = world.GetComponent<genesis::TransformComponent>(overworld::GetPlayerEntity()).mPosition;
-    auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
-    cameraComponent.mPosition.x = playerPosition.x;
-    cameraComponent.mPosition.y = playerPosition.y;
+    overworld::PrepareOverworldCamera();
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -220,8 +219,31 @@ void Game::VOnUpdate(float& dt)
     else if (dayCycleFactor <= 21.0f) currentPeriod = "Dusk";
     else if (dayCycleFactor <= 24.0f) currentPeriod = "Night";
     
+    static const tsl::robin_map<std::string, float> periodXValues =
+    {
+        { "Dawn", -0.82f },
+        { "Dusk", -0.82f },
+        { "Night", -0.86f },
+        { "Morning", -0.88f },
+        { "Midday", -0.87f },
+        { "Afternoon", -0.92f },
+        { "Midnight", -0.925f },
+        { "Early Morning", -0.96f }
+    };
+    
     world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_period")));
-    genesis::rendering::RenderText(currentPeriod, StringId("ancient_greek_font"), 0.1f, glm::vec3(-0.85f, -0.85f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), false, StringId("time_period"));
+    //world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_plate")));
+    genesis::rendering::RenderText(currentPeriod, StringId("ancient_greek_font"), 0.1f, glm::vec3(periodXValues.at(currentPeriod), -0.91f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), false, StringId("time_period"));
+    
+//    const auto textRect = genesis::rendering::CalculateTextBoundingRect(timePeriodEntity);
+//    const auto textRectWidth = textRect.topRight.x - textRect.bottomLeft.x;
+//    const auto textRectHeight = textRect.topRight.y - textRect.bottomLeft.y;
+    
+    if (!world.HasEntity(world.FindEntityWithName(StringId("time_plate"))))
+    {
+        genesis::rendering::LoadAndCreateGuiSprite("time_plate", "time_plate", StringId("default_gui"),  glm::vec3(-0.755f, -0.905f, 0.01f), glm::vec3(), glm::vec3(0.9f, 0.2f, 1.0f), false, StringId("time_plate"));
+    }
+    
     
     //    Log(LogType::INFO, "%.6f, %.6f, %.6f", lightStoreComponent.mLightPositions[0].x, lightStoreComponent.mLightPositions[0].y, lightStoreComponent.mLightPositions[0].z);
 #if !defined(NDEBUG)

@@ -33,8 +33,9 @@ namespace battle
 
 namespace
 {
-    static const StringId BATTLE_MAP_ENTITY_NAME  = StringId("battle_grass");
-    static const StringId BATTLE_UNIT_ENTITY_NAME = StringId("battle_unit");
+    static const StringId BATTLE_MAP_ENTITY_NAME        = StringId("battle_grass");
+    static const StringId BATTLE_UNIT_ENTITY_NAME       = StringId("battle_unit");
+    static const StringId BATTLE_PROJECTILE_ENTITY_NAME = StringId("battle_projectile");
     
     static const std::string BATTLE_HEIGHT_MAP_NAME = "battle";
 
@@ -67,9 +68,36 @@ genesis::ecs::EntityId GetMapEntity()
 
 ///------------------------------------------------------------------------------------------------
 
+StringId GetProjectileEntityName()
+{
+    return BATTLE_PROJECTILE_ENTITY_NAME;
+}
+
+///------------------------------------------------------------------------------------------------
+
 std::vector<genesis::ecs::EntityId> GetAllBattleUnitEntities()
 {
     return genesis::ecs::World::GetInstance().FindAllEntitiesWithName(BATTLE_UNIT_ENTITY_NAME);
+}
+
+///------------------------------------------------------------------------------------------------
+
+bool IsBattleFinished()
+{
+    return  genesis::ecs::World::GetInstance().GetSingletonComponent<LiveBattleStateSingletonComponent>().mBattleState != BattleState::ONGOING;
+}
+
+///------------------------------------------------------------------------------------------------
+
+void SetBattleState(const BattleState battleState)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    if (!world.HasSingletonComponent<LiveBattleStateSingletonComponent>())
+    {
+        world.SetSingletonComponent<LiveBattleStateSingletonComponent>(std::make_unique<LiveBattleStateSingletonComponent>());
+    }
+    
+    world.GetSingletonComponent<LiveBattleStateSingletonComponent>().mBattleState = battleState;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -125,16 +153,32 @@ void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, co
 
 ///------------------------------------------------------------------------------------------------
 
+void DestroyBattleEntities()
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto mapEntity = GetMapEntity();
+    
+    auto& resourceLoadingService = genesis::resources::ResourceLoadingService::GetInstance();
+    auto& mapRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(mapEntity);
+    resourceLoadingService.UnloadResource(mapRenderableComponent.mTextureResourceId);
+    world.DestroyEntity(world.FindEntityWithName(BATTLE_MAP_ENTITY_NAME));
+    world.DestroyEntities(world.FindAllEntitiesWithName(BATTLE_UNIT_ENTITY_NAME));
+    world.DestroyEntities(world.FindAllEntitiesWithName(BATTLE_PROJECTILE_ENTITY_NAME));
+}
+
+///------------------------------------------------------------------------------------------------
+
 void PrepareBattleCamera()
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
-    cameraComponent.mPosition.x = BATTLE_CAMERA_X;
-    cameraComponent.mPosition.y = BATTLE_CAMERA_Y;
-    cameraComponent.mPosition.z = BATTLE_CAMERA_Z;
-    cameraComponent.mYaw        = BATTLE_CAMERA_YAW;
-    cameraComponent.mPitch      = BATTLE_CAMERA_PITCH;
-    cameraComponent.mRoll       = BATTLE_CAMERA_ROLL;
+    cameraComponent.mPosition.x  = BATTLE_CAMERA_X;
+    cameraComponent.mPosition.y  = BATTLE_CAMERA_Y;
+    cameraComponent.mPosition.z  = BATTLE_CAMERA_Z;
+    cameraComponent.mYaw         = BATTLE_CAMERA_YAW;
+    cameraComponent.mPitch       = BATTLE_CAMERA_PITCH;
+    cameraComponent.mRoll        = BATTLE_CAMERA_ROLL;
+    cameraComponent.mCameraState = genesis::rendering::CameraState::AUTO_CENTERING;
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -8,6 +8,7 @@
 #include "BattleTargetAcquisitionSystem.h"
 #include "../components/BattleSideComponent.h"
 #include "../components/BattleTargetComponent.h"
+#include "../utils/BattleUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
@@ -28,6 +29,8 @@ BattleTargetAcquisitionSystem::BattleTargetAcquisitionSystem()
 
 void BattleTargetAcquisitionSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
+    if (IsBattleFinished()) return;
+    
     for (const auto& entityId: entitiesToProcess)
     {
         if (IsUnitDead(entityId)) continue;

@@ -11,6 +11,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+#include "../components/LiveBattleStateSingletonComponent.h"
 
 ///------------------------------------------------------------------------------------------------
 
@@ -25,7 +26,19 @@ genesis::ecs::EntityId GetMapEntity();
 
 ///------------------------------------------------------------------------------------------------
 
+StringId GetProjectileEntityName();
+
+///------------------------------------------------------------------------------------------------
+
 std::vector<genesis::ecs::EntityId> GetAllBattleUnitEntities();
+
+///------------------------------------------------------------------------------------------------
+
+bool IsBattleFinished();
+
+///------------------------------------------------------------------------------------------------
+
+void SetBattleState(const BattleState battleState);
 
 ///------------------------------------------------------------------------------------------------
 
@@ -38,6 +51,10 @@ void AddCollidableDataToArrow(const genesis::ecs::EntityId arrowEntity);
 ///------------------------------------------------------------------------------------------------
 
 void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const genesis::ecs::EntityId attackingLeaderEntity, const genesis::ecs::EntityId defendingLeaderEntity);
+
+///------------------------------------------------------------------------------------------------
+
+void DestroyBattleEntities();
 
 ///------------------------------------------------------------------------------------------------
 

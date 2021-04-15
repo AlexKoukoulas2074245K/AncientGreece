@@ -15,8 +15,9 @@
 #include "../../../engine/ECS.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/ColorUtils.h"
-#include "../../../engine/rendering/components/RenderableComponent.h"
+#include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/HeightMapComponent.h"
+#include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/rendering/utils/FontUtils.h"
 #include "../../../engine/rendering/utils/MeshUtils.h"
 #include "../../../engine/rendering/utils/HeightMapUtils.h"
@@ -345,6 +346,19 @@ void PopulateOverworldCityStates()
         
         AddCollidableDataToCityState(cityStateEntity);
     }
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void PrepareOverworldCamera()
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    const auto& playerPosition = world.GetComponent<genesis::TransformComponent>(overworld::GetPlayerEntity()).mPosition;
+    world.RemoveSingletonComponent<genesis::rendering::CameraSingletonComponent>();
+    world.SetSingletonComponent<genesis::rendering::CameraSingletonComponent>(std::make_unique<genesis::rendering::CameraSingletonComponent>());
+    auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
+    cameraComponent.mPosition.x = playerPosition.x;
+    cameraComponent.mPosition.y = playerPosition.y;
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -46,6 +46,8 @@ BattleAttackTriggerHandlingSystem::BattleAttackTriggerHandlingSystem()
 
 void BattleAttackTriggerHandlingSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
+    if (IsBattleFinished()) return;
+    
     auto& world = genesis::ecs::World::GetInstance();
     for (const auto& entityId: entitiesToProcess)
     {
@@ -118,7 +120,7 @@ void BattleAttackTriggerHandlingSystem::CreateProjectile(const genesis::ecs::Ent
     
     const auto projectileRotation = CalculateProjectileRotation(vecToTarget);
     
-    auto arrowEntity = genesis::rendering::LoadAndCreateStaticModelByName(PROJECTILE_MODEL_NAME, originPosition, projectileRotation, PROJECTILE_SCALE);
+    auto arrowEntity = genesis::rendering::LoadAndCreateStaticModelByName(PROJECTILE_MODEL_NAME, originPosition, projectileRotation, PROJECTILE_SCALE, GetProjectileEntityName());
     
     auto arrowBattleSideComponent = std::make_unique<BattleSideComponent>();
     arrowBattleSideComponent->mBattleSideLeaderName = battleSideComponent.mBattleSideLeaderName;

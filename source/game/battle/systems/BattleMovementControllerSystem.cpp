@@ -48,6 +48,8 @@ BattleMovementControllerSystem::BattleMovementControllerSystem()
 
 void BattleMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
+    if (IsBattleFinished()) return;
+    
     auto& world = genesis::ecs::World::GetInstance();
     auto mapEntity = GetMapEntity();
     

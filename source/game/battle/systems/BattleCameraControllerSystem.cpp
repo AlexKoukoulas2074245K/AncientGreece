@@ -34,7 +34,6 @@ namespace
     static const float CAMERA_MAX_Z                          = -0.2f;
     static const float CAMERA_MIN_Z                          = -0.4f;
     static const float CAMERA_AUTOCENTERING_SPEED            = 0.3f;
-    static const float CAMERA_AUTOCENTERING_RESET_DELAY      = 4.0f;
     static const float CAMERA_AUTOCENTERING_Y_OFFSET         = -0.35f;
 }
 
@@ -49,6 +48,8 @@ BattleCameraControllerSystem::BattleCameraControllerSystem()
 
 void BattleCameraControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const
 {
+    if (IsBattleFinished()) return;
+    
     const auto& world = genesis::ecs::World::GetInstance();
     const auto& debugViewState = world.GetSingletonComponent<genesis::debug::DebugViewStateSingletonComponent>();
     
@@ -120,14 +121,6 @@ void BattleCameraControllerSystem::NormalCameraOperation(const float dt) const
         cameraComponent.mDtAccum = 0.0f;
     }
     
-    cameraComponent.mDtAccum += dt;
-    if (cameraComponent.mDtAccum > CAMERA_AUTOCENTERING_RESET_DELAY)
-    {
-        cameraComponent.mDtAccum = 0.0f;
-        cameraComponent.mCameraState = genesis::rendering::CameraState::AUTO_CENTERING;
-    }
-    
-    
     // Auto center to middle of battlefield
     if (cameraComponent.mCameraState == genesis::rendering::CameraState::AUTO_CENTERING)
     {
@@ -139,7 +132,8 @@ void BattleCameraControllerSystem::NormalCameraOperation(const float dt) const
             cameraComponent.mVelocity.y = directionToPlayer.y * CAMERA_AUTOCENTERING_SPEED;
         }
     }
-    Log(LogType::INFO, "%.6f, %.6f", cameraComponent.mVelocity.x, cameraComponent.mVelocity.y);
+    
+    //Log(LogType::INFO, "%.6f, %.6f", cameraComponent.mVelocity.x, cameraComponent.mVelocity.y);
     
     // Zoom Calculations
     if (genesis::input::GetMouseWheelDelta() > 0)

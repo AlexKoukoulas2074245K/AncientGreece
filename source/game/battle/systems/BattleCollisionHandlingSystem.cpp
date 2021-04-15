@@ -9,6 +9,7 @@
 #include "../components/BattleSideComponent.h"
 #include "../components/BattleUnitCollisionComponent.h"
 #include "../components/BattleProjectileComponent.h"
+#include "../utils/BattleUtils.h"
 #include "../../components/CollidableComponent.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitCollisionUtils.h"
@@ -46,6 +47,8 @@ void BattleCollisionHandlingSystem::VUpdate(const float dt, const std::vector<ge
 
 void BattleCollisionHandlingSystem::BuildCollisionDisplacementMap(const std::vector<genesis::ecs::EntityId>& entitiesToProcess, tsl::robin_map<genesis::ecs::EntityId, glm::vec3>& collisionDisplacementMap) const
 {
+    if (IsBattleFinished()) return;
+    
     auto& world = genesis::ecs::World::GetInstance();
     const auto& sceneGraph = world.GetSingletonComponent<scene::SceneStateSingletonComponent>().mSceneGraph;
     
