@@ -99,8 +99,9 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<battle::BattleDamageApplicationSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleDestructionTimerProcessingSystem>(), BATTLE_CONTEXT);
     
+    world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), 0);
+    
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
-    world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetInteractionHandlingSystem>(), MAP_CONTEXT);

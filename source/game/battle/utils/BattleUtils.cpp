@@ -8,7 +8,6 @@
 #include "BattleUtils.h"
 #include "../components/BattleDamageComponent.h"
 #include "../components/BattleSideComponent.h"
-#include "../components/BattleQueueSingletonComponent.h"
 #include "../../components/CollidableComponent.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/UnitFactoryUtils.h"
@@ -113,20 +112,6 @@ void AddCollidableDataToArrow(const genesis::ecs::EntityId arrowEntity)
     world.AddComponent<CollidableComponent>(arrowEntity, std::move(collidableComponent));
 }
 
-///------------------------------------------------------------------------------------------------
-
-void QueueBattle(const genesis::ecs::EntityId attackingEntity, const genesis::ecs::EntityId defendingEntity)
-{
-    auto& world = genesis::ecs::World::GetInstance();
-    if (!world.HasSingletonComponent<BattleQueueSingletonComponent>())
-    {
-        world.SetSingletonComponent<BattleQueueSingletonComponent>(std::make_unique<BattleQueueSingletonComponent>());
-    }
-    
-    auto& battleQueueComponent = world.GetSingletonComponent<BattleQueueSingletonComponent>();
-    battleQueueComponent.mQueuedBattles.push({attackingEntity, defendingEntity});
-}
-
 ///-----------------------------------------------------------------------------------------------
 
 void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const genesis::ecs::EntityId attackingLeaderEntity, const genesis::ecs::EntityId defendingLeaderEntity)
@@ -186,7 +171,7 @@ bool AreUnitsInDoubleMeleeDistance(const genesis::ecs::EntityId unitEntityA, con
 
 void CreateBattleGround()
 {
-    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.1f, 4.0f, BATTLE_MAP_ENTITY_NAME, genesis::rendering::HeightMapGenerationType::RANDOM_HIGH_ROUGHNESS);
+    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.05f, 4.0f, BATTLE_MAP_ENTITY_NAME, genesis::rendering::HeightMapGenerationType::RANDOM_LOW_ROUGHNESS);
 }
 
 ///------------------------------------------------------------------------------------------------
