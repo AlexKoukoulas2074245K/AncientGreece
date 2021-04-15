@@ -6,6 +6,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "BattleCameraControllerSystem.h"
+#include "../utils/BattleUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/debug/components/DebugViewStateSingletonComponent.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
@@ -25,12 +26,14 @@ namespace battle
 
 namespace
 {
-    static const float CAMERA_PANNING_SPEED           = 0.2f;
-    //static const float CAMERA_MOVE_TO_PLAYER_SPEED    = 1.0f;
-    static const float CAMERA_ZOOM_SPEED              = 1.0f;
-    static const float CAMERA_ZOOM_SPEED_DECELERATION = 9.8f;
-    static const float CAMERA_MAX_Z                   = -0.2f;
-    static const float CAMERA_MIN_Z                   = -0.6f;
+    static const float CAMERA_PANNING_SPEED             = 0.2f;
+    static const float CAMERA_ZOOM_SPEED                = 1.0f;
+    static const float CAMERA_ZOOM_SPEED_DECELERATION   = 9.8f;
+    static const float CAMERA_MAX_Z                     = -0.2f;
+    static const float CAMERA_MIN_Z                     = -0.4f;
+    static const float CAMERA_AUTOCENTERING_SPEED       = 0.3f;
+    static const float CAMERA_AUTOCENTERING_RESET_DELAY = 4.0f;
+    static const float CAMERA_AUTOCENTERING_Y_OFFSET    = -0.35f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -94,6 +97,42 @@ void BattleCameraControllerSystem::NormalCameraOperation(const float dt) const
     {
         cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
         cameraComponent.mVelocity.y = -CAMERA_PANNING_SPEED;
+    }
+    
+    if (glm::length(cameraComponent.mVelocity) > genesis::math::EQ_THRESHOLD)
+    {
+        cameraComponent.mDtAccum = 0.0f;
+    }
+    
+    cameraComponent.mDtAccum += dt;
+    if (cameraComponent.mDtAccum > CAMERA_AUTOCENTERING_RESET_DELAY)
+    {
+        cameraComponent.mDtAccum = 0.0f;
+        cameraComponent.mCameraState = genesis::rendering::CameraState::AUTO_CENTERING;
+    }
+    
+    
+    // Auto center to middle of battlefield
+    if (cameraComponent.mCameraState == genesis::rendering::CameraState::AUTO_CENTERING)
+    {
+        const auto& units = GetAllBattleUnitEntities();
+        glm::vec3 positionCounter(0.0f);
+        
+        for (const auto entity: units)
+        {
+            const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entity);
+            positionCounter += transformComponent.mPosition;
+        }
+        positionCounter /= units.size();
+        positionCounter.y += CAMERA_AUTOCENTERING_Y_OFFSET;
+        
+        // If we havent already reached the player move towards them
+        if (genesis::math::Abs(positionCounter.x - cameraComponent.mPosition.x) > genesis::math::EQ_THRESHOLD && genesis::math::Abs(positionCounter.y - cameraComponent.mPosition.y) > genesis::math::EQ_THRESHOLD)
+        {
+            const auto directionToPlayer = glm::normalize(positionCounter - cameraComponent.mPosition);
+            cameraComponent.mVelocity.x = directionToPlayer.x * CAMERA_AUTOCENTERING_SPEED;
+            cameraComponent.mVelocity.y = directionToPlayer.y * CAMERA_AUTOCENTERING_SPEED;
+        }
     }
     
     // Zoom Calculations

@@ -17,7 +17,7 @@
 
 namespace
 {
-    static const float ENTITY_SPHERE_COLLISION_MULTIPLIER = 0.25f * 0.3333f;
+    static const float ENTITY_SPHERE_COLLISION_MULTIPLIER = 0.4f * 0.3333f;
 }
 
 ///------------------------------------------------------------------------------------------------

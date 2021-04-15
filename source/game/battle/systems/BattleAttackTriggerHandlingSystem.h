@@ -47,7 +47,7 @@ private:
     void CreateProjectile(const genesis::ecs::EntityId sourceEntityId) const;
     void DamageTarget(const genesis::ecs::EntityId sourceEntityId) const;
     glm::vec3 CalculateProjectileTargetOffset(const glm::vec3& targetEntityScaledDimensions) const;
-    glm::vec3 CalculateProjectileOriginOffset(const glm::vec3& sourceEntityScaledDimensions) const;
+    glm::vec3 CalculateProjectileOriginOffset(const glm::vec3& sourceEntityScaledDimensions, const glm::vec3& targetPosition) const;
     glm::vec3 CalculateProjectileRotation(const glm::vec3& vecToTarget) const;
 };
 

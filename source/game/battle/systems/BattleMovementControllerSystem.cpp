@@ -31,7 +31,7 @@ namespace
     static const float ROTATION_SPEED                         = 5.0f;
     static const float BASE_UNIT_SPEED                        = 0.01f;
 	static const float BASE_PROJECTILE_SPEED                  = 0.2f;
-    static const float PROJECTILE_TARGET_DISTANCE_THRESHOLD   = 0.01f;
+    static const float PROJECTILE_TARGET_DISTANCE_THRESHOLD   = 0.001f;
     static const float PROJECTILE_PITCH_DOWN_SPEED            = 0.2f;
     static const float PROJECTILE_TTL_ON_ATTACHMENT           = 1.0f;
     static const float UNIT_ASCENDING_DESCENDING_SPEED_FACTOR = 300.0f;
@@ -89,14 +89,13 @@ void BattleMovementControllerSystem::UpdateProjectile(const float dt, const gene
     {
         case ProjectileState::SEEKING_TARGET:
         {
-            const auto& vecToTarget = targetPoint - transformComponent.mPosition;
-            const auto distanceToTarget = glm::length(vecToTarget);
+            const auto& vecToTarget3 = targetPoint - transformComponent.mPosition;
             
-            if (distanceToTarget > PROJECTILE_TARGET_DISTANCE_THRESHOLD)
+            if (genesis::math::Abs(targetPoint.y - transformComponent.mPosition.y) > PROJECTILE_TARGET_DISTANCE_THRESHOLD)
             {
                 const auto unitSpeed = BASE_PROJECTILE_SPEED;
                 UpdatePosition(genesis::ecs::NULL_ENTITY_ID, dt, unitSpeed, targetPoint, transformComponent.mPosition);
-                UpdateRotation(dt, -genesis::math::Arctan2(vecToTarget.x, vecToTarget.y), transformComponent.mRotation);
+                UpdateRotation(dt, -genesis::math::Arctan2(vecToTarget3.x, vecToTarget3.y), transformComponent.mRotation);
                 UpdateProjectilePitch(dt, transformComponent.mRotation);
             }
             else

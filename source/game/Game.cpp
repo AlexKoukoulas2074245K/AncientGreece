@@ -178,7 +178,13 @@ void Game::VOnUpdate(float& dt)
     auto& world = genesis::ecs::World::GetInstance();
     
     auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
-    
+
+#if !defined(NDEBUG)
+    if (genesis::input::GetKeyState(genesis::input::Key::SPACEBAR_KEY) == genesis::input::InputState::PRESSED)
+    {
+        dt /= 10.0f;
+    }
+#endif
     
     dtAccum2 += dt;
     if (dtAccum2 >= 2.0f)

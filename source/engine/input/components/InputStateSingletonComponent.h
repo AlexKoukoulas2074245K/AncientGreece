@@ -39,7 +39,7 @@ enum class Key
     K_KEY, L_KEY, M_KEY, N_KEY, O_KEY, P_KEY, Q_KEY, R_KEY, S_KEY, T_KEY,
     U_KEY, V_KEY, W_KEY, X_KEY, Y_KEY, Z_KEY, SHIFT_KEY, BACKSPACE_KEY, ENTER_KEY,
     UP_ARROW_KEY, DOWN_ARROW_KEY, LEFT_ARROW_KEY, RIGHT_ARROW_KEY,
-    TILDE_KEY
+    TILDE_KEY, SPACEBAR_KEY
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -84,6 +84,7 @@ public:
         {SDL_SCANCODE_RIGHT, Key::RIGHT_ARROW_KEY},
         {SDL_SCANCODE_UP, Key::UP_ARROW_KEY},
         {SDL_SCANCODE_DOWN, Key::DOWN_ARROW_KEY},
+        {SDL_SCANCODE_SPACE, Key::SPACEBAR_KEY}
     };
     
     tsl::robin_map<int, Button> mButtonBindings =

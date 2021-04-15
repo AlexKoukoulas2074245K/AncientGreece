@@ -111,14 +111,14 @@ void BattleAttackTriggerHandlingSystem::CreateProjectile(const genesis::ecs::Ent
     const auto& targetCurrentMesh = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>(targetRenderableComponent.mMeshResourceIds[targetRenderableComponent.mCurrentMeshResourceIndex]);
     const auto scaledTargetDimensions = targetCurrentMesh.GetDimensions() * targetTransformComponent.mScale;
     
-    const auto offsetOriginPosition = CalculateProjectileOriginOffset(currentMesh.GetDimensions() * transformComponent.mScale);
     const auto offsetTargetPosition = CalculateProjectileTargetOffset(scaledTargetDimensions);
-    
+    const auto offsetOriginPosition = CalculateProjectileOriginOffset(currentMesh.GetDimensions() * transformComponent.mScale, targetTransformComponent.mPosition + offsetTargetPosition);
+    const auto originPosition = glm::vec3(transformComponent.mPosition.x + offsetOriginPosition.x, transformComponent.mPosition.y + offsetOriginPosition.y, offsetOriginPosition.z);
     const auto vecToTarget = (targetTransformComponent.mPosition + offsetTargetPosition) - transformComponent.mPosition;
     
     const auto projectileRotation = CalculateProjectileRotation(vecToTarget);
     
-    auto arrowEntity = genesis::rendering::LoadAndCreateStaticModelByName(PROJECTILE_MODEL_NAME, transformComponent.mPosition + offsetOriginPosition, projectileRotation, PROJECTILE_SCALE);
+    auto arrowEntity = genesis::rendering::LoadAndCreateStaticModelByName(PROJECTILE_MODEL_NAME, originPosition, projectileRotation, PROJECTILE_SCALE);
     
     auto arrowBattleSideComponent = std::make_unique<BattleSideComponent>();
     arrowBattleSideComponent->mBattleSideLeaderName = battleSideComponent.mBattleSideLeaderName;
@@ -153,21 +153,23 @@ void BattleAttackTriggerHandlingSystem::DamageTarget(const genesis::ecs::EntityI
 
 glm::vec3 BattleAttackTriggerHandlingSystem::CalculateProjectileTargetOffset(const glm::vec3& targetEntityScaledDimensions) const
 {
-    return glm::vec3( genesis::math::RandomFloat(-targetEntityScaledDimensions.x/4.0f, targetEntityScaledDimensions.x/4.0f), -0.004f, -genesis::math::RandomFloat(targetEntityScaledDimensions.y * 0.15f, targetEntityScaledDimensions.y * 0.55f));
+    return glm::vec3( genesis::math::RandomFloat(-targetEntityScaledDimensions.x/4.0f, targetEntityScaledDimensions.x/4.0f), 0.0f, -genesis::math::RandomFloat(targetEntityScaledDimensions.y * 0.15f, targetEntityScaledDimensions.y * 0.55f));
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-glm::vec3 BattleAttackTriggerHandlingSystem::CalculateProjectileOriginOffset(const glm::vec3& sourceEntityScaledDimensions) const
+glm::vec3 BattleAttackTriggerHandlingSystem::CalculateProjectileOriginOffset(const glm::vec3& sourceEntityScaledDimensions, const glm::vec3& targetPosition) const
 {
-    return glm::vec3(0.0f, sourceEntityScaledDimensions.y / 8.0, -sourceEntityScaledDimensions.z / 1.3f);
+    return glm::vec3(0.0f, sourceEntityScaledDimensions.y / 2.0f, targetPosition.z);
 }
 
 ///-----------------------------------------------------------------------------------------------
 
 glm::vec3 BattleAttackTriggerHandlingSystem::CalculateProjectileRotation(const glm::vec3& vecToTarget) const
 {
-    return glm::vec3(-genesis::math::PI/8.0f, 0.0f, -genesis::math::Arctan2(vecToTarget.x, vecToTarget.y));
+    auto pitch = genesis::math::Arctan2(vecToTarget.z, vecToTarget.y);
+    if (vecToTarget.y < 0) pitch += genesis::math::PI;
+    return glm::vec3(pitch, 0.0f, -genesis::math::Arctan2(vecToTarget.x, vecToTarget.y));
 }
 
 ///-----------------------------------------------------------------------------------------------

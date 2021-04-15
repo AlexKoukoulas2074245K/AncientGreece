@@ -66,6 +66,7 @@ public:
     float mPitch                = DEFAULT_CAMERA_PITCH;
     float mYaw                  = DEFAULT_CAMERA_YAW;
     float mRoll                 = DEFAULT_CAMERA_ROLL;
+    float mDtAccum              = 0.0f;
     CameraState mCameraState    = CameraState::AUTO_CENTERING;
 };
 

@@ -68,6 +68,13 @@ genesis::ecs::EntityId GetMapEntity()
 
 ///------------------------------------------------------------------------------------------------
 
+std::vector<genesis::ecs::EntityId> GetAllBattleUnitEntities()
+{
+    return genesis::ecs::World::GetInstance().FindAllEntitiesWithName(BATTLE_UNIT_ENTITY_NAME);
+}
+
+///------------------------------------------------------------------------------------------------
+
 void DamageUnit(const genesis::ecs::EntityId unitEntity, const int damage)
 {
     if (IsUnitDead(unitEntity))
@@ -179,7 +186,7 @@ bool AreUnitsInDoubleMeleeDistance(const genesis::ecs::EntityId unitEntityA, con
 
 void CreateBattleGround()
 {
-    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.05f, 4.0f, BATTLE_MAP_ENTITY_NAME, genesis::rendering::HeightMapGenerationType::RANDOM_HIGH_ROUGHNESS);
+    genesis::rendering::LoadAndCreateHeightMapByName(BATTLE_HEIGHT_MAP_NAME, 0.1f, 4.0f, BATTLE_MAP_ENTITY_NAME, genesis::rendering::HeightMapGenerationType::RANDOM_HIGH_ROUGHNESS);
 }
 
 ///------------------------------------------------------------------------------------------------
