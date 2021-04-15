@@ -321,6 +321,8 @@ SDL_Surface* GenerateHeightMapSurface(float** data)
        std::memcpy( ((char *) generatedSurface->pixels) + generatedSurface->pitch * i, pixels + 3 * DIAMOND_SQUARE_HEIGHTMAP_MAX * (DIAMOND_SQUARE_HEIGHTMAP_MAX - i - 1), DIAMOND_SQUARE_HEIGHTMAP_MAX * 3);
     }
        
+    SDL_SaveBMP(generatedSurface, "last_generated_heightmap.bmp");
+    
     delete [] pixels;
     
     return generatedSurface;

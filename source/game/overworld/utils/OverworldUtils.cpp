@@ -21,6 +21,7 @@
 #include "../../../engine/rendering/utils/MeshUtils.h"
 #include "../../../engine/rendering/utils/HeightMapUtils.h"
 #include "../../../engine/resources/MeshResource.h"
+#include "../../../engine/resources/TextureLoader.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
 
 #include <fstream>
@@ -364,6 +365,12 @@ void RemoveOverworldCityStates()
 void RemoveOverworldMapComponents()
 {
     auto& world = genesis::ecs::World::GetInstance();
+    const auto mapEntity = GetMapEntity();
+    
+    auto& resourceLoadingService = genesis::resources::ResourceLoadingService::GetInstance();
+    auto& mapRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(mapEntity);
+    resourceLoadingService.UnloadResource(mapRenderableComponent.mTextureResourceId);
+    
     world.DestroyEntity(world.FindEntityWithName(MAP_ENTITY_NAME));
     world.DestroyEntity(world.FindEntityWithName(MAP_EDGE_1_ENTITY_NAME));
     world.DestroyEntity(world.FindEntityWithName(MAP_EDGE_2_ENTITY_NAME));

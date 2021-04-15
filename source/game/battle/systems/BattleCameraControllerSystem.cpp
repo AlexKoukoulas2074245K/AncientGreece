@@ -8,6 +8,7 @@
 #include "BattleCameraControllerSystem.h"
 #include "../utils/BattleUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
+#include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/debug/components/DebugViewStateSingletonComponent.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
@@ -26,14 +27,15 @@ namespace battle
 
 namespace
 {
-    static const float CAMERA_PANNING_SPEED             = 0.2f;
-    static const float CAMERA_ZOOM_SPEED                = 1.0f;
-    static const float CAMERA_ZOOM_SPEED_DECELERATION   = 9.8f;
-    static const float CAMERA_MAX_Z                     = -0.2f;
-    static const float CAMERA_MIN_Z                     = -0.4f;
-    static const float CAMERA_AUTOCENTERING_SPEED       = 0.3f;
-    static const float CAMERA_AUTOCENTERING_RESET_DELAY = 4.0f;
-    static const float CAMERA_AUTOCENTERING_Y_OFFSET    = -0.35f;
+    static const float CAMERA_PANNING_SPEED                  = 0.2f;
+    static const float CAMERA_PANNING_CENTER_DISTANCE_FACTOR = 0.1f;
+    static const float CAMERA_ZOOM_SPEED                     = 1.0f;
+    static const float CAMERA_ZOOM_SPEED_DECELERATION        = 9.8f;
+    static const float CAMERA_MAX_Z                          = -0.2f;
+    static const float CAMERA_MIN_Z                          = -0.4f;
+    static const float CAMERA_AUTOCENTERING_SPEED            = 0.3f;
+    static const float CAMERA_AUTOCENTERING_RESET_DELAY      = 4.0f;
+    static const float CAMERA_AUTOCENTERING_Y_OFFSET         = -0.35f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -77,26 +79,40 @@ void BattleCameraControllerSystem::NormalCameraOperation(const float dt) const
     
     cameraComponent.mVelocity.x = cameraComponent.mVelocity.y = 0.0f;
     
+    // Calculate battlefield center
+    const auto& units = GetAllBattleUnitEntities();
+    glm::vec3 battlefieldCenterPosition(cameraComponent.mPosition.z);
+    
+    for (const auto entity: units)
+    {
+        const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entity);
+        battlefieldCenterPosition += transformComponent.mPosition;
+    }
+    battlefieldCenterPosition /= units.size();
+    battlefieldCenterPosition.y += CAMERA_AUTOCENTERING_Y_OFFSET;
+    
+    const auto battlefieldCenterDistance = genesis::math::Max(glm::distance(cameraComponent.mPosition, battlefieldCenterPosition), genesis::math::EQ_THRESHOLD);
+    
     // Panning Calculations
     if(genesis::input::GetKeyState(genesis::input::Key::A_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
-        cameraComponent.mVelocity.x = -CAMERA_PANNING_SPEED;
+        cameraComponent.mVelocity.x = -CAMERA_PANNING_SPEED * (CAMERA_PANNING_CENTER_DISTANCE_FACTOR/battlefieldCenterDistance);
     }
     if(genesis::input::GetKeyState(genesis::input::Key::D_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
-        cameraComponent.mVelocity.x = CAMERA_PANNING_SPEED;
+        cameraComponent.mVelocity.x = CAMERA_PANNING_SPEED * (CAMERA_PANNING_CENTER_DISTANCE_FACTOR/battlefieldCenterDistance);
     }
     if(genesis::input::GetKeyState(genesis::input::Key::W_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
-        cameraComponent.mVelocity.y = CAMERA_PANNING_SPEED;
+        cameraComponent.mVelocity.y = CAMERA_PANNING_SPEED * (CAMERA_PANNING_CENTER_DISTANCE_FACTOR/battlefieldCenterDistance);
     }
     if(genesis::input::GetKeyState(genesis::input::Key::S_KEY) == genesis::input::InputState::PRESSED)
     {
         cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
-        cameraComponent.mVelocity.y = -CAMERA_PANNING_SPEED;
+        cameraComponent.mVelocity.y = -CAMERA_PANNING_SPEED * (CAMERA_PANNING_CENTER_DISTANCE_FACTOR/battlefieldCenterDistance);
     }
     
     if (glm::length(cameraComponent.mVelocity) > genesis::math::EQ_THRESHOLD)
@@ -115,25 +131,15 @@ void BattleCameraControllerSystem::NormalCameraOperation(const float dt) const
     // Auto center to middle of battlefield
     if (cameraComponent.mCameraState == genesis::rendering::CameraState::AUTO_CENTERING)
     {
-        const auto& units = GetAllBattleUnitEntities();
-        glm::vec3 positionCounter(0.0f);
-        
-        for (const auto entity: units)
+        // If we havent already reached the battlefield center, then move towards it
+        if (battlefieldCenterDistance > genesis::math::EQ_THRESHOLD)
         {
-            const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entity);
-            positionCounter += transformComponent.mPosition;
-        }
-        positionCounter /= units.size();
-        positionCounter.y += CAMERA_AUTOCENTERING_Y_OFFSET;
-        
-        // If we havent already reached the player move towards them
-        if (genesis::math::Abs(positionCounter.x - cameraComponent.mPosition.x) > genesis::math::EQ_THRESHOLD && genesis::math::Abs(positionCounter.y - cameraComponent.mPosition.y) > genesis::math::EQ_THRESHOLD)
-        {
-            const auto directionToPlayer = glm::normalize(positionCounter - cameraComponent.mPosition);
+            const auto directionToPlayer = glm::normalize(battlefieldCenterPosition - cameraComponent.mPosition);
             cameraComponent.mVelocity.x = directionToPlayer.x * CAMERA_AUTOCENTERING_SPEED;
             cameraComponent.mVelocity.y = directionToPlayer.y * CAMERA_AUTOCENTERING_SPEED;
         }
     }
+    Log(LogType::INFO, "%.6f, %.6f", cameraComponent.mVelocity.x, cameraComponent.mVelocity.y);
     
     // Zoom Calculations
     if (genesis::input::GetMouseWheelDelta() > 0)
