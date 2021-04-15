@@ -9,6 +9,9 @@
 #include "../components/HighlightableComponent.h"
 #include "../../components/CollidableComponent.h"
 #include "../../components/CityStateInfoSingletonComponent.h"
+#include "../../components/UnitStatsComponent.h"
+#include "../../utils/UnitFactoryUtils.h"
+#include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/ECS.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/ColorUtils.h"
@@ -20,6 +23,8 @@
 #include "../../../engine/resources/MeshResource.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
 
+#include <fstream>
+#include <json.hpp>
 
 ///------------------------------------------------------------------------------------------------
 
@@ -30,20 +35,21 @@ namespace overworld
 
 namespace
 {
-    static const StringId GAME_FONT_NAME             = StringId("ancient_greek_font");
-    static const StringId UNIT_PREVIEW_POPUP_NAME    = StringId("unit_preview_popup");
-    static const StringId MAP_ENTITY_NAME            = StringId("map");
-    static const StringId MAP_EDGE_1_ENTITY_NAME     = StringId("map_edge_1");
-    static const StringId MAP_EDGE_2_ENTITY_NAME     = StringId("map_edge_2");
-    static const StringId MAP_EDGE_3_ENTITY_NAME     = StringId("map_edge_3");
-    static const StringId MAP_EDGE_4_ENTITY_NAME     = StringId("map_edge_4");
-    static const StringId OVERWORLD_UNIT_ENTITY_NAME = StringId("overworld_unit");
-    static const StringId PLAYER_ENTITY_NAME         = StringId("player");
+    static const StringId GAME_FONT_NAME                     = StringId("ancient_greek_font");
+    static const StringId UNIT_PREVIEW_POPUP_NAME            = StringId("unit_preview_popup");
+    static const StringId MAP_ENTITY_NAME                    = StringId("map");
+    static const StringId MAP_EDGE_1_ENTITY_NAME             = StringId("map_edge_1");
+    static const StringId MAP_EDGE_2_ENTITY_NAME             = StringId("map_edge_2");
+    static const StringId MAP_EDGE_3_ENTITY_NAME             = StringId("map_edge_3");
+    static const StringId MAP_EDGE_4_ENTITY_NAME             = StringId("map_edge_4");
+    static const StringId GENERIC_OVERWORLD_UNIT_ENTITY_NAME = StringId("overworld_unit");
+    static const StringId PLAYER_ENTITY_NAME                 = StringId("player");
 
     static const std::string OVERWORLD_HEIGHTMAP_NAME       = "overworld";
     static const std::string NAME_PLATE_MODEL_NAME          = "name_plate";
     static const std::string MAP_EDGE_MODEL_NAME            = "map_edge";
     static const std::string CITY_STATE_BUILDING_MODEL_NAME = "building";
+    static const std::string SAVE_FILE_PATH = "save.json";
 
     static const float ENTITY_SPHERE_COLLISION_MULTIPLIER     = 0.25f * 0.3333f;
 
@@ -76,6 +82,20 @@ genesis::ecs::EntityId GetPlayerEntity()
 
 ///------------------------------------------------------------------------------------------------
 
+StringId GetPlayerEntityName()
+{
+    return PLAYER_ENTITY_NAME;
+}
+
+///------------------------------------------------------------------------------------------------
+
+StringId GetGenericOverworldUnitEntityName()
+{
+    return GENERIC_OVERWORLD_UNIT_ENTITY_NAME;
+}
+
+///------------------------------------------------------------------------------------------------
+
 void PopulateOverworldEntities()
 {
     LoadAndCreateOverworldMapComponents();
@@ -88,12 +108,163 @@ void DestroyOverworldEntities()
 {
     auto& world = genesis::ecs::World::GetInstance();
     
+    SaveOverworldStateToFile();
+    
     RemoveOverworldCityStates();
     RemoveOverworldMapComponents();
     
     world.DestroyEntities(world.FindAllEntitiesWithName(UNIT_PREVIEW_POPUP_NAME));
-    world.DestroyEntities(world.FindAllEntitiesWithName(OVERWORLD_UNIT_ENTITY_NAME));
+    world.DestroyEntities(world.FindAllEntitiesWithName(GENERIC_OVERWORLD_UNIT_ENTITY_NAME));
     world.DestroyEntities(world.FindAllEntitiesWithName(PLAYER_ENTITY_NAME));
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void SaveOverworldStateToFile()
+{
+    nlohmann::json saveFileRoot;
+    
+    auto& world = genesis::ecs::World::GetInstance();
+    
+    // Save player data
+    const auto playerEntity = GetPlayerEntity();
+    const auto& playerUnitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
+    const auto& playerTransformComponent = world.GetComponent<genesis::TransformComponent>(playerEntity);
+    
+    nlohmann::json playerJsonObject;
+    playerJsonObject["player_unit_name"] = playerUnitStatsComponent.mStats.mUnitName.GetString();
+    playerJsonObject["player_unit_type"] = playerUnitStatsComponent.mStats.mUnitType.GetString();
+    playerJsonObject["player_x"] = playerTransformComponent.mPosition.x;
+    playerJsonObject["player_y"] = playerTransformComponent.mPosition.y;
+    playerJsonObject["player_z"] = playerTransformComponent.mPosition.z;
+    playerJsonObject["player_rx"] = playerTransformComponent.mRotation.x;
+    playerJsonObject["player_ry"] = playerTransformComponent.mRotation.y;
+    playerJsonObject["player_rz"] = playerTransformComponent.mRotation.z;
+    
+    nlohmann::json playerPartyJsonObject;
+    for (auto i = 1U; i < playerUnitStatsComponent.mParty.size(); ++i)
+    {
+        const auto& partyUnitStats = playerUnitStatsComponent.mParty[i];
+        playerPartyJsonObject.push_back(partyUnitStats.mUnitType.GetString());
+    }
+    
+    playerJsonObject["player_party"] = playerPartyJsonObject;
+    
+    // Save overworld unit data
+    nlohmann::json overworldUnitsJsonObject;
+    const auto& overworldUnitEntities = world.FindAllEntitiesWithName(GENERIC_OVERWORLD_UNIT_ENTITY_NAME);
+    
+    for (const auto overworldUnitEntity: overworldUnitEntities)
+    {
+        nlohmann::json unitJsonObject;
+        const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldUnitEntity);
+        const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(overworldUnitEntity);
+        
+        unitJsonObject["name"] = unitStatsComponent.mStats.mUnitName.GetString();
+        unitJsonObject["unit_type"] = unitStatsComponent.mStats.mUnitType.GetString();
+        unitJsonObject["x"] = transformComponent.mPosition.x;
+        unitJsonObject["y"] = transformComponent.mPosition.y;
+        unitJsonObject["z"] = transformComponent.mPosition.z;
+        unitJsonObject["rx"] = transformComponent.mRotation.x;
+        unitJsonObject["ry"] = transformComponent.mRotation.y;
+        unitJsonObject["rz"] = transformComponent.mRotation.z;
+        
+        nlohmann::json partyJsonObject;
+        for (auto i = 1U; i < unitStatsComponent.mParty.size(); ++i)
+        {
+            const auto& partyUnitStats = unitStatsComponent.mParty[i];
+            partyJsonObject.push_back(partyUnitStats.mUnitType.GetString());
+        }
+        
+        unitJsonObject["party"] = partyJsonObject;
+        overworldUnitsJsonObject.push_back(unitJsonObject);
+    }
+    
+    saveFileRoot["player"] = playerJsonObject;
+    saveFileRoot["overworld_units"] = overworldUnitsJsonObject;
+    
+    std::ofstream saveFile(SAVE_FILE_PATH);
+    saveFile << saveFileRoot.dump(4);
+}
+
+///-----------------------------------------------------------------------------------------------
+
+bool TryLoadOverworldStateFromFile()
+{
+    std::ifstream saveFile(SAVE_FILE_PATH);
+    if (!saveFile.good())
+    {
+        return false;
+    }
+    
+    // Read save file as string
+    std::string fileData;
+    
+    saveFile.seekg(0, std::ios::end);
+    fileData.reserve(static_cast<size_t>(saveFile.tellg()));
+    saveFile.seekg(0, std::ios::beg);
+    
+    fileData.assign((std::istreambuf_iterator<char>(saveFile)),
+               std::istreambuf_iterator<char>());
+    
+    
+    // Parse save file
+    const auto saveFileJsonRoot = nlohmann::json::parse(fileData);
+    auto& world = genesis::ecs::World::GetInstance();
+    
+    // Parse player data
+    const auto& playerJsonObject = saveFileJsonRoot["player"];
+    const auto playerUnitName = StringId(playerJsonObject["player_unit_name"].get<std::string>());
+    const auto playerUnitType = StringId(playerJsonObject["player_unit_type"].get<std::string>());
+    const auto playerPosition = glm::vec3
+    (
+        playerJsonObject["player_x"].get<float>(),
+        playerJsonObject["player_y"].get<float>(),
+        playerJsonObject["player_z"].get<float>()
+    );
+    const auto playerRotation = glm::vec3
+    (
+        playerJsonObject["player_rx"].get<float>(),
+        playerJsonObject["player_ry"].get<float>(),
+        playerJsonObject["player_rz"].get<float>()
+    );
+    
+    auto playerEntity = CreateUnit(playerUnitType, playerUnitName, PLAYER_ENTITY_NAME, playerPosition, playerRotation);
+    
+    auto& playerUnitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
+    for (const auto& partyEntry: playerJsonObject["player_party"])
+    {
+        playerUnitStatsComponent.mParty.push_back(GetUnitBaseStats(StringId(partyEntry.get<std::string>())));
+    }
+    
+    // Parse overworld units
+    for (const auto& overworldUnitJsonObject: saveFileJsonRoot["overworld_units"])
+    {
+        const auto unitName = StringId(overworldUnitJsonObject["name"].get<std::string>());
+        const auto unitType = StringId(overworldUnitJsonObject["unit_type"].get<std::string>());
+        const auto unitPosition = glm::vec3
+        (
+            overworldUnitJsonObject["x"].get<float>(),
+            overworldUnitJsonObject["y"].get<float>(),
+            overworldUnitJsonObject["z"].get<float>()
+        );
+        const auto unitRotation = glm::vec3
+        (
+            overworldUnitJsonObject["rx"].get<float>(),
+            overworldUnitJsonObject["ry"].get<float>(),
+            overworldUnitJsonObject["rz"].get<float>()
+        );
+        
+        auto unitEntity = CreateUnit(unitType, unitName, GENERIC_OVERWORLD_UNIT_ENTITY_NAME, unitPosition, unitRotation);
+        
+        auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
+        for (const auto& partyEntry: overworldUnitJsonObject["party"])
+        {
+            unitStatsComponent.mParty.push_back(GetUnitBaseStats(StringId(partyEntry.get<std::string>())));
+        }
+    }
+    
+    return true;
 }
 
 ///-----------------------------------------------------------------------------------------------

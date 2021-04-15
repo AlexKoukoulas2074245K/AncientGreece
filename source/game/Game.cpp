@@ -129,47 +129,54 @@ void Game::VOnGameInit()
 
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 0.5f), 1.0f);
     
-    const tsl::robin_map<int, StringId> intToModelType =
+    if (!overworld::TryLoadOverworldStateFromFile())
     {
-        { 0, StringId("Spearman") },
-        { 1, StringId("Elite Spearman") },
-        { 2, StringId("Horse Archer") },
-    };
-    
-    const auto mapEntity = world.FindEntityWithName(StringId("map"));
-    
-    auto position = glm::vec3(0.0f, 0.0f, 0.0f);
-    position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
-    auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), StringId("player"), position);
-    
-    const auto partySize = genesis::math::RandomInt(0, 80);
-    auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
-
-    for (auto j = 0; j < partySize; ++j)
-    {
-        const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
-        unitStatsComponent.mParty.push_back(GetUnitBaseStats(unitTypeRng));
-    }
-    
-    for (int i = 0; i < SPARTAN_COUNT; ++i)
-    {
-        auto position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
+        const tsl::robin_map<int, StringId> intToModelType =
+        {
+            { 0, StringId("Spearman") },
+            { 1, StringId("Elite Spearman") },
+            { 2, StringId("Horse Archer") },
+        };
+        
+        const auto mapEntity = overworld::GetMapEntity();
+        auto position = glm::vec3(0.2f, 0.2f, 0.0f);
         position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
+        auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), overworld::GetPlayerEntityName(), position);
         
-        auto unitTypeName = intToModelType.at(i % 3);
-        auto entityName = StringId("overworld_unit");
-        
-        auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), entityName, position);
         
         const auto partySize = genesis::math::RandomInt(0, 80);
-        auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
-        
+        auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
+
         for (auto j = 0; j < partySize; ++j)
         {
             const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
             unitStatsComponent.mParty.push_back(GetUnitBaseStats(unitTypeRng));
         }
+        
+        for (int i = 0; i < SPARTAN_COUNT; ++i)
+        {
+            auto position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
+            position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
+            
+            auto unitTypeName = intToModelType.at(i % 3);
+            
+            auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), overworld::GetGenericOverworldUnitEntityName(), position);
+            
+            const auto partySize = genesis::math::RandomInt(0, 80);
+            auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
+            
+            for (auto j = 0; j < partySize; ++j)
+            {
+                const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
+                unitStatsComponent.mParty.push_back(GetUnitBaseStats(unitTypeRng));
+            }
+        }
     }
+    
+    const auto& playerPosition = world.GetComponent<genesis::TransformComponent>(overworld::GetPlayerEntity()).mPosition;
+    auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
+    cameraComponent.mPosition.x = playerPosition.x;
+    cameraComponent.mPosition.y = playerPosition.y;
 }
 
 ///------------------------------------------------------------------------------------------------
