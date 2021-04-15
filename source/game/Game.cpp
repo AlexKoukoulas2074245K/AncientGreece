@@ -193,7 +193,7 @@ void Game::VOnUpdate(float& dt)
         dtAccum2 = 0.0f;
     }
     
-    const auto dayCycleSpeed = 1.0f/10.0f;
+    const auto dayCycleSpeed = 1.0f/20.0f;
     dtAccum += dayCycleSpeed * dt;
     
     const auto currentTimeStamp = std::fmod(dtAccum, genesis::math::PI * 2.0f);

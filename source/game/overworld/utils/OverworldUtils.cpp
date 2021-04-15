@@ -38,7 +38,7 @@ namespace
     static const StringId MAP_EDGE_3_ENTITY_NAME     = StringId("map_edge_3");
     static const StringId MAP_EDGE_4_ENTITY_NAME     = StringId("map_edge_4");
     static const StringId OVERWORLD_UNIT_ENTITY_NAME = StringId("overworld_unit");
-    static const StringId PLAYER_UNIT_ENTITY_NAME    = StringId("player");
+    static const StringId PLAYER_ENTITY_NAME         = StringId("player");
 
     static const std::string OVERWORLD_HEIGHTMAP_NAME       = "overworld";
     static const std::string NAME_PLATE_MODEL_NAME          = "name_plate";
@@ -69,6 +69,13 @@ genesis::ecs::EntityId GetMapEntity()
 
 ///------------------------------------------------------------------------------------------------
 
+genesis::ecs::EntityId GetPlayerEntity()
+{
+    return genesis::ecs::World::GetInstance().FindEntityWithName(PLAYER_ENTITY_NAME);
+}
+
+///------------------------------------------------------------------------------------------------
+
 void PopulateOverworldEntities()
 {
     LoadAndCreateOverworldMapComponents();
@@ -86,7 +93,7 @@ void DestroyOverworldEntities()
     
     world.DestroyEntities(world.FindAllEntitiesWithName(UNIT_PREVIEW_POPUP_NAME));
     world.DestroyEntities(world.FindAllEntitiesWithName(OVERWORLD_UNIT_ENTITY_NAME));
-    world.DestroyEntities(world.FindAllEntitiesWithName(PLAYER_UNIT_ENTITY_NAME));
+    world.DestroyEntities(world.FindAllEntitiesWithName(PLAYER_ENTITY_NAME));
 }
 
 ///-----------------------------------------------------------------------------------------------

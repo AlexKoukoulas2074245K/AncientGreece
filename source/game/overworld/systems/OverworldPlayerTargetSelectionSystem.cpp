@@ -10,7 +10,7 @@
 #include "../components/HighlightableComponent.h"
 #include "../components/OverworldMapPickingInfoSingletonComponent.h"
 #include "../components/OverworldTargetComponent.h"
-#include "../utils/NavmapUtils.h"
+#include "../utils/OverworldUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
@@ -34,21 +34,9 @@ namespace overworld
 
 ///-----------------------------------------------------------------------------------------------
 
-namespace
-{
-    static const StringId PLAYER_ENTITY_NAME = StringId("player");
-    
-    static const std::string NAVMAP_ASSET_PATH = genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + "nav_map.png";
-
-    static const glm::vec3 MAP_DIMENSIONS = glm::vec3(1.0f, 1.0f, 1.0f);
-}
-
-///-----------------------------------------------------------------------------------------------
-
 OverworldPlayerTargetSelectionSystem::OverworldPlayerTargetSelectionSystem()
     : BaseSystem()
 {
-    genesis::resources::ResourceLoadingService::GetInstance().LoadResource(NAVMAP_ASSET_PATH);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -62,7 +50,7 @@ void OverworldPlayerTargetSelectionSystem::VUpdate(const float, const std::vecto
     
     auto& world = genesis::ecs::World::GetInstance();
     
-    auto playerEntity = world.FindEntityWithName(PLAYER_ENTITY_NAME);
+    auto playerEntity = GetPlayerEntity();
     auto targetComponent = std::make_unique<OverworldTargetComponent>();
     auto entityToFollow = GetEntityToFollow(entitiesToProcess, playerEntity, world);
     auto isValidTarget = false;
@@ -119,15 +107,9 @@ void OverworldPlayerTargetSelectionSystem::CalculateMapTarget(OverworldTargetCom
 {
     const auto& mapPickingInfoComponent = world.GetSingletonComponent<OverworldMapPickingInfoSingletonComponent>();
     
-    // Calculate respective navmap pixel
-    auto& navmapTexture = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::TextureResource>(NAVMAP_ASSET_PATH);
-    
-    const auto pixelPosition = MapPositionToNavmapPixel(mapPickingInfoComponent.mMapIntersectionPoint, MAP_DIMENSIONS, navmapTexture.GetDimensions());
-    const auto targetPixel = navmapTexture.GetRgbAtPixel(pixelPosition.x, pixelPosition.y);
-    
     // Attach waypoint component to player
     targetComponent.mTargetPosition = mapPickingInfoComponent.mMapIntersectionPoint;
-    targetComponent.mTargetAreaType = RGB_TO_AREA_TYPE_MASK.count(targetPixel) > 0 ? RGB_TO_AREA_TYPE_MASK.at(targetPixel) : areaTypeMasks::NEUTRAL;
+    targetComponent.mTargetAreaType = areaTypeMasks::NEUTRAL;
 }
 
 ///-----------------------------------------------------------------------------------------------

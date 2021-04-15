@@ -6,6 +6,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "OverworldCameraControllerSystem.h"
+#include "../utils/OverworldUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/debug/components/DebugViewStateSingletonComponent.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
@@ -25,8 +26,6 @@ namespace overworld
 
 namespace
 {
-    static const StringId PLAYER_ENTITY_NAME = StringId("player");
-
     static const float CAMERA_PANNING_SPEED           = 0.2f;
     static const float CAMERA_MOVE_TO_PLAYER_SPEED    = 1.0f;
     static const float CAMERA_ZOOM_SPEED              = 1.0f;
@@ -100,7 +99,7 @@ void OverworldCameraControllerSystem::NormalCameraOperation(const float dt) cons
     
     if (cameraComponent.mCameraState == genesis::rendering::CameraState::AUTO_CENTERING)
     {
-        const auto playerEntity = world.FindEntityWithName(PLAYER_ENTITY_NAME);
+        const auto playerEntity = GetPlayerEntity();
         const auto& playerPosition = world.GetComponent<genesis::TransformComponent>(playerEntity).mPosition;
         
         // If we havent already reached the player move towards them
