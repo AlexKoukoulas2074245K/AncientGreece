@@ -14,6 +14,7 @@
 #include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
+#include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
 #include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/rendering/utils/HeightMapUtils.h"
@@ -146,7 +147,8 @@ void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, co
 {
     CreateBattleGround();
     
-    float targetUnitXDistance, targetUnitYDistance;
+    float targetUnitXDistance = 0.0f;
+    float targetUnitYDistance = 0.0f;
     CalculateUnitTargetDistances(attackingSideParty, targetUnitXDistance, targetUnitYDistance);
     CreateBattleUnits(attackingSideParty, defendingSideParty, targetUnitXDistance, targetUnitYDistance, attackingLeaderEntity, defendingLeaderEntity);
 }

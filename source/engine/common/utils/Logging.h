@@ -15,6 +15,10 @@
 #include <string>
 
 ///-----------------------------------------------------------------------------------------------
+
+#define LOG_IN_RELEASE
+
+///-----------------------------------------------------------------------------------------------
 /// Different types of logging available
 enum class LogType
 {
@@ -25,7 +29,7 @@ enum class LogType
 /// Logs a message to the std out, with a custom log type tag \see LogType
 /// @param[in] logType the category of logging message 
 /// @param[in] message the message itself as a c-string
-#ifndef NDEBUG
+#if not defined(NDEBUG) || defined(LOG_IN_RELEASE)
 inline void Log(const LogType logType, const char* message, ...)
 {
 

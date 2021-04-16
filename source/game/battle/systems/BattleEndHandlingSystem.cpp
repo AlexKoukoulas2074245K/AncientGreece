@@ -14,6 +14,7 @@
 #include "../../overworld/utils/OverworldUtils.h"
 #include "../../overworld/components/OverworldInteractionComponent.h"
 #include "../../utils/UnitInfoUtils.h"
+#include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -81,6 +82,8 @@ void BattleEndHandlingSystem::VUpdate(const float dt, const std::vector<genesis:
                 battleStateComponent.mBattleState = BattleState::UNITS_CELEBRATING;
                 battleStateComponent.mCelebrationTimer = CELEBRATION_TIME;
             }
+            
+            Log(LogType::INFO, "%d, %d", attackingSideUnitCount, defendingSideUnitCount);
         } break;
             
             

@@ -141,8 +141,8 @@ ecs::EntityId LoadAndCreateHeightMapByName
             glm::vec3 triangle0Norm = glm::cross(triangle0[1]-triangle0[0], triangle0[2]-triangle0[0]);
             glm::vec3 triangle1Norm = glm::cross(triangle1[1]-triangle1[0], triangle1[2]-triangle1[0]);
             
-            triangleNormals[0][row * heightMapCols + col] = glm::normalize(triangle0Norm);
-            triangleNormals[1][row * heightMapCols + col] = glm::normalize(triangle1Norm);
+            triangleNormals[0][row * (heightMapCols - 1) + col] = glm::normalize(triangle0Norm);
+            triangleNormals[1][row * (heightMapCols - 1) + col] = glm::normalize(triangle1Norm);
         }
     }
     
@@ -155,27 +155,27 @@ ecs::EntityId LoadAndCreateHeightMapByName
             // Look for upper-left triangles
             if(col != 0 && row != 0)
             {
-                finalNormal += triangleNormals[0][(row - 1) * heightMapCols + (col - 1)];
-                finalNormal += triangleNormals[1][(row - 1) * heightMapCols + (col - 1)];
+                finalNormal += triangleNormals[0][(row - 1) * (heightMapCols - 1) + (col - 1)];
+                finalNormal += triangleNormals[1][(row - 1) * (heightMapCols - 1) + (col - 1)];
             }
 
             // Look for upper-right triangles
             if(row != 0 && col != heightMapCols - 1)
             {
-                finalNormal += triangleNormals[0][(row - 1) * heightMapCols + col];
+                finalNormal += triangleNormals[0][(row - 1) * (heightMapCols - 1) + col];
             }
 
             // Look for bottom-right triangles
             if(row != heightMapRows - 1 && col != heightMapCols - 1)
             {
-                finalNormal += triangleNormals[0][row * heightMapCols + col];
-                finalNormal += triangleNormals[1][row * heightMapCols + col];
+                finalNormal += triangleNormals[0][row * (heightMapCols - 1) + col];
+                finalNormal += triangleNormals[1][row * (heightMapCols - 1) + col];
             }
 
             // Look for bottom-left triangles
             if(row != heightMapRows - 1 && col != 0)
             {
-                finalNormal += triangleNormals[1][row * heightMapCols + (col - 1)];
+                finalNormal += triangleNormals[1][row * (heightMapCols - 1) + (col - 1)];
             }
 
             normals.push_back(glm::normalize(finalNormal));

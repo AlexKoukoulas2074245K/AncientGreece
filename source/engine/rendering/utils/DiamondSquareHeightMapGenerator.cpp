@@ -298,7 +298,7 @@ bool CheckHeightMapColorDistribution(float** data)
 
 SDL_Surface* GenerateHeightMapSurface(float** data)
 {
-    char* pixels = new char [ 3 * DIAMOND_SQUARE_HEIGHTMAP_MAX * DIAMOND_SQUARE_HEIGHTMAP_MAX];
+    char* pixels = new char [ 4 * DIAMOND_SQUARE_HEIGHTMAP_MAX * DIAMOND_SQUARE_HEIGHTMAP_MAX];
     int i = 0;
     for (int y = 0; y < DIAMOND_SQUARE_HEIGHTMAP_MAX; ++y)
     {
@@ -311,14 +311,15 @@ SDL_Surface* GenerateHeightMapSurface(float** data)
             pixels[i++] = respectiveRange;
             pixels[i++] = respectiveRange;
             pixels[i++] = respectiveRange;
+            pixels[i++] = 255;
         }
     }
    
-    SDL_Surface* generatedSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, DIAMOND_SQUARE_HEIGHTMAP_MAX, DIAMOND_SQUARE_HEIGHTMAP_MAX, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0);
+    SDL_Surface* generatedSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, DIAMOND_SQUARE_HEIGHTMAP_MAX, DIAMOND_SQUARE_HEIGHTMAP_MAX, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0);
    
     for (int i = 0 ; i < DIAMOND_SQUARE_HEIGHTMAP_MAX ; i++)
     {
-       std::memcpy( ((char *) generatedSurface->pixels) + generatedSurface->pitch * i, pixels + 3 * DIAMOND_SQUARE_HEIGHTMAP_MAX * (DIAMOND_SQUARE_HEIGHTMAP_MAX - i - 1), DIAMOND_SQUARE_HEIGHTMAP_MAX * 3);
+       std::memcpy( ((char *) generatedSurface->pixels) + generatedSurface->pitch * i, pixels + 4 * DIAMOND_SQUARE_HEIGHTMAP_MAX * (DIAMOND_SQUARE_HEIGHTMAP_MAX - i - 1), DIAMOND_SQUARE_HEIGHTMAP_MAX * 4);
     }
        
     SDL_SaveBMP(generatedSurface, "last_generated_heightmap.bmp");

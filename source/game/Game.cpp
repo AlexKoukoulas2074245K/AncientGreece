@@ -231,18 +231,18 @@ void Game::VOnUpdate(float& dt)
         { "Early Morning", -0.96f }
     };
     
-    world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_period")));
-    //world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_plate")));
-    genesis::rendering::RenderText(currentPeriod, StringId("ancient_greek_font"), 0.1f, glm::vec3(periodXValues.at(currentPeriod), -0.91f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), false, StringId("time_period"));
+//    world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_period")));
+//    //world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_plate")));
+//    genesis::rendering::RenderText(currentPeriod, StringId("ancient_greek_font"), 0.1f, glm::vec3(periodXValues.at(currentPeriod), -0.91f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), false, StringId("time_period"));
     
 //    const auto textRect = genesis::rendering::CalculateTextBoundingRect(timePeriodEntity);
 //    const auto textRectWidth = textRect.topRight.x - textRect.bottomLeft.x;
 //    const auto textRectHeight = textRect.topRight.y - textRect.bottomLeft.y;
     
-    if (!world.HasEntity(world.FindEntityWithName(StringId("time_plate"))))
-    {
-        genesis::rendering::LoadAndCreateGuiSprite("time_plate", "time_plate", StringId("default_gui"),  glm::vec3(-0.755f, -0.905f, 0.01f), glm::vec3(), glm::vec3(0.9f, 0.2f, 1.0f), false, StringId("time_plate"));
-    }
+//    if (!world.HasEntity(world.FindEntityWithName(StringId("time_plate"))))
+//    {
+//        genesis::rendering::LoadAndCreateGuiSprite("time_plate", "time_plate", StringId("default_gui"),  glm::vec3(-0.755f, -0.905f, 0.01f), glm::vec3(), glm::vec3(0.9f, 0.2f, 1.0f), false, StringId("time_plate"));
+//    }
     
     
     //    Log(LogType::INFO, "%.6f, %.6f, %.6f", lightStoreComponent.mLightPositions[0].x, lightStoreComponent.mLightPositions[0].y, lightStoreComponent.mLightPositions[0].z);
@@ -258,12 +258,6 @@ void Game::VOnUpdate(float& dt)
 //            view::QueueView("unit_interaction", StringId("unit_interaction"));
 //        }
 //    }
-    if (world.GetContext() == BATTLE_CONTEXT && genesis::input::GetKeyState(genesis::input::Key::F_KEY) == genesis::input::InputState::TAPPED)
-    {
-        auto ents = world.FindAllEntitiesWithName(StringId("battle_unit"));
-        auto randomIndex = genesis::math::RandomInt(0, ents.size() - 1);
-        world.DestroyEntity(ents[randomIndex]);
-    }
     
     if (world.FindEntityWithName(StringId("unit_interaction")) != genesis::ecs::NULL_ENTITY_ID)
     {
