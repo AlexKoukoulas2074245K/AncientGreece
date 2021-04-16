@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <View background_name="horizontal_parchment" x="0.0" y="0.0" z="1.0" width="3.0" height="2.0">
 	<Text x="-0.15" y="0.75" z="0.5" size="0.15" red="0.0" green="0.0" blue="0.0">{unit_name}</Text>
-	<Text x="-0.5" y="0.55" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">Health: </Text>
-	<Text x="-0.1" y="0.55" z="0.5" size="0.1" red="{unit_health_red}" green="{unit_health_green}" blue="{unit_health_blue}">{unit_health}</Text>
-	<Text x="-0.5" y="0.45" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">Party Size: </Text>
-	<Text x="-0.1" y="0.45" z="0.5" size="0.1" red="{unit_party_size_red}" green="{unit_party_size_green}" blue="{unit_party_size_blue}">{unit_party_size}</Text>
+	<Text x="-0.5" y="0.55" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">Party Size: </Text>
+	<Text x="-0.1" y="0.55" z="0.5" size="0.1" red="{unit_party_size_red}" green="{unit_party_size_green}" blue="{unit_party_size_blue}">{unit_party_size}</Text>
+	<Text x="-0.5" y="0.40" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{unit_party_line_0}</Text>
+	<Text x="-0.5" y="0.30" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{unit_party_line_1}</Text>
+	<Text x="-0.5" y="0.20" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{unit_party_line_2}</Text>
+	<Text x="-0.5" y="0.10" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{unit_party_line_3}</Text>
+	<Text x="-0.5" y="0.00" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{unit_party_line_4}</Text>
+	<Text x="-0.5" y="-0.10" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{unit_party_line_5}</Text>
+	<Text x="-0.5" y="-0.20" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{unit_party_line_6}</Text>
     <ClickableText x="-0.2" y="-0.7" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="close">Back to map</ClickableText>
     <ClickableText x="-0.13" y="-0.5" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="attack">Attack!</ClickableText>
     <AnimatedModel name="{unit_model_name}" x="0.035" y="0.01" z="0.2" rot_x="-0.95" rot_y="5.95" rot_z="28.15" scale_x="{unit_scale_x}" scale_y="{unit_scale_y}" scale_z="{unit_scale_z}"></AnimatedModel>
