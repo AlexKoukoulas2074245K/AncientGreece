@@ -35,6 +35,9 @@ float DEBUG_TEXTBOX_DY = 0.0f;
 float DEBUG_MODEL_RX = 0.0f;
 float DEBUG_MODEL_RY = 0.0f;
 float DEBUG_MODEL_RZ = 0.0f;
+float DEBUG_MODEL_X = 0.0f;
+float DEBUG_MODEL_Y = 0.0f;
+float DEBUG_MODEL_Z = 0.0f;
 #endif
 
 ///------------------------------------------------------------------------------------------------
@@ -46,10 +49,11 @@ namespace view
 
 namespace
 {
-    static const StringId GUI_MODEL_SHADER_NAME             = StringId("default_gui");
-    static const StringId GUI_MODEL_3D_SHADER_NAME          = StringId("default_gui_3d");
-    static const StringId DEFAULT_FONT_NAME                 = StringId("ancient_greek_font");
-    static const StringId DEFAULT_INTERACTION_EVENT_NAME    = StringId("close");
+    static const StringId GUI_SPRITE_SHADER_NAME         = StringId("default_gui");
+    static const StringId GUI_MODEL_SHADER_NAME          = StringId("default_gui");
+    static const StringId GUI_MODEL_3D_SHADER_NAME       = StringId("default_gui_3d");
+    static const StringId DEFAULT_FONT_NAME              = StringId("ancient_greek_font");
+    static const StringId DEFAULT_INTERACTION_EVENT_NAME = StringId("close");
 
     static const std::string GUI_BASE_MODEL_NAME = "gui_base";
 
@@ -57,6 +61,7 @@ namespace
     static const char* XML_TEXT_NODE_NAME           = "Text";
     static const char* XML_TEXTBOX_NODE_NAME        = "Textbox";
     static const char* XML_CLICKABLETEXT_NODE_NAME  = "ClickableText";
+    static const char* XML_SPRITE_NODE_NAME         = "Sprite";
     static const char* XML_MODEL_NODE_NAME          = "Model";
     static const char* XML_ANIMATED_MODEL_NODE_NAME = "AnimatedModel";
 
@@ -104,6 +109,17 @@ namespace
     static const char* MODEL_SCALE_Y_ATTRIBUTE_NAME = "scale_y";
     static const char* MODEL_SCALE_Z_ATTRIBUTE_NAME = "scale_z";
     
+    static const char* SPRITE_NAME_ATTRIBUTE_NAME    = "name";
+    static const char* SPRITE_X_ATTRIBUTE_NAME       = "x";
+    static const char* SPRITE_Y_ATTRIBUTE_NAME       = "y";
+    static const char* SPRITE_Z_ATTRIBUTE_NAME       = "z";
+    static const char* SPRITE_ROT_X_ATTRIBUTE_NAME   = "rot_x";
+    static const char* SPRITE_ROT_Y_ATTRIBUTE_NAME   = "rot_y";
+    static const char* SPRITE_ROT_Z_ATTRIBUTE_NAME   = "rot_z";
+    static const char* SPRITE_SCALE_X_ATTRIBUTE_NAME = "scale_x";
+    static const char* SPRITE_SCALE_Y_ATTRIBUTE_NAME = "scale_y";
+    static const char* SPRITE_SCALE_Z_ATTRIBUTE_NAME = "scale_z";
+
     static const char* ANIMATED_MODEL_NAME_ATTRIBUTE_NAME    = "name";
     static const char* ANIMATED_MODEL_X_ATTRIBUTE_NAME       = "x";
     static const char* ANIMATED_MODEL_Y_ATTRIBUTE_NAME       = "y";
@@ -437,6 +453,54 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
             textPositionCounter.x += textIncludingSpace.size() * derivedCharSize;
         }
     }
+    else if (std::strcmp(XML_SPRITE_NODE_NAME, node->name()) == 0)
+    {
+        glm::vec3 spritePosition(0.0f);
+        glm::vec3 spriteRotation(0.0f);
+        glm::vec3 spriteScale(1.0f);
+        if (node->first_attribute(SPRITE_X_ATTRIBUTE_NAME) != nullptr)
+        {
+            spritePosition.x = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_X_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(SPRITE_Y_ATTRIBUTE_NAME) != nullptr)
+        {
+            spritePosition.y = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_Y_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(SPRITE_Z_ATTRIBUTE_NAME) != nullptr)
+        {
+            spritePosition.z = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_Z_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(SPRITE_ROT_X_ATTRIBUTE_NAME) != nullptr)
+        {
+            spriteRotation.x = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_ROT_X_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(SPRITE_ROT_Y_ATTRIBUTE_NAME) != nullptr)
+        {
+            spriteRotation.y = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_ROT_Y_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(SPRITE_ROT_Z_ATTRIBUTE_NAME) != nullptr)
+        {
+            spriteRotation.z = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_ROT_Z_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(SPRITE_SCALE_X_ATTRIBUTE_NAME) != nullptr)
+        {
+            spriteScale.x = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_SCALE_X_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(SPRITE_SCALE_Y_ATTRIBUTE_NAME) != nullptr)
+        {
+            spriteScale.y = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_SCALE_Y_ATTRIBUTE_NAME)->value()));
+        }
+        if (node->first_attribute(SPRITE_SCALE_Z_ATTRIBUTE_NAME) != nullptr)
+        {
+            spriteScale.z = std::stof(ReplaceTextVariables(node->first_attribute(SPRITE_SCALE_Z_ATTRIBUTE_NAME)->value()));
+        }
+
+        assert(node->first_attribute(SPRITE_NAME_ATTRIBUTE_NAME) != nullptr && "No sprite name present");
+        
+        auto spriteName = std::string(ReplaceTextVariables(node->first_attribute(SPRITE_NAME_ATTRIBUTE_NAME)->value()));
+        
+        viewStateComponent.mViewEntities.push_back(genesis::rendering::LoadAndCreateGuiSprite(spriteName, spriteName, GUI_SPRITE_SHADER_NAME, spritePosition, spriteRotation, spriteScale, false));
+    }
     else if (std::strcmp(XML_MODEL_NODE_NAME, node->name()) == 0)
     {
         glm::vec3 modelPosition(0.0f);
@@ -481,6 +545,10 @@ void ProcessViewNode(const rapidxml::xml_node<>* node, ViewStateComponent& viewS
         
                 
 #if !defined(NDEBUG)
+        modelPosition.x += DEBUG_MODEL_X;
+        modelPosition.y += DEBUG_MODEL_Y;
+        modelPosition.z += DEBUG_MODEL_Z;
+        
         modelRotation.x += DEBUG_MODEL_RX;
         modelRotation.y += DEBUG_MODEL_RY;
         modelRotation.z += DEBUG_MODEL_RZ;

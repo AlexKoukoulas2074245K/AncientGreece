@@ -13,7 +13,10 @@
 #include "../../overworld/utils/OverworldInteractionUtils.h"
 #include "../../overworld/utils/OverworldUtils.h"
 #include "../../overworld/components/OverworldInteractionComponent.h"
+#include "../../utils/KeyValueUtils.h"
 #include "../../utils/UnitInfoUtils.h"
+#include "../../view/utils/ViewUtils.h"
+#include "../../../engine/common/utils/ColorUtils.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 
@@ -26,6 +29,15 @@ namespace battle
 
 namespace
 {
+    static const std::string BATTLE_RESULT_VIEW_NAME = "battle_result";
+
+    static const StringId BATTLE_RESULT_MODEL_NAME_DS_KEY = StringId("battle_result_model_name");
+    static const StringId BATTLE_RESULT_TEXT_DS_KEY       = StringId("battle_result_text");
+    static const StringId BATTLE_RESULT_TEXT_RED_DS_KEY   = StringId("battle_result_text_red");
+    static const StringId BATTLE_RESULT_TEXT_GREEN_DS_KEY = StringId("battle_result_text_green");
+    static const StringId BATTLE_RESULT_TEXT_BLUE_DS_KEY  = StringId("battle_result_text_blue");
+    static const StringId BATTLE_CASUALTIES_LINE_PREFIX   = StringId("battle_casualties_line_");
+
     static const float CELEBRATION_TIME = 5.0f;
 }
 
@@ -110,6 +122,27 @@ void BattleEndHandlingSystem::VUpdate(const float dt, const std::vector<genesis:
             overworld::TryLoadOverworldStateFromFile();
             overworld::PrepareOverworldCamera();
             world.ChangeContext(MAP_CONTEXT);
+            
+            auto playerVictorious = (lastInteraction.mInstigatorEntityName == overworld::GetPlayerEntityName() && battleStateComponent.mBattleResult == BattleResult::ATTACKER_VICTORIOUS) || (lastInteraction.mOtherEntityName == overworld::GetPlayerEntityName() && battleStateComponent.mBattleResult == BattleResult::DEFENDER_VICTORIOUS);
+            
+            if (playerVictorious)
+            {
+                WriteValue(BATTLE_RESULT_MODEL_NAME_DS_KEY, "battle_result_victory");
+                WriteValue(BATTLE_RESULT_TEXT_DS_KEY, "Victory");
+                WriteValue(BATTLE_RESULT_TEXT_RED_DS_KEY, std::to_string(genesis::colors::GREEN.r));
+                WriteValue(BATTLE_RESULT_TEXT_GREEN_DS_KEY, std::to_string(genesis::colors::GREEN.g));
+                WriteValue(BATTLE_RESULT_TEXT_BLUE_DS_KEY, std::to_string(genesis::colors::GREEN.b));
+            }
+            else
+            {
+                WriteValue(BATTLE_RESULT_MODEL_NAME_DS_KEY, "battle_result_defeat");
+                WriteValue(BATTLE_RESULT_TEXT_DS_KEY, "Defeat");
+                WriteValue(BATTLE_RESULT_TEXT_RED_DS_KEY, std::to_string(genesis::colors::RED.r));
+                WriteValue(BATTLE_RESULT_TEXT_GREEN_DS_KEY, std::to_string(genesis::colors::RED.g));
+                WriteValue(BATTLE_RESULT_TEXT_BLUE_DS_KEY, std::to_string(genesis::colors::RED.b));
+            }
+            
+            view::QueueView(BATTLE_RESULT_VIEW_NAME);
         } break;
     }
 }
