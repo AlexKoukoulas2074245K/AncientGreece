@@ -42,6 +42,7 @@ namespace
     static const StringId UNIT_SCALE_X_DS_KEY          = StringId("unit_scale_x");
     static const StringId UNIT_SCALE_Y_DS_KEY          = StringId("unit_scale_y");
     static const StringId UNIT_SCALE_Z_DS_KEY          = StringId("unit_scale_z");
+    static const StringId UNIT_PARTY_LINE_PREFIX       = StringId("unit_party_line_");
 
     static const StringId CITY_STATE_NAME_DS_KEY           = StringId("city_state_name");
     static const StringId CITY_STATE_RENOWN_DS_KEY         = StringId("city_state_renown");
@@ -53,6 +54,8 @@ namespace
     static const StringId CITY_STATE_GARISSON_GREEN_DS_KEY = StringId("city_state_garisson_green");
     static const StringId CITY_STATE_GARISSON_BLUE_DS_KEY  = StringId("city_state_garisson_blue");
     static const StringId CITY_STATE_DESCRIPTION_DS_KEY    = StringId("city_state_description");
+
+    static const int UNIT_INTERACTION_PARTY_LINES_COUNT = 7;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -89,6 +92,7 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
                 const auto unitHealthColor    = GetUnitHealthColor(unitStatsComponent);
                 const auto unitPartySize      = GetUnitPartySize(unitStatsComponent);
                 const auto unitPartySizeColor = GetUnitPartyColor(unitStatsComponent);
+                const auto& unitPartyBuckets  = GetUnitPartyCountBuckets(unitStatsComponent);
                 const auto& unitScale         = transformComponent.mScale;
                 
                 WriteValue(UNIT_NAME_DS_KEY, unitName.GetString());
@@ -104,7 +108,17 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
                 WriteValue(UNIT_SCALE_X_DS_KEY, std::to_string(unitScale.x));
                 WriteValue(UNIT_SCALE_Y_DS_KEY, std::to_string(unitScale.y));
                 WriteValue(UNIT_SCALE_Z_DS_KEY, std::to_string(unitScale.z));
-
+                
+                auto lineCounter = 0;
+                for (const auto& bucket: unitPartyBuckets)
+                {
+                    WriteValue(StringId(UNIT_PARTY_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), std::to_string(bucket.second) + " " + bucket.first.GetString() + (bucket.second > 1 ? "s" : ""));
+                }
+                while (lineCounter < UNIT_INTERACTION_PARTY_LINES_COUNT)
+                {
+                    WriteValue(StringId(UNIT_PARTY_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), "");
+                }
+                
                 view::QueueView(UNIT_INTERACTION_VIEW_NAME);
             }
             // City State interaction

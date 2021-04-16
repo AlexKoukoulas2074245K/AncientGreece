@@ -155,8 +155,6 @@ public:
     }
     
     operator size_t () { return mStringId; }
-    bool operator == (const StringId& other) const { return mStringId == other.GetStringId(); }
-    bool operator != (const StringId& other) const { return mStringId != other.GetStringId(); }
 
     const std::string& GetString() const { return mString; }
     size_t GetStringId() const { return mStringId; }
@@ -172,6 +170,14 @@ inline bool operator < (const StringId& lhs, const StringId& rhs)
 {
     return lhs.GetStringId() < rhs.GetStringId();
 }
+
+///-----------------------------------------------------------------------------------------------
+/// Custom equality operator for StringIds to be used indirectly by stl containers
+inline bool operator == (const StringId& lhs, const StringId& rhs) { return lhs.GetStringId() == rhs.GetStringId(); }
+
+///-----------------------------------------------------------------------------------------------
+/// Custom inequality operator for StringIds to be used indirectly by stl containers
+inline bool operator != (const StringId& lhs, const StringId& rhs) { return lhs.GetStringId() != rhs.GetStringId(); }
 
 ///-----------------------------------------------------------------------------------------------
 /// Custom StringId hasher to be used in stl containers

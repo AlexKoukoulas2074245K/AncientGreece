@@ -14,6 +14,8 @@
 #include "../../engine/common/utils/ColorUtils.h"
 #include "../../engine/common/utils/StringUtils.h"
 
+#include <map>
+
 ///------------------------------------------------------------------------------------------------
 
 struct UnitStats;
@@ -30,6 +32,10 @@ StringId GetRandomAvailableUnitName();
 ///------------------------------------------------------------------------------------------------
 
 const UnitStats& GetUnitBaseStats(const StringId& unitTypeName);
+
+///------------------------------------------------------------------------------------------------
+
+std::map<StringId, int> GetUnitPartyCountBuckets(const UnitStatsComponent& unitStatsComponent);
 
 ///------------------------------------------------------------------------------------------------
 

@@ -83,7 +83,6 @@ void BattleEndHandlingSystem::VUpdate(const float dt, const std::vector<genesis:
                 battleStateComponent.mCelebrationTimer = CELEBRATION_TIME;
             }
             
-            Log(LogType::INFO, "%d, %d", attackingSideUnitCount, defendingSideUnitCount);
         } break;
             
             

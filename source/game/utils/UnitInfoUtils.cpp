@@ -103,6 +103,26 @@ const UnitStats& GetUnitBaseStats(const StringId& unitTypeName)
 
 ///-----------------------------------------------------------------------------------------------
 
+std::map<StringId, int> GetUnitPartyCountBuckets(const UnitStatsComponent& unitStatsComponent)
+{
+    std::map<StringId, int> resultBuckets;
+    for (const auto& unitStats: unitStatsComponent.mParty)
+    {
+        if (resultBuckets.count(unitStats.mUnitType) > 0)
+        {
+            resultBuckets[unitStats.mUnitType]++;
+        }
+        else
+        {
+            resultBuckets[unitStats.mUnitType] = 1;
+        }
+    }
+    
+    return resultBuckets;
+}
+
+///-----------------------------------------------------------------------------------------------
+
 size_t GetUnitPartySize(const UnitStatsComponent& unitStatsComponent)
 {
     // Plus one to include leader
