@@ -92,7 +92,7 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
                 const auto unitHealthColor    = GetUnitHealthColor(unitStatsComponent);
                 const auto unitPartySize      = GetUnitPartySize(unitStatsComponent);
                 const auto unitPartySizeColor = GetUnitPartyColor(unitStatsComponent);
-                const auto& unitPartyBuckets  = GetUnitPartyCountBuckets(unitStatsComponent);
+                const auto& unitPartyBuckets  = GetUnitPartyCountBuckets(unitStatsComponent, true);
                 const auto& unitScale         = transformComponent.mScale;
                 
                 WriteValue(UNIT_NAME_DS_KEY, unitName.GetString());

@@ -31,6 +31,7 @@ public:
     
 private:
     void PrepareAndShowResultsView() const;
+    void ModifyPartiesByCasualties(const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

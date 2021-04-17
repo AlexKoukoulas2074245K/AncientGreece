@@ -103,9 +103,13 @@ void SetBattleState(const BattleState battleState)
 
 ///------------------------------------------------------------------------------------------------
 
-void ResetCasualties()
+void InitCasualties(const StringId attackingLeaderUnitName, const StringId defendingLeaderUnitName)
 {
-    genesis::ecs::World::GetInstance().GetSingletonComponent<BattleStateSingletonComponent>().mLeaderNameToCasualtiesMap.clear();
+    auto& world = genesis::ecs::World::GetInstance();
+    auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
+    
+    battleStateComponent.mLeaderNameToCasualtiesMap[attackingLeaderUnitName];
+    battleStateComponent.mLeaderNameToCasualtiesMap[defendingLeaderUnitName];
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -136,11 +140,6 @@ void AddBattleCasualty(const StringId unitType, const StringId leaderName)
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
-    
-    if (battleStateComponent.mLeaderNameToCasualtiesMap.count(leaderName) == 0)
-    {
-        battleStateComponent.mLeaderNameToCasualtiesMap[leaderName];
-    }
     
     if (battleStateComponent.mLeaderNameToCasualtiesMap.at(leaderName).count(unitType) == 0)
     {

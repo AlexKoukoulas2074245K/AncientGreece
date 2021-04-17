@@ -129,6 +129,7 @@ void BattleEndHandlingSystem::VUpdate(const float dt, const std::vector<genesis:
             overworld::PrepareOverworldCamera();
             world.ChangeContext(MAP_CONTEXT);
             PrepareAndShowResultsView();
+            ModifyPartiesByCasualties(entitiesToProcess);
         } break;
     }
 }
@@ -169,6 +170,7 @@ void BattleEndHandlingSystem::PrepareAndShowResultsView() const
         WriteValue(StringId(BATTLE_PLAYER_CASUALTIES_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), std::to_string(bucket.second) + " " + GetUnitCollectionString(bucket.first, bucket.second));
         
     }
+    
     while (lineCounter < BATTLE_CASUALTIES_LINE_COUNT)
     {
         WriteValue(StringId(BATTLE_PLAYER_CASUALTIES_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), "");
@@ -180,12 +182,53 @@ void BattleEndHandlingSystem::PrepareAndShowResultsView() const
     {
         WriteValue(StringId(BATTLE_ENEMY_CASUALTIES_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), std::to_string(bucket.second) + " " + GetUnitCollectionString(bucket.first, bucket.second));
     }
+    
     while (lineCounter < BATTLE_CASUALTIES_LINE_COUNT)
     {
         WriteValue(StringId(BATTLE_ENEMY_CASUALTIES_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), "");
     }
     
     view::QueueView(BATTLE_RESULT_VIEW_NAME);
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void BattleEndHandlingSystem::ModifyPartiesByCasualties(const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
+{
+    const auto& lastInteraction = overworld::GetLastInteraction();
+    const auto& world = genesis::ecs::World::GetInstance();
+    auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
+    
+    for (const auto& entityId: entitiesToProcess)
+    {
+        auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
+        if (unitStatsComponent.mStats.mUnitName == lastInteraction.mInstigatorUnitName || unitStatsComponent.mStats.mUnitName == lastInteraction.mOtherUnitName)
+        {
+            const auto& casualties = battleStateComponent.mLeaderNameToCasualtiesMap.at(unitStatsComponent.mStats.mUnitName);
+                       
+            auto unitPartyBuckets = GetUnitPartyCountBuckets(unitStatsComponent, false);
+            
+            for (const auto& casualtyEntry: casualties)
+            {
+                unitPartyBuckets.at(casualtyEntry.first) -= casualtyEntry.second;
+            }
+            
+            std::vector<UnitStats> newParty;
+            newParty.push_back(unitStatsComponent.mParty.front());
+            
+            for (const auto& partyEntry: unitPartyBuckets)
+            {
+                for (auto i = 0; i < partyEntry.second; ++i)
+                {
+                    newParty.push_back(GetUnitBaseStats(partyEntry.first));
+                }
+            }
+            
+            unitStatsComponent.mParty = std::move(newParty);
+        }
+    }
+    
+    battleStateComponent.mLeaderNameToCasualtiesMap.clear();
 }
 
 ///-----------------------------------------------------------------------------------------------

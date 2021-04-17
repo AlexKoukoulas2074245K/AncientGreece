@@ -42,7 +42,7 @@ void SetBattleState(const BattleState battleState);
 
 ///------------------------------------------------------------------------------------------------
 
-void ResetCasualties();
+void InitCasualties(const StringId attackingLeaderUnitName, const StringId defendingLeaderUnitName);
 
 ///------------------------------------------------------------------------------------------------
 
