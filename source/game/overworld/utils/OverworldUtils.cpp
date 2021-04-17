@@ -84,6 +84,14 @@ genesis::ecs::EntityId GetPlayerEntity()
 
 ///------------------------------------------------------------------------------------------------
 
+StringId GetPlayerUnitName()
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    return world.GetComponent<UnitStatsComponent>(world.FindEntityWithName(PLAYER_ENTITY_NAME)).mStats.mUnitName;
+}
+
+///------------------------------------------------------------------------------------------------
+
 StringId GetPlayerEntityName()
 {
     return PLAYER_ENTITY_NAME;

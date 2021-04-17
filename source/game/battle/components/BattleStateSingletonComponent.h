@@ -1,16 +1,18 @@
 ///------------------------------------------------------------------------------------------------
-///  LiveBattleStateSingletonComponent.h
+///  BattleStateSingletonComponent.h
 ///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 07/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef LiveBattleStateSingletonComponent_h
-#define LiveBattleStateSingletonComponent_h
+#ifndef BattleStateSingletonComponent_h
+#define BattleStateSingletonComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
+
+#include <tsl/robin_map.h>
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -33,9 +35,10 @@ enum class BattleResult
 
 ///-----------------------------------------------------------------------------------------------
 
-class LiveBattleStateSingletonComponent final: public genesis::ecs::IComponent
+class BattleStateSingletonComponent final: public genesis::ecs::IComponent
 {
 public:
+    tsl::robin_map<StringId, tsl::robin_map<StringId, int, StringIdHasher>, StringIdHasher> mLeaderNameToCasualtiesMap;
     BattleState mBattleState;
     BattleResult mBattleResult;
     float mCelebrationTimer;
@@ -47,4 +50,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* LiveBattleStateSingletonComponent_h */
+#endif /* BattleStateSingletonComponent_h */

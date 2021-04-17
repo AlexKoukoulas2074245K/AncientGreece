@@ -28,6 +28,9 @@ public:
     BattleEndHandlingSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+    
+private:
+    void PrepareAndShowResultsView() const;
 };
 
 ///-----------------------------------------------------------------------------------------------

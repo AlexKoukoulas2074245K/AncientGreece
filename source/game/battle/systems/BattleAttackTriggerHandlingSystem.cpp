@@ -123,7 +123,7 @@ void BattleAttackTriggerHandlingSystem::CreateProjectile(const genesis::ecs::Ent
     auto arrowEntity = genesis::rendering::LoadAndCreateStaticModelByName(PROJECTILE_MODEL_NAME, originPosition, projectileRotation, PROJECTILE_SCALE, GetProjectileEntityName());
     
     auto arrowBattleSideComponent = std::make_unique<BattleSideComponent>();
-    arrowBattleSideComponent->mBattleSideLeaderName = battleSideComponent.mBattleSideLeaderName;
+    arrowBattleSideComponent->mBattleSideLeaderUnitName = battleSideComponent.mBattleSideLeaderUnitName;
     world.AddComponent<BattleSideComponent>(arrowEntity, std::move(arrowBattleSideComponent));
     
     auto arrowProjectileComponent = std::make_unique<BattleProjectileComponent>();

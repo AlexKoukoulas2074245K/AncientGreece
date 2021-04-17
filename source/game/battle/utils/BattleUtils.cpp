@@ -58,7 +58,7 @@ namespace
 void CreateBattleGround();
 void CalculateUnitTargetDistances(const std::vector<UnitStats>& party, float& targetUnitXDistance, float& targetUnitYDistance);
 void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId);
-void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderEntityName, const bool isAttackingSide);
+void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderUnitName, const bool isAttackingSide);
 
 ///------------------------------------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ std::vector<genesis::ecs::EntityId> GetAllBattleUnitEntities()
 
 bool IsBattleFinished()
 {
-    return  genesis::ecs::World::GetInstance().GetSingletonComponent<LiveBattleStateSingletonComponent>().mBattleState != BattleState::ONGOING;
+    return  genesis::ecs::World::GetInstance().GetSingletonComponent<BattleStateSingletonComponent>().mBattleState != BattleState::ONGOING;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -93,12 +93,19 @@ bool IsBattleFinished()
 void SetBattleState(const BattleState battleState)
 {
     auto& world = genesis::ecs::World::GetInstance();
-    if (!world.HasSingletonComponent<LiveBattleStateSingletonComponent>())
+    if (!world.HasSingletonComponent<BattleStateSingletonComponent>())
     {
-        world.SetSingletonComponent<LiveBattleStateSingletonComponent>(std::make_unique<LiveBattleStateSingletonComponent>());
+        world.SetSingletonComponent<BattleStateSingletonComponent>(std::make_unique<BattleStateSingletonComponent>());
     }
     
-    world.GetSingletonComponent<LiveBattleStateSingletonComponent>().mBattleState = battleState;
+    world.GetSingletonComponent<BattleStateSingletonComponent>().mBattleState = battleState;
+}
+
+///------------------------------------------------------------------------------------------------
+
+void ResetCasualties()
+{
+    genesis::ecs::World::GetInstance().GetSingletonComponent<BattleStateSingletonComponent>().mLeaderNameToCasualtiesMap.clear();
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -120,6 +127,28 @@ void DamageUnit(const genesis::ecs::EntityId unitEntity, const int damage)
         auto damageComponent = std::make_unique<BattleDamageComponent>();
         damageComponent->mDamage = damage;
         world.AddComponent<BattleDamageComponent>(unitEntity, std::move(damageComponent));
+    }
+}
+
+///------------------------------------------------------------------------------------------------
+
+void AddBattleCasualty(const StringId unitType, const StringId leaderName)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
+    
+    if (battleStateComponent.mLeaderNameToCasualtiesMap.count(leaderName) == 0)
+    {
+        battleStateComponent.mLeaderNameToCasualtiesMap[leaderName];
+    }
+    
+    if (battleStateComponent.mLeaderNameToCasualtiesMap.at(leaderName).count(unitType) == 0)
+    {
+        battleStateComponent.mLeaderNameToCasualtiesMap.at(leaderName)[unitType] = 1;
+    }
+    else
+    {
+        battleStateComponent.mLeaderNameToCasualtiesMap.at(leaderName)[unitType]++;
     }
 }
 
@@ -260,16 +289,16 @@ void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const s
 {
     const auto& world = genesis::ecs::World::GetInstance();
     
-    const auto attackingLeaderEntityName = world.GetComponent<genesis::NameComponent>(attackingLeaderEntityId).mName;
-    const auto defendingLeaderEntityName = world.GetComponent<genesis::NameComponent>(defendingLeaderEntityId).mName;
+    const auto attackingLeaderUnitName = world.GetComponent<UnitStatsComponent>(attackingLeaderEntityId).mStats.mUnitName;
+    const auto defendingLeaderUnitName = world.GetComponent<UnitStatsComponent>(defendingLeaderEntityId).mStats.mUnitName;
     
-    CreateBattleUnitsOnSide(attackingSideParty, targetUnitXDistance, targetUnitYDistance, attackingLeaderEntityName, true);
-    CreateBattleUnitsOnSide(defendingSideParty, targetUnitXDistance, targetUnitYDistance, defendingLeaderEntityName, false);
+    CreateBattleUnitsOnSide(attackingSideParty, targetUnitXDistance, targetUnitYDistance, attackingLeaderUnitName, true);
+    CreateBattleUnitsOnSide(defendingSideParty, targetUnitXDistance, targetUnitYDistance, defendingLeaderUnitName, false);
 }
 
 ///------------------------------------------------------------------------------------------------
 
-void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderEntityName, const bool isAttackingSide)
+void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderUnitName, const bool isAttackingSide)
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto groundEntity = GetMapEntity();
@@ -283,7 +312,7 @@ void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const floa
         auto unitEntityId = CreateUnit(unitStats.mUnitType, unitStats.mUnitName, BATTLE_UNIT_ENTITY_NAME, glm::vec3(xCounter, yCounter, targetZ), glm::vec3(0.0f, 0.0f, (isAttackingSide ? 0.0f : genesis::math::PI)));
         
         auto battleSideComponent = std::make_unique<BattleSideComponent>();
-        battleSideComponent->mBattleSideLeaderName = leaderEntityName;
+        battleSideComponent->mBattleSideLeaderUnitName = leaderUnitName;
         world.AddComponent<BattleSideComponent>(unitEntityId, std::move(battleSideComponent));
         
         xCounter += targetUnitXDistance;

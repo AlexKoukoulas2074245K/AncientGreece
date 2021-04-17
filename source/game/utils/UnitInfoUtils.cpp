@@ -145,6 +145,27 @@ bool IsUnitDead(const genesis::ecs::EntityId unitEntity)
 
 ///------------------------------------------------------------------------------------------------
 
+std::string GetUnitCollectionString(const StringId& unitType, const int unitCount)
+{
+    if (unitCount == 1)
+    {
+        return unitType.GetString();
+    }
+    else
+    {
+        if (StringEndsWith(unitType.GetString(), "man"))
+        {
+            return unitType.GetString().substr(0, unitType.GetString().size() - 3) + "men";
+        }
+        else
+        {
+            return unitType.GetString() + "s";
+        }
+    }
+}
+
+///------------------------------------------------------------------------------------------------
+
 genesis::colors::RgbTriplet<float> GetUnitPartyColor(const UnitStatsComponent& unitStatsComponent)
 {
     const auto unitPartySize = GetUnitPartySize(unitStatsComponent);

@@ -11,7 +11,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "../../engine/ECS.h"
-#include "../components/LiveBattleStateSingletonComponent.h"
+#include "../components/BattleStateSingletonComponent.h"
 
 ///------------------------------------------------------------------------------------------------
 
@@ -42,7 +42,15 @@ void SetBattleState(const BattleState battleState);
 
 ///------------------------------------------------------------------------------------------------
 
+void ResetCasualties();
+
+///------------------------------------------------------------------------------------------------
+
 void DamageUnit(const genesis::ecs::EntityId unitEntity, const int damage);
+
+///------------------------------------------------------------------------------------------------
+
+void AddBattleCasualty(const StringId unitType, const StringId leaderName);
 
 ///------------------------------------------------------------------------------------------------
 

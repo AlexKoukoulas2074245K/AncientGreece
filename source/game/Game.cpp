@@ -258,9 +258,9 @@ void Game::VOnUpdate(float& dt)
     
     WriteValue(BATTLE_RESULT_MODEL_NAME_DS_KEY, "battle_result_victory");
     WriteValue(BATTLE_RESULT_TEXT_DS_KEY, "Victory");
-    WriteValue(BATTLE_RESULT_TEXT_RED_DS_KEY, std::to_string(genesis::colors::GREEN.r));
-    WriteValue(BATTLE_RESULT_TEXT_GREEN_DS_KEY, std::to_string(genesis::colors::GREEN.g));
-    WriteValue(BATTLE_RESULT_TEXT_BLUE_DS_KEY, std::to_string(genesis::colors::GREEN.b));
+    WriteValue(BATTLE_RESULT_TEXT_RED_DS_KEY, std::to_string(0.0f));
+    WriteValue(BATTLE_RESULT_TEXT_GREEN_DS_KEY, std::to_string(0.7f));
+    WriteValue(BATTLE_RESULT_TEXT_BLUE_DS_KEY, std::to_string(0.0f));
     
     if (genesis::input::GetButtonState(genesis::input::Button::RIGHT_BUTTON) == genesis::input::InputState::TAPPED)
     {

@@ -23,8 +23,8 @@ struct InteractionInfo
 {
     genesis::ecs::EntityId mInstigatorEntityId = genesis::ecs::NULL_ENTITY_ID;
     genesis::ecs::EntityId mOtherEntityId = genesis::ecs::NULL_ENTITY_ID;
-    StringId mInstigatorEntityName = StringId();
-    StringId mOtherEntityName = StringId();
+    StringId mInstigatorUnitName = StringId();
+    StringId mOtherUnitName = StringId();
 };
 
 ///-----------------------------------------------------------------------------------------------

@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <View background_name="horizontal_parchment" x="0.0" y="0.0" z="1.0" width="3.0" height="2.0">
-	<Text x="-0.15" y="0.75" z="0.5" size="0.15" red="{battle_result_text_red}" green="{battle_result_text_green}" blue="{battle_result_text_blue}">{battle_result_text}</Text>
-	<Sprite name="{battle_result_model_name}" x="0.3" y="0.1" z="0.2" rot_x="0.0" rot_y="0.0" rot_z="0.0" scale_x="0.905" scale_y="0.905" scale_z="0.905"></Sprite>
-	<Text x="-0.5" y="0.0" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{battle_casualties_line_0}</Text>
-	<Text x="-0.5" y="-0.1" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{battle_casualties_line_1}</Text>
-	<Text x="-0.5" y="-0.2" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{battle_casualties_line_2}</Text>
-	<Text x="-0.5" y="-0.3" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">{battle_casualties_line_3}</Text>
+	<Text x="-0.12" y="0.75" z="0.5" size="0.15" red="{battle_result_text_red}" green="{battle_result_text_green}" blue="{battle_result_text_blue}">{battle_result_text}</Text>
+	<Sprite name="{battle_result_model_name}" x="0.03" y="0.3" z="0.2" rot_x="0.0" rot_y="0.0" rot_z="0.0" scale_x="0.705" scale_y="0.705" scale_z="0.705"></Sprite>
+	<Text x="-0.67" y="0.5" z="0.5" size="0.09" red="0.0" green="0.0" blue="0.0">Your Casualties</Text>
+	<Text x="-0.67" y="0.38" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{player_casualties_line_0}</Text>
+	<Text x="-0.67" y="0.28" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{player_casualties_line_1}</Text>
+	<Text x="-0.67" y="0.18" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{player_casualties_line_2}</Text>
+	<Text x="-0.67" y="0.08" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{player_casualties_line_3}</Text>
+	<Text x="-0.67" y="-0.02" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{player_casualties_line_4}</Text>
+	<Text x="-0.67" y="-0.12" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{player_casualties_line_5}</Text>
+	<Text x="-0.67" y="-0.22" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{player_casualties_line_6}</Text>
+	<Text x="0.27" y="0.5" z="0.5" size="0.09" red="0.0" green="0.0" blue="0.0">Enemy Casualties</Text>
+	<Text x="0.27" y="0.38" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{enemy_casualties_line_0}</Text>
+	<Text x="0.27" y="0.28" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{enemy_casualties_line_1}</Text>
+	<Text x="0.27" y="0.18" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{enemy_casualties_line_2}</Text>
+	<Text x="0.27" y="0.08" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{enemy_casualties_line_3}</Text>
+	<Text x="0.27" y="-0.02" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{enemy_casualties_line_4}</Text>
+	<Text x="0.27" y="-0.12" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{enemy_casualties_line_5}</Text>
+	<Text x="0.27" y="-0.22" z="0.5" size="0.09" red="0.7" green="0.0" blue="0.0">{enemy_casualties_line_6}</Text>
     <ClickableText x="-0.2" y="-0.7" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="close">Back to map</ClickableText>
 </View>

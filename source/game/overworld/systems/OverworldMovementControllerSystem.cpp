@@ -79,9 +79,9 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
             {
                 auto interactionComponent = std::make_unique<OverworldInteractionComponent>();
                 interactionComponent->mInteraction.mInstigatorEntityId = entityId;
-                interactionComponent->mInteraction.mInstigatorEntityName = world.GetComponent<genesis::NameComponent>(entityId).mName;
+                interactionComponent->mInteraction.mInstigatorUnitName = world.GetComponent<UnitStatsComponent>(entityId).mStats.mUnitName;
                 interactionComponent->mInteraction.mOtherEntityId = waypointComponent.mEntityTargetToFollow;
-                interactionComponent->mInteraction.mOtherEntityName = world.GetComponent<genesis::NameComponent>(waypointComponent.mEntityTargetToFollow).mName;
+                interactionComponent->mInteraction.mOtherUnitName = world.HasComponent<UnitStatsComponent>(waypointComponent.mEntityTargetToFollow) ? world.GetComponent<UnitStatsComponent>(waypointComponent.mEntityTargetToFollow).mStats.mUnitName : world.GetComponent<genesis::NameComponent>(waypointComponent.mEntityTargetToFollow).mName;
                 world.AddComponent<OverworldInteractionComponent>(world.CreateEntity(), std::move(interactionComponent));
             }
             

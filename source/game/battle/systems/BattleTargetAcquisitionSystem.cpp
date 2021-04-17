@@ -66,7 +66,7 @@ void BattleTargetAcquisitionSystem::PickOptimalTargetForEntity(const genesis::ec
     const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
     const auto& battleSideComponent = world.GetComponent<BattleSideComponent>(entityId);
     
-    const auto targetUnitEntity = FindClosestTargetUnit(battleSideComponent.mBattleSideLeaderName, transformComponent, entities);
+    const auto targetUnitEntity = FindClosestTargetUnit(battleSideComponent.mBattleSideLeaderUnitName, transformComponent, entities);
     
     if (!world.HasComponent<BattleTargetComponent>(entityId))
     {
@@ -85,7 +85,7 @@ void BattleTargetAcquisitionSystem::PickOptimalTargetForEntity(const genesis::ec
 
 ///-----------------------------------------------------------------------------------------------
 
-genesis::ecs::EntityId BattleTargetAcquisitionSystem::FindClosestTargetUnit(const StringId& currentEntityBattleLeader, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const
+genesis::ecs::EntityId BattleTargetAcquisitionSystem::FindClosestTargetUnit(const StringId& currentEntityBattleLeaderUnitName, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const
 {
     const auto& world = genesis::ecs::World::GetInstance();
     auto closestTargetUnitEntity = genesis::ecs::NULL_ENTITY_ID;
@@ -96,7 +96,7 @@ genesis::ecs::EntityId BattleTargetAcquisitionSystem::FindClosestTargetUnit(cons
         const auto& otherBattleSideComponent = world.GetComponent<BattleSideComponent>(otherEntityId);
         
         // Don't process units in the same army
-        if (currentEntityBattleLeader == otherBattleSideComponent.mBattleSideLeaderName)
+        if (currentEntityBattleLeaderUnitName == otherBattleSideComponent.mBattleSideLeaderUnitName)
         {
             continue;
         }

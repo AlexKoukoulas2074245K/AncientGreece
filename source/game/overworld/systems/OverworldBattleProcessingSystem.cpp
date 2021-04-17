@@ -48,6 +48,7 @@ void OverworldBattleProcessingSystem::VUpdate(const float, const std::vector<gen
         DestroyOverworldEntities();
         world.ChangeContext(BATTLE_CONTEXT);
         battle::SetBattleState(battle::BattleState::ONGOING);
+        battle::ResetCasualties();
     }
 }
 

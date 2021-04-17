@@ -43,7 +43,7 @@ public:
 private:
     void ValidateCurrentTargetComponent(const genesis::ecs::EntityId entityId) const;
     void PickOptimalTargetForEntity(const genesis::ecs::EntityId entityId, const std::vector<genesis::ecs::EntityId> entities) const;
-    genesis::ecs::EntityId FindClosestTargetUnit(const StringId& currentEntityBattleLeader, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const;
+    genesis::ecs::EntityId FindClosestTargetUnit(const StringId& currentEntityBattleLeaderUnitName, const genesis::TransformComponent& currentEntityTransformComponent, const std::vector<genesis::ecs::EntityId> entities) const;
 };
 
 ///-----------------------------------------------------------------------------------------------

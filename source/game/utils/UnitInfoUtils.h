@@ -51,6 +51,10 @@ bool IsUnitDead(const genesis::ecs::EntityId unitEntity);
 
 ///------------------------------------------------------------------------------------------------
 
+std::string GetUnitCollectionString(const StringId& unitType, const int unitCount);
+
+///------------------------------------------------------------------------------------------------
+
 genesis::colors::RgbTriplet<float> GetUnitPartyColor(const UnitStatsComponent& unitStatsComponent);
 
 ///------------------------------------------------------------------------------------------------

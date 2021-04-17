@@ -77,7 +77,7 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
         
         if (world.HasEntity(overworldInteractionComponent.mInteraction.mInstigatorEntityId) && world.HasEntity(overworldInteractionComponent.mInteraction.mOtherEntityId))
         {
-            SaveInteractionToHistory(overworldInteractionComponent.mInteraction.mInstigatorEntityId,  overworldInteractionComponent.mInteraction.mOtherEntityId, overworldInteractionComponent.mInteraction.mInstigatorEntityName, overworldInteractionComponent.mInteraction.mOtherEntityName);
+            SaveInteractionToHistory(overworldInteractionComponent.mInteraction.mInstigatorEntityId,  overworldInteractionComponent.mInteraction.mOtherEntityId, overworldInteractionComponent.mInteraction.mInstigatorUnitName, overworldInteractionComponent.mInteraction.mOtherUnitName);
             
             const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId);
             
@@ -112,7 +112,7 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
                 auto lineCounter = 0;
                 for (const auto& bucket: unitPartyBuckets)
                 {
-                    WriteValue(StringId(UNIT_PARTY_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), std::to_string(bucket.second) + " " + bucket.first.GetString() + (bucket.second > 1 ? "s" : ""));
+                    WriteValue(StringId(UNIT_PARTY_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), std::to_string(bucket.second) + " " + GetUnitCollectionString(bucket.first, bucket.second));
                 }
                 while (lineCounter < UNIT_INTERACTION_PARTY_LINES_COUNT)
                 {

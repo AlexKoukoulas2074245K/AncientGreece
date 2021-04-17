@@ -22,7 +22,7 @@ namespace battle
 class BattleSideComponent final: public genesis::ecs::IComponent
 {
 public:
-    StringId mBattleSideLeaderName = StringId();
+    StringId mBattleSideLeaderUnitName = StringId();
 };
 
 ///-----------------------------------------------------------------------------------------------
