@@ -6,7 +6,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "OverworldUtils.h"
-#include "../components/HighlightableComponent.h"
+#include "../components/OverworldHighlightableComponent.h"
 #include "../../components/CollidableComponent.h"
 #include "../../components/CityStateInfoSingletonComponent.h"
 #include "../../components/UnitStatsComponent.h"
@@ -350,7 +350,7 @@ void PopulateOverworldCityStates()
         renderableComponent.mIsAffectedByLight = true;
         renderableComponent.mIsCastingShadows = true;
         
-        world.AddComponent<overworld::HighlightableComponent>(cityStateEntity, std::make_unique<overworld::HighlightableComponent>());
+        world.AddComponent<overworld::OverworldHighlightableComponent>(cityStateEntity, std::make_unique<overworld::OverworldHighlightableComponent>());
         
         AddCollidableDataToCityState(cityStateEntity);
     }

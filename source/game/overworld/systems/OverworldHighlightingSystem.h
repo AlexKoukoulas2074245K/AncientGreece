@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  HighlightingSystem.h
+///  OverworldHighlightingSystem.h
 ///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 21/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef HighlightingSystem_h
-#define HighlightingSystem_h
+#ifndef OverworldHighlightingSystem_h
+#define OverworldHighlightingSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -24,13 +24,13 @@ namespace overworld
 
 ///-----------------------------------------------------------------------------------------------
 
-class HighlightableComponent;
+class OverworldHighlightableComponent;
 
 ///-----------------------------------------------------------------------------------------------
-class HighlightingSystem final : public genesis::ecs::BaseSystem<HighlightableComponent>
+class OverworldHighlightingSystem final : public genesis::ecs::BaseSystem<OverworldHighlightableComponent>
 {
 public:
-    HighlightingSystem();
+    OverworldHighlightingSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
     
@@ -46,4 +46,4 @@ private:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* HighlightingSystem_h */
+#endif /* OverworldHighlightingSystem_h */

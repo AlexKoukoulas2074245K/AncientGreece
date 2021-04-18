@@ -194,7 +194,9 @@ public:
 
         const auto componentTypeId = GetTypeHash<ComponentType>();
         const auto& entityEntry = mEntityComponentStore.at(entityId);
-
+        
+        assert(componentTypeId < MAX_COMPONENTS && "Maximum amount of components exceeded");
+        
         assert(entityEntry.mComponents[componentTypeId] &&
             "Component is not present in this entity's component store");
         
@@ -215,6 +217,9 @@ public:
             "Entity does not exist in the world");
 
         const auto componentTypeId = GetTypeHash<ComponentType>();
+        
+        assert(componentTypeId < MAX_COMPONENTS && "Maximum amount of components exceeded");
+        
         return mEntityComponentStore.at(entityId).mComponents[componentTypeId] != nullptr;
     }
 
@@ -233,6 +238,8 @@ public:
 
         const auto componentTypeId = GetTypeHash<ComponentType>();
 
+        assert(componentTypeId < MAX_COMPONENTS && "Maximum amount of components exceeded");
+        
         auto& entityEntry = mEntityComponentStore.at(entityId);
         assert(entityEntry.mComponents[componentTypeId] == nullptr &&
             "Component is already present in this entity's component store");
@@ -257,7 +264,9 @@ public:
 
         const auto componentTypeId = GetTypeHash<ComponentType>();
         auto& entityEntry = mEntityComponentStore.at(entityId);
-
+        
+        assert(componentTypeId < MAX_COMPONENTS && "Maximum amount of components exceeded");
+        
         assert(entityEntry.mComponents[componentTypeId] &&
             "Component is not present in this entity's component store");
         
@@ -277,6 +286,7 @@ public:
             "ComponentType does not derive from IComponent");
 
         const auto componentTypeId = GetTypeHash<ComponentType>();
+        assert(componentTypeId < MAX_COMPONENTS && "Maximum amount of components exceeded");
         return static_cast<ComponentType&>(*mSingletonComponents.at(componentTypeId));
     }
 
@@ -288,8 +298,8 @@ public:
     {
         static_assert(std::is_base_of<IComponent, ComponentType>::value,
             "ComponentType does not derive from IComponent");
-
         const auto componentTypeId = GetTypeHash<ComponentType>();
+        assert(componentTypeId < MAX_COMPONENTS && "Maximum amount of components exceeded");
         return mSingletonComponents.count(componentTypeId) != 0;
     }    
 
@@ -305,6 +315,8 @@ public:
             "ComponentType does not derive from IComponent");
 
         const auto componentTypeId = GetTypeHash<ComponentType>();
+        assert(componentTypeId < MAX_COMPONENTS && "Maximum amount of components exceeded");
+        
         assert(mSingletonComponents.count(componentTypeId) == 0 &&
             "A Singleton component of the specified type already exists in the world");
 
@@ -320,6 +332,9 @@ public:
             "ComponentType does not derive from IComponent");
                 
         const auto componentTypeId = GetTypeHash<ComponentType>();
+        
+        assert(componentTypeId < MAX_COMPONENTS && "Maximum amount of components exceeded");
+        
         assert(mSingletonComponents.count(componentTypeId) != 0 &&
             "A Singleton component of the specified type does not exist");
 

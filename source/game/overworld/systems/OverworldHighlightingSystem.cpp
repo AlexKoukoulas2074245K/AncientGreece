@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  HighlightingSystem.cpp
+///  OverworldHighlightingSystem.cpp
 ///  AncientGreece
 ///
 ///  Created by Alex Koukoulas on 21/03/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#include "HighlightingSystem.h"
-#include "../components/HighlightableComponent.h"
+#include "OverworldHighlightingSystem.h"
+#include "../components/OverworldHighlightableComponent.h"
 #include "../components/OverworldMapPickingInfoSingletonComponent.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/CityStateInfoUtils.h"
@@ -59,14 +59,14 @@ namespace
 
 ///-----------------------------------------------------------------------------------------------
 
-HighlightingSystem::HighlightingSystem()
+OverworldHighlightingSystem::OverworldHighlightingSystem()
     : BaseSystem()
 {
 }
 
 ///-----------------------------------------------------------------------------------------------
 
-void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
+void OverworldHighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
     auto& world = genesis::ecs::World::GetInstance();
     const auto& mapPickingInfoComponent = world.GetSingletonComponent<OverworldMapPickingInfoSingletonComponent>();
@@ -76,7 +76,7 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
     for (const auto entityId: entitiesToProcess)
     {
         auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
-        world.GetComponent<HighlightableComponent>(entityId).mHighlighted = false;
+        world.GetComponent<OverworldHighlightableComponent>(entityId).mHighlighted = false;
         if (world.HasComponent<UnitStatsComponent>(entityId))
         {
             renderableComponent.mShaderNameId = DEFAULT_SKELETAL_MODEL_SHADER;
@@ -114,7 +114,7 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
     {
         const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
         auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
-        auto& highlightableComponent = world.GetComponent<HighlightableComponent>(entityId);
+        auto& highlightableComponent = world.GetComponent<OverworldHighlightableComponent>(entityId);
         highlightableComponent.mHighlighted = true;
         
         // Unit highlighted
@@ -139,7 +139,7 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
 
 ///-----------------------------------------------------------------------------------------------
 
-void HighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPosition, const UnitStatsComponent& unitStatsComponent) const
+void OverworldHighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPosition, const UnitStatsComponent& unitStatsComponent) const
 {
     auto& world = genesis::ecs::World::GetInstance();
     
@@ -177,7 +177,7 @@ void HighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPosition, c
 
 ///-----------------------------------------------------------------------------------------------
 
-void HighlightingSystem::CreateCityStatePreviewPopup(const glm::vec3& cityStatePosition, const StringId& cityStateName) const
+void OverworldHighlightingSystem::CreateCityStatePreviewPopup(const glm::vec3& cityStatePosition, const StringId& cityStateName) const
 {
     const auto cityStateNameSize = GetCityStateNameSize(cityStateName);
     auto nameTextEntity = genesis::rendering::RenderText(cityStateName.GetString(), GAME_FONT_NAME, cityStateNameSize, cityStatePosition + glm::vec3(0.0f, CITY_STATE_DETAILS_Y_OFFSET + 2 * cityStateNameSize, CITY_STATE_NAME_Z), genesis::colors::BLACK, true, PREVIEW_POPUP_NAME);
@@ -197,7 +197,7 @@ void HighlightingSystem::CreateCityStatePreviewPopup(const glm::vec3& cityStateP
 
 ///-----------------------------------------------------------------------------------------------
 
-void HighlightingSystem::DestroyUnitPreviewPopup() const
+void OverworldHighlightingSystem::DestroyUnitPreviewPopup() const
 {
     auto& world = genesis::ecs::World::GetInstance();
     world.DestroyEntities(world.FindAllEntitiesWithName(PREVIEW_POPUP_NAME));

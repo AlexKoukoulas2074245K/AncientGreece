@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  HighlightableComponent.h
+///  OverworldDayTimeSingletonComponent.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 21/03/2021.
+///  Created by Alex Koukoulas on 18/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef HighlightableComponent_h
-#define HighlightableComponent_h
+#ifndef OverworldDayTimeSingletonComponent_h
+#define OverworldDayTimeSingletonComponent_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -16,13 +16,19 @@
 
 namespace overworld
 {
-    
+
 ///-----------------------------------------------------------------------------------------------
 
-class HighlightableComponent final: public genesis::ecs::IComponent
+class OverworldDayTimeSingletonComponent final: public genesis::ecs::IComponent
 {
 public:
-    bool mHighlighted = false;
+    StringId mCurrentPeriod;
+    float mDtAccum     = 0.0f;
+    int mCurrentDay    = 0;
+    int mCurrentYearBc = 0;
+    bool mPeriodChangeTick = false;
+    bool mDayChangeTick = false;
+    bool mYearChangeTick = false;
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -31,4 +37,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* HighlightableComponent_h */
+#endif /* OverworldDayTimeSingletonComponent_h */

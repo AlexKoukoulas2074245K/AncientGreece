@@ -19,11 +19,11 @@ namespace overworld
 
 ///-----------------------------------------------------------------------------------------------
 
-class HighlightableComponent;
+class OverworldHighlightableComponent;
 class OverworldTargetComponent;
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldPlayerTargetSelectionSystem final : public genesis::ecs::BaseSystem<HighlightableComponent>
+class OverworldPlayerTargetSelectionSystem final : public genesis::ecs::BaseSystem<OverworldHighlightableComponent>
 {
 public:
     OverworldPlayerTargetSelectionSystem();

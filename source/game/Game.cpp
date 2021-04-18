@@ -17,11 +17,11 @@
 #include "battle/systems/BattleTargetAcquisitionSystem.h"
 #include "components/CollidableComponent.h"
 #include "components/UnitStatsComponent.h"
-#include "overworld/components/HighlightableComponent.h"
 #include "overworld/components/OverworldTargetComponent.h"
-#include "overworld/systems/HighlightingSystem.h"
 #include "overworld/systems/OverworldBattleProcessingSystem.h"
 #include "overworld/systems/OverworldCameraControllerSystem.h"
+#include "overworld/systems/OverworldDayTimeUpdaterSystem.h"
+#include "overworld/systems/OverworldHighlightingSystem.h"
 #include "overworld/systems/OverworldMapPickingInfoSystem.h"
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetInteractionHandlingSystem.h"
@@ -65,8 +65,7 @@
 ///------------------------------------------------------------------------------------------------
 
 static int SPARTAN_COUNT = 20;
-static float dtAccum = 0.0f;
-static float dtAccum2 = 0.0f;
+//static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
 extern float DEBUG_TEXTBOX_SIZE_DX;
 extern float DEBUG_TEXTBOX_SIZE_DY;
@@ -102,8 +101,9 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<battle::BattleDamageApplicationSystem>(), BATTLE_CONTEXT);
     world.AddSystem(std::make_unique<battle::BattleDestructionTimerProcessingSystem>(), BATTLE_CONTEXT);
     
-    world.AddSystem(std::make_unique<overworld::HighlightingSystem>(), 0);
+    world.AddSystem(std::make_unique<overworld::OverworldHighlightingSystem>(), 0);
     
+    world.AddSystem(std::make_unique<overworld::OverworldDayTimeUpdaterSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>(), MAP_CONTEXT);
@@ -188,64 +188,14 @@ void Game::VOnGameInit()
 
 void Game::VOnUpdate(float& dt)
 {
-    auto& world = genesis::ecs::World::GetInstance();
+    //auto& world = genesis::ecs::World::GetInstance();
     
-    auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
-
 #if !defined(NDEBUG)
     if (genesis::input::GetKeyState(genesis::input::Key::SPACEBAR_KEY) == genesis::input::InputState::PRESSED)
     {
         dt /= 10.0f;
     }
 #endif
-    
-    dtAccum2 += dt;
-    if (dtAccum2 >= 2.0f)
-    {
-        dtAccum2 = 0.0f;
-    }
-    
-    const auto dayCycleSpeed = 1.0f/20.0f;
-    dtAccum += dayCycleSpeed * dt;
-    
-    const auto currentTimeStamp = std::fmod(dtAccum, genesis::math::PI * 2.0f);
-    lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(currentTimeStamp);
-    lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(currentTimeStamp);
-    
-    const auto dayCycleFactor = (currentTimeStamp/(genesis::math::PI * 2.0f)) * 24.0f;
-    
-    std::string currentPeriod = "Night";
-    
-    if (dayCycleFactor <= 3.0f) currentPeriod = "Midnight";
-    else if (dayCycleFactor <= 6.0f) currentPeriod = "Dawn";
-    else if (dayCycleFactor <= 9.0f) currentPeriod = "Early Morning";
-    else if (dayCycleFactor <= 12.0f) currentPeriod = "Morning";
-    else if (dayCycleFactor <= 15.0f) currentPeriod = "Midday";
-    else if (dayCycleFactor <= 18.0f) currentPeriod = "Afternoon";
-    else if (dayCycleFactor <= 21.0f) currentPeriod = "Dusk";
-    else if (dayCycleFactor <= 24.0f) currentPeriod = "Night";
-    
-    static const tsl::robin_map<std::string, float> periodXValues =
-    {
-        { "Dawn", -0.82f },
-        { "Dusk", -0.82f },
-        { "Night", -0.86f },
-        { "Morning", -0.88f },
-        { "Midday", -0.87f },
-        { "Afternoon", -0.92f },
-        { "Midnight", -0.85f },
-        { "Early Morning", -0.96f }
-    };
-    
-    world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_period")));
-    //world.DestroyEntities(world.FindAllEntitiesWithName(StringId("time_plate")));
-    genesis::rendering::RenderText(currentPeriod, StringId("ancient_greek_font"), 0.1f, glm::vec3(periodXValues.at(currentPeriod), -0.91f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), false, StringId("time_period"));
-    
-    if (!world.HasEntity(world.FindEntityWithName(StringId("time_plate"))))
-    {
-        genesis::rendering::LoadAndCreateGuiSprite("gui_base", "horizontal_parchment", StringId("default_gui"),  glm::vec3(-0.74f, -0.89f, 0.01f), glm::vec3(), glm::vec3(0.9f, 0.2f, 1.0f), false, StringId("time_plate"));
-    }
-    
     
     //    Log(LogType::INFO, "%.6f, %.6f, %.6f", lightStoreComponent.mLightPositions[0].x, lightStoreComponent.mLightPositions[0].y, lightStoreComponent.mLightPositions[0].z);
 #if !defined(NDEBUG)

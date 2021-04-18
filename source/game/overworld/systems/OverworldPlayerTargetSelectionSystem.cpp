@@ -7,7 +7,7 @@
 
 #include "OverworldPlayerTargetSelectionSystem.h"
 #include "../AreaTypes.h"
-#include "../components/HighlightableComponent.h"
+#include "../components/OverworldHighlightableComponent.h"
 #include "../components/OverworldMapPickingInfoSingletonComponent.h"
 #include "../components/OverworldTargetComponent.h"
 #include "../utils/OverworldUtils.h"
@@ -92,7 +92,7 @@ genesis::ecs::EntityId OverworldPlayerTargetSelectionSystem::GetEntityToFollow(c
         {
             continue;
         }
-        if (world.GetComponent<HighlightableComponent>(entityId).mHighlighted && playerEntity != entityId)
+        if (world.GetComponent<OverworldHighlightableComponent>(entityId).mHighlighted && playerEntity != entityId)
         {
             return entityId;
         }
