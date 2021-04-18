@@ -388,6 +388,8 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
     
     // Execute gui 3d model pass
     GL_CHECK(glEnable(GL_DEPTH_TEST));
+    // Clear depth buffer
+    GL_CHECK(glClear(GL_DEPTH_BUFFER_BIT));
     
     if (mGuiEntityGroups.count(RenderableType::GUI_3D_MODEL))
     {
