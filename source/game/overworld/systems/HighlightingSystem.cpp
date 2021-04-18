@@ -87,39 +87,52 @@ void HighlightingSystem::VUpdate(const float, const std::vector<genesis::ecs::En
         }
     }
     
+    std::vector<genesis::ecs::EntityId> highlightedCandidates;
+    
     for (const auto entityId: entitiesToProcess)
     {
         auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
-        auto& highlightableComponent = world.GetComponent<HighlightableComponent>(entityId);
         const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
         const auto& meshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( renderableComponent.mMeshResourceIds.at(renderableComponent.mCurrentMeshResourceIndex));
             const auto& scaledMeshDimensions = meshResource.GetDimensions() * transformComponent.mScale;
         const auto averageHalfDimension = (scaledMeshDimensions.x + scaledMeshDimensions.y + scaledMeshDimensions.z) * 0.333f * 0.75f;
 
         float t;
-        const auto intersectionExists = genesis::math::RayToSphereIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, transformComponent.mPosition, averageHalfDimension, t);
-        
-        highlightableComponent.mHighlighted = intersectionExists;
-        
-        if (highlightableComponent.mHighlighted)
+        if (genesis::math::RayToSphereIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, transformComponent.mPosition, averageHalfDimension, t))
         {
-            // Unit highlighted
-            if (world.HasComponent<UnitStatsComponent>(entityId))
-            {
-                renderableComponent.mShaderNameId = HIGHLIGHTED_SKELETAL_MODEL_SHADER;
-                const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
-                CreateUnitPreviewPopup(transformComponent.mPosition, unitStatsComponent);
-            }
-            // City state highlighted
-            else
-            {
-                renderableComponent.mShaderNameId = HIGHLIGHTED_STATIC_MODEL_SHADER;
-                const auto& cityStateName = world.GetComponent<genesis::NameComponent>(entityId);
-                CreateCityStatePreviewPopup(transformComponent.mPosition, cityStateName.mName);
-            }
-            
-            break;
+            highlightedCandidates.push_back(entityId);
         }
+    }
+    
+    // Sort highlighted candidates by closest to mouse position
+    std::sort(highlightedCandidates.begin(), highlightedCandidates.end(), [&](const genesis::ecs::EntityId& lhs, const genesis::ecs::EntityId& rhs)
+    {
+        return glm::distance(mapPickingInfoComponent.mMapIntersectionPoint, world.GetComponent<genesis::TransformComponent>(lhs).mPosition) < glm::distance(mapPickingInfoComponent.mMapIntersectionPoint, world.GetComponent<genesis::TransformComponent>(rhs).mPosition);
+    });
+    
+    for (const auto& entityId: highlightedCandidates)
+    {
+        const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
+        auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(entityId);
+        auto& highlightableComponent = world.GetComponent<HighlightableComponent>(entityId);
+        highlightableComponent.mHighlighted = true;
+        
+        // Unit highlighted
+        if (world.HasComponent<UnitStatsComponent>(entityId))
+        {
+            renderableComponent.mShaderNameId = HIGHLIGHTED_SKELETAL_MODEL_SHADER;
+            const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
+            CreateUnitPreviewPopup(transformComponent.mPosition, unitStatsComponent);
+        }
+        // City state highlighted
+        else
+        {
+            renderableComponent.mShaderNameId = HIGHLIGHTED_STATIC_MODEL_SHADER;
+            const auto& cityStateName = world.GetComponent<genesis::NameComponent>(entityId);
+            CreateCityStatePreviewPopup(transformComponent.mPosition, cityStateName.mName);
+        }
+
+        break;
     }
 }
 

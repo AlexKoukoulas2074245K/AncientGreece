@@ -55,7 +55,7 @@ namespace
     static const StringId CITY_STATE_GARISSON_BLUE_DS_KEY  = StringId("city_state_garisson_blue");
     static const StringId CITY_STATE_DESCRIPTION_DS_KEY    = StringId("city_state_description");
 
-    static const int UNIT_INTERACTION_PARTY_LINES_COUNT = 7;
+    static const int UNIT_INTERACTION_PARTY_LINES_COUNT = 10;
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -190,5 +190,15 @@ struct StringIdHasher
 };
 
 ///-----------------------------------------------------------------------------------------------
+/// Custom StringId comprator to be used in stl map
+struct StringIdStdMapComparator
+{
+    bool operator()(const StringId& lhs, const StringId& rhs) const
+    {
+        return lhs.GetString() < rhs.GetString();
+    }
+};
+
+///-----------------------------------------------------------------------------------------------
 
 #endif /* StringUtils_h */

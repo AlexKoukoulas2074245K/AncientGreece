@@ -46,11 +46,6 @@ public:
     glm::vec4 mClearColor             = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
     float mDtAccumulator              = 0.0f;
     bool mShadowsEnabled              = true;
-    
-    // Previous render call resource pointers
-    const resources::ShaderResource* previousShader   = nullptr;
-    const resources::TextureResource* previousTexture = nullptr;
-    const resources::MeshResource* previousMesh       =  nullptr;
 
     // Previous render call resource ids
     StringId previousShaderNameId             = StringId();

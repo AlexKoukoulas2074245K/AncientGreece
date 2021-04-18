@@ -35,7 +35,7 @@ const UnitStats& GetUnitBaseStats(const StringId& unitTypeName);
 
 ///------------------------------------------------------------------------------------------------
 
-std::map<StringId, int> GetUnitPartyCountBuckets(const UnitStatsComponent& unitStatsComponent, const bool includeLeader);
+std::map<StringId, int, StringIdStdMapComparator> GetUnitPartyCountBuckets(const UnitStatsComponent& unitStatsComponent, const bool includeLeader);
 
 ///------------------------------------------------------------------------------------------------
 

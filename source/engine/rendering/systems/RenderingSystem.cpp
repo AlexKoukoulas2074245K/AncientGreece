@@ -425,21 +425,10 @@ void RenderingSystem::RenderHeightMapInternal
     RenderingContextSingletonComponent& renderingContextComponent
 ) const
 {
-    // Update Shader is necessary
-    const resources::ShaderResource* currentShader = nullptr;
-    if (renderableComponent.mShaderNameId != renderingContextComponent.previousShaderNameId)
-    {
-        currentShader = &shaderStoreComponent.mShaders.at(renderableComponent.mShaderNameId);
-        GL_CHECK(glUseProgram(currentShader->GetProgramId()));
+    // Update Shader
+    const resources::ShaderResource* currentShader = &shaderStoreComponent.mShaders.at(renderableComponent.mShaderNameId);
+    GL_CHECK(glUseProgram(currentShader->GetProgramId()));
 
-        renderingContextComponent.previousShaderNameId = renderableComponent.mShaderNameId;
-        renderingContextComponent.previousShader       = currentShader;
-    }
-    else
-    {
-        currentShader = renderingContextComponent.previousShader;
-    }
-        
     // Calculate world matrix for entity
     glm::mat4 world(1.0f);
         
@@ -569,7 +558,7 @@ void RenderingSystem::RenderStringInternal
     const ShaderStoreSingletonComponent& shaderStoreComponent,
     const TextStringComponent& textStringComponent,
     const WindowSingletonComponent& windowComponent,
-    RenderingContextSingletonComponent& renderingContextComponent
+    RenderingContextSingletonComponent&
 ) const
 {
     if (!renderableComponent.mIsVisible)
@@ -577,20 +566,9 @@ void RenderingSystem::RenderStringInternal
         return;
     }
 
-    // Update Shader is necessary
-    const resources::ShaderResource* currentShader = nullptr;
-    if (renderableComponent.mShaderNameId != renderingContextComponent.previousShaderNameId)
-    {
-        currentShader = &shaderStoreComponent.mShaders.at(renderableComponent.mShaderNameId);
-        GL_CHECK(glUseProgram(currentShader->GetProgramId()));
-
-        renderingContextComponent.previousShaderNameId = renderableComponent.mShaderNameId;
-        renderingContextComponent.previousShader       = currentShader;
-    }
-    else
-    {
-        currentShader = renderingContextComponent.previousShader;
-    }
+    // Update Shader
+    const resources::ShaderResource* currentShader = &shaderStoreComponent.mShaders.at(renderableComponent.mShaderNameId);
+    GL_CHECK(glUseProgram(currentShader->GetProgramId()));
 
     auto currentTexture = &resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(renderableComponent.mTextureResourceId);
     GL_CHECK(glBindTexture(GL_TEXTURE_2D, currentTexture->GetGLTextureId()));
@@ -705,7 +683,7 @@ void RenderingSystem::RenderEntityInternal
     const LightStoreSingletonComponent& lightStoreComponent,
     const ShaderStoreSingletonComponent& shaderStoreComponent,
     const WindowSingletonComponent& windowComponent,    
-    RenderingContextSingletonComponent& renderingContextComponent    
+    RenderingContextSingletonComponent&
 ) const
 {
     if (!renderableComponent.mIsVisible)
@@ -713,21 +691,10 @@ void RenderingSystem::RenderEntityInternal
         return;
     }
 
-    // Update Shader is necessary
-    const resources::ShaderResource* currentShader = nullptr;
-    if (renderableComponent.mShaderNameId != renderingContextComponent.previousShaderNameId)
-    {
-        currentShader = &shaderStoreComponent.mShaders.at(renderableComponent.mShaderNameId);
-        GL_CHECK(glUseProgram(currentShader->GetProgramId()));
+    // Update Shader
+    const resources::ShaderResource* currentShader = &shaderStoreComponent.mShaders.at(renderableComponent.mShaderNameId);
+    GL_CHECK(glUseProgram(currentShader->GetProgramId()));
 
-        renderingContextComponent.previousShaderNameId = renderableComponent.mShaderNameId;
-        renderingContextComponent.previousShader       = currentShader;
-    }
-    else
-    {
-        currentShader = renderingContextComponent.previousShader;
-    }
-        
     // Calculate world matrix for entity
     glm::mat4 world(1.0f);
         
@@ -747,21 +714,9 @@ void RenderingSystem::RenderEntityInternal
     world *= rotMatrix;
     world = glm::scale(world, scale);
        
-
-    // Update texture if necessary
-    const resources::TextureResource* currentTexture = nullptr;
-    if (renderableComponent.mTextureResourceId != renderingContextComponent.previousTextureResourceId)
-    {
-        currentTexture = &resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(renderableComponent.mTextureResourceId);
-        GL_CHECK(glBindTexture(GL_TEXTURE_2D, currentTexture->GetGLTextureId()));
-
-        renderingContextComponent.previousTexture = currentTexture;
-        renderingContextComponent.previousTextureResourceId = renderableComponent.mTextureResourceId;
-    }
-    else
-    {
-        currentTexture = renderingContextComponent.previousTexture;
-    }      
+    // Update texture
+    const resources::TextureResource* currentTexture = &resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(renderableComponent.mTextureResourceId);
+    GL_CHECK(glBindTexture(GL_TEXTURE_2D, currentTexture->GetGLTextureId()));
 
     // Set mvp uniforms    
     currentShader->SetMatrix4fv(WORLD_MARIX_UNIFORM_NAME, world);
@@ -831,20 +786,9 @@ void RenderingSystem::RenderEntityInternal
         currentShader->SetBool(boolUniformEntry.first, boolUniformEntry.second);
     }
     
-    // Update current mesh if necessary
-    const resources::MeshResource* currentMesh = nullptr;
-    if (renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex] != renderingContextComponent.previousMeshResourceId)
-    {
-        currentMesh = &resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
-        GL_CHECK(glBindVertexArray(currentMesh->GetVertexArrayObject()));
-
-        renderingContextComponent.previousMesh           = currentMesh;
-        renderingContextComponent.previousMeshResourceId = renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex];
-    }
-    else
-    {
-        currentMesh = renderingContextComponent.previousMesh;
-    }
+    // Update current mesh
+    const resources::MeshResource* currentMesh = &resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
+    GL_CHECK(glBindVertexArray(currentMesh->GetVertexArrayObject()));;
 
     // Perform draw call
     const auto& indexCountPerMesh = currentMesh->GetIndexCountPerMesh();

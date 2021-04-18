@@ -29,9 +29,8 @@ namespace
 {
     static const float CAMERA_PANNING_SPEED                  = 0.2f;
     static const float CAMERA_PANNING_CENTER_DISTANCE_FACTOR = 0.1f;
-    static const float CAMERA_ZOOM_SPEED                     = 1.0f;
-    static const float CAMERA_ZOOM_SPEED_DECELERATION        = 9.8f;
-    static const float CAMERA_MAX_Z                          = -0.2f;
+    static const float CAMERA_ZOOM_SPEED                     = 5.0f;
+    static const float CAMERA_MAX_Z                          = -0.1f;
     static const float CAMERA_MIN_Z                          = -0.4f;
     static const float CAMERA_AUTOCENTERING_SPEED            = 0.3f;
     static const float CAMERA_AUTOCENTERING_Y_OFFSET         = -0.35f;
@@ -132,35 +131,20 @@ void BattleCameraControllerSystem::NormalCameraOperation(const float dt) const
             cameraComponent.mVelocity.y = directionToPlayer.y * CAMERA_AUTOCENTERING_SPEED;
         }
     }
-    
-    //Log(LogType::INFO, "%.6f, %.6f", cameraComponent.mVelocity.x, cameraComponent.mVelocity.y);
-    
+
     // Zoom Calculations
     if (genesis::input::GetMouseWheelDelta() > 0)
     {
-        cameraComponent.mVelocity.z = CAMERA_ZOOM_SPEED;
+        cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
+        cameraComponent.mPosition += glm::normalize(cameraComponent.mFrontVector) * CAMERA_ZOOM_SPEED * dt;
     }
     else if (genesis::input::GetMouseWheelDelta() < 0)
     {
-        cameraComponent.mVelocity.z = -CAMERA_ZOOM_SPEED;
+        cameraComponent.mCameraState = genesis::rendering::CameraState::PANNING;
+        cameraComponent.mPosition += glm::normalize(cameraComponent.mFrontVector)  * -CAMERA_ZOOM_SPEED * dt;
     }
     
     cameraComponent.mPosition += cameraComponent.mVelocity * dt;
-    
-    // Decelerate zoom-in velocity
-    if (cameraComponent.mVelocity.z > 0)
-    {
-        cameraComponent.mVelocity.z -= CAMERA_ZOOM_SPEED_DECELERATION * dt;
-    }
-    if (cameraComponent.mVelocity.z < 0)
-    {
-        cameraComponent.mVelocity.z += CAMERA_ZOOM_SPEED_DECELERATION * dt;
-    }
-    
-    if (genesis::math::Abs(cameraComponent.mVelocity.z) < CAMERA_ZOOM_SPEED_DECELERATION * dt)
-    {
-        cameraComponent.mVelocity.z = 0.0f;
-    }
     
     // Check for exceeding limits
     auto exceededZoomLimits = cameraComponent.mPosition.z < CAMERA_MIN_Z || cameraComponent.mPosition.z > CAMERA_MAX_Z;

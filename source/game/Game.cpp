@@ -64,7 +64,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 5;
+static int SPARTAN_COUNT = 20;
 static float dtAccum = 0.0f;
 static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
@@ -139,6 +139,11 @@ void Game::VOnGameInit()
             { 0, StringId("Spearman") },
             { 1, StringId("Elite Spearman") },
             { 2, StringId("Horse Archer") },
+            { 3, StringId("Novice Spearman")},
+            { 4, StringId("Novice Horse Archer")},
+            { 5, StringId("Horse Lancer")},
+            { 6, StringId("Barbarian Axeman")},
+            { 7, StringId("Bandit Horseman")},
         };
         
         const auto mapEntity = overworld::GetMapEntity();
@@ -152,7 +157,7 @@ void Game::VOnGameInit()
 
         for (auto j = 0; j < partySize; ++j)
         {
-            const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
+            const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, intToModelType.size() - 1));
             unitStatsComponent.mParty.push_back(GetUnitBaseStats(unitTypeRng));
         }
         
@@ -161,7 +166,7 @@ void Game::VOnGameInit()
             auto position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
             position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
             
-            auto unitTypeName = intToModelType.at(i % 3);
+            auto unitTypeName = intToModelType.at(i % intToModelType.size());
             
             auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), overworld::GetGenericOverworldUnitEntityName(), position);
             
@@ -170,7 +175,7 @@ void Game::VOnGameInit()
             
             for (auto j = 0; j < partySize; ++j)
             {
-                const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, 2));
+                const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, intToModelType.size() - 1));
                 unitStatsComponent.mParty.push_back(GetUnitBaseStats(unitTypeRng));
             }
         }

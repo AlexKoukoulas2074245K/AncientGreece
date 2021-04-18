@@ -42,9 +42,9 @@ namespace
     static const glm::vec3 BATTLE_VICTORY_COLOR = glm::vec3(0.0f, 0.7f, 0.0f);
     static const glm::vec3 BATTLE_DEFEAT_COLOR  = glm::vec3(0.7f, 0.0f, 0.0f);
 
-    static const int BATTLE_CASUALTIES_LINE_COUNT = 7;
+    static const int BATTLE_CASUALTIES_LINE_COUNT = 10;
 
-    static const float CELEBRATION_TIME = 5.0f;
+    static const float CELEBRATION_TIME = 3.0f;
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ void BattleEndHandlingSystem::VUpdate(const float dt, const std::vector<genesis:
             {
                 if (!IsUnitDead(entityId))
                 {
-                    genesis::animation::ChangeAnimation(entityId, StringId("celebrating"));
+                    genesis::animation::ChangeAnimation(entityId, StringId("celebrating"), false);
                 }
             }
             

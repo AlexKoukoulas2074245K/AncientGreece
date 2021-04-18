@@ -103,9 +103,9 @@ const UnitStats& GetUnitBaseStats(const StringId& unitTypeName)
 
 ///-----------------------------------------------------------------------------------------------
 
-std::map<StringId, int> GetUnitPartyCountBuckets(const UnitStatsComponent& unitStatsComponent, const bool includeLeader)
+std::map<StringId, int, StringIdStdMapComparator> GetUnitPartyCountBuckets(const UnitStatsComponent& unitStatsComponent, const bool includeLeader)
 {
-    std::map<StringId, int> resultBuckets;
+    std::map<StringId, int, StringIdStdMapComparator> resultBuckets;
     auto startingIndex = includeLeader ? 0U : 1U;
     
     for (auto i = startingIndex; i < unitStatsComponent.mParty.size(); ++i)
