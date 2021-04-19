@@ -65,7 +65,7 @@ assign_source_group(${SOURCE_DIR})
 
 # Copy DLLs to output folder on Windows
 if(WIN32)		
-    foreach(DLL ${SDL2_DLLS} ${LUA_DLLS})		
+    foreach(DLL ${assimp_DLLS} ${SDL2_DLLS} ${LUA_DLLS})		
 		message("Copying ${DLL} to output folder")
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND
             ${CMAKE_COMMAND} -E copy_if_different ${DLL} $<TARGET_FILE_DIR:${PROJECT_NAME}>)
@@ -75,7 +75,7 @@ endif()
 
 # Enable highest warning levels + treated as errors
 if(MSVC)
-  target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
+  target_compile_options(${PROJECT_NAME} PRIVATE /W4)
   set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 else(MSVC)
   target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
