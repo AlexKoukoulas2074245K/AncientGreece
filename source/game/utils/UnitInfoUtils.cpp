@@ -62,7 +62,7 @@ void LoadUnitBaseStats()
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mAttackAnimationDamageTrigger = unitBaseStats["attack_animation_damage_trigger"].get<float>();
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mDamage = unitBaseStats["base_damage"].get<int>();
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mHealth = unitBaseStats["base_health"].get<int>();
-        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mSpeedMultiplier = unitBaseStats["base_speed_multiplier"].get<int>();
+        unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mSpeedMultiplier = unitBaseStats["base_speed_multiplier"].get<float>();
         unitBaseStatsComponent->mUnitTypeNameToBaseStats[unitTypeName].mIsRangedUnit =
         unitBaseStats["is_ranged_unit"].get<bool>();
         

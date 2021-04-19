@@ -6,6 +6,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "OverworldUtils.h"
+#include "../components/OverworldDayTimeSingletonComponent.h"
 #include "../components/OverworldHighlightableComponent.h"
 #include "../../components/CollidableComponent.h"
 #include "../../components/CityStateInfoSingletonComponent.h"
@@ -140,6 +141,12 @@ void SaveOverworldStateToFile()
     const auto playerEntity = GetPlayerEntity();
     const auto& playerUnitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
     const auto& playerTransformComponent = world.GetComponent<genesis::TransformComponent>(playerEntity);
+    const auto& dayTimeComponent = world.GetSingletonComponent<OverworldDayTimeSingletonComponent>();
+    
+    nlohmann::json overworldStateJsonObject;
+    overworldStateJsonObject["time_accumulator"] = dayTimeComponent.mTimeDtAccum;
+    overworldStateJsonObject["current_day"] = dayTimeComponent.mCurrentDay;
+    overworldStateJsonObject["current_year"] = dayTimeComponent.mCurrentYearBc;
     
     nlohmann::json playerJsonObject;
     playerJsonObject["player_unit_name"] = playerUnitStatsComponent.mStats.mUnitName.GetString();
@@ -190,6 +197,7 @@ void SaveOverworldStateToFile()
         overworldUnitsJsonObject.push_back(unitJsonObject);
     }
     
+    saveFileRoot["overworld_state"] = overworldStateJsonObject;
     saveFileRoot["player"] = playerJsonObject;
     saveFileRoot["overworld_units"] = overworldUnitsJsonObject;
     
@@ -221,6 +229,13 @@ bool TryLoadOverworldStateFromFile()
     // Parse save file
     const auto saveFileJsonRoot = nlohmann::json::parse(fileData);
     auto& world = genesis::ecs::World::GetInstance();
+    auto& dayTimeComponent = world.GetSingletonComponent<OverworldDayTimeSingletonComponent>();
+    
+    // Parse overworld state
+    const auto& overworldStateJsonObject = saveFileJsonRoot["overworld_state"];
+    dayTimeComponent.mTimeDtAccum = overworldStateJsonObject["time_accumulator"].get<float>();
+    dayTimeComponent.mCurrentDay = overworldStateJsonObject["current_day"].get<int>();
+    dayTimeComponent.mCurrentYearBc = overworldStateJsonObject["current_year"].get<int>();
     
     // Parse player data
     const auto& playerJsonObject = saveFileJsonRoot["player"];

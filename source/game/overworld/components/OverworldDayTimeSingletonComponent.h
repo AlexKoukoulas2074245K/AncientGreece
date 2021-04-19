@@ -23,7 +23,7 @@ class OverworldDayTimeSingletonComponent final: public genesis::ecs::IComponent
 {
 public:
     StringId mCurrentPeriod;
-    float mDtAccum     = 0.0f;
+    float mTimeDtAccum = 0.0f;
     int mCurrentDay    = 0;
     int mCurrentYearBc = 0;
     bool mPeriodChangeTick = false;

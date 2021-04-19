@@ -47,7 +47,7 @@ namespace
 
     static const glm::vec3 TIME_DISPLAY_BACKGROUND_POSITION = glm::vec3(-0.69f, -0.89f, 0.01f);
     static const glm::vec3 TIME_DISPLAY_BACKGROUND_SCALE    = glm::vec3(1.1f, 0.3f, 1.0f);
-    static const glm::vec3 DAY_STRING_POSITION              = glm::vec3(-0.93f, -0.84f, 0.0f);
+    static const glm::vec3 DAY_STRING_POSITION              = glm::vec3(-0.91f, -0.84f, 0.0f);
     static const glm::vec3 YEAR_STRING_POSITION             = glm::vec3(-0.63f, -0.84f, 0.0f);
 
     static const tsl::robin_map<StringId, float, StringIdHasher> PERIOD_NAME_TO_X_OFFSET =
@@ -72,7 +72,7 @@ OverworldDayTimeUpdaterSystem::OverworldDayTimeUpdaterSystem()
     dayTimeComponent->mCurrentDay = INIT_DAY;
     dayTimeComponent->mCurrentYearBc = INIT_YEAR_BC;
     dayTimeComponent->mCurrentPeriod = StringId();
-    dayTimeComponent->mDtAccum = 0.0f;
+    dayTimeComponent->mTimeDtAccum = 0.0f;
     
     genesis::ecs::World::GetInstance().SetSingletonComponent<OverworldDayTimeSingletonComponent>(std::move(dayTimeComponent));
 }
@@ -86,15 +86,15 @@ void OverworldDayTimeUpdaterSystem::VUpdate(const float dt, const std::vector<ge
     auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
     
     // Calculate current day time timestamp
-    dayTimeComponent.mDtAccum += DAY_CYCLE_SPEED * dt;
-    const auto currentTimeStamp = std::fmod(dayTimeComponent.mDtAccum, genesis::math::PI * 2.0f);
+    dayTimeComponent.mTimeDtAccum += DAY_CYCLE_SPEED * dt;
+    dayTimeComponent.mTimeDtAccum = std::fmod(dayTimeComponent.mTimeDtAccum, genesis::math::PI * 2.0f);
     
     // Position "sun" depending on current timestamp
-    lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(currentTimeStamp);
-    lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(currentTimeStamp);
+    lightStoreComponent.mLightPositions[0].x = genesis::math::Sinf(dayTimeComponent.mTimeDtAccum);
+    lightStoreComponent.mLightPositions[0].z = genesis::math::Cosf(dayTimeComponent.mTimeDtAccum);
     
     // Get ration to 24 hours
-    const auto dayCycleFactor = (currentTimeStamp/(genesis::math::PI * 2.0f)) * HOURS_IN_DAY;
+    const auto dayCycleFactor = (dayTimeComponent.mTimeDtAccum/(genesis::math::PI * 2.0f)) * HOURS_IN_DAY;
     
     // Decide on day period
     const auto previousPeriod = dayTimeComponent.mCurrentPeriod;
