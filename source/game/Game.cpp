@@ -53,8 +53,10 @@
 #include "../engine/rendering/components/WindowSingletonComponent.h"
 #include "../engine/rendering/utils/FontUtils.h"
 #include "../engine/rendering/utils/LightUtils.h"
-#include "../engine/rendering/utils/MeshUtils.h"
 #include "../engine/rendering/utils/HeightMapUtils.h"
+#include "../engine/rendering/utils/MeshUtils.h"
+#include "../engine/rendering/utils/ParticleUtils.h"
+#include "../engine/rendering/systems/ParticleUpdaterSystem.h"
 #include "../engine/rendering/systems/RenderingSystem.h"
 #include "../engine/resources/ResourceLoadingService.h"
 #include "../engine/scripting/components/ScriptComponent.h"
@@ -113,6 +115,7 @@ void Game::VOnSystemsInit()
     
     world.AddSystem(std::make_unique<scene::SceneUpdaterSystem>());
     world.AddSystem(std::make_unique<genesis::animation::ModelAnimationSystem>(), 0, genesis::ecs::SystemOperationMode::MULTI_THREADED);
+    world.AddSystem(std::make_unique<genesis::rendering::ParticleUpdaterSystem>());
     world.AddSystem(std::make_unique<genesis::rendering::RenderingSystem>());
 }
 
@@ -131,6 +134,7 @@ void Game::VOnGameInit()
     overworld::PopulateOverworldEntities();
 
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 0.5f), 1.0f);
+    genesis::rendering::AddParticleEmitter(genesis::rendering::ParticleEmitterType::SMOKE, "smoke", glm::vec3(0.10f, 0.20f, 0.0f), glm::vec2(2.0f, 3.0f), glm::vec2(-0.01f, 0.01f), glm::vec2(0.0f), 100, 0.01f);
     
     if (!overworld::TryLoadOverworldStateFromFile())
     {
@@ -150,7 +154,6 @@ void Game::VOnGameInit()
         auto position = glm::vec3(0.2f, 0.2f, 0.0f);
         position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
         auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), overworld::GetPlayerEntityName(), position);
-        
         
         const auto partySize = genesis::math::RandomInt(0, 80);
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);

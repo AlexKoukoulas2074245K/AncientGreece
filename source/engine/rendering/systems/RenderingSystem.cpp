@@ -9,6 +9,7 @@
 #include "../components/CameraSingletonComponent.h"
 #include "../components/LightStoreSingletonComponent.h"
 #include "../components/HeightMapComponent.h"
+#include "../components/ParticleEmitterComponent.h"
 #include "../components/RenderableComponent.h"
 #include "../components/RenderingContextSingletonComponent.h"
 #include "../components/ShaderStoreSingletonComponent.h"
@@ -62,6 +63,7 @@ namespace
     static const StringId LIGHT_SPACE_MATRIX_UNIFORM_NAME   = StringId("light_space_matrix");
     static const StringId SHADOW_MAP_TEXTURE_UNIFORM_NAME   = StringId("shadowMap_texture");
     static const StringId SHADOWS_ENABLED_UNIFORM_NAME      = StringId("shadows_enabled");
+    static const StringId PARTICLE_SIZE_UNIFORM_NAME        = StringId("particle_size");
     static const StringId SKELETAL_MODEL_DEPTH_SHADER_NAME  = StringId("skeletal_model_depth");
     static const StringId STATIC_MODEL_DEPTH_SHADER_NAME    = StringId("static_model_depth");
     
@@ -127,7 +129,7 @@ void RenderingSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& 
     {
         DepthRenderingPass(applicableEntities);
     }
-
+    
     FinalRenderingPass(applicableEntities);
     
     // Swap window buffers
@@ -220,6 +222,8 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
                     GL_CHECK(glDrawElementsBaseVertex(GL_TRIANGLES, indexCountPerMesh.at(i), GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * baseIndexPerMesh.at(i)), baseVertexPerMesh.at(i)));
                 }
             }
+            
+            GL_CHECK(glBindVertexArray(0));
         }
     }
 }
@@ -252,11 +256,14 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
         renderingContextComponent.mClearColor.w
     ));
 
+    GL_CHECK(glEnable(GL_DEPTH_TEST));
+    
     // Clear buffers
     GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     
-    // Execute normal 3d model pass and save gui entities
-    tsl::robin_map<RenderableType, std::vector<ecs::EntityId>> mGuiEntityGroups;
+    tsl::robin_map<RenderableType, std::vector<ecs::EntityId>> guiEntityGroups;
+    
+    
     for (const auto& entityId : applicableEntities)
     {
         const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
@@ -270,7 +277,17 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
                 RenderHeightMapInternal(transformComponent, renderableComponent, world.GetComponent<HeightMapComponent>(entityId), cameraComponent, lightStoreComponent, shaderStoreComponent, windowComponent, renderingContextComponent);
                 continue;
             }
-            
+            // Render particle entities
+            else if (world.HasComponent<ParticleEmitterComponent>(entityId))
+            {
+                if (renderingContextComponent.mParticlesEnabled)
+                {
+                    RenderParticleSystem(world.GetComponent<ParticleEmitterComponent>(entityId), transformComponent, renderableComponent, shaderStoreComponent, cameraComponent);
+                }
+                
+                continue;
+            }
+                     
             const auto& currentMesh        = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
 
             // Frustum culling
@@ -298,14 +315,14 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
         }
         else
         {
-            mGuiEntityGroups[renderableComponent.mRenderableType].push_back(entityId);
+            guiEntityGroups[renderableComponent.mRenderableType].push_back(entityId);
         }
     }
     
     // Render 3d texts
-    if (mGuiEntityGroups.count(RenderableType::TEXT_3D_MODEL))
+    if (guiEntityGroups.count(RenderableType::TEXT_3D_MODEL))
     {
-        const auto& text3dEntities = mGuiEntityGroups.at(RenderableType::TEXT_3D_MODEL);
+        const auto& text3dEntities = guiEntityGroups.at(RenderableType::TEXT_3D_MODEL);
         for (const auto& entityId : text3dEntities)
         {
             const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
@@ -345,9 +362,9 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
     GL_CHECK(glDisable(GL_DEPTH_TEST));
     
     // Execute normal gui sprite pass
-    if (mGuiEntityGroups.count(RenderableType::GUI_SPRITE))
+    if (guiEntityGroups.count(RenderableType::GUI_SPRITE))
     {
-        const auto& guiEntities = mGuiEntityGroups.at(RenderableType::GUI_SPRITE);
+        const auto& guiEntities = guiEntityGroups.at(RenderableType::GUI_SPRITE);
         for (const auto& entityId : guiEntities)
         {
             const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
@@ -391,9 +408,9 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
     // Clear depth buffer
     GL_CHECK(glClear(GL_DEPTH_BUFFER_BIT));
     
-    if (mGuiEntityGroups.count(RenderableType::GUI_3D_MODEL))
+    if (guiEntityGroups.count(RenderableType::GUI_3D_MODEL))
     {
-        const auto& gui3dEntities = mGuiEntityGroups.at(RenderableType::GUI_3D_MODEL);
+        const auto& gui3dEntities = guiEntityGroups.at(RenderableType::GUI_3D_MODEL);
         for (const auto& entityId : gui3dEntities)
         {
             const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
@@ -415,6 +432,70 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
 
 ///-----------------------------------------------------------------------------------------------
 
+void RenderingSystem::RenderParticleSystem
+(
+     const ParticleEmitterComponent& particleEmitterComponent,
+     const TransformComponent& entityTransformComponent,
+     const RenderableComponent& entityRenderableComponent,
+     const ShaderStoreSingletonComponent& shaderStoreComponent,
+     const CameraSingletonComponent& cameraComponent
+) const
+{
+    const resources::ShaderResource* currentShader = &shaderStoreComponent.mShaders.at(entityRenderableComponent.mShaderNameId);
+    GL_CHECK(glUseProgram(currentShader->GetProgramId()));
+
+    currentShader->SetMatrix4fv(VIEW_MARIX_UNIFORM_NAME, cameraComponent.mViewMatrix);
+    currentShader->SetMatrix4fv(PROJECTION_MARIX_UNIFORM_NAME, cameraComponent.mProjectionMatrix);
+    currentShader->SetFloat(PARTICLE_SIZE_UNIFORM_NAME, entityTransformComponent.mScale.x);
+    
+    const resources::TextureResource* currentTexture = &resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(entityRenderableComponent.mTextureResourceId);
+    GL_CHECK(glBindTexture(GL_TEXTURE_2D, currentTexture->GetGLTextureId()));
+    
+    GL_CHECK(glBindVertexArray(particleEmitterComponent.mParticleVertexArrayObject));
+    
+    GL_CHECK(glEnableVertexAttribArray(0));
+    GL_CHECK(glEnableVertexAttribArray(1));
+    GL_CHECK(glEnableVertexAttribArray(2));
+    GL_CHECK(glEnableVertexAttribArray(3));
+
+    // update the position buffer
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticlePositionsBuffer));
+    GL_CHECK(glBufferSubData(GL_ARRAY_BUFFER, 0, particleEmitterComponent.mParticlePositions.size() * sizeof(glm::vec3), particleEmitterComponent.mParticlePositions.data()));
+    
+    // update the lifetime buffer
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticleLifetimesBuffer));
+    GL_CHECK(glBufferSubData(GL_ARRAY_BUFFER, 0, particleEmitterComponent.mParticlePositions.size() * sizeof(float), particleEmitterComponent.mParticleLifetimes.data()));
+    
+    // vertex buffer
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER , particleEmitterComponent.mParticleVertexBuffer));
+    GL_CHECK(glVertexAttribPointer(0, 3 , GL_FLOAT, GL_FALSE , 0 , nullptr));
+    
+    // uv buffer
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER , particleEmitterComponent.mParticleUVBuffer));
+    GL_CHECK(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE , 0 , nullptr));
+    
+    // position buffer
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticlePositionsBuffer));
+    GL_CHECK(glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE , 0 , nullptr));
+    GL_CHECK(glVertexAttribDivisor(2, 1));
+    
+    // position buffer
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticleLifetimesBuffer));
+    GL_CHECK(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE , 0 , nullptr));
+    GL_CHECK(glVertexAttribDivisor(3, 1));
+    
+    // draw triangles
+    GL_CHECK(glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleEmitterComponent.mParticlePositions.size()));
+
+    GL_CHECK(glDisableVertexAttribArray(0));
+    GL_CHECK(glDisableVertexAttribArray(1));
+    GL_CHECK(glDisableVertexAttribArray(2));
+    GL_CHECK(glDisableVertexAttribArray(3));
+    GL_CHECK(glBindVertexArray(0));
+}
+                     
+///-----------------------------------------------------------------------------------------------
+                     
 void RenderingSystem::RenderHeightMapInternal
 (
     const TransformComponent& transformComponent,
@@ -547,6 +628,7 @@ void RenderingSystem::RenderHeightMapInternal
     GL_CHECK(glDrawElements(GL_TRIANGLE_STRIP, numIndices, GL_UNSIGNED_INT, 0));
     GL_CHECK(glDisable(GL_PRIMITIVE_RESTART));
     GL_CHECK(glActiveTexture(GL_TEXTURE0));
+    GL_CHECK(glBindVertexArray(0));
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -672,6 +754,8 @@ void RenderingSystem::RenderStringInternal
         
         // Perform draw call
         GL_CHECK(glDrawElements(GL_TRIANGLES, currentMesh->GetIndexCountPerMesh()[0], GL_UNSIGNED_SHORT, (void*)0));
+
+        GL_CHECK(glBindVertexArray(0));
     }
 }
 
@@ -803,6 +887,8 @@ void RenderingSystem::RenderEntityInternal
             GL_CHECK(glDrawElementsBaseVertex(GL_TRIANGLES, indexCountPerMesh.at(i), GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * baseIndexPerMesh.at(i)), baseVertexPerMesh.at(i)));
         }
     }
+    
+    GL_CHECK(glBindVertexArray(0));
 }
 
 ///-----------------------------------------------------------------------------------------------

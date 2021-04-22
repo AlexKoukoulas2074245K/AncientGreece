@@ -37,6 +37,7 @@ namespace rendering
 class CameraSingletonComponent;
 class HeightMapComponent;
 class LightStoreSingletonComponent;
+class ParticleEmitterComponent;
 class RenderableComponent;
 class RenderingContextSingletonComponent;
 class TextStringComponent;
@@ -55,6 +56,15 @@ public:
 private:
     void DepthRenderingPass(const std::vector<ecs::EntityId>& applicableEntities) const;
     void FinalRenderingPass(const std::vector<ecs::EntityId>& applicableEntities) const;
+    
+    void RenderParticleSystem
+    (
+        const ParticleEmitterComponent& particleEmitterComponent,
+        const TransformComponent& entityTransformComponent,
+        const RenderableComponent& entityRenderableComponent,
+        const ShaderStoreSingletonComponent& shaderStoreComponent,
+        const CameraSingletonComponent& cameraComponent
+    ) const;
     
     void RenderHeightMapInternal
     (
@@ -98,7 +108,6 @@ private:
     void CompileAndLoadShaders() const;
 
     std::set<std::string> GetAndFilterShaderNames() const;
-
 };
 
 ///-----------------------------------------------------------------------------------------------

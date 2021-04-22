@@ -44,7 +44,7 @@ namespace
     
     static const StringId GAME_FONT_NAME                       = StringId("ancient_greek_font");
     
-    static const float NAME_PLATE_Z                    = -0.03f;
+    static const float NAME_PLATE_Z                    = -0.032f;
     static const float NAME_PLATE_X_OFFSET_MULTIPLIER  = 1.0/20.0f;
     static const float NAME_PLATE_HEIGHT_MULTIPLIER    = 1.5f;
     static const float NAME_PLATE_WIDTH_MULTIPLIER     = 1.2f;

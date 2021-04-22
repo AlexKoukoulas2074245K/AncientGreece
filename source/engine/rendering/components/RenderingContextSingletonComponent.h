@@ -46,6 +46,7 @@ public:
     glm::vec4 mClearColor             = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
     float mDtAccumulator              = 0.0f;
     bool mShadowsEnabled              = true;
+    bool mParticlesEnabled            = true;
 
     // Previous render call resource ids
     StringId previousShaderNameId             = StringId();

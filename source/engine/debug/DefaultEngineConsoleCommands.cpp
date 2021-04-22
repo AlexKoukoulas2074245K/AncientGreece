@@ -118,6 +118,25 @@ void RegisterDefaultEngineConsoleCommands()
         return debug::ConsoleCommandResult(true);
     });
     
+    debug::RegisterConsoleCommand(StringId("particles"), [](const std::vector<std::string>& commandTextComponents)
+    {
+        static const std::unordered_set<std::string> sAllowedOptions = { "on", "off" };
+
+        const std::string USAGE_STRING = "Usage: particles on|off";
+
+        if (commandTextComponents.size() != 2 || sAllowedOptions.count(StringToLower(commandTextComponents[1])) == 0)
+        {
+            return debug::ConsoleCommandResult(false, USAGE_STRING);
+        }
+
+        const auto& world = ecs::World::GetInstance();
+        auto& renderingContextComponent = world.GetSingletonComponent<rendering::RenderingContextSingletonComponent>();
+
+        renderingContextComponent.mParticlesEnabled = StringToLower(commandTextComponents[1]) == "on";
+
+        return debug::ConsoleCommandResult(true);
+    });
+    
     debug::RegisterConsoleCommand(StringId("move_entity_by"), [](const std::vector<std::string>& commandTextComponents)
     {
         const std::string USAGE_STRING = "Usage: move_entity_by \"entity_name\" dx dy dz";
