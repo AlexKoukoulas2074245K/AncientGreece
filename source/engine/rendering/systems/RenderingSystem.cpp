@@ -281,9 +281,13 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
             if (world.HasComponent<ParticleEmitterComponent>(entityId))
             {
                 particleEntities.push_back(entityId);
-                continue;
             }
                 
+            if (renderableComponent.mMeshResourceIds.size() == 0)
+            {
+                continue;
+            }
+            
             const auto& currentMesh        = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
 
             // Frustum culling
@@ -442,19 +446,19 @@ void RenderingSystem::RenderParticleSystem
 (
      const ParticleEmitterComponent& particleEmitterComponent,
      const TransformComponent&,
-     const RenderableComponent& entityRenderableComponent,
+     const RenderableComponent&,
      const ShaderStoreSingletonComponent& shaderStoreComponent,
      const CameraSingletonComponent& cameraComponent
 ) const
 {
-    const resources::ShaderResource* currentShader = &shaderStoreComponent.mShaders.at(entityRenderableComponent.mShaderNameId);
+    const resources::ShaderResource* currentShader = &shaderStoreComponent.mShaders.at(particleEmitterComponent.mShaderNameId);
     GL_CHECK(glUseProgram(currentShader->GetProgramId()));
 
     currentShader->SetMatrix4fv(VIEW_MARIX_UNIFORM_NAME, cameraComponent.mViewMatrix);
     currentShader->SetMatrix4fv(PROJECTION_MARIX_UNIFORM_NAME, cameraComponent.mProjectionMatrix);
     currentShader->SetFloatVec3(EYE_POSITION_UNIFORM_NAME, cameraComponent.mPosition);
     
-    const resources::TextureResource* currentTexture = &resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(entityRenderableComponent.mTextureResourceId);
+    const resources::TextureResource* currentTexture = &resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(particleEmitterComponent.mParticleTextureResourceId);
     GL_CHECK(glBindTexture(GL_TEXTURE_2D, currentTexture->GetGLTextureId()));
     
     GL_CHECK(glBindVertexArray(particleEmitterComponent.mParticleVertexArrayObject));

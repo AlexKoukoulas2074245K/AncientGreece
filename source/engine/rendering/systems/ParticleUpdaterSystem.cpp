@@ -34,8 +34,12 @@ void ParticleUpdaterSystem::VUpdate(const float dt, const std::vector<ecs::Entit
     auto& world = genesis::ecs::World::GetInstance();
     for (const auto& entityId: entitiesToProcess)
     {
-        const auto& emitterTransformComponent = world.GetComponent<TransformComponent>(entityId);
         auto& particleEmitterComponent = world.GetComponent<ParticleEmitterComponent>(entityId);
+        if (particleEmitterComponent.mAttachedToEntity)
+        {
+            const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
+            particleEmitterComponent.mEmitterOriginPosition = particleEmitterComponent.mEmitterAttachementOffsetPosition + transformComponent.mPosition;
+        }
         
         switch (particleEmitterComponent.mEmitterType)
         {
@@ -49,11 +53,24 @@ void ParticleUpdaterSystem::VUpdate(const float dt, const std::vector<ecs::Entit
                     // if the lifetime is below 0 respawn the particle
                     if (particleEmitterComponent.mParticleLifetimes[i] <= 0.0f )
                     {
-                        SpawnParticleAtIndex(static_cast<size_t>(i), emitterTransformComponent, particleEmitterComponent);
+                        SpawnParticleAtIndex(static_cast<size_t>(i), particleEmitterComponent);
                     }
 
-                    // move the particle down depending on the delta time
+                    // move the particle up depending on the delta time
                     particleEmitterComponent.mParticlePositions[i] += glm::vec3(0.0f, 0.0f, -dt/20.0f);
+                }
+            } break;
+                
+            case ParticleEmitterType::BLOOD_DROP:
+            {
+                for (size_t i = 0U; i < particleEmitterComponent.mParticlePositions.size(); ++i)
+                {
+                    // subtract from the particles lifetime
+                    particleEmitterComponent.mParticleLifetimes[i] -= dt;
+
+                    // move the particle down depending on the delta time
+                    particleEmitterComponent.mParticlePositions[i] += particleEmitterComponent.mParticleDirections[i] * dt/40.0f;
+                    particleEmitterComponent.mParticlePositions[i].z += dt/20.0f;
                 }
             } break;
         }
@@ -78,16 +95,19 @@ void ParticleUpdaterSystem::SortParticles(ParticleEmitterComponent& particleEmit
     
     // Create corrected vectors
     std::vector<glm::vec3> correctedPositions(particleCount);
+    std::vector<glm::vec3> correctedDirections(particleCount);
     std::vector<float> correctedLifetimes(particleCount);
     std::vector<float> correctedSizes(particleCount);
     for (size_t i = 0U; i < particleCount; ++i)
     {
-        correctedPositions[i] = particleEmitterComponent.mParticlePositions[indexVec[i]];
-        correctedLifetimes[i] = particleEmitterComponent.mParticleLifetimes[indexVec[i]];
-        correctedSizes[i]     = particleEmitterComponent.mParticleSizes[indexVec[i]];
+        correctedPositions[i]  = particleEmitterComponent.mParticlePositions[indexVec[i]];
+        correctedDirections[i] = particleEmitterComponent.mParticleDirections[indexVec[i]];
+        correctedLifetimes[i]  = particleEmitterComponent.mParticleLifetimes[indexVec[i]];
+        correctedSizes[i]      = particleEmitterComponent.mParticleSizes[indexVec[i]];
     }
     
     particleEmitterComponent.mParticlePositions = std::move(correctedPositions);
+    particleEmitterComponent.mParticleDirections = std::move(correctedDirections);
     particleEmitterComponent.mParticleLifetimes = std::move(correctedLifetimes);
     particleEmitterComponent.mParticleSizes     = std::move(correctedSizes);
 }

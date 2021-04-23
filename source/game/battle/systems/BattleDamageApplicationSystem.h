@@ -32,6 +32,10 @@ public:
     BattleDamageApplicationSystem();
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
+
+private:
+    void AddBloodDropsToUnit(const genesis::ecs::EntityId unitEntityId) const;
+    
 };
 
 ///-----------------------------------------------------------------------------------------------

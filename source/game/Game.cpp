@@ -134,7 +134,6 @@ void Game::VOnGameInit()
     overworld::PopulateOverworldEntities();
 
     genesis::rendering::AddLightSource(glm::vec3(0.0f, 0.0f, 0.5f), 1.0f);
-    genesis::rendering::AddParticleEmitter(genesis::rendering::ParticleEmitterType::SMOKE, "smoke", glm::vec3(0.0f, 0.0f, -0.01f), glm::vec2(0.5f, 1.0f), glm::vec2(-0.01f, 0.01f), glm::vec2(-0.01, 0.01f), glm::vec2(0.005f, 0.02f), 500);
     
     if (!overworld::TryLoadOverworldStateFromFile())
     {

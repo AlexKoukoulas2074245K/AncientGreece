@@ -46,7 +46,14 @@ namespace
 
     static const tsl::robin_map<ParticleEmitterType, StringId> PARTICLE_TYPE_TO_SHADER_NAME =
     {
-        { ParticleEmitterType::SMOKE, StringId("particle_smoke") }
+        { ParticleEmitterType::SMOKE, StringId("particle_smoke") },
+        { ParticleEmitterType::BLOOD_DROP, StringId("particle_blood_drop") }
+    };
+
+    static const tsl::robin_map<ParticleEmitterType, StringId> PARTICLE_TYPE_TO_TEXTURE_NAME =
+    {
+        { ParticleEmitterType::SMOKE, StringId("smoke") },
+        { ParticleEmitterType::BLOOD_DROP, StringId("blood_drop") }
     };
 }
 
@@ -55,7 +62,6 @@ namespace
 void SpawnParticleAtIndex
 (
     const size_t index,
-    const TransformComponent& transformComponent,
     ParticleEmitterComponent& emitterComponent
 )
 {
@@ -65,10 +71,32 @@ void SpawnParticleAtIndex
     const auto size = genesis::math::RandomFloat(emitterComponent.mParticleSizeRange.s, emitterComponent.mParticleSizeRange.t);
     
     emitterComponent.mParticleLifetimes[index] = lifeTime;
-    emitterComponent.mParticlePositions[index] = transformComponent.mPosition;
+    emitterComponent.mParticlePositions[index] = emitterComponent.mEmitterOriginPosition;
     emitterComponent.mParticlePositions[index].x += xOffset;
     emitterComponent.mParticlePositions[index].y += yOffset;
+    emitterComponent.mParticleDirections[index] = glm::normalize(glm::vec3(xOffset, yOffset, 0.0f));
     emitterComponent.mParticleSizes[index] = size;
+}
+
+///------------------------------------------------------------------------------------------------
+
+void SpawnParticlesAtFirstAvailableSlot
+(
+    const int particlesToSpawnCount,
+    ParticleEmitterComponent& emitterComponent
+)
+{
+    auto particlesToSpawn = particlesToSpawnCount;
+    auto particleCount = emitterComponent.mParticlePositions.size();
+    
+    for (size_t i = 0; i < particleCount && particlesToSpawn > 0; ++i)
+    {
+        if (emitterComponent.mParticleLifetimes[i] <= 0.0f)
+        {
+            SpawnParticleAtIndex(i, emitterComponent);
+            particlesToSpawn--;
+        }
+    }
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -76,20 +104,21 @@ void SpawnParticleAtIndex
 genesis::ecs::EntityId AddParticleEmitter
 (
     const ParticleEmitterType emitterType,
-    const std::string& particleTextureName,
     const glm::vec3& emitterOriginPosition,
     const glm::vec2& particleLifetimeRange,
     const glm::vec2& particlePositionXOffsetRange,
     const glm::vec2& particlePositionYOffsetRange,
     const glm::vec2& particleSizeRange,
-    const size_t particleCount
+    const size_t particleCount,
+    const bool preFillParticles,
+    const ecs::EntityId parentEntityIdToAttachTo /* ecs::NULL_ENTITY_ID */
 )
 {
-    auto transformComponent = std::make_unique<TransformComponent>();
-    transformComponent->mPosition = emitterOriginPosition;
+    auto& world = ecs::World::GetInstance();
     
     auto emitterComponent = std::make_unique<ParticleEmitterComponent>();
     emitterComponent->mParticlePositions.resize(particleCount);
+    emitterComponent->mParticleDirections.resize(particleCount);
     emitterComponent->mParticleLifetimes.resize(particleCount);
     emitterComponent->mParticleSizes.resize(particleCount);
     emitterComponent->mEmitterType = emitterType;
@@ -98,10 +127,22 @@ genesis::ecs::EntityId AddParticleEmitter
     emitterComponent->mParticlePositionXOffsetRange = particlePositionXOffsetRange;
     emitterComponent->mParticlePositionYOffsetRange = particlePositionYOffsetRange;
     emitterComponent->mParticleSizeRange = particleSizeRange;
+    emitterComponent->mParticleTextureResourceId = genesis::resources::ResourceLoadingService::GetInstance().LoadResource(genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + PARTICLE_TYPE_TO_TEXTURE_NAME.at(emitterType).GetString() + ".png");
+    emitterComponent->mShaderNameId = PARTICLE_TYPE_TO_SHADER_NAME.at(emitterType);
+    emitterComponent->mAttachedToEntity = parentEntityIdToAttachTo != genesis::ecs::NULL_ENTITY_ID;
+    
+    if (emitterComponent->mAttachedToEntity)
+    {
+        emitterComponent->mEmitterAttachementOffsetPosition = emitterOriginPosition - world.GetComponent<TransformComponent>(parentEntityIdToAttachTo).mPosition;
+    }
     
     for (size_t i = 0U; i < particleCount; ++i)
     {
-        SpawnParticleAtIndex(i, *transformComponent, *emitterComponent);
+        emitterComponent->mParticleLifetimes[i] = 0.0f;
+        if (preFillParticles)
+        {
+            SpawnParticleAtIndex(i, *emitterComponent);
+        }
     }
  
     GL_CHECK(glGenVertexArrays(1, &emitterComponent->mParticleVertexArrayObject));
@@ -130,16 +171,15 @@ genesis::ecs::EntityId AddParticleEmitter
     
     GL_CHECK(glBindVertexArray(emitterComponent->mParticleVertexArrayObject));
     
-    auto renderableComponent = std::make_unique<RenderableComponent>();
-    renderableComponent->mTextureResourceId = genesis::resources::ResourceLoadingService::GetInstance().LoadResource(genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + particleTextureName + ".png");
-    renderableComponent->mShaderNameId = PARTICLE_TYPE_TO_SHADER_NAME.at(emitterType);
+    auto entity = parentEntityIdToAttachTo;
+    if (entity == genesis::ecs::NULL_ENTITY_ID)
+    {
+        entity = world.CreateEntity();
+        world.AddComponent<TransformComponent>(entity, std::make_unique<TransformComponent>());
+        world.AddComponent<RenderableComponent>(entity, std::make_unique<RenderableComponent>());
+    }
     
-    auto& world = ecs::World::GetInstance();
-    
-    auto entity = world.CreateEntity();
     world.AddComponent<ParticleEmitterComponent>(entity, std::move(emitterComponent));
-    world.AddComponent<TransformComponent>(entity, std::move(transformComponent));
-    world.AddComponent<RenderableComponent>(entity, std::move(renderableComponent));
     
     return entity;
 }

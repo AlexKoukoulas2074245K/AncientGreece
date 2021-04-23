@@ -31,13 +31,10 @@ using GLuint = unsigned int;
 
 ///-----------------------------------------------------------------------------------------------
 
-//static constexpr int PARTICLE_COUNT = 1000;
-
-///-----------------------------------------------------------------------------------------------
-
 enum class ParticleEmitterType
 {
-    SMOKE
+    SMOKE,
+    BLOOD_DROP
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -46,7 +43,9 @@ class ParticleEmitterComponent final: public ecs::IComponent
 {
 public:
     glm::vec3 mEmitterOriginPosition;
+    glm::vec3 mEmitterAttachementOffsetPosition;
     std::vector<glm::vec3> mParticlePositions;
+    std::vector<glm::vec3> mParticleDirections;
     std::vector<float> mParticleLifetimes;
     std::vector<float> mParticleSizes;
     
@@ -55,6 +54,7 @@ public:
     glm::vec2 mParticlePositionYOffsetRange;
     glm::vec2 mParticleSizeRange;
     
+    GLuint mParticleTextureResourceId;
     GLuint mParticleVertexArrayObject;
     GLuint mParticleVertexBuffer;
     GLuint mParticleUVBuffer;
@@ -62,7 +62,11 @@ public:
     GLuint mParticleLifetimesBuffer;
     GLuint mParticleSizesBuffer;
     
+    StringId mShaderNameId;
+    
     ParticleEmitterType mEmitterType;
+    
+    bool mAttachedToEntity;
 };
 
 ///-----------------------------------------------------------------------------------------------
