@@ -4,13 +4,28 @@ layout(location = 0) in vec3 vertex_position;
 layout(location = 1) in vec2 uv;
 layout(location = 2) in vec3 position;
 layout(location = 3) in float lifetime;
+layout(location = 4) in float size;
 
 uniform mat4 view;
 uniform mat4 proj;
-uniform float particle_size;
+uniform vec3 eye_pos;
 
 out float frag_lifetime;
 out vec2 uv_frag;
+
+
+mat4 rotationMatrix(vec3 axis, float angle) {
+    axis = normalize(axis);
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0 - c;
+    
+    return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+                0.0,                                0.0,                                0.0,                                1.0);
+}
+
 
 void main()
 {
@@ -18,20 +33,15 @@ void main()
     
     vec3 frag_unprojected_pos = vec3
     (
-    	(vertex_position.x * particle_size) + position.x,
-    	(vertex_position.y * particle_size) + position.y,
-    	(vertex_position.z * particle_size) + position.z
+    	(vertex_position.x * size) + position.x,
+    	(vertex_position.y * size) + position.y,
+    	(vertex_position.z * size) + position.z
     );
 
-    
-    mat4 particle_view_mat = view;
-    particle_view_mat[0] = vec4(1.0f, 0.0f, 0.0f, 0.0f);
-    particle_view_mat[1] = vec4(0.0f, 1.0f, 0.0f, 0.0f);
-    particle_view_mat[2] = vec4(0.0f, 0.0f, 1.0f, 0.0f);
-    
-    //mat4 particle_view_mat = view;
+    vec3 vec_to_cam = eye_pos - position;
+    mat4 particle_rot_matrix = rotationMatrix(vec3(0.0f, 0.0f, 1.0f), atan(vec_to_cam.x, vec_to_cam.y));
 
     frag_lifetime = lifetime;
-    gl_Position = proj * particle_view_mat * vec4(frag_unprojected_pos, 1.0f);
+    gl_Position = proj * view * particle_rot_matrix * vec4(frag_unprojected_pos, 1.0f);
 
 }

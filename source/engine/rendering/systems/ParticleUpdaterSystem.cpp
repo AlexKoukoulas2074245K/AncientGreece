@@ -73,20 +73,23 @@ void ParticleUpdaterSystem::SortParticles(ParticleEmitterComponent& particleEmit
     std::iota(indexVec.begin(), indexVec.end(), 0);
     std::sort(indexVec.begin(), indexVec.end(), [&](const size_t i, const size_t j)
     {
-        return particleEmitterComponent.mParticlePositions[i].z > particleEmitterComponent.mParticlePositions[j].z;
+        return particleEmitterComponent.mParticlePositions[i].y < particleEmitterComponent.mParticlePositions[j].y;
     });
     
     // Create corrected vectors
     std::vector<glm::vec3> correctedPositions(particleCount);
     std::vector<float> correctedLifetimes(particleCount);
+    std::vector<float> correctedSizes(particleCount);
     for (size_t i = 0U; i < particleCount; ++i)
     {
         correctedPositions[i] = particleEmitterComponent.mParticlePositions[indexVec[i]];
         correctedLifetimes[i] = particleEmitterComponent.mParticleLifetimes[indexVec[i]];
+        correctedSizes[i]     = particleEmitterComponent.mParticleSizes[indexVec[i]];
     }
     
     particleEmitterComponent.mParticlePositions = std::move(correctedPositions);
     particleEmitterComponent.mParticleLifetimes = std::move(correctedLifetimes);
+    particleEmitterComponent.mParticleSizes     = std::move(correctedSizes);
 }
 
 ///-----------------------------------------------------------------------------------------------

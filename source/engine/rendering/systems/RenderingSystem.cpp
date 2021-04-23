@@ -63,7 +63,6 @@ namespace
     static const StringId LIGHT_SPACE_MATRIX_UNIFORM_NAME   = StringId("light_space_matrix");
     static const StringId SHADOW_MAP_TEXTURE_UNIFORM_NAME   = StringId("shadowMap_texture");
     static const StringId SHADOWS_ENABLED_UNIFORM_NAME      = StringId("shadows_enabled");
-    static const StringId PARTICLE_SIZE_UNIFORM_NAME        = StringId("particle_size");
     static const StringId SKELETAL_MODEL_DEPTH_SHADER_NAME  = StringId("skeletal_model_depth");
     static const StringId STATIC_MODEL_DEPTH_SHADER_NAME    = StringId("static_model_depth");
     
@@ -262,7 +261,7 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
     GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     
     tsl::robin_map<RenderableType, std::vector<ecs::EntityId>> guiEntityGroups;
-    
+    std::vector<ecs::EntityId> particleEntities;
     
     for (const auto& entityId : applicableEntities)
     {
@@ -277,17 +276,14 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
                 RenderHeightMapInternal(transformComponent, renderableComponent, world.GetComponent<HeightMapComponent>(entityId), cameraComponent, lightStoreComponent, shaderStoreComponent, windowComponent, renderingContextComponent);
                 continue;
             }
-            // Render particle entities
-            else if (world.HasComponent<ParticleEmitterComponent>(entityId))
+            
+            // Save particle entities
+            if (world.HasComponent<ParticleEmitterComponent>(entityId))
             {
-                if (renderingContextComponent.mParticlesEnabled)
-                {
-                    RenderParticleSystem(world.GetComponent<ParticleEmitterComponent>(entityId), transformComponent, renderableComponent, shaderStoreComponent, cameraComponent);
-                }
-                
+                particleEntities.push_back(entityId);
                 continue;
             }
-                     
+                
             const auto& currentMesh        = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
 
             // Frustum culling
@@ -316,6 +312,16 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
         else
         {
             guiEntityGroups[renderableComponent.mRenderableType].push_back(entityId);
+        }
+    }
+    
+    // Render particles
+    for (const auto& entityId: particleEntities)
+    {
+        // Render particle entities
+        if (renderingContextComponent.mParticlesEnabled)
+        {
+            RenderParticleSystem(world.GetComponent<ParticleEmitterComponent>(entityId), world.GetComponent<TransformComponent>(entityId), world.GetComponent<RenderableComponent>(entityId), shaderStoreComponent, cameraComponent);
         }
     }
     
@@ -435,7 +441,7 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
 void RenderingSystem::RenderParticleSystem
 (
      const ParticleEmitterComponent& particleEmitterComponent,
-     const TransformComponent& entityTransformComponent,
+     const TransformComponent&,
      const RenderableComponent& entityRenderableComponent,
      const ShaderStoreSingletonComponent& shaderStoreComponent,
      const CameraSingletonComponent& cameraComponent
@@ -446,7 +452,7 @@ void RenderingSystem::RenderParticleSystem
 
     currentShader->SetMatrix4fv(VIEW_MARIX_UNIFORM_NAME, cameraComponent.mViewMatrix);
     currentShader->SetMatrix4fv(PROJECTION_MARIX_UNIFORM_NAME, cameraComponent.mProjectionMatrix);
-    currentShader->SetFloat(PARTICLE_SIZE_UNIFORM_NAME, entityTransformComponent.mScale.x);
+    currentShader->SetFloatVec3(EYE_POSITION_UNIFORM_NAME, cameraComponent.mPosition);
     
     const resources::TextureResource* currentTexture = &resources::ResourceLoadingService::GetInstance().GetResource<resources::TextureResource>(entityRenderableComponent.mTextureResourceId);
     GL_CHECK(glBindTexture(GL_TEXTURE_2D, currentTexture->GetGLTextureId()));
@@ -457,6 +463,7 @@ void RenderingSystem::RenderParticleSystem
     GL_CHECK(glEnableVertexAttribArray(1));
     GL_CHECK(glEnableVertexAttribArray(2));
     GL_CHECK(glEnableVertexAttribArray(3));
+    GL_CHECK(glEnableVertexAttribArray(4));
 
     // update the position buffer
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticlePositionsBuffer));
@@ -465,6 +472,10 @@ void RenderingSystem::RenderParticleSystem
     // update the lifetime buffer
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticleLifetimesBuffer));
     GL_CHECK(glBufferSubData(GL_ARRAY_BUFFER, 0, particleEmitterComponent.mParticlePositions.size() * sizeof(float), particleEmitterComponent.mParticleLifetimes.data()));
+    
+    // update the scale buffer
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticleSizesBuffer));
+    GL_CHECK(glBufferSubData(GL_ARRAY_BUFFER, 0, particleEmitterComponent.mParticleSizes.size() * sizeof(float), particleEmitterComponent.mParticleSizes.data()));
     
     // vertex buffer
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER , particleEmitterComponent.mParticleVertexBuffer));
@@ -479,10 +490,15 @@ void RenderingSystem::RenderParticleSystem
     GL_CHECK(glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE , 0 , nullptr));
     GL_CHECK(glVertexAttribDivisor(2, 1));
     
-    // position buffer
+    // lifetime buffer
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticleLifetimesBuffer));
     GL_CHECK(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE , 0 , nullptr));
     GL_CHECK(glVertexAttribDivisor(3, 1));
+    
+    // size buffer
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, particleEmitterComponent.mParticleSizesBuffer));
+    GL_CHECK(glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE , 0 , nullptr));
+    GL_CHECK(glVertexAttribDivisor(4, 1));
     
     // draw triangles
     GL_CHECK(glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleEmitterComponent.mParticlePositions.size()));
@@ -491,6 +507,8 @@ void RenderingSystem::RenderParticleSystem
     GL_CHECK(glDisableVertexAttribArray(1));
     GL_CHECK(glDisableVertexAttribArray(2));
     GL_CHECK(glDisableVertexAttribArray(3));
+    GL_CHECK(glDisableVertexAttribArray(4));
+    
     GL_CHECK(glBindVertexArray(0));
 }
                      

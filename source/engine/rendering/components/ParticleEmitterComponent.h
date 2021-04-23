@@ -48,16 +48,19 @@ public:
     glm::vec3 mEmitterOriginPosition;
     std::vector<glm::vec3> mParticlePositions;
     std::vector<float> mParticleLifetimes;
+    std::vector<float> mParticleSizes;
     
     glm::vec2 mParticleLifetimeRange;
     glm::vec2 mParticlePositionXOffsetRange;
     glm::vec2 mParticlePositionYOffsetRange;
+    glm::vec2 mParticleSizeRange;
     
     GLuint mParticleVertexArrayObject;
     GLuint mParticleVertexBuffer;
     GLuint mParticleUVBuffer;
     GLuint mParticlePositionsBuffer;
     GLuint mParticleLifetimesBuffer;
+    GLuint mParticleSizesBuffer;
     
     ParticleEmitterType mEmitterType;
 };

@@ -32,10 +32,9 @@ namespace
     {
         0.0f, 0.0f, 0.0f,
         1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, 0.0f
+        0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f
     };
-    
 
     static const std::vector<float> PARTICLE_UVS =
     {
@@ -63,11 +62,13 @@ void SpawnParticleAtIndex
     const auto lifeTime = genesis::math::RandomFloat(emitterComponent.mParticleLifetimeRange.s, emitterComponent.mParticleLifetimeRange.t);
     const auto xOffset = genesis::math::RandomFloat(emitterComponent.mParticlePositionXOffsetRange.s, emitterComponent.mParticlePositionXOffsetRange.t);
     const auto yOffset = genesis::math::RandomFloat(emitterComponent.mParticlePositionYOffsetRange.s, emitterComponent.mParticlePositionYOffsetRange.t);
+    const auto size = genesis::math::RandomFloat(emitterComponent.mParticleSizeRange.s, emitterComponent.mParticleSizeRange.t);
     
     emitterComponent.mParticleLifetimes[index] = lifeTime;
     emitterComponent.mParticlePositions[index] = transformComponent.mPosition;
     emitterComponent.mParticlePositions[index].x += xOffset;
     emitterComponent.mParticlePositions[index].y += yOffset;
+    emitterComponent.mParticleSizes[index] = size;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -80,22 +81,23 @@ genesis::ecs::EntityId AddParticleEmitter
     const glm::vec2& particleLifetimeRange,
     const glm::vec2& particlePositionXOffsetRange,
     const glm::vec2& particlePositionYOffsetRange,
-    const size_t particleCount,
-    const float particleSize
+    const glm::vec2& particleSizeRange,
+    const size_t particleCount
 )
 {
     auto transformComponent = std::make_unique<TransformComponent>();
     transformComponent->mPosition = emitterOriginPosition;
-    transformComponent->mScale = glm::vec3(particleSize, particleSize, particleSize);
     
     auto emitterComponent = std::make_unique<ParticleEmitterComponent>();
     emitterComponent->mParticlePositions.resize(particleCount);
     emitterComponent->mParticleLifetimes.resize(particleCount);
+    emitterComponent->mParticleSizes.resize(particleCount);
     emitterComponent->mEmitterType = emitterType;
     emitterComponent->mEmitterOriginPosition = emitterOriginPosition;
     emitterComponent->mParticleLifetimeRange = particleLifetimeRange;
     emitterComponent->mParticlePositionXOffsetRange = particlePositionXOffsetRange;
     emitterComponent->mParticlePositionYOffsetRange = particlePositionYOffsetRange;
+    emitterComponent->mParticleSizeRange = particleSizeRange;
     
     for (size_t i = 0U; i < particleCount; ++i)
     {
@@ -107,6 +109,7 @@ genesis::ecs::EntityId AddParticleEmitter
     GL_CHECK(glGenBuffers(1, &emitterComponent->mParticleUVBuffer));
     GL_CHECK(glGenBuffers(1, &emitterComponent->mParticlePositionsBuffer));
     GL_CHECK(glGenBuffers(1, &emitterComponent->mParticleLifetimesBuffer));
+    GL_CHECK(glGenBuffers(1, &emitterComponent->mParticleSizesBuffer));
     
     GL_CHECK(glBindVertexArray(emitterComponent->mParticleVertexArrayObject));
     
@@ -121,6 +124,9 @@ genesis::ecs::EntityId AddParticleEmitter
     
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, emitterComponent->mParticleLifetimesBuffer));
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, particleCount * sizeof(float), emitterComponent->mParticleLifetimes.data(), GL_DYNAMIC_DRAW));
+    
+    GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, emitterComponent->mParticleSizesBuffer));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, particleCount * sizeof(float), emitterComponent->mParticleSizes.data(), GL_DYNAMIC_DRAW));
     
     GL_CHECK(glBindVertexArray(emitterComponent->mParticleVertexArrayObject));
     
