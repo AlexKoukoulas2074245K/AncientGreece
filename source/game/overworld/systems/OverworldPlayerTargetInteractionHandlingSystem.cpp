@@ -53,6 +53,7 @@ namespace
     static const StringId CITY_STATE_GARISSON_RED_DS_KEY   = StringId("city_state_garisson_red");
     static const StringId CITY_STATE_GARISSON_GREEN_DS_KEY = StringId("city_state_garisson_green");
     static const StringId CITY_STATE_GARISSON_BLUE_DS_KEY  = StringId("city_state_garisson_blue");
+    static const StringId CITY_STATE_RULER_NAME_DS_KEY     = StringId("city_state_ruler");
     static const StringId CITY_STATE_DESCRIPTION_DS_KEY    = StringId("city_state_description");
 
     static const int UNIT_INTERACTION_PARTY_LINES_COUNT = 10;
@@ -67,9 +68,10 @@ OverworldPlayerTargetInteractionHandlingSystem::OverworldPlayerTargetInteraction
 
 ///-----------------------------------------------------------------------------------------------
 
-void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
+void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const std::vector<genesis::ecs::EntityId>& entities) const
 {
     auto& world = genesis::ecs::World::GetInstance();
+    const auto entitiesToProcess = entities;
     
     for (const auto entityId: entitiesToProcess)
     {
@@ -138,6 +140,7 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
                 WriteValue(CITY_STATE_GARISSON_RED_DS_KEY, std::to_string(garissonColor.mRed));
                 WriteValue(CITY_STATE_GARISSON_GREEN_DS_KEY, std::to_string(garissonColor.mGreen));
                 WriteValue(CITY_STATE_GARISSON_BLUE_DS_KEY, std::to_string(garissonColor.mBlue));
+                WriteValue(CITY_STATE_RULER_NAME_DS_KEY, cityStateInfo.mRuler.GetString());
                 WriteValue(CITY_STATE_DESCRIPTION_DS_KEY, cityStateInfo.mDescription);
                 view::QueueView(CITY_STATE_PREVIEW_VIEW_NAME);
             }

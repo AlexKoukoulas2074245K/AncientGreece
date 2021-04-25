@@ -12,7 +12,7 @@
 
 #include "../../engine/ECS.h"
 
-#include <tsl/robin_map.h>
+#include <map>
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ enum class BattleResult
 class BattleStateSingletonComponent final: public genesis::ecs::IComponent
 {
 public:
-    tsl::robin_map<StringId, tsl::robin_map<StringId, int, StringIdHasher>, StringIdHasher> mLeaderNameToCasualtiesMap;
+    std::map<StringId, std::map<StringId, int, StringIdStdMapComparator>, StringIdStdMapComparator> mLeaderNameToCasualtiesMap;
     BattleState mBattleState;
     BattleResult mBattleResult;
     float mCelebrationTimer;

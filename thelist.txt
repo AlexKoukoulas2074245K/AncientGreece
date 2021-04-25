@@ -1,3 +1,4 @@
 * City state coins
-* Dynamic day cycle system
-* Celebration anim
+* Unit Dialog
+* Unit AI
+* Neutral Live Battles

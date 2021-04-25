@@ -11,6 +11,7 @@
 #include "../../components/CollidableComponent.h"
 #include "../../components/CityStateInfoSingletonComponent.h"
 #include "../../components/UnitStatsComponent.h"
+#include "../../utils/CityStateInfoUtils.h"
 #include "../../utils/UnitFactoryUtils.h"
 #include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/ECS.h"
@@ -142,6 +143,7 @@ void SaveOverworldStateToFile()
     const auto& playerUnitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
     const auto& playerTransformComponent = world.GetComponent<genesis::TransformComponent>(playerEntity);
     const auto& dayTimeComponent = world.GetSingletonComponent<OverworldDayTimeSingletonComponent>();
+    const auto& cityStateInfoComponent = world.GetSingletonComponent<CityStateInfoSingletonComponent>();
     
     nlohmann::json overworldStateJsonObject;
     overworldStateJsonObject["time_accumulator"] = dayTimeComponent.mTimeDtAccum;
@@ -197,9 +199,22 @@ void SaveOverworldStateToFile()
         overworldUnitsJsonObject.push_back(unitJsonObject);
     }
     
+    nlohmann::json cityStatesJsonObject;
+    for (const auto& entry: cityStateInfoComponent.mCityStateNameToInfo)
+    {
+        nlohmann::json cityStateInfoJsonObject;
+        cityStateInfoJsonObject["name"] = entry.first.GetString();
+        cityStateInfoJsonObject["renown"] = entry.second.mRenown;
+        cityStateInfoJsonObject["garisson"] = entry.second.mGarisson;
+        cityStateInfoJsonObject["ruler"] = entry.second.mRuler.GetString();
+        
+        cityStatesJsonObject.push_back(cityStateInfoJsonObject);
+    }
+    
     saveFileRoot["overworld_state"] = overworldStateJsonObject;
     saveFileRoot["player"] = playerJsonObject;
     saveFileRoot["overworld_units"] = overworldUnitsJsonObject;
+    saveFileRoot["city_states_info"] = cityStatesJsonObject;
     
     std::ofstream saveFile(SAVE_FILE_PATH);
     saveFile << saveFileRoot.dump(4);
@@ -287,6 +302,17 @@ bool TryLoadOverworldStateFromFile()
         {
             unitStatsComponent.mParty.push_back(GetUnitBaseStats(StringId(partyEntry.get<std::string>())));
         }
+    }
+    
+    // Parse city state changes
+    for (const auto& cityStateInfoJsonObject: saveFileJsonRoot["city_states_info"])
+    {
+        const auto cityStateName = StringId(cityStateInfoJsonObject["name"].get<std::string>());
+        auto& cityStateInfo = GetCityStateInfo(cityStateName);
+        
+        cityStateInfo.mGarisson = cityStateInfoJsonObject["garisson"].get<int>();
+        cityStateInfo.mRenown   = cityStateInfoJsonObject["renown"].get<int>();
+        cityStateInfo.mRuler    = StringId(cityStateInfoJsonObject["ruler"].get<std::string>());
     }
     
     return true;

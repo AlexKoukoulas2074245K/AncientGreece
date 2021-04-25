@@ -19,6 +19,7 @@
 
 struct CityStateInfo
 {
+    StringId mRuler;
     std::string mDescription;
     glm::vec3 mPosition;
     glm::vec3 mRotation;

@@ -15,6 +15,7 @@
 #include "battle/systems/BattleEndHandlingSystem.h"
 #include "battle/systems/BattleMovementControllerSystem.h"
 #include "battle/systems/BattleTargetAcquisitionSystem.h"
+#include "components/CityStateInfoSingletonComponent.h"
 #include "components/CollidableComponent.h"
 #include "components/UnitStatsComponent.h"
 #include "overworld/components/OverworldTargetComponent.h"
@@ -150,7 +151,7 @@ void Game::VOnGameInit()
         };
         
         const auto mapEntity = overworld::GetMapEntity();
-        auto position = glm::vec3(0.2f, 0.2f, 0.0f);
+        auto position = glm::vec3(0.08f, -0.08f, 0.0f);
         position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
         auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), overworld::GetPlayerEntityName(), position);
         
@@ -181,6 +182,38 @@ void Game::VOnGameInit()
                 unitStatsComponent.mParty.push_back(GetUnitBaseStats(unitTypeRng));
             }
         }
+        
+        auto rulersPool = world.FindAllEntitiesWithName(overworld::GetGenericOverworldUnitEntityName());
+        rulersPool.push_back(playerEntity);
+        std::sort(rulersPool.begin(), rulersPool.end(), [&world](const genesis::ecs::EntityId& lhs, const genesis::ecs::EntityId& rhs)
+        {
+            auto& lhsUnitStatsComponent = world.GetComponent<UnitStatsComponent>(lhs);
+            auto& rhsUnitStatsComponent = world.GetComponent<UnitStatsComponent>(rhs);
+            
+            return lhsUnitStatsComponent.mParty.size() > rhsUnitStatsComponent.mParty.size();
+        });
+            
+        auto& cityStateInfoComponent = world.GetSingletonComponent<CityStateInfoSingletonComponent>();
+        std::vector<StringId> cityStateNames;
+        for (const auto& entry: cityStateInfoComponent.mCityStateNameToInfo)
+        {
+            cityStateNames.push_back(entry.first);
+        }
+        
+        std::sort(cityStateNames.begin(), cityStateNames.end(), [](const StringId& lhs, const StringId& rhs)
+        {
+            return GetCityStateInfo(lhs).mRenown > GetCityStateInfo(rhs).mRenown;
+        });
+        
+        for (auto i = 0U; i < cityStateNames.size(); ++i)
+        {
+            auto rulerIndex = i >= rulersPool.size() ? 0 : i;
+            auto rulerName = world.GetComponent<UnitStatsComponent>(rulersPool[rulerIndex]).mStats.mUnitName;
+            GetCityStateInfo(cityStateNames[i]).mRuler = rulerName;
+        }
+        
+        static int a = 2;
+        a++;
     }
     
     overworld::PrepareOverworldCamera();
