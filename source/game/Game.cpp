@@ -378,7 +378,7 @@ void Game::RegisterConsoleCommands() const
 
 void Game::LoadGameFonts() const
 {
-    genesis::rendering::LoadFont(StringId("ancient_greek_font"), 16, 16);
+    genesis::rendering::LoadFont(StringId("game_font"), 16, 16);
 }
 
 ///------------------------------------------------------------------------------------------------

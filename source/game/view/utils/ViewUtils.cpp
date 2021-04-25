@@ -52,7 +52,7 @@ namespace
     static const StringId GUI_SPRITE_SHADER_NAME         = StringId("default_gui");
     static const StringId GUI_MODEL_SHADER_NAME          = StringId("default_gui");
     static const StringId GUI_MODEL_3D_SHADER_NAME       = StringId("default_gui_3d");
-    static const StringId DEFAULT_FONT_NAME              = StringId("ancient_greek_font");
+    static const StringId DEFAULT_FONT_NAME              = StringId("game_font");
     static const StringId DEFAULT_INTERACTION_EVENT_NAME = StringId("close");
 
     static const std::string GUI_BASE_MODEL_NAME = "gui_base";

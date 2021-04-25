@@ -42,15 +42,16 @@ namespace
     static const StringId GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME = StringId("custom_color");
     static const StringId PREVIEW_POPUP_NAME                   = StringId("preview_popup");
     
-    static const StringId GAME_FONT_NAME                       = StringId("ancient_greek_font");
+    static const StringId GAME_FONT_NAME                       = StringId("game_font");
     
     static const float NAME_PLATE_Z                    = -0.032f;
+    static const float NAME_PLATE_Y_OFFSET             = -0.001f;
     static const float NAME_PLATE_X_OFFSET_MULTIPLIER  = 1.0/20.0f;
     static const float NAME_PLATE_HEIGHT_MULTIPLIER    = 1.5f;
     static const float NAME_PLATE_WIDTH_MULTIPLIER     = 1.2f;
     static const float UNIT_NAME_SIZE                  = 0.005f;
     static const float PARTY_X_OFFSET                  = UNIT_NAME_SIZE * 4.8;
-    static const float UNIT_NAME_Z                     = -0.035f;
+    static const float UNIT_NAME_Z                     = -0.033f;
     static const float UNIT_DETAILS_Y_OFFSET           = 0.005f;
     static const float CITY_STATE_NAME_Z               = -0.035f;
     static const float CITY_STATE_DETAILS_Y_OFFSET     = 0.0005f;
@@ -172,7 +173,7 @@ void OverworldHighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPo
     maxTopRightCoords.x -= maxRectWidth * 0.5f;
     minBotLeftCoords.x  -= maxRectWidth * 0.5f;
     
-    genesis::rendering::LoadAndCreateStaticModelByName(NAME_PLATE_MODEL_NAME, glm::vec3(minBotLeftCoords.x + maxRectWidth/2 - maxRectWidth * NAME_PLATE_X_OFFSET_MULTIPLIER, minBotLeftCoords.y + maxRectHeight/2.0, unitPosition.z + NAME_PLATE_Z), glm::vec3(), glm::vec3(maxRectWidth * NAME_PLATE_WIDTH_MULTIPLIER, maxRectHeight * NAME_PLATE_HEIGHT_MULTIPLIER, 1.0f), PREVIEW_POPUP_NAME);
+    genesis::rendering::LoadAndCreateStaticModelByName(NAME_PLATE_MODEL_NAME, glm::vec3(minBotLeftCoords.x + maxRectWidth/2 - maxRectWidth * NAME_PLATE_X_OFFSET_MULTIPLIER, minBotLeftCoords.y + maxRectHeight/2.0 + NAME_PLATE_Y_OFFSET, unitPosition.z + NAME_PLATE_Z), glm::vec3(), glm::vec3(maxRectWidth * NAME_PLATE_WIDTH_MULTIPLIER, maxRectHeight * NAME_PLATE_HEIGHT_MULTIPLIER, 1.0f), PREVIEW_POPUP_NAME);
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -192,7 +193,7 @@ void OverworldHighlightingSystem::CreateCityStatePreviewPopup(const glm::vec3& c
     const auto textRectWidth = textRect.topRight.x - textRect.bottomLeft.x;
     const auto textRectHeight = textRect.topRight.y - textRect.bottomLeft.y;
     
-    genesis::rendering::LoadAndCreateStaticModelByName(NAME_PLATE_MODEL_NAME, glm::vec3(textRect.bottomLeft.x + textRectWidth/2 - textRectWidth * NAME_PLATE_X_OFFSET_MULTIPLIER, textRect.bottomLeft.y + textRectHeight/2.0, cityStatePosition.z + NAME_PLATE_Z), glm::vec3(), glm::vec3(textRectWidth * NAME_PLATE_WIDTH_MULTIPLIER, textRectHeight * NAME_PLATE_HEIGHT_MULTIPLIER, 1.0f), PREVIEW_POPUP_NAME);
+    genesis::rendering::LoadAndCreateStaticModelByName(NAME_PLATE_MODEL_NAME, glm::vec3(textRect.bottomLeft.x + textRectWidth/2 - textRectWidth * NAME_PLATE_X_OFFSET_MULTIPLIER, textRect.bottomLeft.y + textRectHeight/2.0 + NAME_PLATE_Y_OFFSET, cityStatePosition.z + NAME_PLATE_Z), glm::vec3(), glm::vec3(textRectWidth * NAME_PLATE_WIDTH_MULTIPLIER, textRectHeight * NAME_PLATE_HEIGHT_MULTIPLIER, 1.0f), PREVIEW_POPUP_NAME);
 }
 
 ///-----------------------------------------------------------------------------------------------

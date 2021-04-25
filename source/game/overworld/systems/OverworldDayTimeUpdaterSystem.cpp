@@ -41,7 +41,7 @@ namespace
     static const StringId DUSK_PERIOD_NAME          = StringId("Dusk");
     static const StringId NIGHT_PERIOD_NAME         = StringId("Night");
     static const StringId MIDNIGHT_PERIOD_NAME      = StringId("Midnight");
-    static const StringId GAME_FONT_NAME            = StringId("ancient_greek_font");
+    static const StringId GAME_FONT_NAME            = StringId("game_font");
     static const StringId TIME_DISPLAY_ENTITY_NAME  = StringId("time_display");
     static const StringId TIME_DISPLAY_SHADER_NAME  = StringId("default_gui");
 
@@ -140,7 +140,7 @@ void OverworldDayTimeUpdaterSystem::VUpdate(const float dt, const std::vector<ge
     genesis::rendering::RenderText("Day " + std::to_string(dayTimeComponent.mCurrentDay), GAME_FONT_NAME, TIME_STRING_SIZE, DAY_STRING_POSITION, genesis::colors::BLACK, false, TIME_DISPLAY_ENTITY_NAME);
     
     // Year Display
-    genesis::rendering::RenderText(std::to_string(dayTimeComponent.mCurrentYearBc) + "BC", GAME_FONT_NAME, TIME_STRING_SIZE, YEAR_STRING_POSITION, genesis::colors::BLACK, false, TIME_DISPLAY_ENTITY_NAME);
+    genesis::rendering::RenderText(std::to_string(dayTimeComponent.mCurrentYearBc) + "bc", GAME_FONT_NAME, TIME_STRING_SIZE, YEAR_STRING_POSITION, genesis::colors::BLACK, false, TIME_DISPLAY_ENTITY_NAME);
     
     // Current period Display
     genesis::rendering::RenderText(dayTimeComponent.mCurrentPeriod.GetString(), GAME_FONT_NAME, TIME_STRING_SIZE, glm::vec3(PERIOD_NAME_TO_X_OFFSET.at(dayTimeComponent.mCurrentPeriod), CURRENT_PERIOD_Y_OFFSET, 0.0f), genesis::colors::BLACK, false, TIME_DISPLAY_ENTITY_NAME);

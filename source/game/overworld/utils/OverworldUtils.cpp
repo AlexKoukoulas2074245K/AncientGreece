@@ -39,7 +39,7 @@ namespace overworld
 
 namespace
 {
-    static const StringId GAME_FONT_NAME                     = StringId("ancient_greek_font");
+    static const StringId GAME_FONT_NAME                     = StringId("game_font");
     static const StringId UNIT_PREVIEW_POPUP_NAME            = StringId("unit_preview_popup");
     static const StringId MAP_ENTITY_NAME                    = StringId("map");
     static const StringId MAP_EDGE_1_ENTITY_NAME             = StringId("map_edge_1");
