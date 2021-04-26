@@ -27,6 +27,7 @@
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetInteractionHandlingSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
+#include "overworld/ai/systems/OverworldUnitAiUpdaterSystem.h"
 #include "overworld/utils/OverworldUtils.h"
 #include "scene/systems/SceneUpdaterSystem.h"
 #include "systems/ModelAnimationTogglingSystem.h"
@@ -67,7 +68,7 @@
 
 ///------------------------------------------------------------------------------------------------
 
-static int SPARTAN_COUNT = 20;
+static int SPARTAN_COUNT = 10;
 //static float dtAccum2 = 0.0f;
 #if !defined(NDEBUG)
 extern float DEBUG_TEXTBOX_SIZE_DX;
@@ -107,6 +108,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldHighlightingSystem>(), 0);
     
     world.AddSystem(std::make_unique<overworld::OverworldDayTimeUpdaterSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::ai::OverworldUnitAiUpdaterSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>(), MAP_CONTEXT);

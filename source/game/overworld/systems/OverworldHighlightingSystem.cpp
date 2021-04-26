@@ -145,7 +145,8 @@ void OverworldHighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPo
     auto& world = genesis::ecs::World::GetInstance();
     
     std::vector<genesis::ecs::EntityId> renderedTextEntities;
-    renderedTextEntities.push_back(genesis::rendering::RenderText(unitStatsComponent.mStats.mUnitName.GetString(), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + 2 * UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, PREVIEW_POPUP_NAME));
+    renderedTextEntities.push_back(genesis::rendering::RenderText(unitStatsComponent.mStats.mUnitName.GetString(), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + 3.0f * UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, PREVIEW_POPUP_NAME));
+    renderedTextEntities.push_back(genesis::rendering::RenderText((unitStatsComponent.mStats.mCurrentRestingDuration > 0.0f ? "Resting" : "Travelling"), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + 2.0f * UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, PREVIEW_POPUP_NAME));
     renderedTextEntities.push_back(genesis::rendering::RenderText("Party:", GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(0.0f, UNIT_DETAILS_Y_OFFSET + UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::BLACK, true, PREVIEW_POPUP_NAME));
     renderedTextEntities.push_back(genesis::rendering::RenderText(std::to_string(GetUnitPartySize(unitStatsComponent)), GAME_FONT_NAME, UNIT_NAME_SIZE, unitPosition + glm::vec3(PARTY_X_OFFSET, UNIT_DETAILS_Y_OFFSET + UNIT_NAME_SIZE, UNIT_NAME_Z), genesis::colors::RgbTripletToVec4( GetUnitPartyColor(unitStatsComponent)), true, PREVIEW_POPUP_NAME));
     

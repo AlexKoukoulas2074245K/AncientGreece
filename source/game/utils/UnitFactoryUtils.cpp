@@ -8,7 +8,9 @@
 #include "UnitFactoryUtils.h"
 #include "../components/UnitBaseStatsSingletonComponent.h"
 #include "../components/UnitStatsComponent.h"
+#include "../overworld/ai/components/OverworldUnitAiComponent.h"
 #include "../overworld/components/OverworldHighlightableComponent.h"
+#include "../overworld/utils/OverworldUtils.h"
 #include "../utils/UnitCollisionUtils.h"
 #include "../utils/UnitInfoUtils.h"
 #include "../../engine/rendering/utils/MeshUtils.h"
@@ -45,6 +47,11 @@ genesis::ecs::EntityId CreateUnit(const StringId unitTypeName, const StringId un
     
     world.AddComponent<UnitStatsComponent>(entity, std::move(unitStatsComponent));
     world.AddComponent<overworld::OverworldHighlightableComponent>(entity, std::make_unique<overworld::OverworldHighlightableComponent>());
+    
+    if (entityName != overworld::GetPlayerEntityName())
+    {
+        world.AddComponent<overworld::ai::OverworldUnitAiComponent>(entity, std::make_unique<overworld::ai::OverworldUnitAiComponent>());
+    }
     
     AddCollidableDataToUnit(entity);
     

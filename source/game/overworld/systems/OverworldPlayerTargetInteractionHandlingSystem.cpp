@@ -8,6 +8,7 @@
 #include "OverworldPlayerTargetInteractionHandlingSystem.h"
 #include "../components/OverworldInteractionComponent.h"
 #include "../utils/OverworldInteractionUtils.h"
+#include "../utils/OverworldUtils.h"
 #include "../../components/CityStateInfoSingletonComponent.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../utils/KeyValueUtils.h"
@@ -84,7 +85,7 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
             const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId);
             
             // Unit Intraction
-            if (world.HasComponent<UnitStatsComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId))
+            if (overworldInteractionComponent.mInteraction.mInstigatorEntityId == GetPlayerEntity() && world.HasComponent<UnitStatsComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId))
             {
                 const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId);
                            
@@ -124,7 +125,7 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
                 view::QueueView(UNIT_INTERACTION_VIEW_NAME);
             }
             // City State interaction
-            else
+            else if (overworldInteractionComponent.mInteraction.mInstigatorEntityId == GetPlayerEntity())
             {
                 const auto cityName = world.GetComponent<genesis::NameComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId).mName;
                 const auto& cityStateInfo = GetCityStateInfo(cityName);

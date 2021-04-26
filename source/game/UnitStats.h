@@ -11,6 +11,7 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "overworld/AreaTypes.h"
+#include "overworld/utils/TimeStamp.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -19,12 +20,14 @@ struct UnitStats
     StringId mUnitName = StringId();
     StringId mUnitType = StringId();
     StringId mUnitModelName = StringId();
+    overworld::TimeStamp mUnitLastRestTimeStamp;
     int mHealth = 0;
     int mDamage = 0;
     float mUnitModelScaleFactor = 0.0f;
     float mAttackAnimationDamageTrigger = 0.0f;
     float mSpeedMultiplier = 0.0f;
     float mAttackRange = 0.0f;
+    float mCurrentRestingDuration = 0.0f;
     bool mIsRangedUnit = false;
     overworld::AreaTypeMask mNavigableAreaTypes = overworld::areaTypeMasks::NEUTRAL | overworld::areaTypeMasks::SEA | overworld::areaTypeMasks::MOUNTAIN | overworld::areaTypeMasks::HIGH_MOUNTAIN | overworld::areaTypeMasks::FOREST;
 };

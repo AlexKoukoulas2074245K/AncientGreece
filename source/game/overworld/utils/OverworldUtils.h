@@ -27,7 +27,15 @@ genesis::ecs::EntityId GetMapEntity();
 genesis::ecs::EntityId GetPlayerEntity();
 
 ///------------------------------------------------------------------------------------------------
- 
+
+genesis::ecs::EntityId GetOverworldUnitEntityByName(const StringId& unitName);
+
+///------------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId GetCityStateEntity(const StringId& cityStateName);
+
+///------------------------------------------------------------------------------------------------
+
 StringId GetPlayerEntityName();
 
 ///------------------------------------------------------------------------------------------------

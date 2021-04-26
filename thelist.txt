@@ -2,3 +2,4 @@
 * Unit Dialog
 * Unit AI
 * Neutral Live Battles
+* Disallow city state naming for player, and also take off player's name from unit pool

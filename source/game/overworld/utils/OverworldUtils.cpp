@@ -8,6 +8,9 @@
 #include "OverworldUtils.h"
 #include "../components/OverworldDayTimeSingletonComponent.h"
 #include "../components/OverworldHighlightableComponent.h"
+#include "../components/OverworldTargetComponent.h"
+#include "../ai/components/OverworldUnitAiComponent.h"
+#include "../ai/utils/AiUtils.h"
 #include "../../components/CollidableComponent.h"
 #include "../../components/CityStateInfoSingletonComponent.h"
 #include "../../components/UnitStatsComponent.h"
@@ -15,6 +18,7 @@
 #include "../../utils/UnitFactoryUtils.h"
 #include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/ECS.h"
+#include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/ColorUtils.h"
 #include "../../../engine/rendering/components/CameraSingletonComponent.h"
@@ -82,6 +86,36 @@ genesis::ecs::EntityId GetMapEntity()
 genesis::ecs::EntityId GetPlayerEntity()
 {
     return genesis::ecs::World::GetInstance().FindEntityWithName(PLAYER_ENTITY_NAME);
+}
+
+///------------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId GetOverworldUnitEntityByName(const StringId& unitName)
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    const auto allUnitEntities = world.FindAllEntitiesWithName(GENERIC_OVERWORLD_UNIT_ENTITY_NAME);
+    
+    for (const auto& entityId: allUnitEntities)
+    {
+        if (world.GetComponent<UnitStatsComponent>(entityId).mStats.mUnitName == unitName)
+        {
+            return entityId;
+        }
+    }
+    
+    if (GetPlayerUnitName() == unitName)
+    {
+        return GetPlayerEntity();
+    }
+    
+    assert(false && "Unit with given name can't be found");
+}
+
+///------------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId GetCityStateEntity(const StringId& cityStateName)
+{
+    return genesis::ecs::World::GetInstance().FindEntityWithName(cityStateName);
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -159,6 +193,13 @@ void SaveOverworldStateToFile()
     playerJsonObject["player_rx"] = playerTransformComponent.mRotation.x;
     playerJsonObject["player_ry"] = playerTransformComponent.mRotation.y;
     playerJsonObject["player_rz"] = playerTransformComponent.mRotation.z;
+    playerJsonObject["player_resting_duration"] = playerUnitStatsComponent.mStats.mCurrentRestingDuration;
+    
+    nlohmann::json playerLastRestTimestampJsonObject;
+    playerLastRestTimestampJsonObject["year"] = playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp.mYearBc;
+    playerLastRestTimestampJsonObject["day"] = playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp.mDay;
+    playerLastRestTimestampJsonObject["time_dt_accum"] = playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp.mTimeDtAccum;
+    playerJsonObject["player_last_rest_timestamp"] = playerLastRestTimestampJsonObject;
     
     nlohmann::json playerPartyJsonObject;
     for (auto i = 1U; i < playerUnitStatsComponent.mParty.size(); ++i)
@@ -178,7 +219,9 @@ void SaveOverworldStateToFile()
         nlohmann::json unitJsonObject;
         const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldUnitEntity);
         const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(overworldUnitEntity);
+        const auto& unitAiComponent = world.GetComponent<ai::OverworldUnitAiComponent>(overworldUnitEntity);
         
+        // Save core unit data
         unitJsonObject["name"] = unitStatsComponent.mStats.mUnitName.GetString();
         unitJsonObject["unit_type"] = unitStatsComponent.mStats.mUnitType.GetString();
         unitJsonObject["x"] = transformComponent.mPosition.x;
@@ -187,7 +230,43 @@ void SaveOverworldStateToFile()
         unitJsonObject["rx"] = transformComponent.mRotation.x;
         unitJsonObject["ry"] = transformComponent.mRotation.y;
         unitJsonObject["rz"] = transformComponent.mRotation.z;
+        unitJsonObject["resting_duration"] = unitStatsComponent.mStats.mCurrentRestingDuration;
+        unitJsonObject["last_action_index"] = ai::GetAiActionIndex(unitAiComponent.mCurrentAction);
         
+        // Save target data
+        if (world.HasComponent<OverworldTargetComponent>(overworldUnitEntity))
+        {
+            const auto& targetComponent = world.GetComponent<OverworldTargetComponent>(overworldUnitEntity);
+            if (targetComponent.mEntityTargetToFollow != genesis::ecs::NULL_ENTITY_ID)
+            {
+                if (world.HasComponent<UnitStatsComponent>(targetComponent.mEntityTargetToFollow))
+                {
+                    unitJsonObject["target_unit_name"] = world.GetComponent<UnitStatsComponent>(targetComponent.mEntityTargetToFollow).mStats.mUnitName.GetString();
+                }
+                else
+                {
+                    unitJsonObject["target_city_state_name"] = world.GetComponent<genesis::NameComponent>(targetComponent.mEntityTargetToFollow).mName.GetString();
+                }
+            }
+            else
+            {
+                nlohmann::json targetPositionJsonObject;
+                targetPositionJsonObject["x"] = targetComponent.mTargetPosition.x;
+                targetPositionJsonObject["y"] = targetComponent.mTargetPosition.y;
+                targetPositionJsonObject["z"] = targetComponent.mTargetPosition.z;
+                
+                unitJsonObject["target_position"] = targetPositionJsonObject;
+            }
+        }
+        
+        // Save daytime data
+        nlohmann::json lastRestTimestampJsonObject;
+        lastRestTimestampJsonObject["year"] = unitStatsComponent.mStats.mUnitLastRestTimeStamp.mYearBc;
+        lastRestTimestampJsonObject["day"] = unitStatsComponent.mStats.mUnitLastRestTimeStamp.mDay;
+        lastRestTimestampJsonObject["time_dt_accum"] = unitStatsComponent.mStats.mUnitLastRestTimeStamp.mTimeDtAccum;
+        unitJsonObject["last_rest_timestamp"] = lastRestTimestampJsonObject;
+        
+        // Save party data
         nlohmann::json partyJsonObject;
         for (auto i = 1U; i < unitStatsComponent.mParty.size(); ++i)
         {
@@ -196,6 +275,7 @@ void SaveOverworldStateToFile()
         }
         
         unitJsonObject["party"] = partyJsonObject;
+        
         overworldUnitsJsonObject.push_back(unitJsonObject);
     }
     
@@ -272,6 +352,17 @@ bool TryLoadOverworldStateFromFile()
     auto playerEntity = CreateUnit(playerUnitType, playerUnitName, PLAYER_ENTITY_NAME, playerPosition, playerRotation);
     
     auto& playerUnitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
+    
+    // Parse last rest timestamp for player
+    playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp = TimeStamp
+    (
+        playerJsonObject["player_last_rest_timestamp"]["year"].get<int>(),
+        playerJsonObject["player_last_rest_timestamp"]["day"].get<int>(),
+        playerJsonObject["player_last_rest_timestamp"]["time_dt_accum"].get<float>()
+    );
+    playerUnitStatsComponent.mStats.mCurrentRestingDuration = playerJsonObject["player_resting_duration"].get<float>();
+    
+    
     for (const auto& partyEntry: playerJsonObject["player_party"])
     {
         playerUnitStatsComponent.mParty.push_back(GetUnitBaseStats(StringId(partyEntry.get<std::string>())));
@@ -297,10 +388,56 @@ bool TryLoadOverworldStateFromFile()
         
         auto unitEntity = CreateUnit(unitType, unitName, GENERIC_OVERWORLD_UNIT_ENTITY_NAME, unitPosition, unitRotation);
         
+        auto& unitAiComponent = world.GetComponent<ai::OverworldUnitAiComponent>(unitEntity);
+        unitAiComponent.mLastActionIndex = overworldUnitJsonObject["last_action_index"].get<int>();
+        
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
+        
+        // Parse last rest timestamp for unit
+        unitStatsComponent.mStats.mUnitLastRestTimeStamp = TimeStamp
+        (
+            overworldUnitJsonObject["last_rest_timestamp"]["year"].get<int>(),
+            overworldUnitJsonObject["last_rest_timestamp"]["day"].get<int>(),
+            overworldUnitJsonObject["last_rest_timestamp"]["time_dt_accum"].get<float>()
+        );
+        unitStatsComponent.mStats.mCurrentRestingDuration = overworldUnitJsonObject["resting_duration"].get<float>();
+        
+        // Parse unit's party
         for (const auto& partyEntry: overworldUnitJsonObject["party"])
         {
             unitStatsComponent.mParty.push_back(GetUnitBaseStats(StringId(partyEntry.get<std::string>())));
+        }
+    }
+    
+    // Reparse units to establish target mappings
+    for (const auto& overworldUnitJsonObject: saveFileJsonRoot["overworld_units"])
+    {
+        const auto unitName = StringId(overworldUnitJsonObject["name"].get<std::string>());
+        const auto unitEntity = GetOverworldUnitEntityByName(unitName);
+        
+        if (overworldUnitJsonObject.count("target_position"))
+        {
+            auto targetComponent = std::make_unique<OverworldTargetComponent>();
+            targetComponent->mTargetPosition = glm::vec3
+            (
+                overworldUnitJsonObject["target_position"]["x"].get<float>(),
+                overworldUnitJsonObject["target_position"]["y"].get<float>(),
+                overworldUnitJsonObject["target_position"]["z"].get<float>()
+            );
+            
+            world.AddComponent<OverworldTargetComponent>(unitEntity, std::move(targetComponent));
+        }
+        else if (overworldUnitJsonObject.count("target_unit_name"))
+        {
+            auto targetComponent = std::make_unique<OverworldTargetComponent>();
+            targetComponent->mEntityTargetToFollow = GetOverworldUnitEntityByName(StringId(overworldUnitJsonObject["target_unit_name"].get<std::string>()));
+            world.AddComponent<OverworldTargetComponent>(unitEntity, std::move(targetComponent));
+        }
+        else if (overworldUnitJsonObject.count("target_city_state_name"))
+        {
+            auto targetComponent = std::make_unique<OverworldTargetComponent>();
+            targetComponent->mEntityTargetToFollow = GetCityStateEntity(StringId(overworldUnitJsonObject["target_city_state_name"].get<std::string>()));
+            world.AddComponent<OverworldTargetComponent>(unitEntity, std::move(targetComponent));
         }
     }
     
@@ -381,7 +518,11 @@ void PopulateOverworldCityStates()
     {
         const auto cityStateZ = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, cityStateInfoEntry.second.mPosition);
         const auto finalPosition = glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, cityStateZ);
-        auto cityStateEntity = genesis::rendering::LoadAndCreateStaticModelByName(CITY_STATE_BUILDING_MODEL_NAME,    finalPosition, cityStateInfoEntry.second.mRotation, GetCityStateOverworldScale(cityStateInfoEntry.first), cityStateInfoEntry.first);
+        
+        auto cityStateScale = GetCityStateOverworldScale(cityStateInfoEntry.first);
+        cityStateScale.y *= 2.0f;
+        
+        auto cityStateEntity = genesis::rendering::LoadAndCreateStaticModelByName(CITY_STATE_BUILDING_MODEL_NAME,    finalPosition, cityStateInfoEntry.second.mRotation, cityStateScale, cityStateInfoEntry.first);
         
         auto& renderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(cityStateEntity);
         renderableComponent.mMaterial.mAmbient = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);

@@ -7,7 +7,9 @@
 
 #include "OverworldDayTimeUpdaterSystem.h"
 #include "../components/OverworldDayTimeSingletonComponent.h"
+#include "../utils/OverworldDayTimeUtils.h"
 #include "../../../engine/common/utils/ColorUtils.h"
+#include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/rendering/components/LightStoreSingletonComponent.h"
 #include "../../../engine/rendering/utils/FontUtils.h"
 #include "../../../engine/rendering/utils/MeshUtils.h"
@@ -25,7 +27,6 @@ namespace
     static const int INIT_DAY     = 1;
     static const int DAYS_IN_YEAR = 365;
 
-    static const float DAY_CYCLE_SPEED         = 1.0f/20.0f;
     static const float HOURS_IN_DAY            = 24.0f;
     static const float TIME_STRING_SIZE        = 0.1f;
     static const float CURRENT_PERIOD_Y_OFFSET = -0.94f;
@@ -86,7 +87,7 @@ void OverworldDayTimeUpdaterSystem::VUpdate(const float dt, const std::vector<ge
     auto& lightStoreComponent = world.GetSingletonComponent<genesis::rendering::LightStoreSingletonComponent>();
     
     // Calculate current day time timestamp
-    dayTimeComponent.mTimeDtAccum += DAY_CYCLE_SPEED * dt;
+    dayTimeComponent.mTimeDtAccum += GetDayTimeSpeed() * dt;
     dayTimeComponent.mTimeDtAccum = std::fmod(dayTimeComponent.mTimeDtAccum, genesis::math::PI * 2.0f);
     
     // Position "sun" depending on current timestamp
@@ -118,7 +119,7 @@ void OverworldDayTimeUpdaterSystem::VUpdate(const float dt, const std::vector<ge
         dayTimeComponent.mPeriodChangeTick = true;
         
         // Day change
-        if (previousPeriod == MIDNIGHT_PERIOD_NAME && dayTimeComponent.mCurrentPeriod == DAWN_PERIOD_NAME)
+        if (previousPeriod == NIGHT_PERIOD_NAME && dayTimeComponent.mCurrentPeriod == MIDNIGHT_PERIOD_NAME)
         {
             dayTimeComponent.mDayChangeTick = true;
             dayTimeComponent.mCurrentDay++;
