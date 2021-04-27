@@ -251,6 +251,8 @@ void Game::VOnUpdate(float& dt)
     {
         dt /= 10.0f;
     }
+#else
+    (void)dt;
 #endif
     
     //    Log(LogType::INFO, "%.6f, %.6f, %.6f", lightStoreComponent.mLightPositions[0].x, lightStoreComponent.mLightPositions[0].y, lightStoreComponent.mLightPositions[0].z);
