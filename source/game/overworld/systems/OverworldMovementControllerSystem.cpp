@@ -16,7 +16,9 @@
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
+#include "../../../engine/rendering/components/RenderableComponent.h"
 #include "../../../engine/rendering/utils/HeightMapUtils.h"
+#include "../../../engine/rendering/utils/ParticleUtils.h"
 #include "../../../engine/resources/ResourceLoadingService.h"
 
 #include <tsl/robin_map.h>
@@ -71,7 +73,7 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         
         const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
         
-        // If we have arrived at target position
+        // If we have arrived at target position or collided with our target entity
         if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD || (isFollowingEntity && AreEntitiesColliding(entityId, waypointComponent.mEntityTargetToFollow)))
         {
             // Create interaction component

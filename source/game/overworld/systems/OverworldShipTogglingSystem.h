@@ -1,54 +1,43 @@
 ///------------------------------------------------------------------------------------------------
-///  HeightMapComponent.h
-///  Genesis
+///  OverworldShipTogglingSystem.h
+///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 08/04/2021.
+///  Created by Alex Koukoulas on 27/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef HeightMapComponent_h
-#define HeightMapComponent_h
-
-///-----------------------------------------------------------------------------------------------
-
-#include "../../ECS.h"
-#include "../../common/utils/MathUtils.h"
-#include "../../common/utils/StringUtils.h"
-
-#include <vector>
+#ifndef OverworldShipTogglingSystem_h
+#define OverworldShipTogglingSystem_h
 
 ///-----------------------------------------------------------------------------------------------
 
-namespace genesis
+#include "../../engine/ECS.h"
+
+///-----------------------------------------------------------------------------------------------
+
+class UnitStatsComponent;
+
+///-----------------------------------------------------------------------------------------------
+
+namespace overworld
 {
 
 ///-----------------------------------------------------------------------------------------------
-
-namespace rendering
-{
-
-///-----------------------------------------------------------------------------------------------
-
-using GLuint = unsigned int;
-using ResourceId = size_t;
-
-///-----------------------------------------------------------------------------------------------
-
-class HeightMapComponent final: public ecs::IComponent
+class OverworldShipTogglingSystem final : public genesis::ecs::BaseSystem<UnitStatsComponent>
 {
 public:
-    GLuint mVertexArrayObject = 0;
-    glm::vec2 mHeightMapTextureDimensions;
-    std::vector<ResourceId> mHeightMapTextureResourceIds;
-    std::vector<std::vector<float>> mHeightMapTileHeights;
-    float mHeightMapScale;
+    OverworldShipTogglingSystem();
+
+    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const override;
+    
+private:
+    void CreateSmokeRevealParticleEffectForEntity(const genesis::ecs::EntityId entityId) const;
+    
 };
 
 ///-----------------------------------------------------------------------------------------------
 
 }
 
-}
-
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* HeightMapComponent_h */
+#endif /* OverworldShipTogglingSystem_h */

@@ -67,11 +67,6 @@ void OverworldMapPickingInfoSystem::VUpdate(const float, const std::vector<genes
     mapPickingInfoComponent.mMouseRayDirection = genesis::math::ComputeMouseRayDirection(viewMatrix, projectionMatrix, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight);
     genesis::math::RayToPlaneIntersection(cameraComponent.mPosition, mapPickingInfoComponent.mMouseRayDirection, MAP_POSITION, MAP_NORMAL, mapPickingInfoComponent.mMapIntersectionPoint);
     mapPickingInfoComponent.mMapIntersectionPoint.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, mapPickingInfoComponent.mMapIntersectionPoint);
-    
-    if (genesis::input::GetButtonState(genesis::input::Button::LEFT_BUTTON) == genesis::input::InputState::TAPPED)
-    {
-        Log(LogType::INFO, "Map position %.6f, %.6f, %.6f", mapPickingInfoComponent.mMapIntersectionPoint.x, mapPickingInfoComponent.mMapIntersectionPoint.y, mapPickingInfoComponent.mMapIntersectionPoint.z);
-    }
 }
 
 ///-----------------------------------------------------------------------------------------------

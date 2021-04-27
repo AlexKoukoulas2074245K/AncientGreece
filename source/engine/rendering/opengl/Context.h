@@ -32,7 +32,10 @@ extern GLFuncTable glFuncTable;
 #else
     #include <GLES2/gl3.h>
 #endif
-#define GL_CHECK(call) do { call; assert(glGetError() == GL_NO_ERROR); } while (0)
+
+#include "../../common/utils/Logging.h"
+
+#define GL_CHECK(call) do { call; auto err = glGetError(); if(err != GL_NO_ERROR){ Log(LogType::INFO, "GL ERROR %d", err); } assert(err == GL_NO_ERROR); } while (0)
 #define GL_NO_CHECK(call) (call)
 
 #endif // TURF_TARGET_WIN32

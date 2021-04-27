@@ -28,13 +28,23 @@ namespace rendering
 namespace
 {
 
-    static const std::vector<float> PARTICLE_VERTEX_POSITIONS =
+    static const std::vector<std::vector<float>> PARTICLE_VERTEX_POSITIONS =
     {
-        0.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f
+        {
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 1.0f
+        },
+        
+        {
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            1.0f, 1.0f, 0.0f
+        }
     };
+    
 
     static const std::vector<float> PARTICLE_UVS =
     {
@@ -47,13 +57,22 @@ namespace
     static const tsl::robin_map<ParticleEmitterType, StringId> PARTICLE_TYPE_TO_SHADER_NAME =
     {
         { ParticleEmitterType::SMOKE, StringId("particle_smoke") },
-        { ParticleEmitterType::BLOOD_DROP, StringId("particle_blood_drop") }
+        { ParticleEmitterType::BLOOD_DROP, StringId("particle_blood_drop") },
+        { ParticleEmitterType::SMOKE_REVEAL, StringId("particle_smoke_reveal") }
     };
 
     static const tsl::robin_map<ParticleEmitterType, StringId> PARTICLE_TYPE_TO_TEXTURE_NAME =
     {
         { ParticleEmitterType::SMOKE, StringId("smoke") },
-        { ParticleEmitterType::BLOOD_DROP, StringId("blood_drop") }
+        { ParticleEmitterType::BLOOD_DROP, StringId("blood_drop") },
+        { ParticleEmitterType::SMOKE_REVEAL, StringId("smoke") }
+    };
+
+    static const tsl::robin_map<ParticleEmitterType, size_t> PARTICLE_TYPE_TO_VERTEX_POSITIONS =
+    {
+        { ParticleEmitterType::SMOKE, 0U },
+        { ParticleEmitterType::BLOOD_DROP, 0U },
+        { ParticleEmitterType::SMOKE_REVEAL, 1U }
     };
 }
 
@@ -68,12 +87,14 @@ void SpawnParticleAtIndex
     const auto lifeTime = genesis::math::RandomFloat(emitterComponent.mParticleLifetimeRange.s, emitterComponent.mParticleLifetimeRange.t);
     const auto xOffset = genesis::math::RandomFloat(emitterComponent.mParticlePositionXOffsetRange.s, emitterComponent.mParticlePositionXOffsetRange.t);
     const auto yOffset = genesis::math::RandomFloat(emitterComponent.mParticlePositionYOffsetRange.s, emitterComponent.mParticlePositionYOffsetRange.t);
+    const auto zOffset = genesis::math::RandomFloat(emitterComponent.mParticlePositionZOffsetRange.s, emitterComponent.mParticlePositionZOffsetRange.t);
     const auto size = genesis::math::RandomFloat(emitterComponent.mParticleSizeRange.s, emitterComponent.mParticleSizeRange.t);
     
     emitterComponent.mParticleLifetimes[index] = lifeTime;
     emitterComponent.mParticlePositions[index] = emitterComponent.mEmitterOriginPosition;
     emitterComponent.mParticlePositions[index].x += xOffset;
     emitterComponent.mParticlePositions[index].y += yOffset;
+    emitterComponent.mParticlePositions[index].z += zOffset;
     emitterComponent.mParticleDirections[index] = glm::normalize(glm::vec3(xOffset, yOffset, 0.0f));
     emitterComponent.mParticleSizes[index] = size;
 }
@@ -108,6 +129,7 @@ genesis::ecs::EntityId AddParticleEmitter
     const glm::vec2& particleLifetimeRange,
     const glm::vec2& particlePositionXOffsetRange,
     const glm::vec2& particlePositionYOffsetRange,
+    const glm::vec2& particlePositionZOffsetRange,
     const glm::vec2& particleSizeRange,
     const size_t particleCount,
     const bool preFillParticles,
@@ -126,6 +148,7 @@ genesis::ecs::EntityId AddParticleEmitter
     emitterComponent->mParticleLifetimeRange = particleLifetimeRange;
     emitterComponent->mParticlePositionXOffsetRange = particlePositionXOffsetRange;
     emitterComponent->mParticlePositionYOffsetRange = particlePositionYOffsetRange;
+    emitterComponent->mParticlePositionZOffsetRange = particlePositionZOffsetRange;
     emitterComponent->mParticleSizeRange = particleSizeRange;
     emitterComponent->mParticleTextureResourceId = genesis::resources::ResourceLoadingService::GetInstance().LoadResource(genesis::resources::ResourceLoadingService::RES_TEXTURES_ROOT + PARTICLE_TYPE_TO_TEXTURE_NAME.at(emitterType).GetString() + ".png");
     emitterComponent->mShaderNameId = PARTICLE_TYPE_TO_SHADER_NAME.at(emitterType);
@@ -155,7 +178,7 @@ genesis::ecs::EntityId AddParticleEmitter
     GL_CHECK(glBindVertexArray(emitterComponent->mParticleVertexArrayObject));
     
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, emitterComponent->mParticleVertexBuffer));
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, PARTICLE_VERTEX_POSITIONS.size() * sizeof(float) , PARTICLE_VERTEX_POSITIONS.data(), GL_STATIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, PARTICLE_VERTEX_POSITIONS[PARTICLE_TYPE_TO_VERTEX_POSITIONS.at(emitterType)].size() * sizeof(float) , PARTICLE_VERTEX_POSITIONS[PARTICLE_TYPE_TO_VERTEX_POSITIONS.at(emitterType)].data(), GL_STATIC_DRAW));
     
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, emitterComponent->mParticleUVBuffer));
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, PARTICLE_UVS.size() * sizeof(float) , PARTICLE_UVS.data(), GL_STATIC_DRAW));

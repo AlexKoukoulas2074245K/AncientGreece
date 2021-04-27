@@ -42,7 +42,7 @@ public:
     ShaderResource() = default;
     ShaderResource
     (
-        const tsl::robin_map<StringId, GLuint, StringIdHasher> uniformNamesToLocations,
+        const tsl::robin_map<StringId, GLuint, StringIdHasher>& uniformNamesToLocations,
         const GLuint programId
     );
     ShaderResource& operator = (const ShaderResource&);

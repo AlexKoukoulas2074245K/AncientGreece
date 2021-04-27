@@ -29,9 +29,10 @@ ParticleUpdaterSystem::ParticleUpdaterSystem()
 
 ///-----------------------------------------------------------------------------------------------
 
-void ParticleUpdaterSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& entitiesToProcess) const
+void ParticleUpdaterSystem::VUpdate(const float dt, const std::vector<ecs::EntityId>& entities) const
 {
     auto& world = genesis::ecs::World::GetInstance();
+    const auto entitiesToProcess = entities;
     for (const auto& entityId: entitiesToProcess)
     {
         auto& particleEmitterComponent = world.GetComponent<ParticleEmitterComponent>(entityId);
@@ -58,6 +59,33 @@ void ParticleUpdaterSystem::VUpdate(const float dt, const std::vector<ecs::Entit
 
                     // move the particle up depending on the delta time
                     particleEmitterComponent.mParticlePositions[i] += glm::vec3(0.0f, 0.0f, -dt/20.0f);
+                }
+            } break;
+            
+            case ParticleEmitterType::SMOKE_REVEAL:
+            {
+                auto deadParticles = 0U;
+                for (size_t i = 0U; i < particleEmitterComponent.mParticlePositions.size(); ++i)
+                {
+                    // subtract from the particles lifetime
+                    particleEmitterComponent.mParticleLifetimes[i] -= dt;
+
+                    // if the lifetime is below add to the count of finished particles
+                    if (particleEmitterComponent.mParticleLifetimes[i] <= 0.0f )
+                    {
+                        particleEmitterComponent.mParticleLifetimes[i] = 0.0f;
+                        deadParticles++;
+                    }
+                    
+                    // move the particle up depending on the delta time
+                    particleEmitterComponent.mParticlePositions[i] += glm::vec3(0.0f, 0.0f, -dt/20.0f);
+                }
+                
+                // Remove emitter if all initial particles are finished
+                if (deadParticles == particleEmitterComponent.mParticlePositions.size())
+                {
+                    world.RemoveComponent<ParticleEmitterComponent>(entityId);
+                    continue;
                 }
             } break;
                 
@@ -90,7 +118,15 @@ void ParticleUpdaterSystem::SortParticles(ParticleEmitterComponent& particleEmit
     std::iota(indexVec.begin(), indexVec.end(), 0);
     std::sort(indexVec.begin(), indexVec.end(), [&](const size_t i, const size_t j)
     {
-        return particleEmitterComponent.mParticlePositions[i].y < particleEmitterComponent.mParticlePositions[j].y;
+        switch (particleEmitterComponent.mEmitterType)
+        {
+            case ParticleEmitterType::SMOKE:
+                return particleEmitterComponent.mParticlePositions[i].y < particleEmitterComponent.mParticlePositions[j].y;
+            case ParticleEmitterType::BLOOD_DROP:
+                return particleEmitterComponent.mParticlePositions[i].y < particleEmitterComponent.mParticlePositions[j].y;
+            case ParticleEmitterType::SMOKE_REVEAL:
+                return particleEmitterComponent.mParticlePositions[i].z > particleEmitterComponent.mParticlePositions[j].z;
+        }
     });
     
     // Create corrected vectors

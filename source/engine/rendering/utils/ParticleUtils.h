@@ -62,6 +62,7 @@ void SpawnParticlesAtFirstAvailableSlot
 /// @param[in] particleLifetimeRange an inclusive range of randomness that each particle's lifetime will fall on in the form of [minLifeTime, maxLifeTime] in seconds.
 /// @param[in] particlePositionXOffsetRange an inclusive range of randomness that each particle's offset x position will fall on in the form of [minX, maxX] RELATIVE to the emitter's origin position.
 /// @param[in] particlePositionYOffsetRange an inclusive range of randomness that each particle's offset y position will fall on in the form of [minY, maxY] RELATIVE to the emitter's origin position.
+/// @param[in] particlePositionZOffsetRange an inclusive range of randomness that each particle's offset y position will fall on in the form of [minZ, maxZ] RELATIVE to the emitter's origin position.
 /// @param[in] particleSizeRange an inclusive range of randomness that each particle's size will fall on in the form of [minSize, maxSize] 
 /// @param[in] particleCount the number of particles the emitter can hold at all times
 /// @param[in] preFillParticles specifies whether or not the emitter will have particles initialised initially
@@ -74,6 +75,7 @@ genesis::ecs::EntityId AddParticleEmitter
     const glm::vec2& particleLifetimeRange,
     const glm::vec2& particlePositionXOffsetRange,
     const glm::vec2& particlePositionYOffsetRange,
+    const glm::vec2& particlePositionZOffsetRange,
     const glm::vec2& particleSizeRange,
     const size_t particleCount,
     const bool preFillParticles,

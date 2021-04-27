@@ -27,6 +27,7 @@
 #include "overworld/systems/OverworldMovementControllerSystem.h"
 #include "overworld/systems/OverworldPlayerTargetInteractionHandlingSystem.h"
 #include "overworld/systems/OverworldPlayerTargetSelectionSystem.h"
+#include "overworld/systems/OverworldShipTogglingSystem.h"
 #include "overworld/ai/systems/OverworldUnitAiUpdaterSystem.h"
 #include "overworld/utils/OverworldUtils.h"
 #include "scene/systems/SceneUpdaterSystem.h"
@@ -112,6 +113,7 @@ void Game::VOnSystemsInit()
     world.AddSystem(std::make_unique<overworld::OverworldMapPickingInfoSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetSelectionSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldMovementControllerSystem>(), MAP_CONTEXT);
+    world.AddSystem(std::make_unique<overworld::OverworldShipTogglingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldPlayerTargetInteractionHandlingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldBattleProcessingSystem>(), MAP_CONTEXT);
     world.AddSystem(std::make_unique<overworld::OverworldCameraControllerSystem>(), MAP_CONTEXT);
@@ -156,10 +158,19 @@ void Game::VOnGameInit()
         auto position = glm::vec3(0.08f, -0.08f, 0.0f);
         position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
         auto playerEntity = CreateUnit(StringId("Horse Archer"), StringId("ALEX"), overworld::GetPlayerEntityName(), position);
+        auto playerShipEntity = genesis::rendering::LoadAndCreateStaticModelByName("ship", glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.004f), StringId("ALEX_ship"));
+        world.GetComponent<genesis::rendering::RenderableComponent>(playerShipEntity).mIsVisible = false;
+        world.GetComponent<genesis::rendering::RenderableComponent>(playerShipEntity).mIsCastingShadows = true;
+        world.GetComponent<genesis::rendering::RenderableComponent>(playerShipEntity).mIsAffectedByLight = true;
+        world.GetComponent<genesis::rendering::RenderableComponent>(playerShipEntity).mMaterial.mAmbient = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        world.GetComponent<genesis::rendering::RenderableComponent>(playerShipEntity).mMaterial.mDiffuse = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+        world.GetComponent<genesis::rendering::RenderableComponent>(playerShipEntity).mMaterial.mSpecular = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        world.GetComponent<genesis::rendering::RenderableComponent>(playerShipEntity).mMaterial.mShininess = 1.0f;
         
         const auto partySize = genesis::math::RandomInt(0, 80);
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
-
+        unitStatsComponent.mStats.mSpeedMultiplier *= 3.0f;
+        
         for (auto j = 0; j < partySize; ++j)
         {
             const auto unitTypeRng = intToModelType.at(genesis::math::RandomInt(0, intToModelType.size() - 1));
@@ -172,8 +183,16 @@ void Game::VOnGameInit()
             position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
             
             auto unitTypeName = intToModelType.at(i % intToModelType.size());
-            
-            auto unitEntity = CreateUnit(unitTypeName, GetRandomAvailableUnitName(), overworld::GetGenericOverworldUnitEntityName(), position);
+            auto unitName = GetRandomAvailableUnitName();
+            auto unitEntity = CreateUnit(unitTypeName, unitName, overworld::GetGenericOverworldUnitEntityName(), position);
+            auto shipEntity = genesis::rendering::LoadAndCreateStaticModelByName("ship", glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.004f), StringId(unitName.GetString() + "_ship"));
+            world.GetComponent<genesis::rendering::RenderableComponent>(shipEntity).mIsVisible = false;
+            world.GetComponent<genesis::rendering::RenderableComponent>(shipEntity).mIsAffectedByLight = true;
+            world.GetComponent<genesis::rendering::RenderableComponent>(shipEntity).mIsCastingShadows = true;
+            world.GetComponent<genesis::rendering::RenderableComponent>(shipEntity).mMaterial.mAmbient = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+            world.GetComponent<genesis::rendering::RenderableComponent>(shipEntity).mMaterial.mDiffuse = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+            world.GetComponent<genesis::rendering::RenderableComponent>(shipEntity).mMaterial.mSpecular = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+            world.GetComponent<genesis::rendering::RenderableComponent>(shipEntity).mMaterial.mShininess = 1.0f;
             
             const auto partySize = genesis::math::RandomInt(0, 80);
             auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);

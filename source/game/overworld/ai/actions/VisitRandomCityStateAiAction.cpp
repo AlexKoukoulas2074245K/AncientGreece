@@ -83,8 +83,13 @@ ActionStatus VisitRandomCityStateAiAction::VUpdateForEntity(const float, const g
 
 ///-----------------------------------------------------------------------------------------------
 
-Applicability VisitRandomCityStateAiAction::VGetApplicabilityForEntity(const genesis::ecs::EntityId) const
+Applicability VisitRandomCityStateAiAction::VGetApplicabilityForEntity(const genesis::ecs::EntityId entityId) const
 {
+    const auto& world = genesis::ecs::World::GetInstance();
+    if (world.HasComponent<OverworldTargetComponent>(entityId))
+    {
+        return Applicability::NOT_APPLICABLE;
+    }
     return Applicability::MEDIUM_APPLICABILITY;
 }
 

@@ -9,6 +9,7 @@ layout(location = 4) in float size;
 uniform mat4 view;
 uniform mat4 proj;
 
+out float frag_lifetime;
 out vec2 uv_frag;
 
 
@@ -36,6 +37,7 @@ void main()
     	(vertex_position.z * size) + position.z
     );
 
+    frag_lifetime = lifetime;
     gl_Position = proj * view * vec4(frag_unprojected_pos, 1.0f);
 
 }

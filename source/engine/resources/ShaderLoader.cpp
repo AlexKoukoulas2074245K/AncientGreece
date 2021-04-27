@@ -33,7 +33,7 @@ const std::string ShaderLoader::FRAGMENT_SHADER_FILE_EXTENSION = ".fs";
 
 ///------------------------------------------------------------------------------------------------
 
-static void ExtractUniformFromLine(const std::string& line, const GLuint programId, tsl::robin_map<StringId, GLuint, StringIdHasher>& outUniformNamesToLocations);
+static void ExtractUniformFromLine(const std::string& line, const std::string& shaderName, const GLuint programId, tsl::robin_map<StringId, GLuint, StringIdHasher>& outUniformNamesToLocations);
 
 ///------------------------------------------------------------------------------------------------
 
@@ -70,7 +70,7 @@ std::unique_ptr<IResource> ShaderLoader::VCreateAndLoadResource(const std::strin
         vertexShaderInfoLog.clear();
         vertexShaderInfoLog.reserve(vertexShaderInfoLogLength);
         GL_CHECK(glGetShaderInfoLog(vertexShaderId, vertexShaderInfoLogLength, nullptr, &vertexShaderInfoLog[0]));
-        Log(LogType::INFO, "While compiling vertex shader %s%s:\n%s", resourcePath.c_str(), ".vs", vertexShaderInfoLog.c_str());
+        Log(LogType::WARNING, "While compiling vertex shader %s%s:\n%s", resourcePath.c_str(), ".vs", vertexShaderInfoLog.c_str());
     }
     
     // Generate fragment shader id
@@ -92,7 +92,7 @@ std::unique_ptr<IResource> ShaderLoader::VCreateAndLoadResource(const std::strin
         fragmentShaderInfoLog.clear();
         fragmentShaderInfoLog.reserve(fragmentShaderInfoLogLength);
         GL_CHECK(glGetShaderInfoLog(fragmentShaderId, fragmentShaderInfoLogLength, nullptr, &fragmentShaderInfoLog[0]));
-        Log(LogType::INFO, "While compiling fragment shader %s%s:\n%s", resourcePath.c_str(), ".fs", fragmentShaderInfoLog.c_str());
+        Log(LogType::WARNING, "While compiling fragment shader %s%s:\n%s", resourcePath.c_str(), ".fs", fragmentShaderInfoLog.c_str());
     }
 
     // Link shader program
@@ -111,7 +111,7 @@ std::unique_ptr<IResource> ShaderLoader::VCreateAndLoadResource(const std::strin
         linkingInfoLog.clear();
         linkingInfoLog.reserve(linkingInfoLogLength);
         GL_CHECK(glGetProgramInfoLog(programId, linkingInfoLogLength, NULL, &linkingInfoLog[0]));
-        Log(LogType::INFO, "While linking shader %s:\n%s", resourcePath.c_str(), linkingInfoLog.c_str());
+        Log(LogType::WARNING, "While linking shader %s:\n%s", resourcePath.c_str(), linkingInfoLog.c_str());
     }
 #endif
     
@@ -129,7 +129,7 @@ std::unique_ptr<IResource> ShaderLoader::VCreateAndLoadResource(const std::strin
         validateInfoLog.clear();
         validateInfoLog.reserve(validateInfoLogLength);
         GL_CHECK(glGetProgramInfoLog(programId, validateInfoLogLength, NULL, &validateInfoLog[0]));
-        Log(LogType::INFO, "While validating shader %s:\n%s", resourcePath.c_str(), validateInfoLog.c_str());
+        Log(LogType::WARNING, "While validating shader %s:\n%s", resourcePath.c_str(), validateInfoLog.c_str());
     }
 #endif
     
@@ -139,8 +139,8 @@ std::unique_ptr<IResource> ShaderLoader::VCreateAndLoadResource(const std::strin
     GL_CHECK(glDeleteShader(vertexShaderId));
     GL_CHECK(glDeleteShader(fragmentShaderId));
     
-    Log(LogType::INFO, "Parsing uniforms in shader %s", resourcePath.c_str());
-    const auto uniformNamesToLocations = GetUniformNamesToLocationsMap(programId, vertexShaderFileContents, fragmentShaderFileContents);
+    const auto uniformNamesToLocations = GetUniformNamesToLocationsMap(programId, resourcePath,  vertexShaderFileContents, fragmentShaderFileContents);
+    
     return std::make_unique<ShaderResource>(uniformNamesToLocations, programId);
 }
 
@@ -195,6 +195,7 @@ void ShaderLoader::ReplaceIncludeDirectives(std::string& shaderSource) const
 tsl::robin_map<StringId, GLuint, StringIdHasher> ShaderLoader::GetUniformNamesToLocationsMap
 (
     const GLuint programId,
+    const std::string& shaderName,
     const std::string& vertexShaderFileContents,
     const std::string& fragmentShaderFileContents
 ) const
@@ -206,7 +207,7 @@ tsl::robin_map<StringId, GLuint, StringIdHasher> ShaderLoader::GetUniformNamesTo
     {
         if (StringStartsWith(vertexShaderLine, "uniform"))
         {
-            ExtractUniformFromLine(vertexShaderLine, programId, uniformNamesToLocationsMap);
+            ExtractUniformFromLine(vertexShaderLine, shaderName, programId, uniformNamesToLocationsMap);
         }
     }
     
@@ -215,7 +216,7 @@ tsl::robin_map<StringId, GLuint, StringIdHasher> ShaderLoader::GetUniformNamesTo
     {
         if (StringStartsWith(fragmentShaderLine, "uniform"))
         {
-            ExtractUniformFromLine(fragmentShaderLine, programId, uniformNamesToLocationsMap);
+            ExtractUniformFromLine(fragmentShaderLine, shaderName, programId, uniformNamesToLocationsMap);
         }
     }
     
@@ -224,7 +225,7 @@ tsl::robin_map<StringId, GLuint, StringIdHasher> ShaderLoader::GetUniformNamesTo
 
 ///------------------------------------------------------------------------------------------------
 
-void ExtractUniformFromLine(const std::string& line, const GLuint programId, tsl::robin_map<StringId, GLuint, StringIdHasher>& outUniformNamesToLocations)
+void ExtractUniformFromLine(const std::string& line, const std::string& shaderName, const GLuint programId, tsl::robin_map<StringId, GLuint, StringIdHasher>& outUniformNamesToLocations)
 {
     const auto uniformLineSplitBySpace = StringSplit(line, ' ');
     
@@ -255,7 +256,7 @@ void ExtractUniformFromLine(const std::string& line, const GLuint programId, tsl
             
             if (uniformLocation == -1)
             {
-                Log(LogType::WARNING, "Unused uniform at location -1: %s", indexedUniformName.c_str());
+                Log(LogType::WARNING, "At %s, Unused uniform at location -1: %s", shaderName.c_str(), indexedUniformName.c_str());
             }
         }
     }
@@ -267,7 +268,7 @@ void ExtractUniformFromLine(const std::string& line, const GLuint programId, tsl
         
         if (uniformLocation == -1)
         {
-            Log(LogType::WARNING, "Unused uniform at location -1: %s", uniformName.c_str());
+            Log(LogType::WARNING, "At %s, Unused uniform at location -1: %s", shaderName.c_str(), uniformName.c_str());
         }
     }
 }

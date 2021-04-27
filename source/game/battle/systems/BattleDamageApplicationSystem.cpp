@@ -90,7 +90,7 @@ void  BattleDamageApplicationSystem::AddBloodDropsToUnit(const genesis::ecs::Ent
     
     if (!world.HasComponent<genesis::rendering::ParticleEmitterComponent>(unitEntityId))
     {
-        genesis::rendering::AddParticleEmitter(genesis::rendering::ParticleEmitterType::BLOOD_DROP, transformComponent.mPosition + glm::vec3(0.0f, 0.0f, -scaledEntityHeight/2.0f), glm::vec2(0.5f, 1.0f), glm::vec2(-0.01f, 0.01f), glm::vec2(-0.01, 0.01f), glm::vec2(0.001f, 0.001f), 100, false, unitEntityId);
+        genesis::rendering::AddParticleEmitter(genesis::rendering::ParticleEmitterType::BLOOD_DROP, transformComponent.mPosition + glm::vec3(0.0f, 0.0f, -scaledEntityHeight/2.0f), glm::vec2(0.5f, 1.0f), glm::vec2(-0.01f, 0.01f), glm::vec2(-0.01, 0.01f), glm::vec2(-0.001f, 0.001f), glm::vec2(0.001f), 100, false, unitEntityId);
     }
     else
     {

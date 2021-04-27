@@ -171,9 +171,8 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
 
             if (!renderableComponent.mIsVisible)
             {
-                return;
+                continue;
             }
-            
 
             const auto& currentMesh = resources::ResourceLoadingService::GetInstance().GetResource<resources::MeshResource>(renderableComponent.mMeshResourceIds[renderableComponent.mCurrentMeshResourceIndex]);
             GL_CHECK(glBindVertexArray(currentMesh.GetVertexArrayObject()));
@@ -194,6 +193,7 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
 
             auto& currentShader = shaderStoreComponent.mShaders.at(currentMesh.HasSkeleton() ? SKELETAL_MODEL_DEPTH_SHADER_NAME : STATIC_MODEL_DEPTH_SHADER_NAME);
             GL_CHECK(glUseProgram(currentShader.GetProgramId()));
+            
             currentShader.SetMatrix4fv(LIGHT_SPACE_MATRIX_UNIFORM_NAME, lightStoreComponent.mMainShadowCastingLightMatrix);
             
             currentShader.SetMatrix4fv(WORLD_MARIX_UNIFORM_NAME, world);
@@ -319,16 +319,6 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
         }
     }
     
-    // Render particles
-    for (const auto& entityId: particleEntities)
-    {
-        // Render particle entities
-        if (renderingContextComponent.mParticlesEnabled)
-        {
-            RenderParticleSystem(world.GetComponent<ParticleEmitterComponent>(entityId), world.GetComponent<TransformComponent>(entityId), world.GetComponent<RenderableComponent>(entityId), shaderStoreComponent, cameraComponent);
-        }
-    }
-    
     // Render 3d texts
     if (guiEntityGroups.count(RenderableType::TEXT_3D_MODEL))
     {
@@ -365,6 +355,15 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
                 windowComponent,
                 renderingContextComponent
             );
+        }
+    }
+    
+    // Render particles
+    for (const auto& entityId: particleEntities)
+    {
+        if (renderingContextComponent.mParticlesEnabled)
+        {
+            RenderParticleSystem(world.GetComponent<ParticleEmitterComponent>(entityId), world.GetComponent<TransformComponent>(entityId), world.GetComponent<RenderableComponent>(entityId), shaderStoreComponent, cameraComponent);
         }
     }
     
@@ -802,7 +801,7 @@ void RenderingSystem::RenderEntityInternal
     // Update Shader
     const resources::ShaderResource* currentShader = &shaderStoreComponent.mShaders.at(renderableComponent.mShaderNameId);
     GL_CHECK(glUseProgram(currentShader->GetProgramId()));
-
+    
     // Calculate world matrix for entity
     glm::mat4 world(1.0f);
         

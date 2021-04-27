@@ -7,6 +7,7 @@
 
 #include "ShaderResource.h"
 #include "../rendering/opengl/Context.h"
+#include "../common/utils/Logging.h"
 
 ///------------------------------------------------------------------------------------------------
 
@@ -22,7 +23,7 @@ namespace resources
 
 ShaderResource::ShaderResource
 (
-    const tsl::robin_map<StringId, GLuint, StringIdHasher> uniformNamesToLocations,
+    const tsl::robin_map<StringId, GLuint, StringIdHasher>& uniformNamesToLocations,
     const GLuint programId
 )
     : mShaderUniformNamesToLocations(uniformNamesToLocations) 
@@ -207,10 +208,7 @@ const tsl::robin_map<StringId, GLuint, StringIdHasher>& ShaderResource::GetUnifo
 void ShaderResource::CopyConstruction(const ShaderResource& rhs)
 {
     mProgramId = rhs.GetProgramId();
-    for (const auto& uniformEntry: rhs.GetUniformNamesToLocations())
-    {
-        mShaderUniformNamesToLocations[uniformEntry.first] = uniformEntry.second;
-    }
+    mShaderUniformNamesToLocations = rhs.GetUniformNamesToLocations();
 }
 
 ///------------------------------------------------------------------------------------------------

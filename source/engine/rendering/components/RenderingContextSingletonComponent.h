@@ -47,11 +47,6 @@ public:
     float mDtAccumulator              = 0.0f;
     bool mShadowsEnabled              = true;
     bool mParticlesEnabled            = true;
-
-    // Previous render call resource ids
-    StringId previousShaderNameId             = StringId();
-    resources::ResourceId previousTextureResourceId = resources::ResourceId();
-    resources::ResourceId previousMeshResourceId    = resources::ResourceId();
 };
 
 ///-----------------------------------------------------------------------------------------------

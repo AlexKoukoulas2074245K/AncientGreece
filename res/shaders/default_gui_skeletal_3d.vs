@@ -11,7 +11,6 @@ uniform mat4 proj;
 uniform mat4 bones[100];
 
 out vec2 uv_frag;
-out vec3 frag_pos;
 
 void main()
 {
@@ -23,6 +22,4 @@ void main()
     uv_frag = uv;
     vec3 frag_unprojected_pos = (world * boneTransform * vec4(position, 1.0f)).rgb;
     gl_Position = proj * vec4(frag_unprojected_pos, 1.0f);
-    frag_pos = gl_Position.rgb;
-
 }

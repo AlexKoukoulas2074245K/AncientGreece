@@ -39,7 +39,7 @@ namespace
     static const StringId TEXT_FONT_NAME         = StringId("console_font");
     static const StringId DEBUG_LIGHT_ASSET_NAME = StringId("debug_light");
 
-    static const float TEXT_SIZE         = 0.06f;
+    static const float TEXT_SIZE         = 0.05f;
 }
 
 ///-----------------------------------------------------------------------------------------------

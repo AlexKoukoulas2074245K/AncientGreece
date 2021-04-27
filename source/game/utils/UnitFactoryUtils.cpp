@@ -34,9 +34,6 @@ genesis::ecs::EntityId CreateUnit(const StringId unitTypeName, const StringId un
     
     auto unitStatsComponent = std::make_unique<UnitStatsComponent>();
     unitStatsComponent->mStats = unitBaseStats;
-    unitStatsComponent->mStats.mSpeedMultiplier = unitBaseStats.mSpeedMultiplier;
-    unitStatsComponent->mStats.mDamage = unitBaseStats.mDamage;
-    unitStatsComponent->mStats.mHealth = unitBaseStats.mHealth;
     
     if (unitName != StringId())
     {

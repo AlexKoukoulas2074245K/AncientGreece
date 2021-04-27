@@ -52,6 +52,7 @@ private:
     tsl::robin_map<StringId, GLuint, StringIdHasher> GetUniformNamesToLocationsMap
     (
         const GLuint programId,
+        const std::string& shaderName, 
         const std::string& vertexShaderFileContents,
         const std::string& fragmentShaderFileContents
     ) const;

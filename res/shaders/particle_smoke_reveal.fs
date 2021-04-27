@@ -1,5 +1,6 @@
 #version 330 core
 
+in float frag_lifetime;
 in vec2 uv_frag;
 
 out vec4 frag_color;
@@ -14,5 +15,8 @@ void main()
 
 	// Get texture color
     frag_color = texture(tex, vec2(finalUvX, finalUvY));
-    frag_color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    frag_color.r = frag_color.r * min(1.0f, frag_lifetime);
+    frag_color.g = frag_color.r * min(1.0f, frag_lifetime);
+    frag_color.b = frag_color.r * min(1.0f, frag_lifetime);
+    frag_color.a = frag_color.r * min(1.0f, frag_lifetime);
 }

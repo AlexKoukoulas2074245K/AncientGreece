@@ -57,12 +57,14 @@ namespace
     static const std::string NAME_PLATE_MODEL_NAME          = "name_plate";
     static const std::string MAP_EDGE_MODEL_NAME            = "map_edge";
     static const std::string CITY_STATE_BUILDING_MODEL_NAME = "building";
-    static const std::string SAVE_FILE_PATH = "save.json";
+    static const std::string UNIT_SHIP_MODEL_NAME           = "ship";
+    static const std::string SAVE_FILE_PATH                 = "save.json";
 
     static const float ENTITY_SPHERE_COLLISION_MULTIPLIER     = 0.25f * 0.3333f;
 
     static const glm::vec3 CITY_STATE_BASE_SCALE              = glm::vec3(0.01f);
     static const glm::vec3 CITY_STATE_SCALE_RENOWN_MULTIPLIER = glm::vec3(0.0003f);
+    static const glm::vec3 UNIT_SHIP_SCALE                    = glm::vec3(0.004f);
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -109,6 +111,8 @@ genesis::ecs::EntityId GetOverworldUnitEntityByName(const StringId& unitName)
     }
     
     assert(false && "Unit with given name can't be found");
+    
+    return genesis::ecs::NULL_ENTITY_ID;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -138,6 +142,13 @@ StringId GetPlayerEntityName()
 StringId GetGenericOverworldUnitEntityName()
 {
     return GENERIC_OVERWORLD_UNIT_ENTITY_NAME;
+}
+
+///------------------------------------------------------------------------------------------------
+
+StringId GetShipEntityNameFromUnitName(const StringId& unitName)
+{
+    return StringId(unitName.GetString() + "_ship");
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -350,8 +361,19 @@ bool TryLoadOverworldStateFromFile()
     );
     
     auto playerEntity = CreateUnit(playerUnitType, playerUnitName, PLAYER_ENTITY_NAME, playerPosition, playerRotation);
+    auto playerShipEntity = genesis::rendering::LoadAndCreateStaticModelByName(UNIT_SHIP_MODEL_NAME, glm::vec3(0.0f), glm::vec3(0.0f), UNIT_SHIP_SCALE, GetShipEntityNameFromUnitName(playerUnitName));
+    
+    auto& playerShipRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(playerShipEntity);
+    playerShipRenderableComponent.mIsVisible           = false;
+    playerShipRenderableComponent.mIsCastingShadows    = true;
+    playerShipRenderableComponent.mIsAffectedByLight   = true;
+    playerShipRenderableComponent.mMaterial.mAmbient   = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    playerShipRenderableComponent.mMaterial.mDiffuse   = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+    playerShipRenderableComponent.mMaterial.mSpecular  = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    playerShipRenderableComponent.mMaterial.mShininess = 1.0f;
     
     auto& playerUnitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
+    playerUnitStatsComponent.mStats.mSpeedMultiplier *= 3.0f;
     
     // Parse last rest timestamp for player
     playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp = TimeStamp
@@ -387,6 +409,17 @@ bool TryLoadOverworldStateFromFile()
         );
         
         auto unitEntity = CreateUnit(unitType, unitName, GENERIC_OVERWORLD_UNIT_ENTITY_NAME, unitPosition, unitRotation);
+        auto unitShipEntity = genesis::rendering::LoadAndCreateStaticModelByName(UNIT_SHIP_MODEL_NAME, glm::vec3(0.0f), glm::vec3(0.0f), UNIT_SHIP_SCALE, GetShipEntityNameFromUnitName(unitName));
+        
+        auto& shipRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(unitShipEntity);
+        
+        shipRenderableComponent.mIsVisible           = false;
+        shipRenderableComponent.mIsAffectedByLight   = true;
+        shipRenderableComponent.mIsCastingShadows    = true;
+        shipRenderableComponent.mMaterial.mAmbient   = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        shipRenderableComponent.mMaterial.mDiffuse   = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+        shipRenderableComponent.mMaterial.mSpecular  = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        shipRenderableComponent.mMaterial.mShininess = 1.0f;
         
         auto& unitAiComponent = world.GetComponent<ai::OverworldUnitAiComponent>(unitEntity);
         unitAiComponent.mLastActionIndex = overworldUnitJsonObject["last_action_index"].get<int>();

@@ -34,6 +34,7 @@ using GLuint = unsigned int;
 enum class ParticleEmitterType
 {
     SMOKE,
+    SMOKE_REVEAL,
     BLOOD_DROP
 };
 
@@ -52,9 +53,10 @@ public:
     glm::vec2 mParticleLifetimeRange;
     glm::vec2 mParticlePositionXOffsetRange;
     glm::vec2 mParticlePositionYOffsetRange;
+    glm::vec2 mParticlePositionZOffsetRange;
     glm::vec2 mParticleSizeRange;
     
-    GLuint mParticleTextureResourceId;
+    size_t mParticleTextureResourceId;
     GLuint mParticleVertexArrayObject;
     GLuint mParticleVertexBuffer;
     GLuint mParticleUVBuffer;

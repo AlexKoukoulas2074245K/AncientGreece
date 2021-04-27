@@ -30,7 +30,7 @@ namespace resources
 
 ///------------------------------------------------------------------------------------------------
 
-using ResourceId = unsigned int;
+using ResourceId = size_t;
 class IResource;
 class IResourceLoader;
 
