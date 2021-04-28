@@ -55,6 +55,7 @@ void OverworldUnitAiUpdaterSystem::VUpdate(const float dt, const std::vector<gen
     
     for (const auto& entityId: entitiesToProcess)
     {
+        const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
         auto& aiComponent = world.GetComponent<OverworldUnitAiComponent>(entityId);
         
         if (aiComponent.mCurrentAction == nullptr)
@@ -68,6 +69,8 @@ void OverworldUnitAiUpdaterSystem::VUpdate(const float dt, const std::vector<gen
             {
                 // Get highest applicability action for current entity
                 auto registeredActionsCopy = registeredActionsComponent.mRegisteredActions;
+                
+                std::shuffle(registeredActionsCopy.begin(), registeredActionsCopy.end(), std::default_random_engine{});
                 std::sort(registeredActionsCopy.begin(), registeredActionsCopy.end(), [entityId](const std::shared_ptr<IAiAction>& lhs, const std::shared_ptr<IAiAction>& rhs)
                 {
                     const auto lhsApplicability = static_cast<int>(lhs->VGetApplicabilityForEntity(entityId));
@@ -86,6 +89,16 @@ void OverworldUnitAiUpdaterSystem::VUpdate(const float dt, const std::vector<gen
             {
                 aiComponent.mCurrentAction = nullptr;
             }
+        }
+        
+        // Update state description
+        if (unitStatsComponent.mStats.mCurrentRestingDuration > 0.0f)
+        {
+            aiComponent.mBehaviourState = BehaviourState::RESTING;
+        }
+        else
+        {
+            aiComponent.mBehaviourState = BehaviourState::TRAVELLING;
         }
     }
 }

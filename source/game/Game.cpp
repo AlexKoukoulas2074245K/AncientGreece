@@ -249,7 +249,14 @@ void Game::VOnUpdate(float& dt)
 #if !defined(NDEBUG)
     if (genesis::input::GetKeyState(genesis::input::Key::SPACEBAR_KEY) == genesis::input::InputState::PRESSED)
     {
-        dt /= 10.0f;
+        if (genesis::input::GetKeyState(genesis::input::Key::SHIFT_KEY) == genesis::input::InputState::PRESSED)
+        {
+            dt *= 10.0f;
+        }
+        else
+        {
+            dt /= 10.0f;
+        }
     }
 #else
     (void)dt;

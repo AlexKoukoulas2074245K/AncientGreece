@@ -13,14 +13,17 @@
 #include "overworld/AreaTypes.h"
 #include "overworld/utils/TimeStamp.h"
 
+#include <tsl/robin_map.h>
+
 ///-----------------------------------------------------------------------------------------------
 
 struct UnitStats
 {
+    tsl::robin_map<StringId, overworld::TimeStamp, StringIdHasher> mUnitEventTimestamps;
     StringId mUnitName = StringId();
     StringId mUnitType = StringId();
     StringId mUnitModelName = StringId();
-    overworld::TimeStamp mUnitLastRestTimeStamp;
+    
     int mHealth = 0;
     int mDamage = 0;
     float mUnitModelScaleFactor = 0.0f;

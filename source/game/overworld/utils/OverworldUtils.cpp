@@ -206,11 +206,18 @@ void SaveOverworldStateToFile()
     playerJsonObject["player_rz"] = playerTransformComponent.mRotation.z;
     playerJsonObject["player_resting_duration"] = playerUnitStatsComponent.mStats.mCurrentRestingDuration;
     
-    nlohmann::json playerLastRestTimestampJsonObject;
-    playerLastRestTimestampJsonObject["year"] = playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp.mYearBc;
-    playerLastRestTimestampJsonObject["day"] = playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp.mDay;
-    playerLastRestTimestampJsonObject["time_dt_accum"] = playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp.mTimeDtAccum;
-    playerJsonObject["player_last_rest_timestamp"] = playerLastRestTimestampJsonObject;
+    nlohmann::json playerEventTimeStampsJsonObject;
+    for (const auto& unitEventTimestampEntry: playerUnitStatsComponent.mStats.mUnitEventTimestamps)
+    {
+        nlohmann::json eventTimeStampJsonObject;
+        eventTimeStampJsonObject["event_name"] = unitEventTimestampEntry.first.GetString();
+        eventTimeStampJsonObject["event_year"] = unitEventTimestampEntry.second.mYearBc;
+        eventTimeStampJsonObject["event_day"] = unitEventTimestampEntry.second.mDay;
+        eventTimeStampJsonObject["event_time_dt_accum"] = unitEventTimestampEntry.second.mTimeDtAccum;
+        
+        playerEventTimeStampsJsonObject.push_back(eventTimeStampJsonObject);
+    }
+    playerJsonObject["player_event_timestamps"] = playerEventTimeStampsJsonObject;
     
     nlohmann::json playerPartyJsonObject;
     for (auto i = 1U; i < playerUnitStatsComponent.mParty.size(); ++i)
@@ -270,12 +277,19 @@ void SaveOverworldStateToFile()
             }
         }
         
-        // Save daytime data
-        nlohmann::json lastRestTimestampJsonObject;
-        lastRestTimestampJsonObject["year"] = unitStatsComponent.mStats.mUnitLastRestTimeStamp.mYearBc;
-        lastRestTimestampJsonObject["day"] = unitStatsComponent.mStats.mUnitLastRestTimeStamp.mDay;
-        lastRestTimestampJsonObject["time_dt_accum"] = unitStatsComponent.mStats.mUnitLastRestTimeStamp.mTimeDtAccum;
-        unitJsonObject["last_rest_timestamp"] = lastRestTimestampJsonObject;
+        // Save last unit event timestamp data
+        nlohmann::json eventTimeStampsJsonObject;
+        for (const auto& unitEventTimestampEntry: unitStatsComponent.mStats.mUnitEventTimestamps)
+        {
+            nlohmann::json eventTimeStampJsonObject;
+            eventTimeStampJsonObject["event_name"] = unitEventTimestampEntry.first.GetString();
+            eventTimeStampJsonObject["event_year"] = unitEventTimestampEntry.second.mYearBc;
+            eventTimeStampJsonObject["event_day"] = unitEventTimestampEntry.second.mDay;
+            eventTimeStampJsonObject["event_time_dt_accum"] = unitEventTimestampEntry.second.mTimeDtAccum;
+            
+            eventTimeStampsJsonObject.push_back(eventTimeStampJsonObject);
+        }
+        unitJsonObject["event_timestamps"] = eventTimeStampsJsonObject;
         
         // Save party data
         nlohmann::json partyJsonObject;
@@ -375,15 +389,18 @@ bool TryLoadOverworldStateFromFile()
     auto& playerUnitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
     playerUnitStatsComponent.mStats.mSpeedMultiplier *= 3.0f;
     
-    // Parse last rest timestamp for player
-    playerUnitStatsComponent.mStats.mUnitLastRestTimeStamp = TimeStamp
-    (
-        playerJsonObject["player_last_rest_timestamp"]["year"].get<int>(),
-        playerJsonObject["player_last_rest_timestamp"]["day"].get<int>(),
-        playerJsonObject["player_last_rest_timestamp"]["time_dt_accum"].get<float>()
-    );
-    playerUnitStatsComponent.mStats.mCurrentRestingDuration = playerJsonObject["player_resting_duration"].get<float>();
+    // Parse event timestamps for player
+    for (auto& eventTimeStampJsonObject: playerJsonObject["player_event_timestamps"])
+    {
+        playerUnitStatsComponent.mStats.mUnitEventTimestamps[StringId(eventTimeStampJsonObject["event_name"])] = TimeStamp
+        (
+            eventTimeStampJsonObject["event_year"].get<int>(),
+            eventTimeStampJsonObject["event_day"].get<int>(),
+            eventTimeStampJsonObject["event_time_dt_accum"].get<float>()
+        );
+    }
     
+    playerUnitStatsComponent.mStats.mCurrentRestingDuration = playerJsonObject["player_resting_duration"].get<float>();
     
     for (const auto& partyEntry: playerJsonObject["player_party"])
     {
@@ -426,14 +443,16 @@ bool TryLoadOverworldStateFromFile()
         
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
         
-        // Parse last rest timestamp for unit
-        unitStatsComponent.mStats.mUnitLastRestTimeStamp = TimeStamp
-        (
-            overworldUnitJsonObject["last_rest_timestamp"]["year"].get<int>(),
-            overworldUnitJsonObject["last_rest_timestamp"]["day"].get<int>(),
-            overworldUnitJsonObject["last_rest_timestamp"]["time_dt_accum"].get<float>()
-        );
-        unitStatsComponent.mStats.mCurrentRestingDuration = overworldUnitJsonObject["resting_duration"].get<float>();
+        // Parse event timestamps for unit
+        for (auto& eventTimeStampJsonObject: overworldUnitJsonObject["event_timestamps"])
+        {
+            unitStatsComponent.mStats.mUnitEventTimestamps[StringId(eventTimeStampJsonObject["event_name"])] = TimeStamp
+            (
+                eventTimeStampJsonObject["event_year"].get<int>(),
+                eventTimeStampJsonObject["event_day"].get<int>(),
+                eventTimeStampJsonObject["event_time_dt_accum"].get<float>()
+            );
+        }
         
         // Parse unit's party
         for (const auto& partyEntry: overworldUnitJsonObject["party"])
