@@ -87,6 +87,24 @@ CityStateInfo& GetCityStateInfo(const StringId& cityStateName)
 
 ///-----------------------------------------------------------------------------------------------
 
+StringId GetRulingCityStateOfUnit(const StringId& unitName)
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    const auto& cityStateInfoComponent = world.GetSingletonComponent<CityStateInfoSingletonComponent>();
+    
+    for (const auto& cityStateInfoEntry: cityStateInfoComponent.mCityStateNameToInfo)
+    {
+        if (cityStateInfoEntry.second.mRuler == unitName)
+        {
+            return cityStateInfoEntry.first;
+        }
+    }
+    
+    return StringId();
+}
+
+///-----------------------------------------------------------------------------------------------
+
 genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId& cityStateName)
 {
     auto& world = genesis::ecs::World::GetInstance();

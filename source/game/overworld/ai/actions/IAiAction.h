@@ -10,6 +10,7 @@
 
 ///-----------------------------------------------------------------------------------------------
 
+#include "../components/OverworldUnitAiComponent.h"
 #include "../../../../engine/ECS.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -49,7 +50,7 @@ public:
     virtual void VStartForEntity(const genesis::ecs::EntityId entityId) const = 0;
     virtual ActionStatus VUpdateForEntity(const float dt, const genesis::ecs::EntityId entityId) const = 0;
     virtual Applicability VGetApplicabilityForEntity(const genesis::ecs::EntityId entityId) const = 0;
-    
+    virtual BehaviourState VGetActionBehaviourState() const = 0;
 };
 
 ///-----------------------------------------------------------------------------------------------

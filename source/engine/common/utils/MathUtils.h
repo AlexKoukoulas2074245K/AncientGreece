@@ -326,18 +326,19 @@ inline float TweenValue(const float val, const std::function<float(const float)>
 }
 
 ///-----------------------------------------------------------------------------------------------
+/// Returns a mersenne_twister_engine
+/// @returns the rng engine
+std::mt19937& GetRandomEngine();
+
+///-----------------------------------------------------------------------------------------------
 /// Computes a random int based on the min and max inclusive values provided.
 /// @param[in] min the minimum value (inclusive) that the function can return (defaults to 0).
 /// @param[in] max the maximum value (inclusive) that the function can return (defaults to 32767).
 /// @returns a random integer that respects the given bounds.
 inline int RandomInt(const int min = 0, const int max = RAND_MAX)
-{    
-    static std::random_device rd;
-    static std::mt19937 eng(rd());        
-
+{
     std::uniform_int_distribution<> distr(min, max);    
-
-    return distr(eng);
+    return distr(GetRandomEngine());
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -349,7 +350,7 @@ inline float RandomFloat(const float min = 0.0f, const float max = 1.0f)
 {
     return min + static_cast <float> (RandomInt()) / (static_cast <float> (RAND_MAX / (max - min)));
 }
-
+                          
 ///-----------------------------------------------------------------------------------------------
 /// Computes a random sign, 1 or -1.
 /// @returns a random sign (either -1 or 1).

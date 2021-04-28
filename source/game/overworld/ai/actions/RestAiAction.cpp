@@ -102,6 +102,13 @@ Applicability RestAiAction::VGetApplicabilityForEntity(const genesis::ecs::Entit
 
 ///-----------------------------------------------------------------------------------------------
 
+BehaviourState RestAiAction::VGetActionBehaviourState() const
+{
+    return BehaviourState::RESTING;
+}
+
+///-----------------------------------------------------------------------------------------------
+
 }
 
 }

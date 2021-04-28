@@ -1,12 +1,12 @@
 ///------------------------------------------------------------------------------------------------
-///  RestAIAction.h
+///  PatrolAroundRulingTownAction.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 26/04/2021.
+///  Created by Alex Koukoulas on 28/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef RestAiAction_h
-#define RestAiAction_h
+#ifndef PatrolAroundRulingTownAction_h
+#define PatrolAroundRulingTownAction_h
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -23,10 +23,10 @@ namespace ai
 {
 
 ///-----------------------------------------------------------------------------------------------
-class RestAiAction final : public IAiAction
+class PatrolAroundRulingTownAction final : public IAiAction
 {
 public:
-    RestAiAction();
+    PatrolAroundRulingTownAction();
     void VStartForEntity(const genesis::ecs::EntityId entityId) const override;
     ActionStatus VUpdateForEntity(const float dt, const genesis::ecs::EntityId entityId) const override;
     Applicability VGetApplicabilityForEntity(const genesis::ecs::EntityId entityId) const override;
@@ -41,4 +41,4 @@ public:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* RestAiAction_h */
+#endif /* PatrolAroundRulingTownAction_h */

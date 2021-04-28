@@ -123,6 +123,13 @@ Applicability VisitRandomCityStateAiAction::VGetApplicabilityForEntity(const gen
 
 ///-----------------------------------------------------------------------------------------------
 
+BehaviourState VisitRandomCityStateAiAction::VGetActionBehaviourState() const
+{
+    return BehaviourState::TRAVELLING;
+}
+
+///-----------------------------------------------------------------------------------------------
+
 }
 
 }

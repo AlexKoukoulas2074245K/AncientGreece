@@ -12,8 +12,9 @@
 
 #include "../../engine/ECS.h"
 #include "../../utils/OverworldDayTimeUtils.h"
-#include "../../utils/TimeStamp.h"
+#include "../../../../engine/common/utils/MathUtils.h"
 
+#include <forward_list>
 #include <memory>
 #include <tsl/robin_map.h>
 
@@ -55,8 +56,8 @@ class OverworldUnitAiComponent final: public genesis::ecs::IComponent
 {
 public:
     std::shared_ptr<IAiAction> mCurrentAction = nullptr;
+    std::forward_list<glm::vec3> mPathPositions;
     int mLastActionIndex = -1;
-    TimeStamp mLastRestTimeStamp;
     BehaviourState mBehaviourState;
 };
 

@@ -6,16 +6,11 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "OverworldUnitAiUpdaterSystem.h"
+#include "../actions/PatrolAroundRulingTownAction.h"
 #include "../actions/RestAiAction.h"
 #include "../actions/VisitRandomCityStateAiAction.h"
 #include "../components/OverworldUnitAiComponent.h"
 #include "../components/OverworldUnitAiRegisteredActionsSingletonComponent.h"
-#include "../../utils/OverworldInteractionUtils.h"
-#include "../../../components/CityStateInfoSingletonComponent.h"
-#include "../../../components/UnitStatsComponent.h"
-#include "../../../utils/KeyValueUtils.h"
-#include "../../../utils/CityStateInfoUtils.h"
-#include "../../../utils/UnitInfoUtils.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -40,6 +35,7 @@ OverworldUnitAiUpdaterSystem::OverworldUnitAiUpdaterSystem()
 {
     auto registeredActionsComponent = std::make_unique<OverworldUnitAiRegisteredActionsSingletonComponent>();
     registeredActionsComponent->mRegisteredActions.push_back(std::make_unique<RestAiAction>());
+    registeredActionsComponent->mRegisteredActions.push_back(std::make_unique<PatrolAroundRulingTownAction>());
     registeredActionsComponent->mRegisteredActions.push_back(std::make_unique<VisitRandomCityStateAiAction>());
     
     genesis::ecs::World::GetInstance().SetSingletonComponent<OverworldUnitAiRegisteredActionsSingletonComponent>(std::move(registeredActionsComponent));
@@ -55,7 +51,6 @@ void OverworldUnitAiUpdaterSystem::VUpdate(const float dt, const std::vector<gen
     
     for (const auto& entityId: entitiesToProcess)
     {
-        const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
         auto& aiComponent = world.GetComponent<OverworldUnitAiComponent>(entityId);
         
         if (aiComponent.mCurrentAction == nullptr)
@@ -70,7 +65,7 @@ void OverworldUnitAiUpdaterSystem::VUpdate(const float dt, const std::vector<gen
                 // Get highest applicability action for current entity
                 auto registeredActionsCopy = registeredActionsComponent.mRegisteredActions;
                 
-                std::shuffle(registeredActionsCopy.begin(), registeredActionsCopy.end(), std::default_random_engine{});
+                std::shuffle(registeredActionsCopy.begin(), registeredActionsCopy.end(), genesis::math::GetRandomEngine());
                 std::sort(registeredActionsCopy.begin(), registeredActionsCopy.end(), [entityId](const std::shared_ptr<IAiAction>& lhs, const std::shared_ptr<IAiAction>& rhs)
                 {
                     const auto lhsApplicability = static_cast<int>(lhs->VGetApplicabilityForEntity(entityId));
@@ -85,20 +80,11 @@ void OverworldUnitAiUpdaterSystem::VUpdate(const float dt, const std::vector<gen
         }
         else
         {
+            aiComponent.mBehaviourState = aiComponent.mCurrentAction->VGetActionBehaviourState();
             if (aiComponent.mCurrentAction->VUpdateForEntity(dt, entityId) == ActionStatus::FINISHED)
             {
                 aiComponent.mCurrentAction = nullptr;
             }
-        }
-        
-        // Update state description
-        if (unitStatsComponent.mStats.mCurrentRestingDuration > 0.0f)
-        {
-            aiComponent.mBehaviourState = BehaviourState::RESTING;
-        }
-        else
-        {
-            aiComponent.mBehaviourState = BehaviourState::TRAVELLING;
         }
     }
 }

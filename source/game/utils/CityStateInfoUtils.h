@@ -31,6 +31,10 @@ CityStateInfo& GetCityStateInfo(const StringId& cityStateName);
 
 ///------------------------------------------------------------------------------------------------
 
+StringId GetRulingCityStateOfUnit(const StringId& unitName);
+
+///------------------------------------------------------------------------------------------------
+
 genesis::colors::RgbTriplet<float> GetCityStateGarissonColor(const StringId& cityStateName);
 
 ///------------------------------------------------------------------------------------------------

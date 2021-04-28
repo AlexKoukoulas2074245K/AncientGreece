@@ -21,6 +21,15 @@ namespace math
 
 ///-----------------------------------------------------------------------------------------------
 
+std::mt19937& GetRandomEngine()
+{
+    static std::random_device rd;
+    static std::mt19937 eng(rd());
+    return eng;
+}
+
+///-----------------------------------------------------------------------------------------------
+
 glm::vec2 ComputeMouseCoordsInNDC(const float windowWidth, const float windowHeight)
 {
     auto mouse_x = 0;

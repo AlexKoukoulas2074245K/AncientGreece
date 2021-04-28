@@ -29,6 +29,7 @@ public:
     void VStartForEntity(const genesis::ecs::EntityId entityId) const override;
     ActionStatus VUpdateForEntity(const float dt, const genesis::ecs::EntityId entityId) const override;
     Applicability VGetApplicabilityForEntity(const genesis::ecs::EntityId entityId) const override;
+    BehaviourState VGetActionBehaviourState() const override;
 };
 
 ///-----------------------------------------------------------------------------------------------
