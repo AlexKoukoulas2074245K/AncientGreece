@@ -38,7 +38,8 @@ enum class BehaviourState
 {
     RESTING,
     TRAVELLING,
-    PATROLLING
+    PATROLLING,
+    SEEKING
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -47,7 +48,8 @@ static const tsl::robin_map<BehaviourState, StringId> BEHAVIOUR_STATE_TO_STRING 
 {
     { BehaviourState::RESTING, StringId("Resting") },
     { BehaviourState::TRAVELLING, StringId("Travelling") },
-    { BehaviourState::PATROLLING, StringId("Patrolling") }
+    { BehaviourState::PATROLLING, StringId("Patrolling") },
+    { BehaviourState::SEEKING, StringId("Seeking") }
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -57,7 +59,7 @@ class OverworldUnitAiComponent final: public genesis::ecs::IComponent
 public:
     std::shared_ptr<IAiAction> mCurrentAction = nullptr;
     std::forward_list<glm::vec3> mPathPositions;
-    int mLastActionIndex = -1;
+    int mLastActionIndexLoadedFromDisk = -1;
     BehaviourState mBehaviourState;
 };
 

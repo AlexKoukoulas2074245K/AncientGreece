@@ -6,6 +6,7 @@
 ///------------------------------------------------------------------------------------------------
 
 #include "OverworldUtils.h"
+#include "../components/OverworldBattleStateComponent.h"
 #include "../components/OverworldDayTimeSingletonComponent.h"
 #include "../components/OverworldHighlightableComponent.h"
 #include "../components/OverworldTargetComponent.h"
@@ -18,6 +19,7 @@
 #include "../../utils/UnitFactoryUtils.h"
 #include "../../utils/UnitInfoUtils.h"
 #include "../../../engine/ECS.h"
+#include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/NameComponent.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/ColorUtils.h"
@@ -43,24 +45,28 @@ namespace overworld
 
 namespace
 {
-    static const StringId GAME_FONT_NAME                     = StringId("game_font");
-    static const StringId UNIT_PREVIEW_POPUP_NAME            = StringId("unit_preview_popup");
-    static const StringId MAP_ENTITY_NAME                    = StringId("map");
-    static const StringId MAP_EDGE_1_ENTITY_NAME             = StringId("map_edge_1");
-    static const StringId MAP_EDGE_2_ENTITY_NAME             = StringId("map_edge_2");
-    static const StringId MAP_EDGE_3_ENTITY_NAME             = StringId("map_edge_3");
-    static const StringId MAP_EDGE_4_ENTITY_NAME             = StringId("map_edge_4");
-    static const StringId GENERIC_OVERWORLD_UNIT_ENTITY_NAME = StringId("overworld_unit");
-    static const StringId PLAYER_ENTITY_NAME                 = StringId("player");
+    static const StringId GAME_FONT_NAME                       = StringId("game_font");
+    static const StringId UNIT_PREVIEW_POPUP_NAME              = StringId("unit_preview_popup");
+    static const StringId MAP_ENTITY_NAME                      = StringId("map");
+    static const StringId MAP_EDGE_1_ENTITY_NAME               = StringId("map_edge_1");
+    static const StringId MAP_EDGE_2_ENTITY_NAME               = StringId("map_edge_2");
+    static const StringId MAP_EDGE_3_ENTITY_NAME               = StringId("map_edge_3");
+    static const StringId MAP_EDGE_4_ENTITY_NAME               = StringId("map_edge_4");
+    static const StringId GENERIC_OVERWORLD_UNIT_ENTITY_NAME   = StringId("overworld_unit");
+    static const StringId GENERIC_OVERWORLD_BATTLE_ENTITY_NAME = StringId("overworld_battle");
+    static const StringId PLAYER_ENTITY_NAME                   = StringId("player");
 
-    static const std::string OVERWORLD_HEIGHTMAP_NAME       = "overworld";
-    static const std::string NAME_PLATE_MODEL_NAME          = "name_plate";
-    static const std::string MAP_EDGE_MODEL_NAME            = "map_edge";
-    static const std::string CITY_STATE_BUILDING_MODEL_NAME = "building";
-    static const std::string UNIT_SHIP_MODEL_NAME           = "ship";
-    static const std::string SAVE_FILE_PATH                 = "save.json";
+    static const std::string OVERWORLD_HEIGHTMAP_NAME         = "overworld";
+    static const std::string NAME_PLATE_MODEL_NAME            = "name_plate";
+    static const std::string OVERWORLD_BATTLE_ICON_MODEL_NAME = "crossed_swords";
+    static const std::string MAP_EDGE_MODEL_NAME              = "map_edge";
+    static const std::string CITY_STATE_BUILDING_MODEL_NAME   = "building";
+    static const std::string UNIT_SHIP_MODEL_NAME             = "ship";
+    static const std::string SAVE_FILE_PATH                   = "save.json";
 
     static const float ENTITY_SPHERE_COLLISION_MULTIPLIER     = 0.25f * 0.3333f;
+
+    static const int OVERWORLD_BATTLE_SINGLE_DEATH_MINUTES = 12;
 
     static const glm::vec3 CITY_STATE_BASE_SCALE              = glm::vec3(0.01f);
     static const glm::vec3 CITY_STATE_SCALE_RENOWN_MULTIPLIER = glm::vec3(0.0003f);
@@ -69,12 +75,14 @@ namespace
 
 ///------------------------------------------------------------------------------------------------
 
+float GetProjectedOverworldBattleDuration(const size_t firstPartySize, const size_t secondPartySize);
 glm::vec3 GetCityStateOverworldScale(const StringId& cityStateName);
 void AddCollidableDataToCityState(const genesis::ecs::EntityId cityStateEntity);
 void LoadAndCreateOverworldMapComponents();
 void PopulateOverworldCityStates();
 void RemoveOverworldCityStates();
 void RemoveOverworldMapComponents();
+
 
 ///------------------------------------------------------------------------------------------------
 
@@ -146,9 +154,23 @@ StringId GetGenericOverworldUnitEntityName()
 
 ///------------------------------------------------------------------------------------------------
 
+StringId GetGenericOverworldBattleEntityName()
+{
+    return GENERIC_OVERWORLD_BATTLE_ENTITY_NAME;
+}
+
+///------------------------------------------------------------------------------------------------
+
 StringId GetShipEntityNameFromUnitName(const StringId& unitName)
 {
     return StringId(unitName.GetString() + "_ship");
+}
+
+///------------------------------------------------------------------------------------------------
+
+float GetProjectedOverworldBattleSingleDeathTime()
+{
+    return GetMinuteDuration() * OVERWORLD_BATTLE_SINGLE_DEATH_MINUTES;
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -190,10 +212,26 @@ void SaveOverworldStateToFile()
     const auto& dayTimeComponent = world.GetSingletonComponent<OverworldDayTimeSingletonComponent>();
     const auto& cityStateInfoComponent = world.GetSingletonComponent<CityStateInfoSingletonComponent>();
     
+    // Save overworld state
     nlohmann::json overworldStateJsonObject;
     overworldStateJsonObject["time_accumulator"] = dayTimeComponent.mTimeDtAccum;
     overworldStateJsonObject["current_day"] = dayTimeComponent.mCurrentDay;
     overworldStateJsonObject["current_year"] = dayTimeComponent.mCurrentYearBc;
+    
+    // Save overworld battles
+    nlohmann::json overworldActiveBattlesJsonObject;
+    const auto& overworldBattleEntities = world.FindAllEntitiesWithName(GENERIC_OVERWORLD_BATTLE_ENTITY_NAME);
+    for (const auto& battleEntity: overworldBattleEntities)
+    {
+        const auto& battleStateComponent = world.GetComponent<OverworldBattleStateComponent>(battleEntity);
+        
+        nlohmann::json activeBattleJsonObject;
+        activeBattleJsonObject["attacking_unit_name"] = battleStateComponent.mAttackingUnitName.GetString();
+        activeBattleJsonObject["defending_unit_name"] = battleStateComponent.mDefendingUnitName.GetString();
+        
+        overworldActiveBattlesJsonObject.push_back(activeBattleJsonObject);
+    }
+    overworldStateJsonObject["active_battles"] = overworldActiveBattlesJsonObject;
     
     nlohmann::json playerJsonObject;
     playerJsonObject["player_unit_name"] = playerUnitStatsComponent.mStats.mUnitName.GetString();
@@ -249,6 +287,7 @@ void SaveOverworldStateToFile()
         unitJsonObject["ry"] = transformComponent.mRotation.y;
         unitJsonObject["rz"] = transformComponent.mRotation.z;
         unitJsonObject["resting_duration"] = unitStatsComponent.mStats.mCurrentRestingDuration;
+        unitJsonObject["battle_duration"] = unitStatsComponent.mStats.mCurrentBattleDuration;
         unitJsonObject["last_action_index"] = ai::GetAiActionIndex(unitAiComponent.mCurrentAction);
         
         // Save target data
@@ -439,7 +478,7 @@ bool TryLoadOverworldStateFromFile()
         shipRenderableComponent.mMaterial.mShininess = 1.0f;
         
         auto& unitAiComponent = world.GetComponent<ai::OverworldUnitAiComponent>(unitEntity);
-        unitAiComponent.mLastActionIndex = overworldUnitJsonObject["last_action_index"].get<int>();
+        unitAiComponent.mLastActionIndexLoadedFromDisk = overworldUnitJsonObject["last_action_index"].get<int>();
         
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(unitEntity);
         
@@ -453,6 +492,9 @@ bool TryLoadOverworldStateFromFile()
                 eventTimeStampJsonObject["event_time_dt_accum"].get<float>()
             );
         }
+        
+        unitStatsComponent.mStats.mCurrentRestingDuration = overworldUnitJsonObject["resting_duration"].get<float>();
+        unitStatsComponent.mStats.mCurrentBattleDuration = overworldUnitJsonObject["battle_duration"].get<float>();
         
         // Parse unit's party
         for (const auto& partyEntry: overworldUnitJsonObject["party"])
@@ -491,6 +533,15 @@ bool TryLoadOverworldStateFromFile()
             targetComponent->mEntityTargetToFollow = GetCityStateEntity(StringId(overworldUnitJsonObject["target_city_state_name"].get<std::string>()));
             world.AddComponent<OverworldTargetComponent>(unitEntity, std::move(targetComponent));
         }
+    }
+    
+    // Parse active battles
+    for (const auto& activeBattleJsonObject: overworldStateJsonObject["active_battles"])
+    {
+        const auto attackingUnitName = StringId(activeBattleJsonObject["attacking_unit_name"].get<std::string>());
+        const auto defendingUnitName = StringId(activeBattleJsonObject["defending_unit_name"].get<std::string>());
+        
+        CreateOverworldBattle(GetOverworldUnitEntityByName(attackingUnitName), GetOverworldUnitEntityByName(defendingUnitName));
     }
     
     // Parse city state changes
@@ -539,6 +590,13 @@ void AddCollidableDataToCityState(const genesis::ecs::EntityId cityStateEntity)
 
 ///------------------------------------------------------------------------------------------------
 
+float GetProjectedOverworldBattleDuration(const size_t firstPartySize, const size_t secondPartySize)
+{
+    return genesis::math::Max(firstPartySize, secondPartySize) * GetProjectedOverworldBattleSingleDeathTime();
+}
+
+///------------------------------------------------------------------------------------------------
+
 glm::vec3 GetCityStateOverworldScale(const StringId& cityStateName)
 {
     auto& world = genesis::ecs::World::GetInstance();
@@ -557,6 +615,50 @@ void LoadAndCreateOverworldMapComponents()
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_4_ENTITY_NAME);
 }
 
+
+///------------------------------------------------------------------------------------------------
+
+void CreateOverworldBattle(const genesis::ecs::EntityId attackingEntityId, const genesis::ecs::EntityId defendingEntityId)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+
+    const auto& attackingEntityPosition = world.GetComponent<genesis::TransformComponent>(attackingEntityId).mPosition;
+    const auto& defendingEntityPosition = world.GetComponent<genesis::TransformComponent>(defendingEntityId).mPosition;
+    
+    auto& attackingEntityUnitStatsComponent = world.GetComponent<UnitStatsComponent>(attackingEntityId);
+    auto& defendingEntityUnitStatsComponent = world.GetComponent<UnitStatsComponent>(defendingEntityId);
+    
+    // Pin target entity
+    if (world.HasComponent<OverworldTargetComponent>(defendingEntityId))
+    {
+        world.RemoveComponent<OverworldTargetComponent>(defendingEntityId);
+        genesis::animation::ChangeAnimation(defendingEntityId, StringId("idle"));
+    }
+    
+    
+    // Assign battle duration to both entities,
+    // Unless one or both already have a battle duration which points to a deserialization from disk flow
+    if (attackingEntityUnitStatsComponent.mStats.mCurrentBattleDuration <= 0.0f && defendingEntityUnitStatsComponent.mStats.mCurrentBattleDuration <= 0.0f)
+    {
+        const auto projectedBattleDuration = GetProjectedOverworldBattleDuration(attackingEntityUnitStatsComponent.mParty.size(), defendingEntityUnitStatsComponent.mParty.size());
+        
+        attackingEntityUnitStatsComponent.mStats.mCurrentBattleDuration = projectedBattleDuration;
+        defendingEntityUnitStatsComponent.mStats.mCurrentBattleDuration = projectedBattleDuration;
+    }
+    
+    // Create battle icon
+    auto battleIconPosition = glm::vec3(attackingEntityPosition + defendingEntityPosition)/2.0f;
+    battleIconPosition.z -= 0.02f;
+    
+    auto battleEntity = genesis::rendering::LoadAndCreateStaticModelByName(OVERWORLD_BATTLE_ICON_MODEL_NAME, battleIconPosition, glm::vec3(), glm::vec3(0.01f, 0.01f, 0.01f), GENERIC_OVERWORLD_BATTLE_ENTITY_NAME);
+
+    auto battleStateComponent = std::make_unique<OverworldBattleStateComponent>();
+    battleStateComponent->mAttackingUnitName = attackingEntityUnitStatsComponent.mStats.mUnitName;
+    battleStateComponent->mDefendingUnitName = defendingEntityUnitStatsComponent.mStats.mUnitName;
+    
+    world.AddComponent<OverworldBattleStateComponent>(battleEntity, std::move(battleStateComponent));
+    
+}
 
 ///------------------------------------------------------------------------------------------------
 

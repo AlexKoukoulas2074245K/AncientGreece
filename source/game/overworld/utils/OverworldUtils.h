@@ -48,7 +48,19 @@ StringId GetGenericOverworldUnitEntityName();
 
 ///------------------------------------------------------------------------------------------------
 
+StringId GetGenericOverworldBattleEntityName();
+
+///------------------------------------------------------------------------------------------------
+
 StringId GetShipEntityNameFromUnitName(const StringId& unitName);
+
+///------------------------------------------------------------------------------------------------
+
+float GetProjectedOverworldBattleSingleDeathTime();
+
+///------------------------------------------------------------------------------------------------
+
+void CreateOverworldBattle(const genesis::ecs::EntityId attackingEntityId, const genesis::ecs::EntityId defendingEntityId);
 
 ///------------------------------------------------------------------------------------------------
 

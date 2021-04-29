@@ -1,20 +1,16 @@
 ///------------------------------------------------------------------------------------------------
-///  OverworldUnitAiUpdaterSystem.h
+///  SeekUnitFightAiAction.h
 ///  AncientGreece
 ///
-///  Created by Alex Koukoulas on 25/04/2021.
+///  Created by Alex Koukoulas on 29/04/2021.
 ///-----------------------------------------------------------------------------------------------
 
-#ifndef OverworldUnitAiUpdaterSystem_h
-#define OverworldUnitAiUpdaterSystem_h
-
-///-----------------------------------------------------------------------------------------------
-
-#include "../../engine/ECS.h"
+#ifndef SeekUnitFightAiAction_h
+#define SeekUnitFightAiAction_h
 
 ///-----------------------------------------------------------------------------------------------
 
-class UnitStatsComponent;
+#include "IAiAction.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -27,19 +23,13 @@ namespace ai
 {
 
 ///-----------------------------------------------------------------------------------------------
-
-class OverworldUnitAiComponent;
-
-///-----------------------------------------------------------------------------------------------
-class OverworldUnitAiUpdaterSystem final : public genesis::ecs::BaseSystem<OverworldUnitAiComponent, UnitStatsComponent>
+class SeekUnitFightAiAction final : public IAiAction
 {
 public:
-    OverworldUnitAiUpdaterSystem();
-
-    void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
-    
-private:
-    
+    void VStartForEntity(const genesis::ecs::EntityId entityId) const override;
+    ActionStatus VUpdateForEntity(const float dt, const genesis::ecs::EntityId entityId) const override;
+    Applicability VGetApplicabilityForEntity(const genesis::ecs::EntityId entityId) const override;
+    BehaviourState VGetActionBehaviourState() const override;
 };
 
 ///-----------------------------------------------------------------------------------------------
@@ -50,4 +40,4 @@ private:
 
 ///-----------------------------------------------------------------------------------------------
 
-#endif /* OverworldUnitAIUpdaterSystem_h */
+#endif /* SeekUnitFightAiAction_h */

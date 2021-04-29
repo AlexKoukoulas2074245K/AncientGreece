@@ -31,6 +31,7 @@ struct UnitStats
     float mSpeedMultiplier = 0.0f;
     float mAttackRange = 0.0f;
     float mCurrentRestingDuration = 0.0f;
+    float mCurrentBattleDuration = 0.0f;
     bool mIsRangedUnit = false;
     overworld::AreaTypeMask mNavigableAreaTypes = overworld::areaTypeMasks::NEUTRAL | overworld::areaTypeMasks::SEA | overworld::areaTypeMasks::MOUNTAIN | overworld::areaTypeMasks::HIGH_MOUNTAIN | overworld::areaTypeMasks::FOREST;
 };

@@ -144,7 +144,6 @@ void OverworldHighlightingSystem::VUpdate(const float, const std::vector<genesis
     }
 }
 
-
 ///-----------------------------------------------------------------------------------------------
 
 void OverworldHighlightingSystem::CreateUnitPreviewPopup(const glm::vec3& unitPosition, const StringId& behaviourDescription, const UnitStatsComponent& unitStatsComponent) const

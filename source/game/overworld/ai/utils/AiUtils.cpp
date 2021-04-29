@@ -27,9 +27,7 @@ size_t GetAiActionIndex(const std::shared_ptr<IAiAction>& aiAction)
     const auto& registeredActionsComponent = world.GetSingletonComponent<OverworldUnitAiRegisteredActionsSingletonComponent>();
     const auto foundIter = std::find(registeredActionsComponent.mRegisteredActions.cbegin(), registeredActionsComponent.mRegisteredActions.cend(), aiAction);
     
-    assert(foundIter != registeredActionsComponent.mRegisteredActions.cend());
-    
-    return std::distance(registeredActionsComponent.mRegisteredActions.cbegin(), foundIter);
+    return foundIter != registeredActionsComponent.mRegisteredActions.cend() ? std::distance(registeredActionsComponent.mRegisteredActions.cbegin(), foundIter) : -1;
 }
 
 ///-----------------------------------------------------------------------------------------------

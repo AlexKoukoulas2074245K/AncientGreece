@@ -54,34 +54,34 @@ OverworldMovementControllerSystem::OverworldMovementControllerSystem()
 
 ///-----------------------------------------------------------------------------------------------
 
-void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
+void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entities) const
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto mapEntity = GetMapEntity();
-    
+    const auto entitiesToProcess = entities;
     for (const auto entityId: entitiesToProcess)
     {
         const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
-        auto& waypointComponent = world.GetComponent<OverworldTargetComponent>(entityId);
+        auto& targetComponent = world.GetComponent<OverworldTargetComponent>(entityId);
         auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entityId);
-        const auto isFollowingEntity = waypointComponent.mEntityTargetToFollow != genesis::ecs::NULL_ENTITY_ID && world.HasEntity(waypointComponent.mEntityTargetToFollow);
+        const auto isFollowingEntity = targetComponent.mEntityTargetToFollow != genesis::ecs::NULL_ENTITY_ID && world.HasEntity(targetComponent.mEntityTargetToFollow);
         
         if (isFollowingEntity)
         {
-            waypointComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(waypointComponent.mEntityTargetToFollow).mPosition;
+            targetComponent.mTargetPosition = world.GetComponent<genesis::TransformComponent>(targetComponent.mEntityTargetToFollow).mPosition;
         }
         
-        const auto& vecToWaypoint = waypointComponent.mTargetPosition - transformComponent.mPosition;
+        const auto& vecToTarget = targetComponent.mTargetPosition - transformComponent.mPosition;
         
         // If we have arrived at target position or collided with our target entity
-        if (glm::length(vecToWaypoint) < SUFFICIENTLY_CLOSE_THRESHOLD || (isFollowingEntity && AreEntitiesColliding(entityId, waypointComponent.mEntityTargetToFollow)))
+        if (glm::length(vecToTarget) < SUFFICIENTLY_CLOSE_THRESHOLD || (isFollowingEntity && AreEntitiesColliding(entityId, targetComponent.mEntityTargetToFollow)))
         {
             // Create interaction component
             if (isFollowingEntity)
             {
-                if (world.HasComponent<UnitStatsComponent>(waypointComponent.mEntityTargetToFollow))
+                if (world.HasComponent<UnitStatsComponent>(targetComponent.mEntityTargetToFollow))
                 {
-                    auto& targetTransformComponent = world.GetComponent<genesis::TransformComponent>(waypointComponent.mEntityTargetToFollow);
+                    auto& targetTransformComponent = world.GetComponent<genesis::TransformComponent>(targetComponent.mEntityTargetToFollow);
                     const auto vecToFollower = transformComponent.mPosition - targetTransformComponent.mPosition;
                     targetTransformComponent.mRotation.z = -genesis::math::Arctan2(vecToFollower.x, vecToFollower.y);
                 }
@@ -89,8 +89,8 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
                 auto interactionComponent = std::make_unique<OverworldInteractionComponent>();
                 interactionComponent->mInteraction.mInstigatorEntityId = entityId;
                 interactionComponent->mInteraction.mInstigatorUnitName = world.GetComponent<UnitStatsComponent>(entityId).mStats.mUnitName;
-                interactionComponent->mInteraction.mOtherEntityId = waypointComponent.mEntityTargetToFollow;
-                interactionComponent->mInteraction.mOtherUnitName = world.HasComponent<UnitStatsComponent>(waypointComponent.mEntityTargetToFollow) ? world.GetComponent<UnitStatsComponent>(waypointComponent.mEntityTargetToFollow).mStats.mUnitName : world.GetComponent<genesis::NameComponent>(waypointComponent.mEntityTargetToFollow).mName;
+                interactionComponent->mInteraction.mOtherEntityId = targetComponent.mEntityTargetToFollow;
+                interactionComponent->mInteraction.mOtherUnitName = world.HasComponent<UnitStatsComponent>(targetComponent.mEntityTargetToFollow) ? world.GetComponent<UnitStatsComponent>(targetComponent.mEntityTargetToFollow).mStats.mUnitName : world.GetComponent<genesis::NameComponent>(targetComponent.mEntityTargetToFollow).mName;
                 world.AddComponent<OverworldInteractionComponent>(world.CreateEntity(), std::move(interactionComponent));
             }
             
@@ -103,8 +103,8 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
         {
             const auto terrainSpeedMultiplier = GetTerrainSpeedMultiplierAtPosition(transformComponent.mPosition);
             const auto unitSpeed = BASE_UNIT_SPEED * unitStatsComponent.mStats.mSpeedMultiplier * terrainSpeedMultiplier;
-            UpdatePosition(mapEntity, dt, unitSpeed, waypointComponent.mTargetPosition, transformComponent.mPosition);
-            UpdateRotation(dt, -genesis::math::Arctan2(vecToWaypoint.x, vecToWaypoint.y), transformComponent.mRotation);
+            UpdatePosition(mapEntity, dt, unitSpeed, targetComponent.mTargetPosition, transformComponent.mPosition);
+            UpdateRotation(dt, -genesis::math::Arctan2(vecToTarget.x, vecToTarget.y), transformComponent.mRotation);
             
             // Start walking animation
             genesis::animation::ChangeAnimation(entityId, StringId("walking"));

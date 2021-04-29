@@ -107,7 +107,7 @@ void OverworldPlayerTargetSelectionSystem::CalculateMapTarget(OverworldTargetCom
 {
     const auto& mapPickingInfoComponent = world.GetSingletonComponent<OverworldMapPickingInfoSingletonComponent>();
     
-    // Attach waypoint component to player
+    // Attach target component to player
     targetComponent.mTargetPosition = mapPickingInfoComponent.mMapIntersectionPoint;
     targetComponent.mTargetAreaType = areaTypeMasks::NEUTRAL;
 }

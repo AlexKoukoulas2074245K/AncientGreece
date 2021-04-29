@@ -22,7 +22,11 @@ namespace overworld
 {
 
 ///-----------------------------------------------------------------------------------------------
-class OverworldBattleProcessingSystem final : public genesis::ecs::BaseSystem<genesis::ecs::NullComponent>
+
+class OverworldBattleStateComponent;
+
+///-----------------------------------------------------------------------------------------------
+class OverworldBattleProcessingSystem final : public genesis::ecs::BaseSystem<OverworldBattleStateComponent>
 {
 public:
     OverworldBattleProcessingSystem();
@@ -30,6 +34,8 @@ public:
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
     
 private:
+    void UpdateOverworldBattles(const float dt, const std::vector<genesis::ecs::EntityId>&) const;
+    void CheckForLiveBattle() const;
     void PrepareLiveBattle() const;
     std::vector<UnitStats> PrepareBattleParty(const genesis::ecs::EntityId partyLeaderEntityId) const;
     

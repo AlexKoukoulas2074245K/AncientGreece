@@ -8,9 +8,11 @@
 #include "OverworldUnitAiUpdaterSystem.h"
 #include "../actions/PatrolAroundRulingTownAction.h"
 #include "../actions/RestAiAction.h"
+#include "../actions/SeekUnitFightAiAction.h"
 #include "../actions/VisitRandomCityStateAiAction.h"
 #include "../components/OverworldUnitAiComponent.h"
 #include "../components/OverworldUnitAiRegisteredActionsSingletonComponent.h"
+#include "../../../components/UnitStatsComponent.h"
 
 ///-----------------------------------------------------------------------------------------------
 
@@ -37,6 +39,7 @@ OverworldUnitAiUpdaterSystem::OverworldUnitAiUpdaterSystem()
     registeredActionsComponent->mRegisteredActions.push_back(std::make_unique<RestAiAction>());
     registeredActionsComponent->mRegisteredActions.push_back(std::make_unique<PatrolAroundRulingTownAction>());
     registeredActionsComponent->mRegisteredActions.push_back(std::make_unique<VisitRandomCityStateAiAction>());
+    registeredActionsComponent->mRegisteredActions.push_back(std::make_unique<SeekUnitFightAiAction>());
     
     genesis::ecs::World::GetInstance().SetSingletonComponent<OverworldUnitAiRegisteredActionsSingletonComponent>(std::move(registeredActionsComponent));
 }
@@ -51,14 +54,21 @@ void OverworldUnitAiUpdaterSystem::VUpdate(const float dt, const std::vector<gen
     
     for (const auto& entityId: entitiesToProcess)
     {
+        const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
+        
+        if (unitStatsComponent.mStats.mCurrentBattleDuration > 0.0f)
+        {
+            continue;
+        }
+        
         auto& aiComponent = world.GetComponent<OverworldUnitAiComponent>(entityId);
         
         if (aiComponent.mCurrentAction == nullptr)
         {
-            if (aiComponent.mLastActionIndex != -1)
+            if (aiComponent.mLastActionIndexLoadedFromDisk != -1)
             {
-                aiComponent.mCurrentAction = registeredActionsComponent.mRegisteredActions[aiComponent.mLastActionIndex];
-                aiComponent.mLastActionIndex = -1;
+                aiComponent.mCurrentAction = registeredActionsComponent.mRegisteredActions[aiComponent.mLastActionIndexLoadedFromDisk];
+                aiComponent.mLastActionIndexLoadedFromDisk = -1;
             }
             else
             {
