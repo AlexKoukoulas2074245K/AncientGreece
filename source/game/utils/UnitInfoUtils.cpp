@@ -91,7 +91,10 @@ StringId GetRandomAvailableUnitName()
     
     auto& globalUnitInfoComponent = world.GetSingletonComponent<UnitAvailableNamesSingletonComponent>();
     const auto randomIndex = genesis::math::RandomInt(0, globalUnitInfoComponent.mAvailableUnitNamesList.size() - 1);
-    return StringId(globalUnitInfoComponent.mAvailableUnitNamesList.at(randomIndex));
+    
+    auto randomName = globalUnitInfoComponent.mAvailableUnitNamesList.at(randomIndex);
+    globalUnitInfoComponent.mAvailableUnitNamesList.erase(globalUnitInfoComponent.mAvailableUnitNamesList.begin() + randomIndex);
+    return StringId(randomName);
 }
 
 ///-----------------------------------------------------------------------------------------------

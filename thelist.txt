@@ -4,3 +4,4 @@
 * Neutral Live Battles
 * Disallow city state naming for player, and also take off player's name from unit pool
 * Find a way to reuse VAOs (especially for particles' constant recreation)
+* Remove names from pool on load for taken ones

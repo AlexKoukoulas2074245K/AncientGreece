@@ -28,6 +28,7 @@ namespace overworld
 namespace
 {
     static const std::string UNIT_INTERACTION_VIEW_NAME   = "unit_interaction";
+    static const std::string PLAYER_ATTACKED_VIEW_NAME    = "player_attacked";
     static const std::string CITY_STATE_PREVIEW_VIEW_NAME = "city_state_preview";
 
     static const StringId UNIT_NAME_DS_KEY             = StringId("unit_name");
@@ -85,9 +86,9 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
             const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId);
             
             // Unit Intraction
-            if (overworldInteractionComponent.mInteraction.mInstigatorEntityId == GetPlayerEntity() && world.HasComponent<UnitStatsComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId))
+            if ((overworldInteractionComponent.mInteraction.mInstigatorEntityId == GetPlayerEntity() || overworldInteractionComponent.mInteraction.mOtherEntityId == GetPlayerEntity()) && world.HasComponent<UnitStatsComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId))
             {
-                const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId);
+                const auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(overworldInteractionComponent.mInteraction.mOtherEntityId == GetPlayerEntity() ? overworldInteractionComponent.mInteraction.mInstigatorEntityId : overworldInteractionComponent.mInteraction.mOtherEntityId);
                            
                 const auto unitName           = unitStatsComponent.mStats.mUnitName;
                 const auto unitModelName      = GetUnitModelName(unitStatsComponent.mStats.mUnitType);
@@ -122,7 +123,7 @@ void OverworldPlayerTargetInteractionHandlingSystem::VUpdate(const float, const 
                     WriteValue(StringId(UNIT_PARTY_LINE_PREFIX.GetString() + std::to_string(lineCounter++)), "");
                 }
                 
-                view::QueueView(UNIT_INTERACTION_VIEW_NAME);
+                view::QueueView(overworldInteractionComponent.mInteraction.mOtherEntityId == GetPlayerEntity() ? PLAYER_ATTACKED_VIEW_NAME : UNIT_INTERACTION_VIEW_NAME);
             }
             // City State interaction
             else if (overworldInteractionComponent.mInteraction.mInstigatorEntityId == GetPlayerEntity())

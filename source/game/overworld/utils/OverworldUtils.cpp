@@ -18,6 +18,7 @@
 #include "../../utils/CityStateInfoUtils.h"
 #include "../../utils/UnitFactoryUtils.h"
 #include "../../utils/UnitInfoUtils.h"
+#include "../../view/utils/ViewUtils.h"
 #include "../../../engine/ECS.h"
 #include "../../../engine/animation/utils/AnimationUtils.h"
 #include "../../../engine/common/components/NameComponent.h"
@@ -193,8 +194,22 @@ void DestroyOverworldEntities()
     RemoveOverworldMapComponents();
     
     world.DestroyEntities(world.FindAllEntitiesWithName(UNIT_PREVIEW_POPUP_NAME));
-    world.DestroyEntities(world.FindAllEntitiesWithName(GENERIC_OVERWORLD_UNIT_ENTITY_NAME));
-    world.DestroyEntities(world.FindAllEntitiesWithName(PLAYER_ENTITY_NAME));
+    world.DestroyEntities(world.FindAllEntitiesWithName(GENERIC_OVERWORLD_BATTLE_ENTITY_NAME));
+    
+    const auto playerEntity = world.FindEntityWithName(PLAYER_ENTITY_NAME);
+    const auto playerShipEntity = GetShipEntityNameFromUnitName(GetPlayerUnitName());
+    
+    world.DestroyEntity(playerEntity);
+    world.DestroyEntity(world.FindEntityWithName(playerShipEntity));
+    
+    const auto otherOverworldUnitEntities = world.FindAllEntitiesWithName(GENERIC_OVERWORLD_UNIT_ENTITY_NAME);
+    for (const auto& unitEntityId: otherOverworldUnitEntities)
+    {
+        const auto shipEntityName = GetShipEntityNameFromUnitName(world.GetComponent<UnitStatsComponent>(unitEntityId).mStats.mUnitName);
+        
+        world.DestroyEntity(world.FindEntityWithName(shipEntityName));
+        world.DestroyEntity(unitEntityId);
+    }
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -635,6 +650,11 @@ void CreateOverworldBattle(const genesis::ecs::EntityId attackingEntityId, const
         genesis::animation::ChangeAnimation(defendingEntityId, StringId("idle"));
     }
     
+    // If defending entity is the player, then the player atatcked flow will take over
+    if (defendingEntityId == GetPlayerEntity())
+    {
+        return;
+    }
     
     // Assign battle duration to both entities,
     // Unless one or both already have a battle duration which points to a deserialization from disk flow
