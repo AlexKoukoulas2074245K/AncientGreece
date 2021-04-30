@@ -143,7 +143,7 @@ void OverworldBattleProcessingSystem::PrepareLiveBattle() const
     auto attackingSideParty = PrepareBattleParty(lastInteraction.mInstigatorEntityId);
     auto defendingSideParty = PrepareBattleParty(lastInteraction.mOtherEntityId);
 
-    battle::PrepareBattleCamera();
+    battle::PrepareBattleCamera(lastInteraction.mOtherEntityId == GetPlayerEntity());
     battle::PopulateBattleEntities(attackingSideParty, defendingSideParty, lastInteraction.mInstigatorEntityId, lastInteraction.mOtherEntityId);
 }
 

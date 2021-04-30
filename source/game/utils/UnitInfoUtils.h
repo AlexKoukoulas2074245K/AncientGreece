@@ -31,6 +31,10 @@ StringId GetRandomAvailableUnitName();
 
 ///------------------------------------------------------------------------------------------------
 
+void RemoveUnitNameFromAvailableNamesPool(const StringId& unitName);
+
+///------------------------------------------------------------------------------------------------
+
 const UnitStats& GetUnitBaseStats(const StringId& unitTypeName);
 
 ///------------------------------------------------------------------------------------------------

@@ -92,9 +92,29 @@ StringId GetRandomAvailableUnitName()
     auto& globalUnitInfoComponent = world.GetSingletonComponent<UnitAvailableNamesSingletonComponent>();
     const auto randomIndex = genesis::math::RandomInt(0, globalUnitInfoComponent.mAvailableUnitNamesList.size() - 1);
     
-    auto randomName = globalUnitInfoComponent.mAvailableUnitNamesList.at(randomIndex);
-    globalUnitInfoComponent.mAvailableUnitNamesList.erase(globalUnitInfoComponent.mAvailableUnitNamesList.begin() + randomIndex);
-    return StringId(randomName);
+    auto randomName = StringId(globalUnitInfoComponent.mAvailableUnitNamesList.at(randomIndex));
+    RemoveUnitNameFromAvailableNamesPool(randomName);
+    return randomName;
+}
+
+///-----------------------------------------------------------------------------------------------
+
+void RemoveUnitNameFromAvailableNamesPool(const StringId& unitName)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    
+    if (!world.HasSingletonComponent<UnitAvailableNamesSingletonComponent>())
+    {
+        world.SetSingletonComponent<UnitAvailableNamesSingletonComponent>(InitializeUnitAvailableNamesComponent());
+    }
+    auto& globalUnitInfoComponent = world.GetSingletonComponent<UnitAvailableNamesSingletonComponent>();
+    
+    auto findIter = std::find(globalUnitInfoComponent.mAvailableUnitNamesList.begin(), globalUnitInfoComponent.mAvailableUnitNamesList.end(), unitName.GetString());
+    
+    if (findIter != globalUnitInfoComponent.mAvailableUnitNamesList.end())
+    {
+        globalUnitInfoComponent.mAvailableUnitNamesList.erase(findIter);
+    }
 }
 
 ///-----------------------------------------------------------------------------------------------

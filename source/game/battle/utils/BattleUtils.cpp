@@ -198,7 +198,7 @@ void DestroyBattleEntities()
 
 ///------------------------------------------------------------------------------------------------
 
-void PrepareBattleCamera()
+void PrepareBattleCamera(const bool isPlayerDefending)
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
@@ -208,6 +208,12 @@ void PrepareBattleCamera()
     cameraComponent.mYaw         = BATTLE_CAMERA_YAW;
     cameraComponent.mPitch       = BATTLE_CAMERA_PITCH;
     cameraComponent.mRoll        = BATTLE_CAMERA_ROLL;
+    
+    if (isPlayerDefending)
+    {
+        cameraComponent.mRoll += genesis::math::PI;
+    }
+    
     cameraComponent.mCameraState = genesis::rendering::CameraState::AUTO_CENTERING;
 }
 

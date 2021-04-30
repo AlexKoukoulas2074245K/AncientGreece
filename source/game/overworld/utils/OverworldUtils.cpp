@@ -65,7 +65,7 @@ namespace
     static const std::string UNIT_SHIP_MODEL_NAME             = "ship";
     static const std::string SAVE_FILE_PATH                   = "save.json";
 
-    static const float ENTITY_SPHERE_COLLISION_MULTIPLIER     = 0.25f * 0.3333f;
+    static const float CITY_STATE_SPHERE_COLLISION_MULTIPLIER = 0.4f * 0.3333f;
 
     static const int OVERWORLD_BATTLE_SINGLE_DEATH_MINUTES = 12;
 
@@ -232,6 +232,7 @@ void SaveOverworldStateToFile()
     overworldStateJsonObject["time_accumulator"] = dayTimeComponent.mTimeDtAccum;
     overworldStateJsonObject["current_day"] = dayTimeComponent.mCurrentDay;
     overworldStateJsonObject["current_year"] = dayTimeComponent.mCurrentYearBc;
+    overworldStateJsonObject["current_period"] = dayTimeComponent.mCurrentPeriod.GetString();
     
     // Save overworld battles
     nlohmann::json overworldActiveBattlesJsonObject;
@@ -410,10 +411,12 @@ bool TryLoadOverworldStateFromFile()
     dayTimeComponent.mTimeDtAccum = overworldStateJsonObject["time_accumulator"].get<float>();
     dayTimeComponent.mCurrentDay = overworldStateJsonObject["current_day"].get<int>();
     dayTimeComponent.mCurrentYearBc = overworldStateJsonObject["current_year"].get<int>();
+    dayTimeComponent.mCurrentPeriod = StringId(overworldStateJsonObject["current_period"].get<std::string>());
     
     // Parse player data
     const auto& playerJsonObject = saveFileJsonRoot["player"];
     const auto playerUnitName = StringId(playerJsonObject["player_unit_name"].get<std::string>());
+    RemoveUnitNameFromAvailableNamesPool(playerUnitName);
     const auto playerUnitType = StringId(playerJsonObject["player_unit_type"].get<std::string>());
     const auto playerPosition = glm::vec3
     (
@@ -465,6 +468,7 @@ bool TryLoadOverworldStateFromFile()
     for (const auto& overworldUnitJsonObject: saveFileJsonRoot["overworld_units"])
     {
         const auto unitName = StringId(overworldUnitJsonObject["name"].get<std::string>());
+        RemoveUnitNameFromAvailableNamesPool(unitName);
         const auto unitType = StringId(overworldUnitJsonObject["unit_type"].get<std::string>());
         const auto unitPosition = glm::vec3
         (
@@ -595,7 +599,7 @@ void AddCollidableDataToCityState(const genesis::ecs::EntityId cityStateEntity)
     const auto& entityRenderableComponent = world.GetComponent<genesis::rendering::RenderableComponent>(cityStateEntity);
     const auto& entityMeshResource = genesis::resources::ResourceLoadingService::GetInstance().GetResource<genesis::resources::MeshResource>( entityRenderableComponent.mMeshResourceIds[entityRenderableComponent.mCurrentMeshResourceIndex]);
     const auto entityScaledDimensions = entityMeshResource.GetDimensions() * entityTransformComponent.mScale;
-    const auto entitySphereRadius = (entityScaledDimensions.x + entityScaledDimensions.y + entityScaledDimensions.z) * ENTITY_SPHERE_COLLISION_MULTIPLIER;
+    const auto entitySphereRadius = (entityScaledDimensions.x + entityScaledDimensions.y + entityScaledDimensions.z) * CITY_STATE_SPHERE_COLLISION_MULTIPLIER;
     
     auto collidableComponent = std::make_unique<CollidableComponent>();
     collidableComponent->mCollidableDimensions.x = collidableComponent->mCollidableDimensions.y = collidableComponent->mCollidableDimensions.z = entitySphereRadius;
@@ -694,7 +698,7 @@ void PopulateOverworldCityStates()
         const auto finalPosition = glm::vec3(cityStateInfoEntry.second.mPosition.x, cityStateInfoEntry.second.mPosition.y, cityStateZ);
         
         auto cityStateScale = GetCityStateOverworldScale(cityStateInfoEntry.first);
-        cityStateScale.y *= 2.0f;
+        cityStateScale.y *= 3.0f;
         
         auto cityStateEntity = genesis::rendering::LoadAndCreateStaticModelByName(CITY_STATE_BUILDING_MODEL_NAME,    finalPosition, cityStateInfoEntry.second.mRotation, cityStateScale, cityStateInfoEntry.first);
         

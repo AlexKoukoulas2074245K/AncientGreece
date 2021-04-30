@@ -86,7 +86,6 @@ void OverworldMovementControllerSystem::VUpdate(const float dt, const std::vecto
                     targetTransformComponent.mRotation.z = -genesis::math::Arctan2(vecToFollower.x, vecToFollower.y);
                 }
                 
-                
                 auto interactionComponent = std::make_unique<OverworldInteractionComponent>();
                 interactionComponent->mInteraction.mInstigatorEntityId = entityId;
                 interactionComponent->mInteraction.mInstigatorUnitName = world.GetComponent<UnitStatsComponent>(entityId).mStats.mUnitName;

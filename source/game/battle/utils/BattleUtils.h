@@ -74,7 +74,7 @@ bool AreUnitsInDoubleMeleeDistance(const genesis::ecs::EntityId unitEntityA, con
 
 ///------------------------------------------------------------------------------------------------
 
-void PrepareBattleCamera();
+void PrepareBattleCamera(const bool isPlayerDefending);
 
 ///------------------------------------------------------------------------------------------------
 
