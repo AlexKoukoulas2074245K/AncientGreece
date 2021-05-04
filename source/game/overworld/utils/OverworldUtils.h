@@ -60,6 +60,10 @@ float GetProjectedOverworldBattleSingleDeathTime();
 
 ///------------------------------------------------------------------------------------------------
 
+genesis::ecs::EntityId FindBattleStateEntityThatInvolvesUnit(const StringId& unitName);
+
+///------------------------------------------------------------------------------------------------
+
 void CreateOverworldBattle(const genesis::ecs::EntityId attackingEntityId, const genesis::ecs::EntityId defendingEntityId);
 
 ///------------------------------------------------------------------------------------------------

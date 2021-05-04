@@ -6,7 +6,6 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "BattleCollisionHandlingSystem.h"
-#include "../components/BattleSideComponent.h"
 #include "../components/BattleUnitCollisionComponent.h"
 #include "../components/BattleProjectileComponent.h"
 #include "../utils/BattleUtils.h"

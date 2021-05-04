@@ -30,6 +30,11 @@ public:
 
     void VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>&) const override;
 
+private:
+    void ShowUnitInteractionView(const OverworldInteractionComponent&) const;
+    void ShowOngoingBattleUnitIntractionView(const genesis::ecs::EntityId battleStateEntity) const;
+    void ShowCityStateInteractionView(const OverworldInteractionComponent&) const;
+    
 };
 
 ///-----------------------------------------------------------------------------------------------

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View background_name="horizontal_parchment" x="0.0" y="0.0" z="1.0" width="3.0" height="2.0">
+	<Text x="-0.6" y="0.75" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0">{attacking_unit_name}</Text>
+	<Text x="-0.05" y="0.75" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0">vs</Text>
+	<Text x="0.1" y="0.75" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0">{defending_unit_name}</Text>
+	<Text x="-0.61" y="0.55" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">Party Size: </Text>
+	<Text x="-0.22" y="0.55" z="0.5" size="0.1" red="{attacking_unit_party_size_red}" green="{attacking_unit_party_size_green}" blue="{attacking_unit_party_size_blue}">{attacking_unit_party_size}</Text>
+	<Text x="-0.61" y="0.40" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_0}</Text>
+	<Text x="-0.61" y="0.32" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_1}</Text>
+	<Text x="-0.61" y="0.24" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_2}</Text>
+	<Text x="-0.61" y="0.16" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_3}</Text>
+	<Text x="-0.61" y="0.08" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_4}</Text>
+	<Text x="-0.61" y="-0.0" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_5}</Text>
+	<Text x="-0.61" y="-0.08" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_6}</Text>
+	<Text x="-0.61" y="-0.16" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_7}</Text>
+	<Text x="-0.61" y="-0.24" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_8}</Text>
+	<Text x="-0.61" y="-0.32" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{attacking_unit_party_line_9}</Text>
+	<Text x="0.1" y="0.55" z="0.5" size="0.1" red="0.0" green="0.0" blue="0.0">Party Size: </Text>
+	<Text x="0.5" y="0.55" z="0.5" size="0.1" red="{defending_unit_party_size_red}" green="{defending_unit_party_size_green}" blue="{defending_unit_party_size_blue}">{defending_unit_party_size}</Text>
+	<Text x="0.1" y="0.40" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_0}</Text>
+	<Text x="0.1" y="0.32" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_1}</Text>
+	<Text x="0.1" y="0.24" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_2}</Text>
+	<Text x="0.1" y="0.16" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_3}</Text>
+	<Text x="0.1" y="0.08" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_4}</Text>
+	<Text x="0.1" y="-0.0" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_5}</Text>
+	<Text x="0.1" y="-0.08" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_6}</Text>
+	<Text x="0.1" y="-0.16" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_7}</Text>
+	<Text x="0.1" y="-0.24" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_8}</Text>
+	<Text x="0.1" y="-0.32" z="0.5" size="0.08" red="0.0" green="0.0" blue="0.0">{defending_unit_party_line_9}</Text>
+    <ClickableText x="-0.2" y="-0.7" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="close">Back to map</ClickableText>
+    <ClickableText x="-0.48" y="-0.5" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="assist_attacker">Assist!</ClickableText>
+    <ClickableText x="0.23" y="-0.5" z="0.5" size="0.12" red="0.0" green="0.0" blue="0.0" interaction_red="0.5" interaction_green="0.5" interaction_blue="0.5" interaction_event="assist_defender">Assist!</ClickableText>
+</View>

@@ -26,7 +26,9 @@ namespace overworld
 
 namespace
 {
-    static const StringId ATTACK_EVENT_NAME = StringId("attack");
+    static const StringId ATTACK_EVENT_NAME          = StringId("attack");
+    static const StringId ASSIST_ATTACKER_EVENT_NAME = StringId("assist_attacker");
+    static const StringId ASSIST_DEFENDER_EVENT_NAME = StringId("assist_defender");
 }
 
 ///-----------------------------------------------------------------------------------------------

@@ -63,7 +63,7 @@ namespace
     static const std::string MAP_EDGE_MODEL_NAME              = "map_edge";
     static const std::string CITY_STATE_BUILDING_MODEL_NAME   = "building";
     static const std::string UNIT_SHIP_MODEL_NAME             = "ship";
-    static const std::string SAVE_FILE_PATH                   = "save.json";
+    static const std::string SAVE_FILE_NAME                   = "save.json";
 
     static const float CITY_STATE_SPHERE_COLLISION_MULTIPLIER = 0.4f * 0.3333f;
 
@@ -376,7 +376,7 @@ void SaveOverworldStateToFile()
     saveFileRoot["overworld_units"] = overworldUnitsJsonObject;
     saveFileRoot["city_states_info"] = cityStatesJsonObject;
     
-    std::ofstream saveFile(SAVE_FILE_PATH);
+    std::ofstream saveFile(SAVE_FILE_NAME);
     saveFile << saveFileRoot.dump(4);
 }
 
@@ -384,7 +384,7 @@ void SaveOverworldStateToFile()
 
 bool TryLoadOverworldStateFromFile()
 {
-    std::ifstream saveFile(SAVE_FILE_PATH);
+    std::ifstream saveFile(SAVE_FILE_NAME);
     if (!saveFile.good())
     {
         return false;
@@ -634,6 +634,25 @@ void LoadAndCreateOverworldMapComponents()
     genesis::rendering::LoadAndCreateStaticModelByName(MAP_EDGE_MODEL_NAME, glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), MAP_EDGE_4_ENTITY_NAME);
 }
 
+
+///------------------------------------------------------------------------------------------------
+
+genesis::ecs::EntityId FindBattleStateEntityThatInvolvesUnit(const StringId& unitName)
+{
+    const auto& world = genesis::ecs::World::GetInstance();
+    const auto overworldBattleEntities = world.FindAllEntitiesWithName(GENERIC_OVERWORLD_BATTLE_ENTITY_NAME);
+    
+    for (const auto& entity: overworldBattleEntities)
+    {
+        const auto& battleStateComponent = world.GetComponent<OverworldBattleStateComponent>(entity);
+        if (battleStateComponent.mAttackingUnitName == unitName || battleStateComponent.mDefendingUnitName == unitName)
+        {
+            return entity;
+        }
+    }
+    
+    return genesis::ecs::NULL_ENTITY_ID;
+}
 
 ///------------------------------------------------------------------------------------------------
 

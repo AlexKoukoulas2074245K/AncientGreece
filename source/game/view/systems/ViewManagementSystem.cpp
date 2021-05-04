@@ -28,8 +28,10 @@ namespace view
 namespace
 {
     static const StringId GUI_SHADER_CUSTOM_COLOR_UNIFORM_NAME = StringId("custom_color");
-    static const StringId CLOSE_EVENT_NAME  = StringId("close");
-    static const StringId ATTACK_EVENT_NAME = StringId("attack");
+    static const StringId CLOSE_EVENT_NAME           = StringId("close");
+    static const StringId ATTACK_EVENT_NAME          = StringId("attack");
+    static const StringId ASSIST_ATTACKER_EVENT_NAME = StringId("assist_attacker");
+    static const StringId ASSIST_DEFENDER_EVENT_NAME = StringId("assist_defender");
 }
 
 ///-----------------------------------------------------------------------------------------------
@@ -111,11 +113,13 @@ void ViewManagementSystem::ProcessClickableEntity(const genesis::ecs::EntityId e
 
 void ViewManagementSystem::HandleEvent(const genesis::ecs::EntityId sourceEntityId, const StringId& eventName) const
 {
-    if (eventName == CLOSE_EVENT_NAME)
-    {
-        DestroyView(sourceEntityId, eventName);
-    }
-    else if (eventName == ATTACK_EVENT_NAME)
+    if
+    (
+        eventName == CLOSE_EVENT_NAME ||
+        eventName == ATTACK_EVENT_NAME ||
+        eventName == ASSIST_ATTACKER_EVENT_NAME ||
+        eventName == ASSIST_DEFENDER_EVENT_NAME
+    )
     {
         DestroyView(sourceEntityId, eventName);
     }

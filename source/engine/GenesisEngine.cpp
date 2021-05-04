@@ -176,7 +176,17 @@ void GenesisEngine::InitializeSdlContextAndWindow(const GameStartupParameters& s
     Log(LogType::INFO, "Vendor     : %s", GL_NO_CHECK(glGetString(GL_VENDOR)));
     Log(LogType::INFO, "Renderer   : %s", GL_NO_CHECK(glGetString(GL_RENDERER)));
     Log(LogType::INFO, "Version    : %s", GL_NO_CHECK(glGetString(GL_VERSION)));
-
+    
+    // Log Pref Path
+    auto prefPath = SDL_GetPrefPath("agames", "AncientGreece");
+    Log(LogType::INFO, "Save Path: %s", prefPath);
+    SDL_free(prefPath);
+    
+    // CWD
+    auto cwdPath = SDL_GetBasePath();
+    Log(LogType::INFO, "CWD Path: %s", cwdPath);
+    SDL_free(cwdPath);
+    
     // Configure Blending
     GL_CHECK(glEnable(GL_BLEND));
     GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
