@@ -42,7 +42,11 @@ void SetBattleState(const BattleState battleState);
 
 ///------------------------------------------------------------------------------------------------
 
-void InitCasualties(const StringId attackingLeaderUnitName, const StringId defendingLeaderUnitName);
+void SetBattleLeaderNames(const StringId& attackingLeaderUnitName, const StringId& defendingLeaderUnitName, const StringId& assistingAttackerLeaderUnitName, const StringId& assistingDefenderLeaderUnitName, const StringId& playerUnitName);
+
+///------------------------------------------------------------------------------------------------
+
+void InitCasualties(const StringId& attackingLeaderUnitName, const StringId& defendingLeaderUnitName, const StringId& assistingAttackerLeaderUnitName, const StringId& assistingDefenderLeaderUnitName);
 
 ///------------------------------------------------------------------------------------------------
 
@@ -58,7 +62,7 @@ void AddCollidableDataToArrow(const genesis::ecs::EntityId arrowEntity);
 
 ///------------------------------------------------------------------------------------------------
 
-void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const genesis::ecs::EntityId attackingLeaderEntity, const genesis::ecs::EntityId defendingLeaderEntity);
+void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const std::vector<UnitStats>& assistingAttackerParty, const std::vector<UnitStats>& assistingDefenderParty, const genesis::ecs::EntityId attackingLeaderEntity, const genesis::ecs::EntityId defendingLeaderEntity, const genesis::ecs::EntityId assistingAttackerLeaderEntity, const genesis::ecs::EntityId assistingDefenderLeaderEntity);
 
 ///------------------------------------------------------------------------------------------------
 

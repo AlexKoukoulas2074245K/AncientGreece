@@ -39,6 +39,11 @@ class BattleStateSingletonComponent final: public genesis::ecs::IComponent
 {
 public:
     std::map<StringId, std::map<StringId, int, StringIdStdMapComparator>, StringIdStdMapComparator> mLeaderNameToCasualtiesMap;
+    StringId mPlayerUnitName;
+    StringId mAttackingLeaderUnitName;
+    StringId mDefendingLeaderUnitName;
+    StringId mAssistingAttackerLeaderUnitName;
+    StringId mAssistingDefenderLeaderUnitName;
     BattleState mBattleState;
     BattleResult mBattleResult;
     float mCelebrationTimer;

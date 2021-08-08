@@ -57,8 +57,10 @@ namespace
 
 void CreateBattleGround();
 void CalculateUnitTargetDistances(const std::vector<UnitStats>& party, float& targetUnitXDistance, float& targetUnitYDistance);
-void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId);
-void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderUnitName, const bool isAttackingSide);
+void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const std::vector<UnitStats>& assistingAttackerParty, const std::vector<UnitStats>& assistingDefenderParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId, const genesis::ecs::EntityId assistingAttackerLeaderEntity, const genesis::ecs::EntityId assistingDefenderLeaderEntity);
+void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderUnitName, const StringId& assistingLeaderUnitName, const bool isAttackingSide, const bool isAssistingParty, const bool hasAssistingParty);
+
+std::vector<UnitStats> FindLargestBattleParty(const std::vector<UnitStats>& firstParty, const std::vector<UnitStats>& secondParty, const std::vector<UnitStats>& thirdParty, const std::vector<UnitStats>& fourthParty);
 
 ///------------------------------------------------------------------------------------------------
 
@@ -103,13 +105,40 @@ void SetBattleState(const BattleState battleState)
 
 ///------------------------------------------------------------------------------------------------
 
-void InitCasualties(const StringId attackingLeaderUnitName, const StringId defendingLeaderUnitName)
+void SetBattleLeaderNames(const StringId& attackingLeaderUnitName, const StringId& defendingLeaderUnitName, const StringId& assistingAttackerLeaderUnitName, const StringId& assistingDefenderLeaderUnitName, const StringId& playerUnitName)
+{
+    auto& world = genesis::ecs::World::GetInstance();
+    if (!world.HasSingletonComponent<BattleStateSingletonComponent>())
+    {
+        world.SetSingletonComponent<BattleStateSingletonComponent>(std::make_unique<BattleStateSingletonComponent>());
+    }
+    
+    auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
+    battleStateComponent.mAttackingLeaderUnitName         = attackingLeaderUnitName;
+    battleStateComponent.mDefendingLeaderUnitName         = defendingLeaderUnitName;
+    battleStateComponent.mAssistingAttackerLeaderUnitName = assistingAttackerLeaderUnitName;
+    battleStateComponent.mAssistingDefenderLeaderUnitName = assistingDefenderLeaderUnitName;
+    battleStateComponent.mPlayerUnitName                  = playerUnitName;
+}
+
+///------------------------------------------------------------------------------------------------
+
+void InitCasualties(const StringId& attackingLeaderUnitName, const StringId& defendingLeaderUnitName, const StringId& assistingAttackerLeaderUnitName, const StringId& assistingDefenderLeaderUnitName)
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
     
     battleStateComponent.mLeaderNameToCasualtiesMap[attackingLeaderUnitName];
     battleStateComponent.mLeaderNameToCasualtiesMap[defendingLeaderUnitName];
+    
+    if (assistingAttackerLeaderUnitName != StringId())
+    {
+        battleStateComponent.mLeaderNameToCasualtiesMap[assistingAttackerLeaderUnitName];
+    }
+    if (assistingDefenderLeaderUnitName != StringId())
+    {
+        battleStateComponent.mLeaderNameToCasualtiesMap[assistingDefenderLeaderUnitName];
+    }
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -171,14 +200,17 @@ void AddCollidableDataToArrow(const genesis::ecs::EntityId arrowEntity)
 
 ///-----------------------------------------------------------------------------------------------
 
-void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const genesis::ecs::EntityId attackingLeaderEntity, const genesis::ecs::EntityId defendingLeaderEntity)
+void PopulateBattleEntities(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const std::vector<UnitStats>& assistingAttackerParty, const std::vector<UnitStats>& assistingDefenderParty, const genesis::ecs::EntityId attackingLeaderEntity, const genesis::ecs::EntityId defendingLeaderEntity, const genesis::ecs::EntityId assistingAttackerLeaderEntity, const genesis::ecs::EntityId assistingDefenderLeaderEntity)
 {
     CreateBattleGround();
     
     float targetUnitXDistance = 0.0f;
     float targetUnitYDistance = 0.0f;
-    CalculateUnitTargetDistances(attackingSideParty, targetUnitXDistance, targetUnitYDistance);
-    CreateBattleUnits(attackingSideParty, defendingSideParty, targetUnitXDistance, targetUnitYDistance, attackingLeaderEntity, defendingLeaderEntity);
+    
+    const auto& largestParty = FindLargestBattleParty(attackingSideParty, defendingSideParty, assistingAttackerParty, assistingDefenderParty);
+    
+    CalculateUnitTargetDistances(largestParty, targetUnitXDistance, targetUnitYDistance);
+    CreateBattleUnits(attackingSideParty, defendingSideParty, assistingAttackerParty, assistingDefenderParty, targetUnitXDistance, targetUnitYDistance, attackingLeaderEntity, defendingLeaderEntity, assistingAttackerLeaderEntity, assistingDefenderLeaderEntity);
 }
 
 ///------------------------------------------------------------------------------------------------
@@ -290,25 +322,40 @@ void CalculateUnitTargetDistances(const std::vector<UnitStats>& party, float& ta
 
 ///------------------------------------------------------------------------------------------------
 
-void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId)
+void CreateBattleUnits(const std::vector<UnitStats>& attackingSideParty, const std::vector<UnitStats>& defendingSideParty, const std::vector<UnitStats>& assistingAttackerParty, const std::vector<UnitStats>& assistingDefenderParty, const float targetUnitXDistance, const float targetUnitYDistance, const genesis::ecs::EntityId attackingLeaderEntityId, const genesis::ecs::EntityId defendingLeaderEntityId, const genesis::ecs::EntityId assistingAttackerLeaderEntity, const genesis::ecs::EntityId assistingDefenderLeaderEntity)
 {
     const auto& world = genesis::ecs::World::GetInstance();
     
     const auto attackingLeaderUnitName = world.GetComponent<UnitStatsComponent>(attackingLeaderEntityId).mStats.mUnitName;
     const auto defendingLeaderUnitName = world.GetComponent<UnitStatsComponent>(defendingLeaderEntityId).mStats.mUnitName;
     
-    CreateBattleUnitsOnSide(attackingSideParty, targetUnitXDistance, targetUnitYDistance, attackingLeaderUnitName, true);
-    CreateBattleUnitsOnSide(defendingSideParty, targetUnitXDistance, targetUnitYDistance, defendingLeaderUnitName, false);
+    CreateBattleUnitsOnSide(attackingSideParty, targetUnitXDistance, targetUnitYDistance, attackingLeaderUnitName, StringId(), true, false, assistingAttackerLeaderEntity != genesis::ecs::NULL_ENTITY_ID);
+    CreateBattleUnitsOnSide(defendingSideParty, targetUnitXDistance, targetUnitYDistance, defendingLeaderUnitName, StringId(), false, false, assistingDefenderLeaderEntity != genesis::ecs::NULL_ENTITY_ID);
+    
+    if (assistingAttackerLeaderEntity != genesis::ecs::NULL_ENTITY_ID)
+    {
+        const auto assistingLeaderUnitName = world.GetComponent<UnitStatsComponent>(assistingAttackerLeaderEntity).mStats.mUnitName;
+        
+        CreateBattleUnitsOnSide(assistingAttackerParty, targetUnitXDistance, targetUnitYDistance, attackingLeaderUnitName, assistingLeaderUnitName, true, true, false);
+    }
+    if (assistingDefenderLeaderEntity != genesis::ecs::NULL_ENTITY_ID)
+    {
+        const auto assistingLeaderUnitName = world.GetComponent<UnitStatsComponent>(assistingDefenderLeaderEntity).mStats.mUnitName;
+        CreateBattleUnitsOnSide(assistingDefenderParty, targetUnitXDistance, targetUnitYDistance, defendingLeaderUnitName, assistingLeaderUnitName, false, true, false);
+    }
 }
 
 ///------------------------------------------------------------------------------------------------
 
-void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderUnitName, const bool isAttackingSide)
+void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const float targetUnitXDistance, const float targetUnitYDistance, const StringId& leaderUnitName, const StringId& assistingLeaderUnitName, const bool isAttackingSide, const bool isAssistingParty, const bool hasAssistingParty)
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto groundEntity = GetMapEntity();
     
     auto xCounter = 0.0f;
+    if (isAssistingParty) xCounter += MAX_UNITS_PER_ROW * targetUnitXDistance;
+    if (hasAssistingParty) xCounter -= MAX_UNITS_PER_ROW * targetUnitXDistance;
+    
     auto yCounter = isAttackingSide ? 0.0f : BATTLE_DEFENDING_SIDE_Y_OFFSET;
     auto unitCounter = 1;
     for (const auto& unitStats: sideParty)
@@ -318,6 +365,7 @@ void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const floa
         
         auto battleSideComponent = std::make_unique<BattleSideComponent>();
         battleSideComponent->mBattleSideLeaderUnitName = leaderUnitName;
+        battleSideComponent->mBattleSideAssistingLeaderUnitName = assistingLeaderUnitName;
         world.AddComponent<BattleSideComponent>(unitEntityId, std::move(battleSideComponent));
         
         xCounter += targetUnitXDistance;
@@ -326,10 +374,26 @@ void CreateBattleUnitsOnSide(const std::vector<UnitStats>& sideParty, const floa
         {
             unitCounter = 1;
             xCounter = 0;
+            if (isAssistingParty) xCounter += MAX_UNITS_PER_ROW * targetUnitXDistance;
+            if (hasAssistingParty) xCounter -= MAX_UNITS_PER_ROW * targetUnitXDistance;
             yCounter += isAttackingSide ? -targetUnitYDistance : targetUnitYDistance;
         }
     }
 }
+
+///------------------------------------------------------------------------------------------------
+
+std::vector<UnitStats> FindLargestBattleParty(const std::vector<UnitStats>& firstParty, const std::vector<UnitStats>& secondParty, const std::vector<UnitStats>& thirdParty, const std::vector<UnitStats>& fourthParty)
+{
+    std::vector<std::vector<UnitStats>> partyCollection = { firstParty, secondParty, thirdParty, fourthParty };
+    std::sort(partyCollection.begin(), partyCollection.end(), [](const std::vector<UnitStats>& lhs, const std::vector<UnitStats>& rhs)
+    {
+        return lhs.size() > rhs.size();
+    });
+    return partyCollection.front();
+}
+
+
 
 ///------------------------------------------------------------------------------------------------
 

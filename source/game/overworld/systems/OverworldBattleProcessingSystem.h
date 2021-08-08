@@ -36,7 +36,6 @@ public:
 private:
     void UpdateOverworldBattles(const float dt, const std::vector<genesis::ecs::EntityId>&) const;
     void CheckForLiveBattle() const;
-    void PrepareLiveBattle() const;
     std::vector<UnitStats> PrepareBattleParty(const genesis::ecs::EntityId partyLeaderEntityId) const;
     
 };

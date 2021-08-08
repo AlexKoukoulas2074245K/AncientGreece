@@ -57,10 +57,10 @@ void BattleDamageApplicationSystem::VUpdate(const float, const std::vector<genes
         unitStatsComponent.mStats.mHealth -= damageComponent.mDamage;
         if (unitStatsComponent.mStats.mHealth <= 0)
         {
-            // Do not add leader as casualty
-            if (unitStatsComponent.mStats.mUnitName != battleSideComponent.mBattleSideLeaderUnitName)
+            // Do not add leader or assisting leader as casualty
+            if (unitStatsComponent.mStats.mUnitName != battleSideComponent.mBattleSideLeaderUnitName && unitStatsComponent.mStats.mUnitName != battleSideComponent.mBattleSideAssistingLeaderUnitName)
             {
-                AddBattleCasualty(unitStatsComponent.mStats.mUnitType, battleSideComponent.mBattleSideLeaderUnitName);
+                AddBattleCasualty(unitStatsComponent.mStats.mUnitType, battleSideComponent.mBattleSideAssistingLeaderUnitName != StringId() ? battleSideComponent.mBattleSideAssistingLeaderUnitName : battleSideComponent.mBattleSideLeaderUnitName);
             }
             
             genesis::animation::ChangeAnimation(entityId, StringId("dying"), false);

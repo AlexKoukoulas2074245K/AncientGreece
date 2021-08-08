@@ -58,7 +58,6 @@ BattleEndHandlingSystem::BattleEndHandlingSystem()
 
 void BattleEndHandlingSystem::VUpdate(const float dt, const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
-    const auto& lastInteraction = overworld::GetLastInteraction();
     auto& world = genesis::ecs::World::GetInstance();
     auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
     
@@ -78,7 +77,7 @@ void BattleEndHandlingSystem::VUpdate(const float dt, const std::vector<genesis:
                 
                 const auto& battleSideComponent = world.GetComponent<BattleSideComponent>(entityId);
                 
-                if (battleSideComponent.mBattleSideLeaderUnitName == lastInteraction.mInstigatorUnitName)
+                if (battleSideComponent.mBattleSideLeaderUnitName == battleStateComponent.mAttackingLeaderUnitName)
                 {
                     attackingSideUnitCount++;
                 }
@@ -138,11 +137,22 @@ void BattleEndHandlingSystem::VUpdate(const float dt, const std::vector<genesis:
 
 void BattleEndHandlingSystem::PrepareAndShowResultsView() const
 {
-    const auto& lastInteraction = overworld::GetLastInteraction();
     const auto& world = genesis::ecs::World::GetInstance();
     const auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
     
-    auto playerVictorious = (lastInteraction.mInstigatorUnitName == overworld::GetPlayerUnitName() && battleStateComponent.mBattleResult == BattleResult::ATTACKER_VICTORIOUS) || (lastInteraction.mOtherUnitName == overworld::GetPlayerUnitName() && battleStateComponent.mBattleResult == BattleResult::DEFENDER_VICTORIOUS);
+    auto playerVictorious = false;
+    auto otherLeaderName = StringId();
+    
+    if (battleStateComponent.mBattleResult == BattleResult::ATTACKER_VICTORIOUS)
+    {
+        playerVictorious = battleStateComponent.mAttackingLeaderUnitName == overworld::GetPlayerUnitName() || battleStateComponent.mAssistingAttackerLeaderUnitName == overworld::GetPlayerUnitName();
+        otherLeaderName = battleStateComponent.mDefendingLeaderUnitName;
+    }
+    else
+    {
+        playerVictorious = battleStateComponent.mDefendingLeaderUnitName == overworld::GetPlayerUnitName() || battleStateComponent.mAssistingDefenderLeaderUnitName == overworld::GetPlayerUnitName();
+        otherLeaderName = battleStateComponent.mAttackingLeaderUnitName;
+    }
     
     if (playerVictorious)
     {
@@ -160,8 +170,6 @@ void BattleEndHandlingSystem::PrepareAndShowResultsView() const
         WriteValue(BATTLE_RESULT_TEXT_GREEN_DS_KEY, std::to_string(BATTLE_DEFEAT_COLOR.g));
         WriteValue(BATTLE_RESULT_TEXT_BLUE_DS_KEY, std::to_string(BATTLE_DEFEAT_COLOR.b));
     }
-    
-    const auto otherLeaderName = lastInteraction.mInstigatorUnitName == overworld::GetPlayerUnitName() ? lastInteraction.mOtherUnitName : lastInteraction.mInstigatorUnitName;
     
     // Write player casualties
     auto lineCounter = 0;
@@ -195,14 +203,15 @@ void BattleEndHandlingSystem::PrepareAndShowResultsView() const
 
 void BattleEndHandlingSystem::ModifyPartiesByCasualties(const std::vector<genesis::ecs::EntityId>& entitiesToProcess) const
 {
-    const auto& lastInteraction = overworld::GetLastInteraction();
     const auto& world = genesis::ecs::World::GetInstance();
     auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
     
     for (const auto& entityId: entitiesToProcess)
     {
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(entityId);
-        if (unitStatsComponent.mStats.mUnitName == lastInteraction.mInstigatorUnitName || unitStatsComponent.mStats.mUnitName == lastInteraction.mOtherUnitName)
+        if (unitStatsComponent.mStats.mUnitName == battleStateComponent.mAttackingLeaderUnitName || unitStatsComponent.mStats.mUnitName == battleStateComponent.mDefendingLeaderUnitName ||
+            unitStatsComponent.mStats.mUnitName == battleStateComponent.mAssistingAttackerLeaderUnitName ||
+            unitStatsComponent.mStats.mUnitName == battleStateComponent.mAssistingDefenderLeaderUnitName)
         {
             const auto& casualties = battleStateComponent.mLeaderNameToCasualtiesMap.at(unitStatsComponent.mStats.mUnitName);
                        

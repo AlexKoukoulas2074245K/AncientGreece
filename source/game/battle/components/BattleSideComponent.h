@@ -23,6 +23,7 @@ class BattleSideComponent final: public genesis::ecs::IComponent
 {
 public:
     StringId mBattleSideLeaderUnitName = StringId();
+    StringId mBattleSideAssistingLeaderUnitName = StringId();
 };
 
 ///-----------------------------------------------------------------------------------------------

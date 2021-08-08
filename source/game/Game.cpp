@@ -169,7 +169,6 @@ void Game::VOnGameInit()
         
         const auto partySize = genesis::math::RandomInt(0, 80);
         auto& unitStatsComponent = world.GetComponent<UnitStatsComponent>(playerEntity);
-        unitStatsComponent.mStats.mSpeedMultiplier *= 3.0f;
         
         for (auto j = 0; j < partySize; ++j)
         {

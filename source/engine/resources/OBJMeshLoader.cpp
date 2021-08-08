@@ -128,7 +128,7 @@ std::unique_ptr<IResource> OBJMeshLoader::VCreateAndLoadResource(const std::stri
     {
         temp_uvs.clear();
         const auto injectedCoordPairs = StringSplit(injectedTexCoordsString, '-');
-        for (const auto injectedCoordPairString: injectedCoordPairs)
+        for (const auto& injectedCoordPairString: injectedCoordPairs)
         {
             const auto injectedCoordPairSplitByComma = StringSplit(injectedCoordPairString, ',');
             temp_uvs.push_back(glm::vec2(std::stof(injectedCoordPairSplitByComma[0]), std::stof(injectedCoordPairSplitByComma[1])));

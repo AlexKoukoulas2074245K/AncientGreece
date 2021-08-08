@@ -14,7 +14,7 @@
 #include "../../battle/utils/BattleUtils.h"
 #include "../../components/UnitStatsComponent.h"
 #include "../../GameContexts.h"
-#include "../../components/CollidableComponent.h"
+#include "../../utils/UnitInfoUtils.h"
 #include "../../view/components/ViewQueueSingletonComponent.h"
 
 ///-----------------------------------------------------------------------------------------------
@@ -125,28 +125,52 @@ void OverworldBattleProcessingSystem::CheckForLiveBattle() const
     auto& world = genesis::ecs::World::GetInstance();
     auto& viewQueueComponent = world.GetSingletonComponent<view::ViewQueueSingletonComponent>();
     
-    if (viewQueueComponent.mLastViewDestructionEvent == ATTACK_EVENT_NAME)
+    if (viewQueueComponent.mLastViewDestructionEvent == ATTACK_EVENT_NAME || viewQueueComponent.mLastViewDestructionEvent == ASSIST_ATTACKER_EVENT_NAME || viewQueueComponent.mLastViewDestructionEvent == ASSIST_DEFENDER_EVENT_NAME)
     {
+        const auto assistingAttacker = viewQueueComponent.mLastViewDestructionEvent == ASSIST_ATTACKER_EVENT_NAME;
+        const auto assistingDefender = viewQueueComponent.mLastViewDestructionEvent == ASSIST_DEFENDER_EVENT_NAME;
+        
         viewQueueComponent.mLastViewDestructionEvent = StringId();
-        PrepareLiveBattle();
+        
+        const auto& lastInteraction = GetLastInteraction();
+        auto attackerEntityId = lastInteraction.mInstigatorEntityId;
+        auto defenderEntityId = lastInteraction.mOtherEntityId;
+        
+        auto liveBattleEntity = FindBattleStateEntityThatInvolvesUnit(world.GetComponent<UnitStatsComponent>(defenderEntityId).mStats.mUnitName);
+        if (liveBattleEntity != genesis::ecs::NULL_ENTITY_ID)
+        {
+            auto& liveBattleState = world.GetComponent<OverworldBattleStateComponent>(liveBattleEntity);
+            attackerEntityId = GetOverworldUnitEntityByName(liveBattleState.mAttackingUnitName);
+            defenderEntityId = GetOverworldUnitEntityByName(liveBattleState.mDefendingUnitName);
+        }
+        
+        const auto attackingLeaderUnitName = world.GetComponent<UnitStatsComponent>(attackerEntityId).mStats.mUnitName;
+        const auto defendingLeaderUnitName = world.GetComponent<UnitStatsComponent>(defenderEntityId).mStats.mUnitName;
+        
+        auto attackingSideParty = PrepareBattleParty(attackerEntityId);
+        auto defendingSideParty = PrepareBattleParty(defenderEntityId);
+
+        std::vector<UnitStats> assistingAttackerParty;
+        std::vector<UnitStats> assistingDefenderParty;
+        
+        if (assistingAttacker)
+        {
+            assistingAttackerParty = PrepareBattleParty(GetPlayerEntity());
+        }
+        else if (assistingDefender)
+        {
+            assistingDefenderParty = PrepareBattleParty(GetPlayerEntity());
+        }
+        
+        battle::PrepareBattleCamera(lastInteraction.mOtherEntityId == GetPlayerEntity() || assistingDefender);
+        battle::PopulateBattleEntities(attackingSideParty, defendingSideParty, assistingAttackerParty, assistingDefenderParty, attackerEntityId, defenderEntityId, assistingAttacker ? GetPlayerEntity() : genesis::ecs::NULL_ENTITY_ID, assistingDefender ? GetPlayerEntity() : genesis::ecs::NULL_ENTITY_ID);
+        
         DestroyOverworldEntities();
         world.ChangeContext(BATTLE_CONTEXT);
         battle::SetBattleState(battle::BattleState::ONGOING);
-        battle::InitCasualties(GetLastInteraction().mInstigatorUnitName, GetLastInteraction().mOtherUnitName);
+        battle::SetBattleLeaderNames(attackingLeaderUnitName, defendingLeaderUnitName, assistingAttacker ? GetPlayerUnitName() : StringId(), assistingDefender ? GetPlayerUnitName() : StringId(), GetPlayerUnitName());
+        battle::InitCasualties(attackingLeaderUnitName, defendingLeaderUnitName, assistingAttacker ? GetPlayerUnitName() : StringId(), assistingDefender ? GetPlayerUnitName() : StringId());
     }
-}
-
-///-----------------------------------------------------------------------------------------------
-
-void OverworldBattleProcessingSystem::PrepareLiveBattle() const
-{
-    const auto& lastInteraction = GetLastInteraction();
-    
-    auto attackingSideParty = PrepareBattleParty(lastInteraction.mInstigatorEntityId);
-    auto defendingSideParty = PrepareBattleParty(lastInteraction.mOtherEntityId);
-
-    battle::PrepareBattleCamera(lastInteraction.mOtherEntityId == GetPlayerEntity());
-    battle::PopulateBattleEntities(attackingSideParty, defendingSideParty, lastInteraction.mInstigatorEntityId, lastInteraction.mOtherEntityId);
 }
 
 ///-----------------------------------------------------------------------------------------------

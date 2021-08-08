@@ -6,7 +6,10 @@
 ///-----------------------------------------------------------------------------------------------
 
 #include "BattleCameraControllerSystem.h"
+#include "../components/BattleSideComponent.h"
+#include "../components/BattleStateSingletonComponent.h"
 #include "../utils/BattleUtils.h"
+#include "../../overworld/utils/OverworldUtils.h"
 #include "../../../engine/common/components/TransformComponent.h"
 #include "../../../engine/common/utils/Logging.h"
 #include "../../../engine/debug/components/DebugViewStateSingletonComponent.h"
@@ -75,20 +78,30 @@ void BattleCameraControllerSystem::NormalCameraOperation(const float dt) const
 {
     auto& world = genesis::ecs::World::GetInstance();
     auto& cameraComponent = world.GetSingletonComponent<genesis::rendering::CameraSingletonComponent>();
+    const auto& battleStateComponent = world.GetSingletonComponent<BattleStateSingletonComponent>();
+    
     const auto oldCameraPosition = cameraComponent.mPosition;
     
     cameraComponent.mVelocity.x = cameraComponent.mVelocity.y = 0.0f;
     
     // Calculate battlefield center
     const auto& units = GetAllBattleUnitEntities();
-    glm::vec3 battlefieldCenterPosition(cameraComponent.mPosition.z);
+    const auto& playerUnitName = battleStateComponent.mPlayerUnitName;
     
+    glm::vec3 battlefieldCenterPosition(cameraComponent.mPosition.z);
+    auto unitsTakenIntoAccount = 0;
     for (const auto entity: units)
     {
-        const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entity);
-        battlefieldCenterPosition += transformComponent.mPosition;
+        const auto& battleSideComponent = world.GetComponent<BattleSideComponent>(entity);
+        
+        if (battleSideComponent.mBattleSideLeaderUnitName == playerUnitName || battleSideComponent.mBattleSideAssistingLeaderUnitName == playerUnitName)
+        {
+            const auto& transformComponent = world.GetComponent<genesis::TransformComponent>(entity);
+            battlefieldCenterPosition += transformComponent.mPosition;
+            unitsTakenIntoAccount++;
+        }
     }
-    battlefieldCenterPosition /= units.size();
+    battlefieldCenterPosition /= unitsTakenIntoAccount;
     battlefieldCenterPosition.y += CAMERA_AUTOCENTERING_Y_OFFSET;
     
     const auto battlefieldCenterDistance = genesis::math::Max(glm::distance(cameraComponent.mPosition, battlefieldCenterPosition), genesis::math::EQ_THRESHOLD);
