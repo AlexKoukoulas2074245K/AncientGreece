@@ -91,7 +91,7 @@ std::unique_ptr<IResource> TextureLoader::VCreateAndLoadResource(const std::stri
     }
     
 #ifdef _WIN32
-    const auto textureFormat = GL_RGBA;
+    const auto textureFormat = mode == 3 ? GL_RGBA : GL_RGB;
 #else
     const auto textureFormat = GL_BGRA;
 #endif

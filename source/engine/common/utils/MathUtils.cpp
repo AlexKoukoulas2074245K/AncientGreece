@@ -146,7 +146,7 @@ bool IsMeshInsideFrustum(const glm::vec3& meshPosition, const glm::vec3& meshSca
 
 bool IsPointInsideRectangle(const glm::vec2& rectangleBottomLeft, const glm::vec2& rectangleTopRight, const glm::vec2& point)
 {
-    return point.x > rectangleBottomLeft.x and point.x < rectangleTopRight.x and point.y > rectangleBottomLeft.y and point.y < rectangleTopRight.y;
+    return point.x > rectangleBottomLeft.x && point.x < rectangleTopRight.x && point.y > rectangleBottomLeft.y && point.y < rectangleTopRight.y;
 }
 
 ///------------------------------------------------------------------------------------------------

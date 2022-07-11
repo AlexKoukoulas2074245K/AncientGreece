@@ -9,7 +9,7 @@
 #include "../engine/GenesisEngine.h"
 
 #if defined(_WIN32) && !defined(NDEBUG)
-#include <vld.h>
+//#include <vld.h>
 #endif
 
 ///------------------------------------------------------------------------------------------------

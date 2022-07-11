@@ -25,6 +25,7 @@
 #include <memory>
 #include <tsl/robin_map.h>
 #include <vector>        
+#include <atomic>
 
 ///------------------------------------------------------------------------------------------------
 
@@ -385,6 +386,9 @@ private:
     /// @param[in] entityId the entity that has changed
     /// @param[in] newComponentMask the new component mask of the entity
     void OnEntityChanged(const EntityId entityId, const ComponentMask& newComponentMask);
+
+    /// Callback for when a system update worker completes
+    void OnWorkerCompleteCallback();
     
 private:
     struct EntityEntry
@@ -407,6 +411,7 @@ private:
     
     EntityId mEntityCounter = 1LL;
     int mCurrentContextId = 0;
+    std::atomic<int> mSystemUpdateWorkersComplete = 0;
 };
 
 ///------------------------------------------------------------------------------------------------

@@ -40,7 +40,7 @@ public:
     glm::vec2 mHeightMapTextureDimensions;
     std::vector<ResourceId> mHeightMapTextureResourceIds;
     std::vector<std::vector<float>> mHeightMapTileHeights;
-    float mHeightMapScale;
+    float mHeightMapScale = 0.0f;
 };
 
 ///-----------------------------------------------------------------------------------------------

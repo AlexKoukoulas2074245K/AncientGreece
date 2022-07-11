@@ -178,7 +178,7 @@ void Game::VOnGameInit()
         
         for (int i = 0; i < SPARTAN_COUNT; ++i)
         {
-            auto position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
+            position = glm::vec3(genesis::math::RandomFloat(-0.2f, 0.2f), genesis::math::RandomFloat(-0.2f, 0.2f), 0.0f);
             position.z = genesis::rendering::GetTerrainHeightAtPosition(mapEntity, position);
             
             auto unitTypeName = intToModelType.at(i % intToModelType.size());

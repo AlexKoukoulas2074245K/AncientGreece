@@ -166,8 +166,7 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
         const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
         if (renderableComponent.mIsCastingShadows)
         {
-            const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);
-            const auto& renderableComponent = world.GetComponent<RenderableComponent>(entityId);
+            const auto& transformComponent = world.GetComponent<TransformComponent>(entityId);            
 
             if (!renderableComponent.mIsVisible)
             {
@@ -178,7 +177,7 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
             GL_CHECK(glBindVertexArray(currentMesh.GetVertexArrayObject()));
             
             // Calculate world matrix for entity
-            glm::mat4 world(1.0f);
+            glm::mat4 worldMat(1.0f);
                 
             // Correct display of hud and billboard entities
             glm::vec3 position = transformComponent.mPosition;
@@ -187,16 +186,16 @@ void RenderingSystem::DepthRenderingPass(const std::vector<ecs::EntityId>& appli
             
             glm::mat4 rotMatrix = glm::mat4_cast(math::EulerAnglesToQuat(rotation));
             
-            world = glm::translate(world, position);
-            world *= rotMatrix;
-            world = glm::scale(world, scale);
+            worldMat = glm::translate(worldMat, position);
+            worldMat *= rotMatrix;
+            worldMat = glm::scale(worldMat, scale);
 
             auto& currentShader = shaderStoreComponent.mShaders.at(currentMesh.HasSkeleton() ? SKELETAL_MODEL_DEPTH_SHADER_NAME : STATIC_MODEL_DEPTH_SHADER_NAME);
             GL_CHECK(glUseProgram(currentShader.GetProgramId()));
             
             currentShader.SetMatrix4fv(LIGHT_SPACE_MATRIX_UNIFORM_NAME, lightStoreComponent.mMainShadowCastingLightMatrix);
             
-            currentShader.SetMatrix4fv(WORLD_MARIX_UNIFORM_NAME, world);
+            currentShader.SetMatrix4fv(WORLD_MARIX_UNIFORM_NAME, worldMat);
             
             // Set other matrix uniforms
             for (const auto& matrixUniformEntry: renderableComponent.mShaderUniforms.mShaderMatrixUniforms)
@@ -244,7 +243,7 @@ void RenderingSystem::FinalRenderingPass(const std::vector<ecs::EntityId>& appli
     GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     
     // Set View Port
-    GL_CHECK(glViewport(0, 0, windowComponent.mRenderableWidth, windowComponent.mRenderableHeight));
+    GL_CHECK(glViewport(0, 0, static_cast<GLsizei>(windowComponent.mRenderableWidth), static_cast<GLsizei>(windowComponent.mRenderableHeight)));
     
     // Set background color
     GL_CHECK(glClearColor
@@ -954,7 +953,7 @@ void RenderingSystem::InitializeFrameBuffers() const
     GL_CHECK(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, renderingContextComponent.mShadowMapTexture, 0));
     GL_CHECK(glDrawBuffer(GL_NONE));
     
-    assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+    GL_CHECK_AGAINST_ARG(glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
     GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 

@@ -10,6 +10,8 @@
 #include "../utils/ParticleUtils.h"
 #include "../../common/components/TransformComponent.h"
 
+#include <numeric>
+
 ///-----------------------------------------------------------------------------------------------
 
 namespace genesis

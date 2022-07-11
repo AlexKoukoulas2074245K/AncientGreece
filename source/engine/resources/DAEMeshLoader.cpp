@@ -123,7 +123,7 @@ std::unique_ptr<IResource> DAEMeshLoader::VCreateAndLoadResource(const std::stri
                 }
                 else
                 {
-                    indices.push_back(face.mIndices[j]);
+                    indices.push_back(static_cast<unsigned short>(face.mIndices[j]));
                 }
             }
         }

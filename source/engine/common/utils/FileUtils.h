@@ -112,7 +112,7 @@ inline std::vector<std::string> GetAllFilenamesInDirectory(const std::string& di
         closedir(dir);
     }
 #else
-    for (const auto& entry : std::experimental::filesystem::v1::directory_iterator(directory))
+    for (const auto& entry : std::filesystem::directory_iterator(directory))
     {
         fileNames.push_back(GetFileName(entry.path().string()));
     }

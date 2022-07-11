@@ -47,11 +47,11 @@ namespace
     
     static const float NAME_PLATE_Z                    = -0.032f;
     static const float NAME_PLATE_Y_OFFSET             = -0.001f;
-    static const float NAME_PLATE_X_OFFSET_MULTIPLIER  = 1.0/20.0f;
+    static const float NAME_PLATE_X_OFFSET_MULTIPLIER  = 1.0f/20.0f;
     static const float NAME_PLATE_HEIGHT_MULTIPLIER    = 1.5f;
     static const float NAME_PLATE_WIDTH_MULTIPLIER     = 1.2f;
     static const float UNIT_NAME_SIZE                  = 0.005f;
-    static const float PARTY_X_OFFSET                  = UNIT_NAME_SIZE * 4.8;
+    static const float PARTY_X_OFFSET                  = UNIT_NAME_SIZE * 4.8f;
     static const float UNIT_NAME_Z                     = -0.033f;
     static const float UNIT_DETAILS_Y_OFFSET           = 0.005f;
     static const float CITY_STATE_NAME_Z               = -0.035f;

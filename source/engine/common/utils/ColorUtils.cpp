@@ -33,13 +33,13 @@ HsvTriplet<float> RgbToHsv(const RgbTriplet<float> rgb)
     hsv.mVal = max;                             // v
     delta = max - min;
     
-    if (delta < 0.00001)
+    if (delta < 0.00001f)
     {
         hsv.mSat = 0;
         hsv.mHue = 0; // undefined, maybe nan?
         return hsv;
     }
-    if(max > 0.0)
+    if(max > 0.0f)
     { // NOTE: if Max is == 0, this divide would cause a crash
         hsv.mSat = (delta / max);               // s
     }
@@ -47,7 +47,7 @@ HsvTriplet<float> RgbToHsv(const RgbTriplet<float> rgb)
     {
         // if max is 0, then r = g = b = 0
         // s = 0, h is undefined
-        hsv.mSat = 0.0;
+        hsv.mSat = 0.0f;
         hsv.mHue = NAN;                                      // its now undefined
         return hsv;
     }
@@ -55,14 +55,14 @@ HsvTriplet<float> RgbToHsv(const RgbTriplet<float> rgb)
         hsv.mHue = ( rgb.mGreen - rgb.mBlue ) / delta;       // between yellow & magenta
     else
     if( rgb.mGreen >= max )
-        hsv.mHue = 2.0 + ( rgb.mBlue - rgb.mRed ) / delta;   // between cyan & yellow
+        hsv.mHue = 2.0f + ( rgb.mBlue - rgb.mRed ) / delta;   // between cyan & yellow
     else
-        hsv.mHue = 4.0 + ( rgb.mRed - rgb.mGreen ) / delta;  // between magenta & cyan
+        hsv.mHue = 4.0f + ( rgb.mRed - rgb.mGreen ) / delta;  // between magenta & cyan
 
-    hsv.mHue *= 60.0;                                        // degrees
+    hsv.mHue *= 60.0f;                                        // degrees
 
-    if( hsv.mHue < 0.0 )
-        hsv.mHue += 360.0;
+    if( hsv.mHue < 0.0f )
+        hsv.mHue += 360.0f;
 
     return hsv;
 }
@@ -75,7 +75,7 @@ RgbTriplet<float> HsvToRgb(const HsvTriplet<float> hsv)
     long              i;
     RgbTriplet<float> rgb;
 
-    if(hsv.mSat <= 0.0) // < is bogus, just shuts up warnings
+    if(hsv.mSat <= 0.0f) // < is bogus, just shuts up warnings
     {
         rgb.mRed = hsv.mVal;
         rgb.mGreen = hsv.mVal;
@@ -84,13 +84,13 @@ RgbTriplet<float> HsvToRgb(const HsvTriplet<float> hsv)
     }
     
     hh = hsv.mHue;
-    if(hh >= 360.0) hh = 0.0;
-    hh /= 60.0;
+    if(hh >= 360.0f) hh = 0.0f;
+    hh /= 60.0f;
     i = (long)hh;
     ff = hh - i;
-    p = hsv.mVal * (1.0 - hsv.mSat);
-    q = hsv.mVal * (1.0 - (hsv.mSat * ff));
-    t = hsv.mVal * (1.0 - (hsv.mSat * (1.0 - ff)));
+    p = hsv.mVal * (1.0f - hsv.mSat);
+    q = hsv.mVal * (1.0f - (hsv.mSat * ff));
+    t = hsv.mVal * (1.0f - (hsv.mSat * (1.0f - ff)));
 
     switch(i)
     {

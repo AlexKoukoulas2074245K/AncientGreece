@@ -27,27 +27,45 @@ namespace ecs
 class SystemUpdateWorker
 {
 public:
-    void RunSystemUpdate
+    void StartWorker(const std::function<void()>& onCompleteCallback)
+    {
+        mOnCompleteCallback = onCompleteCallback;
+        mThread = std::thread([&]
+        {
+            while(true)
+            {
+                if (mCurrentProcessingVec.size() > 0 && mHasAssignedWorkParams)
+                {
+                    mSystem->VUpdate(mCurrentDt, mCurrentProcessingVec);
+                    mCurrentProcessingVec.clear();
+                    mHasAssignedWorkParams = false;
+                    mOnCompleteCallback();
+                }
+            }
+        });
+        mThread.detach();
+    }
+
+    void AssignWorkParams
     (
-        const float dt,
+        const float dt, 
         const std::vector<EntityId> entityVec,
-        ISystem& system
+        ISystem* system
     )
     {
         mCurrentProcessingVec = std::move(entityVec);
         mCurrentDt = dt;
-        mThread = std::thread([&]
-        {
-            system.VUpdate(mCurrentDt, mCurrentProcessingVec);
-        });
+        mSystem = system;
+        mHasAssignedWorkParams = true;
     }
-    
-    void Join() { mThread.join(); }
     
 private:
     std::vector<genesis::ecs::EntityId> mCurrentProcessingVec;
     std::thread mThread;
+    std::function<void()> mOnCompleteCallback;
+    ISystem* mSystem;
     float mCurrentDt;
+    bool mHasAssignedWorkParams = false;
 };
 
 ///------------------------------------------------------------------------------------------------
@@ -56,7 +74,7 @@ private:
 static StringId GetSystemNameFromTypeIdString(const std::string& typeIdString)
 {
     std::string unsymbolifiedName;
-    for (size_t i = typeIdString.size() - 1; i >= 0; i--)
+    for (int i = typeIdString.size() - 1; i >= 0; i--)
     {
         if (std::isdigit(typeIdString[i])) break;
         unsymbolifiedName = typeIdString[i] + unsymbolifiedName;
@@ -126,9 +144,6 @@ void World::Update(const float dt)
     
     for(const auto& system: mSystems)
     {     
-#if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)
-        const auto& start = std::chrono::high_resolution_clock::now();
-#endif
         if (system->mContextIdToOperateIn == 0 || mCurrentContextId == system->mContextIdToOperateIn)
         {
             auto& systemRef = *system;
@@ -142,27 +157,19 @@ void World::Update(const float dt)
                 {
                     const auto startSlice = i * entityVecSlice;
                     const auto endSlice = (i + 1) * entityVecSlice;
-                    mSystemUpdateWorkers[i]->RunSystemUpdate(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.cbegin() + endSlice), systemRef);
+                    mSystemUpdateWorkers[i]->AssignWorkParams(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.cbegin() + endSlice), system.get());
                 }
                 const auto startSlice = (systemUpdateWorkerCount - 1) * entityVecSlice;
-                mSystemUpdateWorkers[systemUpdateWorkerCount - 1]->RunSystemUpdate(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.end()), systemRef);
-                
-                for (auto& worker: mSystemUpdateWorkers)
-                {
-                    worker->Join();
-                }
+                mSystemUpdateWorkers[systemUpdateWorkerCount - 1]->AssignWorkParams(dt, std::vector<ecs::EntityId>(entityVec.cbegin() + startSlice, entityVec.end()), system.get());
+
+                while (mSystemUpdateWorkers.size() > mSystemUpdateWorkersComplete);                
+                mSystemUpdateWorkersComplete = 0;
             }
             else
             {
                 system->VUpdate(dt, entityVec);
             }
         }
-        
-#if !defined(NDEBUG) || defined(CONSOLE_ENABLED_ON_RELEASE)        
-        const auto& end = std::chrono::high_resolution_clock::now();
-        const auto& duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-        mSystemUpdateToDuration[StringId(system->mSystemName)] = duration.count();
-#endif
     }
 }
 
@@ -303,14 +310,22 @@ void World::OnEntityChanged(const EntityId entityId, const ComponentMask& newCom
 
 ///------------------------------------------------------------------------------------------------
 
+void World::OnWorkerCompleteCallback()
+{
+    mSystemUpdateWorkersComplete++;
+}
+
+///------------------------------------------------------------------------------------------------
+
 World::World()
 {
     mEntityComponentStore.reserve(ANTICIPATED_ENTITY_COUNT);
     
-    auto threadWorkerCount = std::thread::hardware_concurrency();
+    auto threadWorkerCount = 1;
     for (auto i = 0U; i < threadWorkerCount; ++i)
     {
         mSystemUpdateWorkers.push_back(std::make_unique<SystemUpdateWorker>());
+        mSystemUpdateWorkers.back()->StartWorker([&](){OnWorkerCompleteCallback();});
     }
 }
 
